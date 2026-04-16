@@ -1,6 +1,6 @@
 # MirrorNeuron Blueprints
 
-This repository contains examples and blueprints for running workflows with [MirrorNeuron](https://github.com/MirrorNeuron/MirrorNeuron).
+This repository contains examples and blueprints for running workflows with [MirrorNeuron](https://github.com/MirrorNeuronLab/MirrorNeuron).
 
 ## Prerequisites
 

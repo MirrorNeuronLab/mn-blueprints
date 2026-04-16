@@ -1,0 +1,15 @@
+
+19:12:51.626 [info] Starting Horde.RegistryImpl with name MirrorNeuron.DistributedRegistry
+
+19:12:51.633 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.JobSupervisor
+
+19:12:51.633 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.AgentSupervisor
+{
+  "ok": true,
+  "status": "failed",
+  "result": {
+    "agent_id": "prime_worker_0001",
+    "error": "%{\"attempts\" => 2, \"exit_code\" => 1, \"logs\" => \"Error:   × status: Internal, message: \\\"persist sandbox failed: execution error:\\n  │ database error: error returned from database: (code: 2067) UNIQUE\\n  │ constraint failed: objects.object_type, objects.name\\\", details: [],\\n  │ metadata: MetadataMap { headers: {\\\"content-type\\\": \\\"application/grpc\\\",\\n  │ \\\"date\\\": \\\"Fri, 27 Mar 2026 23:17:56 GMT\\\"} }\", \"openshell_exit_code\" => 1, \"raw_output\" => \"Error:   × status: Internal, message: \\\"persist sandbox failed: execution error:\\n  │ database error: error returned from database: (code: 2067) UNIQUE\\n  │ constraint failed: objects.object_type, objects.name\\\", details: [],\\n  │ metadata: MetadataMap { headers: {\\\"content-type\\\": \\\"application/grpc\\\",\\n  │ \\\"date\\\": \\\"Fri, 27 Mar 2026 23:17:56 GMT\\\"} }\\n\\n\", \"remote_dir\" => \"/sandbox/job\", \"sandbox_name\" => \"prime-worker-0001-prime-sweep-1001-workers-1774653171673-4cd0d9\", \"stderr\" => \"\", \"stdout\" => \"\"}"
+  },
+  "job_id": "prime_sweep_1001_workers-1774653171673-4cd0d9db195a"
+}

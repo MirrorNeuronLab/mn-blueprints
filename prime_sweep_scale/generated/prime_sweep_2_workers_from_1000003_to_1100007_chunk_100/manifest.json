@@ -1,0 +1,121 @@
+{
+  "manifest_version": "1.0",
+  "graph_id": "prime_sweep_2_workers",
+  "job_name": "prime-sweep-2-workers",
+  "entrypoints": [
+    "dispatcher"
+  ],
+  "initial_inputs": {
+    "dispatcher": [
+      {
+        "benchmark": "prime_sweep",
+        "worker_count": 2,
+        "requested_workers": 2,
+        "chunk_size": 100,
+        "range_start": 1000003,
+        "range_end": 1000202
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "node_id": "dispatcher",
+      "agent_type": "router",
+      "role": "root_coordinator",
+      "config": {
+        "emit_type": "prime_chunk_request"
+      }
+    },
+    {
+      "node_id": "aggregator",
+      "agent_type": "aggregator",
+      "config": {
+        "mode": "prime_sweep",
+        "complete_after": 2
+      }
+    },
+    {
+      "node_id": "prime_worker_0001",
+      "agent_type": "executor",
+      "config": {
+        "name_prefix": "prime-worker-0001",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0001",
+          "1000003",
+          "1000102"
+        ],
+        "pool": "default",
+        "pool_slots": 1,
+        "output_message_type": "prime_chunk_result",
+        "startup_delay_ms": 0,
+        "max_attempts": 4,
+        "retry_backoff_ms": 500,
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0002",
+      "agent_type": "executor",
+      "config": {
+        "name_prefix": "prime-worker-0002",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0002",
+          "1000103",
+          "1000202"
+        ],
+        "pool": "default",
+        "pool_slots": 1,
+        "output_message_type": "prime_chunk_result",
+        "startup_delay_ms": 0,
+        "max_attempts": 4,
+        "retry_backoff_ms": 500,
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "dispatch_prime_worker_0001",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0001",
+      "message_type": "prime_chunk_request"
+    },
+    {
+      "edge_id": "prime_worker_0001_to_aggregator",
+      "from_node": "prime_worker_0001",
+      "to_node": "aggregator",
+      "message_type": "prime_chunk_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0002",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0002",
+      "message_type": "prime_chunk_request"
+    },
+    {
+      "edge_id": "prime_worker_0002_to_aggregator",
+      "from_node": "prime_worker_0002",
+      "to_node": "aggregator",
+      "message_type": "prime_chunk_result"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  }
+}

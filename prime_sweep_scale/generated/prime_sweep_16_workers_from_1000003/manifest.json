@@ -1,0 +1,553 @@
+{
+  "manifest_version": "1.0",
+  "graph_id": "prime_sweep_16_workers",
+  "job_name": "prime-sweep-16-workers",
+  "entrypoints": [
+    "dispatcher"
+  ],
+  "initial_inputs": {
+    "dispatcher": [
+      {
+        "benchmark": "prime_sweep",
+        "worker_count": 16,
+        "candidate_start": 1000003,
+        "candidate_end": 1000033
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "node_id": "dispatcher",
+      "agent_type": "relay",
+      "role": "root_coordinator",
+      "config": {
+        "emit_type": "prime_check_request"
+      }
+    },
+    {
+      "node_id": "result_sink",
+      "agent_type": "collector",
+      "config": {
+        "complete_on_message": false,
+        "complete_after": 16
+      }
+    },
+    {
+      "node_id": "prime_worker_0001",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0001",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000003"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0002",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0002",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000005"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0003",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0003",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000007"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0004",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0004",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000009"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0005",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0005",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000011"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0006",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0006",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000013"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0007",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0007",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000015"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0008",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0008",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000017"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0009",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0009",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000019"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0010",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0010",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000021"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0011",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0011",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000023"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0012",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0012",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000025"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0013",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0013",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000027"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0014",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0014",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000029"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0015",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0015",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000031"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0016",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0016",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000033"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "dispatch_prime_worker_0001",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0001",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0001_to_sink",
+      "from_node": "prime_worker_0001",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0002",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0002",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0002_to_sink",
+      "from_node": "prime_worker_0002",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0003",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0003",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0003_to_sink",
+      "from_node": "prime_worker_0003",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0004",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0004",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0004_to_sink",
+      "from_node": "prime_worker_0004",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0005",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0005",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0005_to_sink",
+      "from_node": "prime_worker_0005",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0006",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0006",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0006_to_sink",
+      "from_node": "prime_worker_0006",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0007",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0007",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0007_to_sink",
+      "from_node": "prime_worker_0007",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0008",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0008",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0008_to_sink",
+      "from_node": "prime_worker_0008",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0009",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0009",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0009_to_sink",
+      "from_node": "prime_worker_0009",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0010",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0010",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0010_to_sink",
+      "from_node": "prime_worker_0010",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0011",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0011",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0011_to_sink",
+      "from_node": "prime_worker_0011",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0012",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0012",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0012_to_sink",
+      "from_node": "prime_worker_0012",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0013",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0013",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0013_to_sink",
+      "from_node": "prime_worker_0013",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0014",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0014",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0014_to_sink",
+      "from_node": "prime_worker_0014",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0015",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0015",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0015_to_sink",
+      "from_node": "prime_worker_0015",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0016",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0016",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0016_to_sink",
+      "from_node": "prime_worker_0016",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  }
+}

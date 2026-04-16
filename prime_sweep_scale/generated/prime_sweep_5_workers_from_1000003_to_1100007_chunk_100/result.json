@@ -1,0 +1,118 @@
+
+20:02:13.417 [info] Starting Horde.RegistryImpl with name MirrorNeuron.DistributedRegistry
+
+20:02:13.424 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.JobSupervisor
+
+20:02:13.424 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.AgentSupervisor
+{
+  "ok": true,
+  "status": "completed",
+  "result": {
+    "agent_id": "aggregator",
+    "output": {
+      "checked_numbers": 500,
+      "chunks": [
+        {
+          "agent_id": "prime_worker_0001",
+          "checked_numbers": 100,
+          "prime_count": 6,
+          "range_end": 1000102,
+          "range_start": 1000003,
+          "worker_id": "prime_worker_0001"
+        },
+        {
+          "agent_id": "prime_worker_0002",
+          "checked_numbers": 100,
+          "prime_count": 10,
+          "range_end": 1000202,
+          "range_start": 1000103,
+          "worker_id": "prime_worker_0002"
+        },
+        {
+          "agent_id": "prime_worker_0003",
+          "checked_numbers": 100,
+          "prime_count": 8,
+          "range_end": 1000302,
+          "range_start": 1000203,
+          "worker_id": "prime_worker_0003"
+        },
+        {
+          "agent_id": "prime_worker_0004",
+          "checked_numbers": 100,
+          "prime_count": 8,
+          "range_end": 1000402,
+          "range_start": 1000303,
+          "worker_id": "prime_worker_0004"
+        },
+        {
+          "agent_id": "prime_worker_0005",
+          "checked_numbers": 100,
+          "prime_count": 7,
+          "range_end": 1000502,
+          "range_start": 1000403,
+          "worker_id": "prime_worker_0005"
+        }
+      ],
+      "first_25_primes": [
+        1000003,
+        1000033,
+        1000037,
+        1000039,
+        1000081,
+        1000099,
+        1000117,
+        1000121,
+        1000133,
+        1000151,
+        1000159,
+        1000171,
+        1000183,
+        1000187,
+        1000193,
+        1000199,
+        1000211,
+        1000213,
+        1000231,
+        1000249,
+        1000253,
+        1000273,
+        1000289,
+        1000291,
+        1000303
+      ],
+      "last_25_primes": [
+        1000193,
+        1000199,
+        1000211,
+        1000213,
+        1000231,
+        1000249,
+        1000253,
+        1000273,
+        1000289,
+        1000291,
+        1000303,
+        1000313,
+        1000333,
+        1000357,
+        1000367,
+        1000381,
+        1000393,
+        1000397,
+        1000403,
+        1000409,
+        1000423,
+        1000427,
+        1000429,
+        1000453,
+        1000457
+      ],
+      "mode": "prime_sweep",
+      "prime_count": 39,
+      "range_end": 1000502,
+      "range_start": 1000003,
+      "worker_count": 5
+    }
+  },
+  "job_id": "prime_sweep_5_workers-1774656133453-ce024bb2280c"
+}

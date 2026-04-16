@@ -1,0 +1,360 @@
+{
+  "manifest_version": "1.0",
+  "graph_id": "ecosystem_simulation_v1",
+  "job_name": "ecosystem-simulation",
+  "entrypoints": [
+    "ingress"
+  ],
+  "initial_inputs": {
+    "ingress": [
+      {
+        "scenario": "ecosystem_competition",
+        "animals": 400,
+        "regions": 8,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_region_population": 220,
+        "seed": 682840368
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "node_id": "ingress",
+      "agent_type": "router",
+      "type": "map",
+      "role": "root_coordinator",
+      "config": {
+        "emit_type": "simulation_start"
+      }
+    },
+    {
+      "node_id": "world",
+      "agent_type": "module",
+      "type": "reduce",
+      "role": "world",
+      "config": {
+        "total_animals": 400,
+        "region_count": 8,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_food": 420.0,
+        "food_regen_per_tick": 72.0,
+        "max_region_population": 220,
+        "migration_rate": 0.035,
+        "mutation_rate": 0.05,
+        "seed": 682840368,
+        "local_top_k": 20,
+        "module": "MirrorNeuron.Examples.EcosystemSimulation.WorldAgent",
+        "module_source": "beam_modules/world_agent.ex"
+      }
+    },
+    {
+      "node_id": "collector",
+      "agent_type": "aggregator",
+      "type": "reduce",
+      "config": {
+        "complete_after": 8,
+        "output_message_type": "region_collection"
+      }
+    },
+    {
+      "node_id": "summarizer",
+      "agent_type": "module",
+      "type": "reduce",
+      "config": {
+        "module": "MirrorNeuron.Examples.EcosystemSimulation.LeaderboardAgent",
+        "module_source": "beam_modules/leaderboard_agent.ex"
+      }
+    },
+    {
+      "node_id": "region_00",
+      "agent_type": "module",
+      "type": "reduce",
+      "role": "region",
+      "config": {
+        "total_animals": 400,
+        "region_count": 8,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_food": 420.0,
+        "food_regen_per_tick": 72.0,
+        "max_region_population": 220,
+        "migration_rate": 0.035,
+        "mutation_rate": 0.05,
+        "seed": 682840368,
+        "local_top_k": 20,
+        "module": "MirrorNeuron.Examples.EcosystemSimulation.RegionAgent",
+        "module_source": "beam_modules/region_agent.ex",
+        "region_index": 0
+      }
+    },
+    {
+      "node_id": "region_01",
+      "agent_type": "module",
+      "type": "reduce",
+      "role": "region",
+      "config": {
+        "total_animals": 400,
+        "region_count": 8,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_food": 420.0,
+        "food_regen_per_tick": 72.0,
+        "max_region_population": 220,
+        "migration_rate": 0.035,
+        "mutation_rate": 0.05,
+        "seed": 682840368,
+        "local_top_k": 20,
+        "module": "MirrorNeuron.Examples.EcosystemSimulation.RegionAgent",
+        "module_source": "beam_modules/region_agent.ex",
+        "region_index": 1
+      }
+    },
+    {
+      "node_id": "region_02",
+      "agent_type": "module",
+      "type": "reduce",
+      "role": "region",
+      "config": {
+        "total_animals": 400,
+        "region_count": 8,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_food": 420.0,
+        "food_regen_per_tick": 72.0,
+        "max_region_population": 220,
+        "migration_rate": 0.035,
+        "mutation_rate": 0.05,
+        "seed": 682840368,
+        "local_top_k": 20,
+        "module": "MirrorNeuron.Examples.EcosystemSimulation.RegionAgent",
+        "module_source": "beam_modules/region_agent.ex",
+        "region_index": 2
+      }
+    },
+    {
+      "node_id": "region_03",
+      "agent_type": "module",
+      "type": "reduce",
+      "role": "region",
+      "config": {
+        "total_animals": 400,
+        "region_count": 8,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_food": 420.0,
+        "food_regen_per_tick": 72.0,
+        "max_region_population": 220,
+        "migration_rate": 0.035,
+        "mutation_rate": 0.05,
+        "seed": 682840368,
+        "local_top_k": 20,
+        "module": "MirrorNeuron.Examples.EcosystemSimulation.RegionAgent",
+        "module_source": "beam_modules/region_agent.ex",
+        "region_index": 3
+      }
+    },
+    {
+      "node_id": "region_04",
+      "agent_type": "module",
+      "type": "reduce",
+      "role": "region",
+      "config": {
+        "total_animals": 400,
+        "region_count": 8,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_food": 420.0,
+        "food_regen_per_tick": 72.0,
+        "max_region_population": 220,
+        "migration_rate": 0.035,
+        "mutation_rate": 0.05,
+        "seed": 682840368,
+        "local_top_k": 20,
+        "module": "MirrorNeuron.Examples.EcosystemSimulation.RegionAgent",
+        "module_source": "beam_modules/region_agent.ex",
+        "region_index": 4
+      }
+    },
+    {
+      "node_id": "region_05",
+      "agent_type": "module",
+      "type": "reduce",
+      "role": "region",
+      "config": {
+        "total_animals": 400,
+        "region_count": 8,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_food": 420.0,
+        "food_regen_per_tick": 72.0,
+        "max_region_population": 220,
+        "migration_rate": 0.035,
+        "mutation_rate": 0.05,
+        "seed": 682840368,
+        "local_top_k": 20,
+        "module": "MirrorNeuron.Examples.EcosystemSimulation.RegionAgent",
+        "module_source": "beam_modules/region_agent.ex",
+        "region_index": 5
+      }
+    },
+    {
+      "node_id": "region_06",
+      "agent_type": "module",
+      "type": "reduce",
+      "role": "region",
+      "config": {
+        "total_animals": 400,
+        "region_count": 8,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_food": 420.0,
+        "food_regen_per_tick": 72.0,
+        "max_region_population": 220,
+        "migration_rate": 0.035,
+        "mutation_rate": 0.05,
+        "seed": 682840368,
+        "local_top_k": 20,
+        "module": "MirrorNeuron.Examples.EcosystemSimulation.RegionAgent",
+        "module_source": "beam_modules/region_agent.ex",
+        "region_index": 6
+      }
+    },
+    {
+      "node_id": "region_07",
+      "agent_type": "module",
+      "type": "reduce",
+      "role": "region",
+      "config": {
+        "total_animals": 400,
+        "region_count": 8,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_food": 420.0,
+        "food_regen_per_tick": 72.0,
+        "max_region_population": 220,
+        "migration_rate": 0.035,
+        "mutation_rate": 0.05,
+        "seed": 682840368,
+        "local_top_k": 20,
+        "module": "MirrorNeuron.Examples.EcosystemSimulation.RegionAgent",
+        "module_source": "beam_modules/region_agent.ex",
+        "region_index": 7
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "world_to_region_00",
+      "from_node": "world",
+      "to_node": "region_00",
+      "message_type": "region_bootstrap"
+    },
+    {
+      "edge_id": "region_00_to_collector",
+      "from_node": "region_00",
+      "to_node": "collector",
+      "message_type": "region_summary"
+    },
+    {
+      "edge_id": "world_to_region_01",
+      "from_node": "world",
+      "to_node": "region_01",
+      "message_type": "region_bootstrap"
+    },
+    {
+      "edge_id": "region_01_to_collector",
+      "from_node": "region_01",
+      "to_node": "collector",
+      "message_type": "region_summary"
+    },
+    {
+      "edge_id": "world_to_region_02",
+      "from_node": "world",
+      "to_node": "region_02",
+      "message_type": "region_bootstrap"
+    },
+    {
+      "edge_id": "region_02_to_collector",
+      "from_node": "region_02",
+      "to_node": "collector",
+      "message_type": "region_summary"
+    },
+    {
+      "edge_id": "world_to_region_03",
+      "from_node": "world",
+      "to_node": "region_03",
+      "message_type": "region_bootstrap"
+    },
+    {
+      "edge_id": "region_03_to_collector",
+      "from_node": "region_03",
+      "to_node": "collector",
+      "message_type": "region_summary"
+    },
+    {
+      "edge_id": "world_to_region_04",
+      "from_node": "world",
+      "to_node": "region_04",
+      "message_type": "region_bootstrap"
+    },
+    {
+      "edge_id": "region_04_to_collector",
+      "from_node": "region_04",
+      "to_node": "collector",
+      "message_type": "region_summary"
+    },
+    {
+      "edge_id": "world_to_region_05",
+      "from_node": "world",
+      "to_node": "region_05",
+      "message_type": "region_bootstrap"
+    },
+    {
+      "edge_id": "region_05_to_collector",
+      "from_node": "region_05",
+      "to_node": "collector",
+      "message_type": "region_summary"
+    },
+    {
+      "edge_id": "world_to_region_06",
+      "from_node": "world",
+      "to_node": "region_06",
+      "message_type": "region_bootstrap"
+    },
+    {
+      "edge_id": "region_06_to_collector",
+      "from_node": "region_06",
+      "to_node": "collector",
+      "message_type": "region_summary"
+    },
+    {
+      "edge_id": "world_to_region_07",
+      "from_node": "world",
+      "to_node": "region_07",
+      "message_type": "region_bootstrap"
+    },
+    {
+      "edge_id": "region_07_to_collector",
+      "from_node": "region_07",
+      "to_node": "collector",
+      "message_type": "region_summary"
+    },
+    {
+      "edge_id": "ingress_to_world",
+      "from_node": "ingress",
+      "to_node": "world",
+      "message_type": "simulation_start"
+    },
+    {
+      "edge_id": "collector_to_summarizer",
+      "from_node": "collector",
+      "to_node": "summarizer",
+      "message_type": "region_collection"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  }
+}

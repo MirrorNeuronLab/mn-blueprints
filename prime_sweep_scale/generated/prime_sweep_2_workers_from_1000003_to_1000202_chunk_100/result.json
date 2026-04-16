@@ -1,0 +1,76 @@
+
+23:15:04.956 [info] Starting Horde.RegistryImpl with name MirrorNeuron.DistributedRegistry
+
+23:15:04.962 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.JobSupervisor
+
+23:15:04.963 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.AgentSupervisor
+{
+  "ok": true,
+  "status": "completed",
+  "result": {
+    "agent_id": "aggregator",
+    "output": {
+      "checked_numbers": 200,
+      "chunks": [
+        {
+          "agent_id": "prime_worker_0001",
+          "checked_numbers": 100,
+          "prime_count": 6,
+          "range_end": 1000102,
+          "range_start": 1000003,
+          "worker_id": "prime_worker_0001"
+        },
+        {
+          "agent_id": "prime_worker_0002",
+          "checked_numbers": 100,
+          "prime_count": 10,
+          "range_end": 1000202,
+          "range_start": 1000103,
+          "worker_id": "prime_worker_0002"
+        }
+      ],
+      "first_25_primes": [
+        1000003,
+        1000033,
+        1000037,
+        1000039,
+        1000081,
+        1000099,
+        1000117,
+        1000121,
+        1000133,
+        1000151,
+        1000159,
+        1000171,
+        1000183,
+        1000187,
+        1000193,
+        1000199
+      ],
+      "last_25_primes": [
+        1000003,
+        1000033,
+        1000037,
+        1000039,
+        1000081,
+        1000099,
+        1000117,
+        1000121,
+        1000133,
+        1000151,
+        1000159,
+        1000171,
+        1000183,
+        1000187,
+        1000193,
+        1000199
+      ],
+      "mode": "prime_sweep",
+      "prime_count": 16,
+      "range_end": 1000202,
+      "range_start": 1000003,
+      "worker_count": 2
+    }
+  },
+  "job_id": "prime_sweep_2_workers-1774667704979-5d61f1a7dee3"
+}

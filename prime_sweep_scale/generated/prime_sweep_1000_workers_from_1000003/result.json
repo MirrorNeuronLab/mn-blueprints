@@ -1,0 +1,15 @@
+
+17:41:54.834 [info] Starting Horde.RegistryImpl with name MirrorNeuron.DistributedRegistry
+
+17:41:54.840 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.JobSupervisor
+
+17:41:54.841 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.AgentSupervisor
+{
+  "ok": true,
+  "status": "failed",
+  "result": {
+    "agent_id": "prime_worker_0036",
+    "error": "%{\"exit_code\" => 1, \"logs\" => \"\\e[1m\\e[36mCreated sandbox:\\e[39m\\e[0m \\e[1mprime-worker-0036-prime-sweep-1000-workers-1774647714884-77179c\\e[0m\\n\\n  \\e[2m[0.0s]\\e[0m Requesting compute...\\n\\nError:   × sandbox provisioning timed out after 300s. Last reported status:\\n  │ DependenciesNotReady: Pod exists with phase: Pending; Service Exists\", \"openshell_exit_code\" => 1, \"raw_output\" => \"\\n\\e[1m\\e[36mCreated sandbox:\\e[39m\\e[0m \\e[1mprime-worker-0036-prime-sweep-1000-workers-1774647714884-77179c\\e[0m\\n\\n  \\e[2m[0.0s]\\e[0m Requesting compute...\\n\\nError:   × sandbox provisioning timed out after 300s. Last reported status:\\n  │ DependenciesNotReady: Pod exists with phase: Pending; Service Exists\\n\\n\", \"remote_dir\" => \"/sandbox/job\", \"sandbox_name\" => \"prime-worker-0036-prime-sweep-1000-workers-1774647714884-77179c\", \"stderr\" => \"\", \"stdout\" => \"\"}"
+  },
+  "job_id": "prime_sweep_1000_workers-1774647714884-77179c23c56f"
+}

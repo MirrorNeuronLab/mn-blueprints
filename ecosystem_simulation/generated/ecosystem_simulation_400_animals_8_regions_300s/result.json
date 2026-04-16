@@ -1,0 +1,652 @@
+
+16:24:58.729 [info] Starting Horde.RegistryImpl with name MirrorNeuron.DistributedRegistry
+
+16:24:58.735 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.AgentSupervisor
+{
+  "ok": true,
+  "status": "completed",
+  "result": {
+    "agent_id": "summarizer",
+    "output": {
+      "births": 62,
+      "deaths": 388,
+      "migrants_in": 122,
+      "migrants_out": 155,
+      "mode": "ecosystem_simulation",
+      "population_alive": 41,
+      "region_count": 8,
+      "region_history_tail": {
+        "region_00": [
+          {
+            "births": 1,
+            "deaths": 0,
+            "food": 473.18,
+            "food_capacity": 508.2,
+            "food_ratio": 0.93,
+            "population": 5,
+            "tick": 58
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 464.43,
+            "food_capacity": 508.2,
+            "food_ratio": 0.91,
+            "population": 5,
+            "tick": 59
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 464.43,
+            "food_capacity": 508.2,
+            "food_ratio": 0.91,
+            "population": 5,
+            "tick": 60
+          }
+        ],
+        "region_01": [
+          {
+            "births": 0,
+            "deaths": 1,
+            "food": 62.61,
+            "food_capacity": 495.6,
+            "food_ratio": 0.13,
+            "population": 6,
+            "tick": 58
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 88.87,
+            "food_capacity": 495.6,
+            "food_ratio": 0.18,
+            "population": 5,
+            "tick": 59
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 122.11,
+            "food_capacity": 495.6,
+            "food_ratio": 0.25,
+            "population": 5,
+            "tick": 60
+          }
+        ],
+        "region_02": [
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 156.12,
+            "food_capacity": 378.0,
+            "food_ratio": 0.41,
+            "population": 11,
+            "tick": 58
+          },
+          {
+            "births": 0,
+            "deaths": 2,
+            "food": 133.07,
+            "food_capacity": 378.0,
+            "food_ratio": 0.35,
+            "population": 9,
+            "tick": 59
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 133.48,
+            "food_capacity": 378.0,
+            "food_ratio": 0.35,
+            "population": 9,
+            "tick": 60
+          }
+        ],
+        "region_03": [
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 424.2,
+            "food_capacity": 424.2,
+            "food_ratio": 1.0,
+            "population": 0,
+            "tick": 58
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 424.2,
+            "food_capacity": 424.2,
+            "food_ratio": 1.0,
+            "population": 0,
+            "tick": 59
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 424.2,
+            "food_capacity": 424.2,
+            "food_ratio": 1.0,
+            "population": 0,
+            "tick": 60
+          }
+        ],
+        "region_04": [
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 266.44,
+            "food_capacity": 441.0,
+            "food_ratio": 0.6,
+            "population": 5,
+            "tick": 58
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 283.96,
+            "food_capacity": 441.0,
+            "food_ratio": 0.64,
+            "population": 5,
+            "tick": 59
+          },
+          {
+            "births": 1,
+            "deaths": 0,
+            "food": 306.39,
+            "food_capacity": 441.0,
+            "food_ratio": 0.69,
+            "population": 6,
+            "tick": 60
+          }
+        ],
+        "region_05": [
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 283.55,
+            "food_capacity": 432.6,
+            "food_ratio": 0.66,
+            "population": 3,
+            "tick": 58
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 322.31,
+            "food_capacity": 432.6,
+            "food_ratio": 0.75,
+            "population": 3,
+            "tick": 59
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 363.38,
+            "food_capacity": 432.6,
+            "food_ratio": 0.84,
+            "population": 3,
+            "tick": 60
+          }
+        ],
+        "region_06": [
+          {
+            "births": 1,
+            "deaths": 0,
+            "food": 176.55,
+            "food_capacity": 466.2,
+            "food_ratio": 0.38,
+            "population": 9,
+            "tick": 58
+          },
+          {
+            "births": 0,
+            "deaths": 1,
+            "food": 162.21,
+            "food_capacity": 466.2,
+            "food_ratio": 0.35,
+            "population": 8,
+            "tick": 59
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 159.48,
+            "food_capacity": 466.2,
+            "food_ratio": 0.34,
+            "population": 8,
+            "tick": 60
+          }
+        ],
+        "region_07": [
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 447.83,
+            "food_capacity": 491.4,
+            "food_ratio": 0.91,
+            "population": 5,
+            "tick": 58
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 447.83,
+            "food_capacity": 491.4,
+            "food_ratio": 0.91,
+            "population": 5,
+            "tick": 59
+          },
+          {
+            "births": 0,
+            "deaths": 0,
+            "food": 447.83,
+            "food_capacity": 491.4,
+            "food_ratio": 0.91,
+            "population": 5,
+            "tick": 60
+          }
+        ]
+      },
+      "region_nodes": {
+        "region_00": "nonode@nohost",
+        "region_01": "nonode@nohost",
+        "region_02": "nonode@nohost",
+        "region_03": "nonode@nohost",
+        "region_04": "nonode@nohost",
+        "region_05": "nonode@nohost",
+        "region_06": "nonode@nohost",
+        "region_07": "nonode@nohost"
+      },
+      "regions": [
+        "region_00",
+        "region_01",
+        "region_02",
+        "region_03",
+        "region_04",
+        "region_05",
+        "region_06",
+        "region_07"
+      ],
+      "resource_profiles": {
+        "region_00": {
+          "band": "balanced",
+          "capacity_multiplier": 1.21,
+          "dna_bias": {
+            "aggression": -0.0,
+            "breed": 0.03,
+            "forage": 0.04,
+            "longevity": 0.06,
+            "metabolism": -0.01,
+            "move": 0.07
+          },
+          "forage_bonus": 0.07,
+          "harshness": 0.68,
+          "lean_factor": 0.58,
+          "neighbors": [
+            "region_07",
+            "region_01"
+          ],
+          "regen_multiplier": 0.91,
+          "region_id": "region_00",
+          "region_index": 0,
+          "shelter_bonus": 0.02,
+          "start_energy_bias": -0.93
+        },
+        "region_01": {
+          "band": "harsh",
+          "capacity_multiplier": 1.18,
+          "dna_bias": {
+            "aggression": -0.08,
+            "breed": -0.07,
+            "forage": 0.05,
+            "longevity": 0.04,
+            "metabolism": 0.04,
+            "move": -0.09
+          },
+          "forage_bonus": 0.02,
+          "harshness": 0.93,
+          "lean_factor": 0.68,
+          "neighbors": [
+            "region_00",
+            "region_02"
+          ],
+          "regen_multiplier": 1.15,
+          "region_id": "region_01",
+          "region_index": 1,
+          "shelter_bonus": 0.01,
+          "start_energy_bias": 0.92
+        },
+        "region_02": {
+          "band": "harsh",
+          "capacity_multiplier": 0.9,
+          "dna_bias": {
+            "aggression": 0.06,
+            "breed": -0.02,
+            "forage": -0.02,
+            "longevity": -0.03,
+            "metabolism": 0.03,
+            "move": 0.09
+          },
+          "forage_bonus": -0.0,
+          "harshness": 0.74,
+          "lean_factor": 0.58,
+          "neighbors": [
+            "region_01",
+            "region_03"
+          ],
+          "regen_multiplier": 1.02,
+          "region_id": "region_02",
+          "region_index": 2,
+          "shelter_bonus": 0.01,
+          "start_energy_bias": 2.19
+        },
+        "region_03": {
+          "band": "harsh",
+          "capacity_multiplier": 1.01,
+          "dna_bias": {
+            "aggression": 0.03,
+            "breed": -0.0,
+            "forage": 0.03,
+            "longevity": 0.07,
+            "metabolism": -0.03,
+            "move": -0.03
+          },
+          "forage_bonus": 0.05,
+          "harshness": 0.88,
+          "lean_factor": 0.65,
+          "neighbors": [
+            "region_02",
+            "region_04"
+          ],
+          "regen_multiplier": 1.12,
+          "region_id": "region_03",
+          "region_index": 3,
+          "shelter_bonus": 0.07,
+          "start_energy_bias": -1.54
+        },
+        "region_04": {
+          "band": "balanced",
+          "capacity_multiplier": 1.05,
+          "dna_bias": {
+            "aggression": 0.09,
+            "breed": 0.02,
+            "forage": 0.09,
+            "longevity": 0.02,
+            "metabolism": -0.02,
+            "move": 0.0
+          },
+          "forage_bonus": 0.11,
+          "harshness": 0.17,
+          "lean_factor": 0.18,
+          "neighbors": [
+            "region_03",
+            "region_05"
+          ],
+          "regen_multiplier": 0.9,
+          "region_id": "region_04",
+          "region_index": 4,
+          "shelter_bonus": 0.07,
+          "start_energy_bias": 1.86
+        },
+        "region_05": {
+          "band": "harsh",
+          "capacity_multiplier": 1.03,
+          "dna_bias": {
+            "aggression": 0.02,
+            "breed": -0.02,
+            "forage": 0.0,
+            "longevity": 0.03,
+            "metabolism": -0.0,
+            "move": -0.05
+          },
+          "forage_bonus": 0.0,
+          "harshness": 0.72,
+          "lean_factor": 0.6,
+          "neighbors": [
+            "region_04",
+            "region_06"
+          ],
+          "regen_multiplier": 0.94,
+          "region_id": "region_05",
+          "region_index": 5,
+          "shelter_bonus": 0.02,
+          "start_energy_bias": -0.23
+        },
+        "region_06": {
+          "band": "balanced",
+          "capacity_multiplier": 1.11,
+          "dna_bias": {
+            "aggression": 0.08,
+            "breed": 0.01,
+            "forage": -0.06,
+            "longevity": -0.01,
+            "metabolism": 0.01,
+            "move": 0.07
+          },
+          "forage_bonus": 0.11,
+          "harshness": 0.19,
+          "lean_factor": 0.19,
+          "neighbors": [
+            "region_05",
+            "region_07"
+          ],
+          "regen_multiplier": 0.89,
+          "region_id": "region_06",
+          "region_index": 6,
+          "shelter_bonus": 0.08,
+          "start_energy_bias": 2.22
+        },
+        "region_07": {
+          "band": "balanced",
+          "capacity_multiplier": 1.17,
+          "dna_bias": {
+            "aggression": 0.08,
+            "breed": 0.02,
+            "forage": -0.04,
+            "longevity": 0.04,
+            "metabolism": 0.01,
+            "move": 0.03
+          },
+          "forage_bonus": 0.0,
+          "harshness": 0.67,
+          "lean_factor": 0.56,
+          "neighbors": [
+            "region_06",
+            "region_00"
+          ],
+          "regen_multiplier": 0.94,
+          "region_id": "region_07",
+          "region_index": 7,
+          "shelter_bonus": 0.06,
+          "start_energy_bias": -2.24
+        }
+      },
+      "simulation_seed": 682840368,
+      "top_10_dna": [
+        {
+          "alive": 2,
+          "avg_energy": 126.86,
+          "dna": {
+            "aggression": 0.45,
+            "breed": 1.19,
+            "forage": 1.16,
+            "longevity": 1.15,
+            "metabolism": 1.06,
+            "move": 0.35
+          },
+          "dna_key": "m1.06-f1.16-b1.19-a0.45-v0.35-l1.15",
+          "fitness_score": 336.86,
+          "generation_max": 2,
+          "regions_present": [
+            "region_00"
+          ]
+        },
+        {
+          "alive": 2,
+          "avg_energy": 188.11,
+          "dna": {
+            "aggression": 0.54,
+            "breed": 0.84,
+            "forage": 1.21,
+            "longevity": 1.3,
+            "metabolism": 1.17,
+            "move": 0.14
+          },
+          "dna_key": "m1.17-f1.21-b0.84-a0.54-v0.14-l1.30",
+          "fitness_score": 393.11,
+          "generation_max": 1,
+          "regions_present": [
+            "region_07"
+          ]
+        },
+        {
+          "alive": 1,
+          "avg_energy": 277.89,
+          "dna": {
+            "aggression": 0.2,
+            "breed": 1.06,
+            "forage": 1.23,
+            "longevity": 1.29,
+            "metabolism": 0.95,
+            "move": 0.37
+          },
+          "dna_key": "m0.95-f1.23-b1.06-a0.20-v0.37-l1.29",
+          "fitness_score": 392.89,
+          "generation_max": 3,
+          "regions_present": [
+            "region_04"
+          ]
+        },
+        {
+          "alive": 1,
+          "avg_energy": 106.19,
+          "dna": {
+            "aggression": 0.41,
+            "breed": 1.02,
+            "forage": 1.27,
+            "longevity": 1.29,
+            "metabolism": 0.88,
+            "move": 0.22
+          },
+          "dna_key": "m0.88-f1.27-b1.02-a0.41-v0.22-l1.29",
+          "fitness_score": 221.19,
+          "generation_max": 3,
+          "regions_present": [
+            "region_04"
+          ]
+        },
+        {
+          "alive": 1,
+          "avg_energy": 101.65,
+          "dna": {
+            "aggression": 0.63,
+            "breed": 0.96,
+            "forage": 1.07,
+            "longevity": 1.04,
+            "metabolism": 1.07,
+            "move": 0.45
+          },
+          "dna_key": "m1.07-f1.07-b0.96-a0.63-v0.45-l1.04",
+          "fitness_score": 216.65,
+          "generation_max": 3,
+          "regions_present": [
+            "region_06"
+          ]
+        },
+        {
+          "alive": 1,
+          "avg_energy": 98.77,
+          "dna": {
+            "aggression": 0.39,
+            "breed": 0.95,
+            "forage": 1.27,
+            "longevity": 1.18,
+            "metabolism": 1.13,
+            "move": 0.25
+          },
+          "dna_key": "m1.13-f1.27-b0.95-a0.39-v0.25-l1.18",
+          "fitness_score": 213.77,
+          "generation_max": 3,
+          "regions_present": [
+            "region_01"
+          ]
+        },
+        {
+          "alive": 1,
+          "avg_energy": 70.12,
+          "dna": {
+            "aggression": 0.7,
+            "breed": 0.89,
+            "forage": 1.06,
+            "longevity": 1.06,
+            "metabolism": 1.13,
+            "move": 0.64
+          },
+          "dna_key": "m1.13-f1.06-b0.89-a0.70-v0.64-l1.06",
+          "fitness_score": 185.12,
+          "generation_max": 3,
+          "regions_present": [
+            "region_06"
+          ]
+        },
+        {
+          "alive": 1,
+          "avg_energy": 46.49,
+          "dna": {
+            "aggression": 0.26,
+            "breed": 1.06,
+            "forage": 1.23,
+            "longevity": 1.29,
+            "metabolism": 0.95,
+            "move": 0.37
+          },
+          "dna_key": "m0.95-f1.23-b1.06-a0.26-v0.37-l1.29",
+          "fitness_score": 161.49,
+          "generation_max": 3,
+          "regions_present": [
+            "region_04"
+          ]
+        },
+        {
+          "alive": 1,
+          "avg_energy": 363.07,
+          "dna": {
+            "aggression": 0.34,
+            "breed": 1.07,
+            "forage": 1.28,
+            "longevity": 1.34,
+            "metabolism": 0.89,
+            "move": 0.23
+          },
+          "dna_key": "m0.89-f1.28-b1.07-a0.34-v0.23-l1.34",
+          "fitness_score": 473.07,
+          "generation_max": 2,
+          "regions_present": [
+            "region_04"
+          ]
+        },
+        {
+          "alive": 1,
+          "avg_energy": 288.49,
+          "dna": {
+            "aggression": 0.5,
+            "breed": 0.87,
+            "forage": 1.35,
+            "longevity": 1.21,
+            "metabolism": 1.2,
+            "move": 0.28
+          },
+          "dna_key": "m1.20-f1.35-b0.87-a0.50-v0.28-l1.21",
+          "fitness_score": 398.49,
+          "generation_max": 2,
+          "regions_present": [
+            "region_01"
+          ]
+        }
+      ]
+    }
+  },
+  "job_id": "ecosystem_simulation_v1-1774729498757-5e47ff4bb7b7"
+}

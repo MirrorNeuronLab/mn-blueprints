@@ -1,0 +1,6 @@
+
+17:38:48.988 [info] Starting Horde.RegistryImpl with name MirrorNeuron.DistributedRegistry
+
+17:38:48.994 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.JobSupervisor
+
+17:38:48.994 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.AgentSupervisor

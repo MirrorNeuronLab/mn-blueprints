@@ -1,0 +1,169 @@
+{
+  "manifest_version": "1.0",
+  "graph_id": "prime_sweep_4_workers",
+  "job_name": "prime-sweep-4-workers",
+  "entrypoints": [
+    "dispatcher"
+  ],
+  "initial_inputs": {
+    "dispatcher": [
+      {
+        "benchmark": "prime_sweep",
+        "worker_count": 4,
+        "candidate_start": 1000003,
+        "candidate_end": 1000009
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "node_id": "dispatcher",
+      "agent_type": "relay",
+      "role": "root_coordinator",
+      "config": {
+        "emit_type": "prime_check_request"
+      }
+    },
+    {
+      "node_id": "result_sink",
+      "agent_type": "collector",
+      "config": {
+        "complete_on_message": false,
+        "complete_after": 4
+      }
+    },
+    {
+      "node_id": "prime_worker_0001",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0001",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000003"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0002",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0002",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000005"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0003",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0003",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000007"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "prime_worker_0004",
+      "agent_type": "sandbox_worker",
+      "config": {
+        "name_prefix": "prime-worker-0004",
+        "from": "base",
+        "upload_path": "prime_worker",
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker",
+        "command": [
+          "python3",
+          "scripts/check_prime.py",
+          "1000009"
+        ],
+        "output_message_type": "prime_check_result",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "dispatch_prime_worker_0001",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0001",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0001_to_sink",
+      "from_node": "prime_worker_0001",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0002",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0002",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0002_to_sink",
+      "from_node": "prime_worker_0002",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0003",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0003",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0003_to_sink",
+      "from_node": "prime_worker_0003",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0004",
+      "from_node": "dispatcher",
+      "to_node": "prime_worker_0004",
+      "message_type": "prime_check_request"
+    },
+    {
+      "edge_id": "prime_worker_0004_to_sink",
+      "from_node": "prime_worker_0004",
+      "to_node": "result_sink",
+      "message_type": "prime_check_result"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  }
+}

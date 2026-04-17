@@ -1,0 +1,62 @@
+{
+  "manifest_version": "1.0",
+  "graph_id": "drug_discovery_loop",
+  "job_name": "drug-discovery-infinite",
+  "entrypoints": ["protein_generator"],
+  "initial_inputs": {
+    "protein_generator": [
+      {
+        "disease": "Alzheimer"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "node_id": "protein_generator",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "upload_path": "worker",
+        "upload_as": "worker",
+        "workdir": "/sandbox/job/worker",
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "command": ["python3", "scripts/generate_protein.py"],
+        "output_message_type": "structure_ready"
+      }
+    },
+    {
+      "node_id": "drug_docker",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "upload_path": "worker",
+        "upload_as": "worker",
+        "workdir": "/sandbox/job/worker",
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "command": ["python3", "scripts/dock_drug.py"],
+        "output_message_type": "docking_complete"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "protein_to_docker",
+      "from_node": "protein_generator",
+      "to_node": "drug_docker",
+      "message_type": "structure_ready"
+    },
+    {
+      "edge_id": "docker_to_protein",
+      "from_node": "drug_docker",
+      "to_node": "protein_generator",
+      "message_type": "docking_complete"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  }
+}

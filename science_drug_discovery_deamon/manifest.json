@@ -1,0 +1,163 @@
+{
+  "manifest_version": "1.0",
+  "graph_id": "science_drug_discovery_daemon_loop",
+  "job_name": "drug-discovery-infinite",
+  "entrypoints": ["target_discovery"],
+  "initial_inputs": {
+    "target_discovery": [
+      {
+        "disease": "Alzheimer"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "node_id": "target_discovery",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "upload_path": "worker",
+        "upload_as": "worker",
+        "workdir": "/sandbox/job/worker",
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "command": ["python3", "scripts/stage_a.py"],
+        "output_message_type": "targets_ready"
+      }
+    },
+    {
+      "node_id": "structure_generation",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "upload_path": "worker",
+        "upload_as": "worker",
+        "workdir": "/sandbox/job/worker",
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "command": ["python3", "scripts/stage_b.py"],
+        "output_message_type": "structures_ready"
+      }
+    },
+    {
+      "node_id": "candidate_generation",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "upload_path": "worker",
+        "upload_as": "worker",
+        "workdir": "/sandbox/job/worker",
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "command": ["python3", "scripts/stage_c.py"],
+        "output_message_type": "candidates_ready"
+      }
+    },
+    {
+      "node_id": "binding_evaluation",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "upload_path": "worker",
+        "upload_as": "worker",
+        "workdir": "/sandbox/job/worker",
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "command": ["python3", "scripts/stage_d.py"],
+        "output_message_type": "evaluations_ready"
+      }
+    },
+    {
+      "node_id": "ranking_reporting",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "upload_path": "worker",
+        "upload_as": "worker",
+        "workdir": "/sandbox/job/worker",
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "command": ["python3", "scripts/stage_e.py"],
+        "output_message_type": "pipeline_complete"
+      }
+    },
+    {
+      "node_id": "manager_monitor",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "upload_path": "worker",
+        "upload_as": "worker",
+        "workdir": "/sandbox/job/worker",
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "command": ["python3", "scripts/manager.py"]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "a_to_b",
+      "from_node": "target_discovery",
+      "to_node": "structure_generation",
+      "message_type": "targets_ready"
+    },
+    {
+      "edge_id": "b_to_c",
+      "from_node": "structure_generation",
+      "to_node": "candidate_generation",
+      "message_type": "structures_ready"
+    },
+    {
+      "edge_id": "c_to_d",
+      "from_node": "candidate_generation",
+      "to_node": "binding_evaluation",
+      "message_type": "candidates_ready"
+    },
+    {
+      "edge_id": "d_to_e",
+      "from_node": "binding_evaluation",
+      "to_node": "ranking_reporting",
+      "message_type": "evaluations_ready"
+    },
+    {
+      "edge_id": "manager_listen_a",
+      "from_node": "target_discovery",
+      "to_node": "manager_monitor",
+      "message_type": "targets_ready"
+    },
+    {
+      "edge_id": "manager_listen_b",
+      "from_node": "structure_generation",
+      "to_node": "manager_monitor",
+      "message_type": "structures_ready"
+    },
+    {
+      "edge_id": "manager_listen_c",
+      "from_node": "candidate_generation",
+      "to_node": "manager_monitor",
+      "message_type": "candidates_ready"
+    },
+    {
+      "edge_id": "manager_listen_d",
+      "from_node": "binding_evaluation",
+      "to_node": "manager_monitor",
+      "message_type": "evaluations_ready"
+    },
+    {
+      "edge_id": "manager_listen_e",
+      "from_node": "ranking_reporting",
+      "to_node": "manager_monitor",
+      "message_type": "pipeline_complete"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  }
+}

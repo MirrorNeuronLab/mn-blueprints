@@ -1,17 +1,12 @@
-
-09:19:56.949 [info] Starting Horde.RegistryImpl with name MirrorNeuron.DistributedRegistry
-
-09:19:56.955 [info] Starting Horde.DynamicSupervisorImpl with name MirrorNeuron.Runtime.AgentSupervisor
-╭─ MirrorNeuron CLI ─────────────────────────────────────────────────────────────────────────────╮
-│  __  __ _                      _   _                                                           │
-│ |  \/  (_)_ __ _ __ ___  _ __| \ | | ___ _   _ _ __ ___                                        │
-│ | |\/| | | '__| '__/ _ \| '__|  \| |/ _ \ | | | '__/ _ \                                       │
-│ | |  | | | |  | | | (_) | |  | |\  |  __/ |_| | | | (_) |                                      │
-│ |_|  |_|_|_|  |_|  \___/|_|  |_| \_|\___|\__,_|_|  \___/                                       │
-│ Event-driven runtime for sandboxed agents                                                      │
-│ Run  /Users/homer/Projects/MirrorNeuron/examples/streaming_peak_demo/generated/streaming_peak_ │
-│ demo_60_samples_6_chunk_gzip                                                                   │
-╰────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ MirrorNeuron CLI ───────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│  __  __ _                      _   _                                                                                         │
+│ |  \/  (_)_ __ _ __ ___  _ __| \ | | ___ _   _ _ __ ___                                                                      │
+│ | |\/| | | '__| '__/ _ \| '__|  \| |/ _ \ | | | '__/ _ \                                                                     │
+│ | |  | | | |  | | | (_) | |  | |\  |  __/ |_| | | | (_) |                                                                    │
+│ |_|  |_|_|_|  |_|  \___/|_|  |_| \_|\___|\__,_|_|  \___/                                                                     │
+│ Event-driven runtime for sandboxed agents                                                                                    │
+│ Run  /Users/homer/Projects/mirrorneuron-blueprints/streaming_peak_demo/generated/streaming_peak_demo_60_samples_6_chunk_gzip │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 {
   "ok": true,
   "status": "completed",
@@ -53,8 +48,8 @@
         }
       ],
       "points_seen": 60,
-      "stream_id": "streaming_peak_demo_v1-1775827196981-2c1cbd53a774:telemetry_source:telemetry"
+      "stream_id": "streaming_peak_demo_v1-1776396860492-61284bfa6f2d:telemetry_source:telemetry"
     }
   },
-  "job_id": "streaming_peak_demo_v1-1775827196981-2c1cbd53a774"
+  "job_id": "streaming_peak_demo_v1-1776396860492-61284bfa6f2d"
 }

@@ -1,0 +1,4557 @@
+╭─ MirrorNeuron CLI ────────────────────────────────────────────────────────────────────────────────────────────╮
+│  __  __ _                      _   _                                                                          │
+│ |  \/  (_)_ __ _ __ ___  _ __| \ | | ___ _   _ _ __ ___                                                       │
+│ | |\/| | | '__| '__/ _ \| '__|  \| |/ _ \ | | | '__/ _ \                                                      │
+│ | |  | | | |  | | | (_) | |  | |\  |  __/ |_| | | | (_) |                                                     │
+│ |_|  |_|_|_|  |_|  \___/|_|  |_| \_|\___|\__,_|_|  \___/                                                      │
+│ Event-driven runtime for sandboxed agents                                                                     │
+│ Run  /Users/homer/Projects/mirrorneuron-blueprints/financial_market/generated/financial_market_500traders_30s │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+{
+  "ok": true,
+  "status": "completed",
+  "result": {
+    "agent_id": "summarizer",
+    "output": {
+      "market_summary": {
+        "agent_summaries": [
+          {
+            "agent_id": "trader_002",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_003",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_000",
+            "final_portfolio": {
+              "cash": 9003.293338545782,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_001",
+            "final_portfolio": {
+              "cash": 11811.213996330376,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_006",
+            "final_portfolio": {
+              "cash": 9504.776301314556,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_005",
+            "final_portfolio": {
+              "cash": 9999.028345425311,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_004",
+            "final_portfolio": {
+              "cash": 9502.453539341921,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_007",
+            "final_portfolio": {
+              "cash": 11811.213996330374,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_008",
+            "final_portfolio": {
+              "cash": 12001.32016313882,
+              "stock": 80
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_009",
+            "final_portfolio": {
+              "cash": 11811.213996330374,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_018",
+            "final_portfolio": {
+              "cash": 12996.020126484133,
+              "stock": 70
+            },
+            "role": "noise",
+            "total_trades": 8
+          },
+          {
+            "agent_id": "trader_022",
+            "final_portfolio": {
+              "cash": 11499.78777385809,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_010",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_012",
+            "final_portfolio": {
+              "cash": 11811.213996330374,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_015",
+            "final_portfolio": {
+              "cash": 6993.106590433034,
+              "stock": 130
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_023",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_024",
+            "final_portfolio": {
+              "cash": 241.09477692014673,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 32
+          },
+          {
+            "agent_id": "trader_013",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_016",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_017",
+            "final_portfolio": {
+              "cash": 10501.07931480878,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_014",
+            "final_portfolio": {
+              "cash": 9994.916151705198,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_020",
+            "final_portfolio": {
+              "cash": 9500.052747888982,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_035",
+            "final_portfolio": {
+              "cash": 9505.108933386098,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_034",
+            "final_portfolio": {
+              "cash": 8998.597966772813,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_021",
+            "final_portfolio": {
+              "cash": 9502.837512581185,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_029",
+            "final_portfolio": {
+              "cash": 9504.152706055254,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_026",
+            "final_portfolio": {
+              "cash": 11811.399844198555,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_011",
+            "final_portfolio": {
+              "cash": 10500.38044993567,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_032",
+            "final_portfolio": {
+              "cash": 9500.438589038029,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_028",
+            "final_portfolio": {
+              "cash": 9504.542720921949,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_019",
+            "final_portfolio": {
+              "cash": 11811.213996330376,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_030",
+            "final_portfolio": {
+              "cash": 11504.378749459836,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_025",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_031",
+            "final_portfolio": {
+              "cash": 11002.600515788085,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_027",
+            "final_portfolio": {
+              "cash": 11811.340575511736,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 29
+          },
+          {
+            "agent_id": "trader_033",
+            "final_portfolio": {
+              "cash": -9672.00673024392,
+              "stock": 300
+            },
+            "role": "market_maker",
+            "total_trades": 47
+          },
+          {
+            "agent_id": "trader_036",
+            "final_portfolio": {
+              "cash": 9510.323492465108,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_038",
+            "final_portfolio": {
+              "cash": 11008.39953129748,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_042",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_039",
+            "final_portfolio": {
+              "cash": 10997.279753267941,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_048",
+            "final_portfolio": {
+              "cash": 9504.604504536397,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_054",
+            "final_portfolio": {
+              "cash": 10001.298617628128,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_049",
+            "final_portfolio": {
+              "cash": 9504.264007671336,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_053",
+            "final_portfolio": {
+              "cash": 100.58293843463389,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 10
+          },
+          {
+            "agent_id": "trader_045",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_043",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_040",
+            "final_portfolio": {
+              "cash": 9507.338276490598,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_051",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_047",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_052",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_044",
+            "final_portfolio": {
+              "cash": 11811.400746572095,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 26
+          },
+          {
+            "agent_id": "trader_046",
+            "final_portfolio": {
+              "cash": 11811.400746572095,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 26
+          },
+          {
+            "agent_id": "trader_041",
+            "final_portfolio": {
+              "cash": 11811.400746572093,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 29
+          },
+          {
+            "agent_id": "trader_055",
+            "final_portfolio": {
+              "cash": 10995.950451533456,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_037",
+            "final_portfolio": {
+              "cash": 8998.935475661523,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_056",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_050",
+            "final_portfolio": {
+              "cash": 9998.976938514741,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_066",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_061",
+            "final_portfolio": {
+              "cash": 8015.877709204944,
+              "stock": 120
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_059",
+            "final_portfolio": {
+              "cash": 10004.220911074819,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_058",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_063",
+            "final_portfolio": {
+              "cash": 11000.339101382757,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_057",
+            "final_portfolio": {
+              "cash": 9505.481634595819,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_060",
+            "final_portfolio": {
+              "cash": 20041.84176043674,
+              "stock": 0
+            },
+            "role": "market_maker",
+            "total_trades": 11
+          },
+          {
+            "agent_id": "trader_064",
+            "final_portfolio": {
+              "cash": 9500.083140460518,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_065",
+            "final_portfolio": {
+              "cash": 10007.400700299524,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_062",
+            "final_portfolio": {
+              "cash": 9997.483780824885,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_068",
+            "final_portfolio": {
+              "cash": 9004.592570104633,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_067",
+            "final_portfolio": {
+              "cash": 11811.404843568444,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 29
+          },
+          {
+            "agent_id": "trader_069",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_075",
+            "final_portfolio": {
+              "cash": 9505.89133684995,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_072",
+            "final_portfolio": {
+              "cash": 10496.572072754334,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_073",
+            "final_portfolio": {
+              "cash": 10006.188823730059,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_071",
+            "final_portfolio": {
+              "cash": 3590.1197603284086,
+              "stock": 165
+            },
+            "role": "market_maker",
+            "total_trades": 24
+          },
+          {
+            "agent_id": "trader_076",
+            "final_portfolio": {
+              "cash": 238.51721723284572,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 31
+          },
+          {
+            "agent_id": "trader_074",
+            "final_portfolio": {
+              "cash": 11000.021679525547,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_080",
+            "final_portfolio": {
+              "cash": 9007.397221305944,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_070",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_082",
+            "final_portfolio": {
+              "cash": 11492.993436365214,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 7
+          },
+          {
+            "agent_id": "trader_079",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_084",
+            "final_portfolio": {
+              "cash": 10001.884685161356,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_083",
+            "final_portfolio": {
+              "cash": 9503.68340411905,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_077",
+            "final_portfolio": {
+              "cash": 10997.195717329258,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_081",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_078",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_085",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_086",
+            "final_portfolio": {
+              "cash": 20186.102481842747,
+              "stock": 0
+            },
+            "role": "market_maker",
+            "total_trades": 35
+          },
+          {
+            "agent_id": "trader_088",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_101",
+            "final_portfolio": {
+              "cash": 8506.883433206478,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_099",
+            "final_portfolio": {
+              "cash": 9009.248490577225,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_092",
+            "final_portfolio": {
+              "cash": 11497.133611557061,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_090",
+            "final_portfolio": {
+              "cash": 11811.40894056479,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_089",
+            "final_portfolio": {
+              "cash": 11811.40894056479,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_097",
+            "final_portfolio": {
+              "cash": 10010.344911913497,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_091",
+            "final_portfolio": {
+              "cash": 10500.032707148748,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_100",
+            "final_portfolio": {
+              "cash": 11811.40894056479,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_093",
+            "final_portfolio": {
+              "cash": 10503.646069438482,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_095",
+            "final_portfolio": {
+              "cash": 9000.354623125322,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_098",
+            "final_portfolio": {
+              "cash": -9805.188730987647,
+              "stock": 300
+            },
+            "role": "market_maker",
+            "total_trades": 21
+          },
+          {
+            "agent_id": "trader_087",
+            "final_portfolio": {
+              "cash": 10994.930321154901,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_096",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_094",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_107",
+            "final_portfolio": {
+              "cash": 9996.418498315008,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_111",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_109",
+            "final_portfolio": {
+              "cash": 19682.152113903543,
+              "stock": 5
+            },
+            "role": "market_maker",
+            "total_trades": 40
+          },
+          {
+            "agent_id": "trader_102",
+            "final_portfolio": {
+              "cash": 9505.47738702424,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_108",
+            "final_portfolio": {
+              "cash": 10491.687986536233,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_104",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_103",
+            "final_portfolio": {
+              "cash": 11003.842675504315,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_105",
+            "final_portfolio": {
+              "cash": 10493.64489543286,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_106",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 29
+          },
+          {
+            "agent_id": "trader_112",
+            "final_portfolio": {
+              "cash": 8496.031784693687,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_114",
+            "final_portfolio": {
+              "cash": 20340.6558158055,
+              "stock": 0
+            },
+            "role": "market_maker",
+            "total_trades": 53
+          },
+          {
+            "agent_id": "trader_117",
+            "final_portfolio": {
+              "cash": 10495.925705795627,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_110",
+            "final_portfolio": {
+              "cash": 10009.003276338586,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_120",
+            "final_portfolio": {
+              "cash": 9504.666717924858,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_122",
+            "final_portfolio": {
+              "cash": 11991.23256046917,
+              "stock": 80
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_118",
+            "final_portfolio": {
+              "cash": 9001.835348785757,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_119",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_125",
+            "final_portfolio": {
+              "cash": 10994.695987431054,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_121",
+            "final_portfolio": {
+              "cash": 10008.38515512058,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_123",
+            "final_portfolio": {
+              "cash": 10497.31115801396,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_127",
+            "final_portfolio": {
+              "cash": -19705.392773213953,
+              "stock": 400
+            },
+            "role": "market_maker",
+            "total_trades": 31
+          },
+          {
+            "agent_id": "trader_113",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_115",
+            "final_portfolio": {
+              "cash": 9002.695724806497,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_129",
+            "final_portfolio": {
+              "cash": 9503.568204165025,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_124",
+            "final_portfolio": {
+              "cash": 11811.408940564788,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_116",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_141",
+            "final_portfolio": {
+              "cash": 11001.08659061575,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_142",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_140",
+            "final_portfolio": {
+              "cash": 10502.63911786013,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 7
+          },
+          {
+            "agent_id": "trader_143",
+            "final_portfolio": {
+              "cash": 9504.461222686601,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_145",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_199",
+            "final_portfolio": {
+              "cash": 11494.275105018793,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_139",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_196",
+            "final_portfolio": {
+              "cash": 10492.161311362055,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_144",
+            "final_portfolio": {
+              "cash": 8006.173179695286,
+              "stock": 120
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_197",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_182",
+            "final_portfolio": {
+              "cash": 101.82528165434405,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 10
+          },
+          {
+            "agent_id": "trader_177",
+            "final_portfolio": {
+              "cash": 10006.823698692833,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_184",
+            "final_portfolio": {
+              "cash": 10001.5261204147,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_175",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_187",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_173",
+            "final_portfolio": {
+              "cash": 10008.070639091442,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_156",
+            "final_portfolio": {
+              "cash": 8510.994808660555,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_134",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_178",
+            "final_portfolio": {
+              "cash": 10498.897586041872,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_130",
+            "final_portfolio": {
+              "cash": 10504.802360269397,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_132",
+            "final_portfolio": {
+              "cash": 9500.946430170887,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_138",
+            "final_portfolio": {
+              "cash": 9010.751736784621,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 8
+          },
+          {
+            "agent_id": "trader_126",
+            "final_portfolio": {
+              "cash": 11811.408940564794,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_181",
+            "final_portfolio": {
+              "cash": 9010.981038193315,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_161",
+            "final_portfolio": {
+              "cash": 9501.247456070603,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_128",
+            "final_portfolio": {
+              "cash": 8510.677932743793,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_137",
+            "final_portfolio": {
+              "cash": 8002.533179650243,
+              "stock": 120
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_168",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_176",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 26
+          },
+          {
+            "agent_id": "trader_192",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_133",
+            "final_portfolio": {
+              "cash": 10277.603479849493,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 46
+          },
+          {
+            "agent_id": "trader_157",
+            "final_portfolio": {
+              "cash": 9498.530477367623,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_148",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_136",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 26
+          },
+          {
+            "agent_id": "trader_149",
+            "final_portfolio": {
+              "cash": 9003.350943472986,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_135",
+            "final_portfolio": {
+              "cash": 9501.777445565285,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_164",
+            "final_portfolio": {
+              "cash": 9006.043651113512,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_159",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_194",
+            "final_portfolio": {
+              "cash": 9505.987056371245,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_193",
+            "final_portfolio": {
+              "cash": 20044.706793588884,
+              "stock": 0
+            },
+            "role": "market_maker",
+            "total_trades": 12
+          },
+          {
+            "agent_id": "trader_166",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_151",
+            "final_portfolio": {
+              "cash": 10497.104039946193,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_158",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_200",
+            "final_portfolio": {
+              "cash": 10139.543401612407,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 22
+          },
+          {
+            "agent_id": "trader_205",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_131",
+            "final_portfolio": {
+              "cash": 11811.408940564794,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_162",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_165",
+            "final_portfolio": {
+              "cash": 11811.40894056479,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_147",
+            "final_portfolio": {
+              "cash": 9499.87173454047,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_189",
+            "final_portfolio": {
+              "cash": 11001.72984443483,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_172",
+            "final_portfolio": {
+              "cash": 9997.570371773238,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_167",
+            "final_portfolio": {
+              "cash": 9999.372585129091,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_180",
+            "final_portfolio": {
+              "cash": 11489.296363532561,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_186",
+            "final_portfolio": {
+              "cash": 10502.678745728306,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_171",
+            "final_portfolio": {
+              "cash": 9500.811314846247,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_188",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_146",
+            "final_portfolio": {
+              "cash": 10997.615768447242,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_174",
+            "final_portfolio": {
+              "cash": 10998.79811225246,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_195",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_152",
+            "final_portfolio": {
+              "cash": 11990.48187853112,
+              "stock": 80
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_160",
+            "final_portfolio": {
+              "cash": 11811.40894056479,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_185",
+            "final_portfolio": {
+              "cash": 9001.873997231858,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_191",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_179",
+            "final_portfolio": {
+              "cash": 9001.74236675147,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_190",
+            "final_portfolio": {
+              "cash": 9503.255494951445,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_155",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_153",
+            "final_portfolio": {
+              "cash": 12491.11916192317,
+              "stock": 75
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_170",
+            "final_portfolio": {
+              "cash": 220.24326977765605,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 39
+          },
+          {
+            "agent_id": "trader_169",
+            "final_portfolio": {
+              "cash": 11811.40894056479,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_198",
+            "final_portfolio": {
+              "cash": -9579.23491025987,
+              "stock": 300
+            },
+            "role": "market_maker",
+            "total_trades": 91
+          },
+          {
+            "agent_id": "trader_183",
+            "final_portfolio": {
+              "cash": 11811.408940564794,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_154",
+            "final_portfolio": {
+              "cash": 11811.40894056479,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_202",
+            "final_portfolio": {
+              "cash": 9502.091896810554,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_208",
+            "final_portfolio": {
+              "cash": 11003.73834445356,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_206",
+            "final_portfolio": {
+              "cash": 9501.427650280039,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_212",
+            "final_portfolio": {
+              "cash": 11001.418993839812,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_242",
+            "final_portfolio": {
+              "cash": 10495.476549860756,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_201",
+            "final_portfolio": {
+              "cash": 10288.463760294848,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 44
+          },
+          {
+            "agent_id": "trader_221",
+            "final_portfolio": {
+              "cash": 10499.269147763443,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_225",
+            "final_portfolio": {
+              "cash": 11498.456415622744,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_223",
+            "final_portfolio": {
+              "cash": 7505.478666069496,
+              "stock": 125
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_216",
+            "final_portfolio": {
+              "cash": 10005.50925708778,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_235",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 26
+          },
+          {
+            "agent_id": "trader_245",
+            "final_portfolio": {
+              "cash": 11003.256616360439,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_224",
+            "final_portfolio": {
+              "cash": 11811.40894056479,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_215",
+            "final_portfolio": {
+              "cash": -9658.649552359746,
+              "stock": 300
+            },
+            "role": "market_maker",
+            "total_trades": 44
+          },
+          {
+            "agent_id": "trader_203",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_210",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_211",
+            "final_portfolio": {
+              "cash": 11503.968398116085,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 9
+          },
+          {
+            "agent_id": "trader_204",
+            "final_portfolio": {
+              "cash": 11004.048931503186,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_239",
+            "final_portfolio": {
+              "cash": 10497.63243260977,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_244",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_232",
+            "final_portfolio": {
+              "cash": 10505.245266689317,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_213",
+            "final_portfolio": {
+              "cash": 9507.689413824119,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_236",
+            "final_portfolio": {
+              "cash": 9498.657030597076,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_240",
+            "final_portfolio": {
+              "cash": 8502.694871720085,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_220",
+            "final_portfolio": {
+              "cash": 100.42398414438912,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 10
+          },
+          {
+            "agent_id": "trader_229",
+            "final_portfolio": {
+              "cash": 223.92489706499032,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 37
+          },
+          {
+            "agent_id": "trader_226",
+            "final_portfolio": {
+              "cash": 11993.986511468689,
+              "stock": 80
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_214",
+            "final_portfolio": {
+              "cash": 10145.322159764366,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 21
+          },
+          {
+            "agent_id": "trader_230",
+            "final_portfolio": {
+              "cash": 11811.40894056479,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_219",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_222",
+            "final_portfolio": {
+              "cash": 10505.203546772771,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_207",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_233",
+            "final_portfolio": {
+              "cash": 10004.964106810801,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 8
+          },
+          {
+            "agent_id": "trader_217",
+            "final_portfolio": {
+              "cash": 9505.729847407814,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_218",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_231",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_228",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_234",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_246",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_237",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_209",
+            "final_portfolio": {
+              "cash": 248.92704658140838,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 32
+          },
+          {
+            "agent_id": "trader_238",
+            "final_portfolio": {
+              "cash": 9502.863025449109,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_247",
+            "final_portfolio": {
+              "cash": 11003.180107513906,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_241",
+            "final_portfolio": {
+              "cash": 10001.860128230084,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_248",
+            "final_portfolio": {
+              "cash": 11502.983954961412,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_272",
+            "final_portfolio": {
+              "cash": 9015.379982883125,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_250",
+            "final_portfolio": {
+              "cash": 10998.145517159286,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_264",
+            "final_portfolio": {
+              "cash": 10498.611076060099,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_252",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_265",
+            "final_portfolio": {
+              "cash": 9501.005414563962,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_256",
+            "final_portfolio": {
+              "cash": 11811.408940564796,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_258",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_243",
+            "final_portfolio": {
+              "cash": 248.92704658140838,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 32
+          },
+          {
+            "agent_id": "trader_268",
+            "final_portfolio": {
+              "cash": 9011.052656422913,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_267",
+            "final_portfolio": {
+              "cash": -9546.98514332961,
+              "stock": 300
+            },
+            "role": "market_maker",
+            "total_trades": 71
+          },
+          {
+            "agent_id": "trader_260",
+            "final_portfolio": {
+              "cash": 10991.879686981087,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_274",
+            "final_portfolio": {
+              "cash": 11811.408940564794,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_249",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_273",
+            "final_portfolio": {
+              "cash": 200.0710021707548,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 46
+          },
+          {
+            "agent_id": "trader_251",
+            "final_portfolio": {
+              "cash": 10991.095708481525,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_257",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_227",
+            "final_portfolio": {
+              "cash": 10993.570568870631,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_253",
+            "final_portfolio": {
+              "cash": 10997.498765784503,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_266",
+            "final_portfolio": {
+              "cash": 9494.89758159074,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_275",
+            "final_portfolio": {
+              "cash": 11811.40894056479,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_261",
+            "final_portfolio": {
+              "cash": 9002.962420991942,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_255",
+            "final_portfolio": {
+              "cash": 10288.195846753037,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 43
+          },
+          {
+            "agent_id": "trader_271",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_254",
+            "final_portfolio": {
+              "cash": 10290.717773417548,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 44
+          },
+          {
+            "agent_id": "trader_263",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_259",
+            "final_portfolio": {
+              "cash": 10265.625512824625,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 45
+          },
+          {
+            "agent_id": "trader_262",
+            "final_portfolio": {
+              "cash": 8995.731537861584,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_269",
+            "final_portfolio": {
+              "cash": 11811.408940564788,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 29
+          },
+          {
+            "agent_id": "trader_270",
+            "final_portfolio": {
+              "cash": 10501.293492837705,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_283",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_279",
+            "final_portfolio": {
+              "cash": 8013.972557832612,
+              "stock": 120
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_276",
+            "final_portfolio": {
+              "cash": 11811.408940564792,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 26
+          },
+          {
+            "agent_id": "trader_284",
+            "final_portfolio": {
+              "cash": 10008.024148132177,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_280",
+            "final_portfolio": {
+              "cash": 9006.64530616025,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_278",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_281",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_282",
+            "final_portfolio": {
+              "cash": 10005.643225797037,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_277",
+            "final_portfolio": {
+              "cash": 11005.308290190851,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_285",
+            "final_portfolio": {
+              "cash": 233.8490523705991,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 31
+          },
+          {
+            "agent_id": "trader_293",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_294",
+            "final_portfolio": {
+              "cash": 10496.693624898742,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_291",
+            "final_portfolio": {
+              "cash": 10005.987109206008,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_287",
+            "final_portfolio": {
+              "cash": 11811.419149898156,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_288",
+            "final_portfolio": {
+              "cash": 9014.342300825614,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_292",
+            "final_portfolio": {
+              "cash": 8502.882959352515,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_295",
+            "final_portfolio": {
+              "cash": 10495.089805855267,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_289",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_286",
+            "final_portfolio": {
+              "cash": 11493.7546909153,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_290",
+            "final_portfolio": {
+              "cash": 11811.625236974383,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 29
+          },
+          {
+            "agent_id": "trader_323",
+            "final_portfolio": {
+              "cash": 10005.079796592432,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_322",
+            "final_portfolio": {
+              "cash": 8507.669980532288,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_315",
+            "final_portfolio": {
+              "cash": 9995.230687868045,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_308",
+            "final_portfolio": {
+              "cash": 10997.759469121387,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_317",
+            "final_portfolio": {
+              "cash": 10993.022006920124,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_302",
+            "final_portfolio": {
+              "cash": 10011.209652981071,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_320",
+            "final_portfolio": {
+              "cash": 10499.298480605878,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_311",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_306",
+            "final_portfolio": {
+              "cash": 10500.199706203517,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_307",
+            "final_portfolio": {
+              "cash": 9005.465647679555,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_312",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_297",
+            "final_portfolio": {
+              "cash": 11811.52872013743,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_296",
+            "final_portfolio": {
+              "cash": 11493.937514495785,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_305",
+            "final_portfolio": {
+              "cash": 11811.76258713374,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 29
+          },
+          {
+            "agent_id": "trader_313",
+            "final_portfolio": {
+              "cash": 11811.887243262969,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 30
+          },
+          {
+            "agent_id": "trader_325",
+            "final_portfolio": {
+              "cash": 11001.528645014514,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_303",
+            "final_portfolio": {
+              "cash": 10004.280651557183,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_318",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_328",
+            "final_portfolio": {
+              "cash": 10506.197353787364,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_316",
+            "final_portfolio": {
+              "cash": 10501.32916200451,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_329",
+            "final_portfolio": {
+              "cash": 9000.894595084525,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_298",
+            "final_portfolio": {
+              "cash": 11811.742521959082,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_299",
+            "final_portfolio": {
+              "cash": 10503.983910202784,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_301",
+            "final_portfolio": {
+              "cash": 8506.583716806424,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_310",
+            "final_portfolio": {
+              "cash": 10502.334400614724,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_304",
+            "final_portfolio": {
+              "cash": 11811.800408186384,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_309",
+            "final_portfolio": {
+              "cash": 11504.400759613016,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_324",
+            "final_portfolio": {
+              "cash": 11812.143621392503,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 29
+          },
+          {
+            "agent_id": "trader_314",
+            "final_portfolio": {
+              "cash": 9001.295694924696,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_326",
+            "final_portfolio": {
+              "cash": 9001.265122670802,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_331",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_341",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_338",
+            "final_portfolio": {
+              "cash": 10506.672973071647,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 7
+          },
+          {
+            "agent_id": "trader_337",
+            "final_portfolio": {
+              "cash": 11498.418540031562,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_343",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_347",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_330",
+            "final_portfolio": {
+              "cash": 9492.973741475067,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_348",
+            "final_portfolio": {
+              "cash": 8510.568660819192,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_334",
+            "final_portfolio": {
+              "cash": 7514.713392936352,
+              "stock": 125
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_355",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_344",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_353",
+            "final_portfolio": {
+              "cash": 11811.975039235072,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 29
+          },
+          {
+            "agent_id": "trader_335",
+            "final_portfolio": {
+              "cash": 9503.405153722166,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_357",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_354",
+            "final_portfolio": {
+              "cash": 20047.104596442914,
+              "stock": 0
+            },
+            "role": "market_maker",
+            "total_trades": 10
+          },
+          {
+            "agent_id": "trader_367",
+            "final_portfolio": {
+              "cash": 9503.601957742589,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_358",
+            "final_portfolio": {
+              "cash": 11812.65278080071,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 29
+          },
+          {
+            "agent_id": "trader_365",
+            "final_portfolio": {
+              "cash": 11492.597573601088,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_340",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_364",
+            "final_portfolio": {
+              "cash": 8505.685564413612,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_342",
+            "final_portfolio": {
+              "cash": 11812.48244883777,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_352",
+            "final_portfolio": {
+              "cash": 10137.655436671079,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 22
+          },
+          {
+            "agent_id": "trader_332",
+            "final_portfolio": {
+              "cash": 10501.984793548485,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_339",
+            "final_portfolio": {
+              "cash": 10003.200105816773,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_351",
+            "final_portfolio": {
+              "cash": 9505.10880132103,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_333",
+            "final_portfolio": {
+              "cash": 11812.791159971894,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 27
+          },
+          {
+            "agent_id": "trader_362",
+            "final_portfolio": {
+              "cash": 9501.037297762261,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_349",
+            "final_portfolio": {
+              "cash": 8999.611706684644,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_360",
+            "final_portfolio": {
+              "cash": 9507.4580103223,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_336",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_345",
+            "final_portfolio": {
+              "cash": 10500.64611913065,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_359",
+            "final_portfolio": {
+              "cash": 9996.504553879966,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_363",
+            "final_portfolio": {
+              "cash": 8008.589292516134,
+              "stock": 120
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_361",
+            "final_portfolio": {
+              "cash": 10000.406728333826,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_346",
+            "final_portfolio": {
+              "cash": -9539.229773053088,
+              "stock": 300
+            },
+            "role": "market_maker",
+            "total_trades": 68
+          },
+          {
+            "agent_id": "trader_356",
+            "final_portfolio": {
+              "cash": -9832.439376864542,
+              "stock": 300
+            },
+            "role": "market_maker",
+            "total_trades": 33
+          },
+          {
+            "agent_id": "trader_368",
+            "final_portfolio": {
+              "cash": 11812.964504595231,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_376",
+            "final_portfolio": {
+              "cash": 10001.997998228348,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_380",
+            "final_portfolio": {
+              "cash": 9999.559943139117,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_370",
+            "final_portfolio": {
+              "cash": 9499.092926580108,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_371",
+            "final_portfolio": {
+              "cash": 10002.14676983307,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_379",
+            "final_portfolio": {
+              "cash": 9503.446386278074,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_369",
+            "final_portfolio": {
+              "cash": 30170.88185790502,
+              "stock": -100
+            },
+            "role": "market_maker",
+            "total_trades": 49
+          },
+          {
+            "agent_id": "trader_366",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_372",
+            "final_portfolio": {
+              "cash": 9504.813757051177,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_377",
+            "final_portfolio": {
+              "cash": 10502.722488868534,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_374",
+            "final_portfolio": {
+              "cash": 10005.507705384769,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 8
+          },
+          {
+            "agent_id": "trader_399",
+            "final_portfolio": {
+              "cash": 9993.25620262059,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_395",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_390",
+            "final_portfolio": {
+              "cash": 30069.591237974142,
+              "stock": -100
+            },
+            "role": "market_maker",
+            "total_trades": 30
+          },
+          {
+            "agent_id": "trader_381",
+            "final_portfolio": {
+              "cash": 10509.169736133019,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_405",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_397",
+            "final_portfolio": {
+              "cash": 10999.278263360371,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_383",
+            "final_portfolio": {
+              "cash": 10005.937641710483,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_373",
+            "final_portfolio": {
+              "cash": 9503.184596587593,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_389",
+            "final_portfolio": {
+              "cash": 9008.045652027935,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_384",
+            "final_portfolio": {
+              "cash": 10005.337936103462,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_388",
+            "final_portfolio": {
+              "cash": 20177.639356030726,
+              "stock": 0
+            },
+            "role": "market_maker",
+            "total_trades": 35
+          },
+          {
+            "agent_id": "trader_398",
+            "final_portfolio": {
+              "cash": 10501.84323811687,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_385",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_391",
+            "final_portfolio": {
+              "cash": 10506.37831257437,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_387",
+            "final_portfolio": {
+              "cash": 9504.06544768233,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_403",
+            "final_portfolio": {
+              "cash": 10248.581547352047,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 43
+          },
+          {
+            "agent_id": "trader_396",
+            "final_portfolio": {
+              "cash": 9003.34770907905,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_382",
+            "final_portfolio": {
+              "cash": 8997.662651514262,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_386",
+            "final_portfolio": {
+              "cash": 11813.65187803569,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 32
+          },
+          {
+            "agent_id": "trader_375",
+            "final_portfolio": {
+              "cash": 11813.12407930994,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 28
+          },
+          {
+            "agent_id": "trader_394",
+            "final_portfolio": {
+              "cash": 11814.968538917,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 32
+          },
+          {
+            "agent_id": "trader_393",
+            "final_portfolio": {
+              "cash": 10491.098780784634,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 7
+          },
+          {
+            "agent_id": "trader_378",
+            "final_portfolio": {
+              "cash": 8507.09558063337,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_407",
+            "final_portfolio": {
+              "cash": 9008.191567297714,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_435",
+            "final_portfolio": {
+              "cash": 11845.636138976139,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 49
+          },
+          {
+            "agent_id": "trader_416",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_429",
+            "final_portfolio": {
+              "cash": 10511.09821558143,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_428",
+            "final_portfolio": {
+              "cash": 11502.390798581844,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 7
+          },
+          {
+            "agent_id": "trader_392",
+            "final_portfolio": {
+              "cash": 10491.1378011686,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_417",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_415",
+            "final_portfolio": {
+              "cash": 11819.870028610741,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 43
+          },
+          {
+            "agent_id": "trader_433",
+            "final_portfolio": {
+              "cash": 201.19221402922386,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 33
+          },
+          {
+            "agent_id": "trader_412",
+            "final_portfolio": {
+              "cash": 10996.628747050367,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_406",
+            "final_portfolio": {
+              "cash": 11816.567658205506,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 38
+          },
+          {
+            "agent_id": "trader_421",
+            "final_portfolio": {
+              "cash": 9498.150379988625,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_402",
+            "final_portfolio": {
+              "cash": 8998.043073459288,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_424",
+            "final_portfolio": {
+              "cash": 11002.9080212391,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_437",
+            "final_portfolio": {
+              "cash": 9502.217084416998,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_418",
+            "final_portfolio": {
+              "cash": 9007.598306324458,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_439",
+            "final_portfolio": {
+              "cash": 10500.925976632592,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_420",
+            "final_portfolio": {
+              "cash": 9998.133713793313,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_455",
+            "final_portfolio": {
+              "cash": 11499.459103870116,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_436",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_408",
+            "final_portfolio": {
+              "cash": 10006.31830560983,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_413",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_400",
+            "final_portfolio": {
+              "cash": 9488.289065113002,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 7
+          },
+          {
+            "agent_id": "trader_449",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_466",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_414",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_423",
+            "final_portfolio": {
+              "cash": 8499.095090374149,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_463",
+            "final_portfolio": {
+              "cash": 10498.47632345878,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_410",
+            "final_portfolio": {
+              "cash": 9506.683366170433,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_422",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_456",
+            "final_portfolio": {
+              "cash": 7503.17570027147,
+              "stock": 125
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_440",
+            "final_portfolio": {
+              "cash": 10000.613059035446,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_462",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_450",
+            "final_portfolio": {
+              "cash": 10502.082133987678,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_401",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_432",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_404",
+            "final_portfolio": {
+              "cash": 9505.338075657977,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_454",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_427",
+            "final_portfolio": {
+              "cash": 11830.847680661922,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 47
+          },
+          {
+            "agent_id": "trader_453",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_430",
+            "final_portfolio": {
+              "cash": 11836.83791616444,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 46
+          },
+          {
+            "agent_id": "trader_441",
+            "final_portfolio": {
+              "cash": 20195.780356901967,
+              "stock": 0
+            },
+            "role": "market_maker",
+            "total_trades": 35
+          },
+          {
+            "agent_id": "trader_452",
+            "final_portfolio": {
+              "cash": 8504.917362153206,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_465",
+            "final_portfolio": {
+              "cash": 11867.139358765558,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 52
+          },
+          {
+            "agent_id": "trader_425",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_451",
+            "final_portfolio": {
+              "cash": 10998.305086331877,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_438",
+            "final_portfolio": {
+              "cash": 10500.156821053137,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_419",
+            "final_portfolio": {
+              "cash": 11826.748815825971,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 45
+          },
+          {
+            "agent_id": "trader_442",
+            "final_portfolio": {
+              "cash": 10500.277626281922,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_431",
+            "final_portfolio": {
+              "cash": 9508.542540237118,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_426",
+            "final_portfolio": {
+              "cash": 11004.219852549983,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_434",
+            "final_portfolio": {
+              "cash": 8498.709487313618,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_411",
+            "final_portfolio": {
+              "cash": 10504.495009510392,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_444",
+            "final_portfolio": {
+              "cash": 10498.118410499446,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_443",
+            "final_portfolio": {
+              "cash": 253.8785824360595,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 32
+          },
+          {
+            "agent_id": "trader_445",
+            "final_portfolio": {
+              "cash": 10999.718588206564,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 8
+          },
+          {
+            "agent_id": "trader_446",
+            "final_portfolio": {
+              "cash": 9008.654466234073,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_493",
+            "final_portfolio": {
+              "cash": 11906.317276161382,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 52
+          },
+          {
+            "agent_id": "trader_477",
+            "final_portfolio": {
+              "cash": 9007.405543947818,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 8
+          },
+          {
+            "agent_id": "trader_447",
+            "final_portfolio": {
+              "cash": 9507.821893237446,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_482",
+            "final_portfolio": {
+              "cash": 11508.48763621164,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_487",
+            "final_portfolio": {
+              "cash": 9009.018322756016,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_471",
+            "final_portfolio": {
+              "cash": 11488.155883265183,
+              "stock": 85
+            },
+            "role": "noise",
+            "total_trades": 7
+          },
+          {
+            "agent_id": "trader_459",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_448",
+            "final_portfolio": {
+              "cash": 10502.246191548025,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_458",
+            "final_portfolio": {
+              "cash": 8502.123201476179,
+              "stock": 115
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_479",
+            "final_portfolio": {
+              "cash": 9504.309208007693,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_409",
+            "final_portfolio": {
+              "cash": 8005.372996147765,
+              "stock": 120
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_488",
+            "final_portfolio": {
+              "cash": 10502.834943210872,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_483",
+            "final_portfolio": {
+              "cash": 9007.316766124615,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_473",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_492",
+            "final_portfolio": {
+              "cash": 10004.088961148738,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_457",
+            "final_portfolio": {
+              "cash": 9997.781011339752,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_478",
+            "final_portfolio": {
+              "cash": 10496.349486220053,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_491",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_469",
+            "final_portfolio": {
+              "cash": 11875.384719955899,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 51
+          },
+          {
+            "agent_id": "trader_490",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_460",
+            "final_portfolio": {
+              "cash": 11858.610698001161,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 52
+          },
+          {
+            "agent_id": "trader_485",
+            "final_portfolio": {
+              "cash": 21320.709467628403,
+              "stock": -10
+            },
+            "role": "market_maker",
+            "total_trades": 56
+          },
+          {
+            "agent_id": "trader_480",
+            "final_portfolio": {
+              "cash": 10501.566684987987,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_486",
+            "final_portfolio": {
+              "cash": 9501.629388905194,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_472",
+            "final_portfolio": {
+              "cash": 10000.4853695118,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_464",
+            "final_portfolio": {
+              "cash": 11002.670922893696,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_467",
+            "final_portfolio": {
+              "cash": 9999.493059468927,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_474",
+            "final_portfolio": {
+              "cash": 11006.40355609615,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_468",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_470",
+            "final_portfolio": {
+              "cash": 9498.327608854446,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_489",
+            "final_portfolio": {
+              "cash": 10992.971736146366,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 6
+          },
+          {
+            "agent_id": "trader_484",
+            "final_portfolio": {
+              "cash": 11005.907777942251,
+              "stock": 90
+            },
+            "role": "noise",
+            "total_trades": 4
+          },
+          {
+            "agent_id": "trader_461",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_475",
+            "final_portfolio": {
+              "cash": 30321.851813393656,
+              "stock": -100
+            },
+            "role": "market_maker",
+            "total_trades": 75
+          },
+          {
+            "agent_id": "trader_481",
+            "final_portfolio": {
+              "cash": 11894.984383442374,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 52
+          },
+          {
+            "agent_id": "trader_476",
+            "final_portfolio": {
+              "cash": 9002.984864906364,
+              "stock": 110
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_494",
+            "final_portfolio": {
+              "cash": 9998.57320120756,
+              "stock": 100
+            },
+            "role": "noise",
+            "total_trades": 2
+          },
+          {
+            "agent_id": "trader_497",
+            "final_portfolio": {
+              "cash": 1.0e4,
+              "stock": 100
+            },
+            "role": "mean_reversion",
+            "total_trades": 0
+          },
+          {
+            "agent_id": "trader_496",
+            "final_portfolio": {
+              "cash": 9506.0550027415,
+              "stock": 105
+            },
+            "role": "noise",
+            "total_trades": 5
+          },
+          {
+            "agent_id": "trader_498",
+            "final_portfolio": {
+              "cash": 10501.903540709553,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 3
+          },
+          {
+            "agent_id": "trader_495",
+            "final_portfolio": {
+              "cash": 10497.368881778759,
+              "stock": 95
+            },
+            "role": "noise",
+            "total_trades": 1
+          },
+          {
+            "agent_id": "trader_499",
+            "final_portfolio": {
+              "cash": 11923.423414323388,
+              "stock": 80
+            },
+            "role": "momentum",
+            "total_trades": 52
+          },
+          {
+            "agent_id": "trader_150",
+            "final_portfolio": {
+              "cash": 10435.818534959133,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 64
+          },
+          {
+            "agent_id": "trader_321",
+            "final_portfolio": {
+              "cash": 384.1176028367862,
+              "stock": 200
+            },
+            "role": "market_maker",
+            "total_trades": 53
+          },
+          {
+            "agent_id": "trader_350",
+            "final_portfolio": {
+              "cash": 10380.775659595858,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 68
+          },
+          {
+            "agent_id": "trader_319",
+            "final_portfolio": {
+              "cash": 10262.436178256503,
+              "stock": 100
+            },
+            "role": "market_maker",
+            "total_trades": 48
+          },
+          {
+            "agent_id": "trader_163",
+            "final_portfolio": {
+              "cash": 20188.06669863937,
+              "stock": 0
+            },
+            "role": "market_maker",
+            "total_trades": 33
+          },
+          {
+            "agent_id": "trader_300",
+            "final_portfolio": {
+              "cash": 16295.22648621127,
+              "stock": 40
+            },
+            "role": "market_maker",
+            "total_trades": 57
+          },
+          {
+            "agent_id": "trader_327",
+            "final_portfolio": {
+              "cash": 30219.44381904696,
+              "stock": -100
+            },
+            "role": "market_maker",
+            "total_trades": 44
+          }
+        ],
+        "final_price": 100.07483275274498,
+        "price_history": [
+          100.0,
+          100.0,
+          99.94819776222502,
+          99.76835685649718,
+          99.47842499080743,
+          99.49930665993014,
+          99.45807511809409,
+          99.99835296629225,
+          99.48317296091653,
+          99.98337190789658,
+          99.46895747112818,
+          99.98685785660757,
+          99.48638415869922,
+          99.96688785948169,
+          99.49858688298659,
+          99.96111126408661,
+          99.45759044095325,
+          100.07169329195543,
+          99.42042621374546,
+          99.95702041544128,
+          99.52313858390454,
+          99.92719714764223,
+          99.56507601789255,
+          99.97693556653559,
+          99.5130041050177,
+          99.92010580586214,
+          99.48427158612822,
+          99.97348651985266,
+          99.48450756383441,
+          100.07483275274498
+        ],
+        "total_trades": 2541
+      }
+    }
+  },
+  "job_id": "financial_market_simulation_v1-1776396878799-1f8d5cd398c1"
+}

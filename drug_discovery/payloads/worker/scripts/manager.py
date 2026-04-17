@@ -102,6 +102,7 @@ def main():
 
             log += f"\n[✓] Pipeline execution complete. One optimal drug candidate found.\n"
             write_log(progress_log, log)
+            print(json.dumps({"complete_job": True}))
             
     except Exception as e:
         import traceback

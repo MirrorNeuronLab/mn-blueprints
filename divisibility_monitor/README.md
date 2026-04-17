@@ -13,8 +13,8 @@ This is a simple long-lived MirrorNeuron workflow that keeps running until you s
 From the project root:
 
 ```bash
-./mirror_neuron validate examples/divisibility_monitor
-./mirror_neuron run examples/divisibility_monitor --no-await
+./mn validate examples/divisibility_monitor
+./mn run examples/divisibility_monitor --no-await
 ```
 
 For a detached end-to-end launcher that starts a background runtime, submits the job, prints the `job_id`, and exits while leaving the job running:
@@ -26,9 +26,9 @@ bash examples/divisibility_monitor/run_divisibility_e2e.sh
 If you want to watch the job after starting it:
 
 ```bash
-./mirror_neuron monitor
-./mirror_neuron job agents <job_id>
-./mirror_neuron job events <job_id>
+./mn monitor
+./mn job agents <job_id>
+./mn job events <job_id>
 ```
 
 ## Notes

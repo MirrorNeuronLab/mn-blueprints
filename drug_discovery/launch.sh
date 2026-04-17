@@ -4,9 +4,15 @@ echo "================================================================="
 echo " 🧬 Launching BioTarget Infinite Drug Discovery Loop (Multi-Agent)"
 echo "================================================================="
 
+if [ -z "${MIRROR_NEURON_HOME:-}" ]; then
+  echo "Error: MIRROR_NEURON_HOME environment variable is not set."
+  echo "Please set it to the root directory of the MirrorNeuron repository."
+  exit 1
+fi
+
 # Run the MirrorNeuron job in detached mode and capture the output
 echo "Submitting job..."
-OUTPUT=$(/Users/homer/Projects/MirrorNeuron/mn run $(dirname "$0") --no-await)
+OUTPUT=$("${MIRROR_NEURON_HOME}/mn" run $(dirname "$0") --no-await)
 
 # Extract job_id
 JOB_ID=$(echo "$OUTPUT" | grep -o 'job_id: "[^"]*"' | cut -d'"' -f2)

@@ -45,6 +45,8 @@ defmodule MirrorNeuron.Examples.EcosystemSimulation.RegionAgent do
           |> Map.put(:config, state.config)
           |> Map.put(:mutation_rate, state.config.mutation_rate)
           |> Map.put(:bootstrapped?, true)
+          |> Map.put(:schedule_seq, state.schedule_seq)
+          |> Map.put(:scheduled_tick, state.scheduled_tick)
 
         {:ok, next_state,
          [

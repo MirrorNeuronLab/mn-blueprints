@@ -10,7 +10,7 @@
       {
         "benchmark": "prime_sweep",
         "worker_count": 5,
-        "requested_workers": 10,
+        "requested_workers": 5,
         "chunk_size": 100,
         "range_start": 1000003,
         "range_end": 1000500
@@ -21,28 +21,49 @@
     {
       "node_id": "dispatcher",
       "agent_type": "router",
+      "type": "map",
       "role": "root_coordinator",
       "config": {
         "emit_type": "prime_chunk_request"
       }
     },
     {
-      "node_id": "aggregator",
+      "node_id": "collector",
       "agent_type": "aggregator",
+      "type": "reduce",
       "config": {
-        "mode": "prime_sweep",
-        "complete_after": 5
+        "complete_after": 5,
+        "output_message_type": "prime_chunk_collection"
+      }
+    },
+    {
+      "node_id": "summarizer",
+      "agent_type": "executor",
+      "type": "reduce",
+      "config": {
+        "name_prefix": "prime-summary",
+        "upload_path": "summary_worker",
+        "upload_as": "summary_worker",
+        "workdir": "/sandbox/job/summary_worker",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "command": [
+          "python3",
+          "scripts/summarize_prime_sweep.py"
+        ],
+        "output_message_type": null
       }
     },
     {
       "node_id": "prime_worker_0001",
       "agent_type": "executor",
+      "type": "map",
       "config": {
         "name_prefix": "prime-worker-0001",
         "from": "base",
         "upload_path": "prime_worker",
         "upload_as": "prime_worker",
         "workdir": "/sandbox/job/prime_worker",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
         "command": [
           "python3",
           "scripts/check_prime_range.py",
@@ -64,12 +85,14 @@
     {
       "node_id": "prime_worker_0002",
       "agent_type": "executor",
+      "type": "map",
       "config": {
         "name_prefix": "prime-worker-0002",
         "from": "base",
         "upload_path": "prime_worker",
         "upload_as": "prime_worker",
         "workdir": "/sandbox/job/prime_worker",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
         "command": [
           "python3",
           "scripts/check_prime_range.py",
@@ -91,12 +114,14 @@
     {
       "node_id": "prime_worker_0003",
       "agent_type": "executor",
+      "type": "map",
       "config": {
         "name_prefix": "prime-worker-0003",
         "from": "base",
         "upload_path": "prime_worker",
         "upload_as": "prime_worker",
         "workdir": "/sandbox/job/prime_worker",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
         "command": [
           "python3",
           "scripts/check_prime_range.py",
@@ -118,12 +143,14 @@
     {
       "node_id": "prime_worker_0004",
       "agent_type": "executor",
+      "type": "map",
       "config": {
         "name_prefix": "prime-worker-0004",
         "from": "base",
         "upload_path": "prime_worker",
         "upload_as": "prime_worker",
         "workdir": "/sandbox/job/prime_worker",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
         "command": [
           "python3",
           "scripts/check_prime_range.py",
@@ -145,12 +172,14 @@
     {
       "node_id": "prime_worker_0005",
       "agent_type": "executor",
+      "type": "map",
       "config": {
         "name_prefix": "prime-worker-0005",
         "from": "base",
         "upload_path": "prime_worker",
         "upload_as": "prime_worker",
         "workdir": "/sandbox/job/prime_worker",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
         "command": [
           "python3",
           "scripts/check_prime_range.py",
@@ -180,7 +209,7 @@
     {
       "edge_id": "prime_worker_0001_to_aggregator",
       "from_node": "prime_worker_0001",
-      "to_node": "aggregator",
+      "to_node": "collector",
       "message_type": "prime_chunk_result"
     },
     {
@@ -192,7 +221,7 @@
     {
       "edge_id": "prime_worker_0002_to_aggregator",
       "from_node": "prime_worker_0002",
-      "to_node": "aggregator",
+      "to_node": "collector",
       "message_type": "prime_chunk_result"
     },
     {
@@ -204,7 +233,7 @@
     {
       "edge_id": "prime_worker_0003_to_aggregator",
       "from_node": "prime_worker_0003",
-      "to_node": "aggregator",
+      "to_node": "collector",
       "message_type": "prime_chunk_result"
     },
     {
@@ -216,7 +245,7 @@
     {
       "edge_id": "prime_worker_0004_to_aggregator",
       "from_node": "prime_worker_0004",
-      "to_node": "aggregator",
+      "to_node": "collector",
       "message_type": "prime_chunk_result"
     },
     {
@@ -228,8 +257,14 @@
     {
       "edge_id": "prime_worker_0005_to_aggregator",
       "from_node": "prime_worker_0005",
-      "to_node": "aggregator",
+      "to_node": "collector",
       "message_type": "prime_chunk_result"
+    },
+    {
+      "edge_id": "collector_to_summarizer",
+      "from_node": "collector",
+      "to_node": "summarizer",
+      "message_type": "prime_chunk_collection"
     }
   ],
   "policies": {

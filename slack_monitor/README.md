@@ -16,7 +16,7 @@ SLACK_DEFAULT_CHANNEL="#claw" SLACK_BOT_TOKEN="<your slack bot oauth token>" ./r
 ```
 Or use the MirrorNeuron CLI directly from the project root:
 ```bash
-SLACK_DEFAULT_CHANNEL="#claw" SLACK_BOT_TOKEN="<your slack bot oauth token>" ./mirror_neuron run examples/slack_monitor
+SLACK_DEFAULT_CHANNEL="#claw" SLACK_BOT_TOKEN="<your slack bot oauth token>" ./mn run examples/slack_monitor
 ```
 
 ## ⚠️ Important Note on Recovery (Duplicate Messages)

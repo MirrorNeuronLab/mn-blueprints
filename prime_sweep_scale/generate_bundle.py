@@ -5,7 +5,12 @@ import shutil
 from pathlib import Path
 
 
-def build_chunks(start: int, workers: int, chunk_size: int, end: int | None = None) -> list[tuple[int, int]]:
+from typing import Optional
+
+
+def build_chunks(
+    start: int, workers: int, chunk_size: int, end: Optional[int] = None
+) -> list[tuple[int, int]]:
     chunks: list[tuple[int, int]] = []
 
     for index in range(workers):
@@ -28,7 +33,7 @@ def build_manifest(
     workers: int,
     start: int,
     chunk_size: int,
-    end: int | None,
+    end: Optional[int],
     wave_size: int,
     wave_delay_ms: int,
     max_attempts: int,
@@ -90,6 +95,7 @@ def build_manifest(
                     "upload_path": "prime_worker",
                     "upload_as": "prime_worker",
                     "workdir": "/sandbox/job/prime_worker",
+                    "runner_module": "MirrorNeuron.Runner.HostLocal",
                     "command": [
                         "python3",
                         "scripts/check_prime_range.py",
@@ -160,11 +166,30 @@ def build_manifest(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate a large-scale prime sweep job bundle.")
-    parser.add_argument("--workers", type=int, default=1000, help="Number of sandbox workers to generate")
-    parser.add_argument("--start", type=int, default=1_000_003, help="Starting number for range generation")
-    parser.add_argument("--end", type=int, default=None, help="Optional inclusive upper boundary for range generation")
-    parser.add_argument("--chunk-size", type=int, default=100, help="Numbers assigned to each worker")
+    parser = argparse.ArgumentParser(
+        description="Generate a large-scale prime sweep job bundle."
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=1000,
+        help="Number of sandbox workers to generate",
+    )
+    parser.add_argument(
+        "--start",
+        type=int,
+        default=1_000_003,
+        help="Starting number for range generation",
+    )
+    parser.add_argument(
+        "--end",
+        type=int,
+        default=None,
+        help="Optional inclusive upper boundary for range generation",
+    )
+    parser.add_argument(
+        "--chunk-size", type=int, default=100, help="Numbers assigned to each worker"
+    )
     parser.add_argument(
         "--wave-size",
         type=int,
@@ -205,7 +230,9 @@ def main() -> None:
     script_dir = Path(__file__).resolve().parent
     template_payloads = script_dir / "payloads"
 
-    preview_chunks = build_chunks(args.start, effective_workers, args.chunk_size, args.end)
+    preview_chunks = build_chunks(
+        args.start, effective_workers, args.chunk_size, args.end
+    )
 
     if not preview_chunks:
         raise SystemExit("requested worker/range combination generated no work")

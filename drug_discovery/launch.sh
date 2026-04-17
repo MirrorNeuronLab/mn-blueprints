@@ -27,16 +27,19 @@ fi
 OUT_DIR="/tmp/mirror_neuron_${JOB_ID}"
 mkdir -p "$OUT_DIR"
 
+PROGRESS_LOG="${OUT_DIR}/progress.log"
 BEST_DRUGS_FILE="${OUT_DIR}/best_drugs.txt"
 DOCKING_LOG_FILE="${OUT_DIR}/docking.log"
 
 # Ensure the files exist so they can be easily tailed
+touch "$PROGRESS_LOG"
 touch "$BEST_DRUGS_FILE"
 touch "$DOCKING_LOG_FILE"
 
 echo ""
 echo " 📂 WINNING DRUGS OUTPUT : $BEST_DRUGS_FILE"
 echo " 📝 DOCKING ATTEMPTS LOG : $DOCKING_LOG_FILE"
+echo " 📊 PROGRESS MONITOR LOG : $PROGRESS_LOG"
 echo "================================================================="
 echo ""
 echo "$OUTPUT"
@@ -45,5 +48,5 @@ echo "================================================================="
 echo " ✅ Loop is running in the background!"
 echo "    To monitor the discoveries in real-time, use this command:"
 echo ""
-echo "    tail -f $DOCKING_LOG_FILE $BEST_DRUGS_FILE"
+echo "    tail -f $PROGRESS_LOG"
 echo "================================================================="

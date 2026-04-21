@@ -1,0 +1,90 @@
+[
+  {
+    "id": "general_openshell_worker_demo",
+    "path": "general_openshell_worker_demo",
+    "name": "General Openshell Worker Demo",
+    "description": "A blueprint for general openshell worker demo.",
+    "graph_id": "general_openshell_worker_demo_v2",
+    "job_name": "openshell-worker-demo"
+  },
+  {
+    "id": "general_prime_sweep_scale",
+    "path": "general_prime_sweep_scale",
+    "name": "General Prime Sweep Scale",
+    "description": "A blueprint for general prime sweep scale.",
+    "graph_id": "prime_sweep_1000_workers",
+    "job_name": "prime-sweep-1000-workers"
+  },
+  {
+    "id": "general_divisibility_monitor_deamon",
+    "path": "general_divisibility_monitor_deamon",
+    "name": "Divisibility Monitor Example",
+    "description": "This is a simple long-lived MirrorNeuron workflow that keeps running until you stop it manually.",
+    "graph_id": "general_divisibility_monitor_daemon_v1",
+    "job_name": "divisibility-monitor"
+  },
+  {
+    "id": "finance_slack_monitor_deamon",
+    "path": "finance_slack_monitor_deamon",
+    "name": "Slack Money Monitor Example",
+    "description": "This is a long-lived, continuous MirrorNeuron workflow that monitors a Slack channel and responds to specific messages.",
+    "graph_id": "slack_money_monitor_v1",
+    "job_name": "slack-money-monitor"
+  },
+  {
+    "id": "science_ecosystem_simulation",
+    "path": "science_ecosystem_simulation",
+    "name": "Science Ecosystem Simulation",
+    "description": "A blueprint for science ecosystem simulation.",
+    "graph_id": "science_ecosystem_simulation_v1",
+    "job_name": "ecosystem-simulation"
+  },
+  {
+    "id": "science_streaming_peak_demo",
+    "path": "science_streaming_peak_demo",
+    "name": "Science Streaming Peak Demo",
+    "description": "A blueprint for science streaming peak demo.",
+    "graph_id": "science_streaming_peak_demo_v1",
+    "job_name": "streaming-peak-demo"
+  },
+  {
+    "id": "science_drug_discovery_deamon",
+    "path": "science_drug_discovery_deamon",
+    "name": "Infinite Drug Discovery Loop",
+    "description": "This blueprint runs an infinite multi-agent loop for AI drug discovery, built on top of [BioTarget](https://github.com/homerquan/BioTarget). It demonstrates how to port complex ML pipelines into long-running, self-sustaining agent workflows using the MirrorNeuron runtime.",
+    "graph_id": "science_drug_discovery_daemon_loop",
+    "job_name": "drug-discovery-infinite"
+  },
+  {
+    "id": "general_llm_codegen_review",
+    "path": "general_llm_codegen_review",
+    "name": "General Llm Codegen Review",
+    "description": "A blueprint for general llm codegen review.",
+    "graph_id": "general_llm_codegen_review_3_rounds",
+    "job_name": "llm-codegen-review-3-rounds"
+  },
+  {
+    "id": "business_marketing_research_flow",
+    "path": "business_marketing_research_flow",
+    "name": "Business Marketing Research Flow",
+    "description": "A blueprint for business marketing research flow.",
+    "graph_id": "marketing_research_flow_v1",
+    "job_name": "market-analysis"
+  },
+  {
+    "id": "finance_makert_observer",
+    "path": "finance_makert_observer",
+    "name": "Finance Market Observer",
+    "description": "A blueprint for finance market observer.",
+    "graph_id": "finance_financial_market_simulation_v1",
+    "job_name": "financial-market-simulation"
+  },
+  {
+    "id": "science_mpe_simple_push_visualization",
+    "path": "science_mpe_simple_push_visualization",
+    "name": "Science Mpe Simple Push Visualization",
+    "description": "A blueprint for science mpe simple push visualization.",
+    "graph_id": "mpe_shared_world_visualization_v2",
+    "job_name": "mpe-shared-world-visualization"
+  }
+]

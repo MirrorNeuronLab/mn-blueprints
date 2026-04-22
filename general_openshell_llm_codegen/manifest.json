@@ -1,0 +1,277 @@
+{
+  "manifest_version": "1.0",
+  "graph_id": "general_openshell_llm_codegen_3_rounds",
+  "job_name": "openshell-llm-codegen-3-rounds",
+  "entrypoints": [
+    "codegen_round_1"
+  ],
+  "initial_inputs": {
+    "codegen_round_1": [
+      {
+        "task_id": "log-anomaly-detector",
+        "title": "Log Anomaly Detector CLI with Dynamic Helper",
+        "description": "Create a Python 3 script named log_analyzer.py. The script must parse a web server log file passed with --log-file. Instead of doing all the parsing in pure Python, the script MUST dynamically create an auxiliary bash script named /tmp/log_parser_helper.sh that uses standard Unix tools (like grep/awk) to filter lines containing the word 'ERROR' or 'WARN'. The Python script should then execute this helper script via subprocess, read its output, and print a JSON summary containing total_errors, total_warnings, and unique_error_ips.",
+        "requirements": [
+          "Use only the Python standard library.",
+          "Dynamically write a bash script to /tmp/log_parser_helper.sh and make it executable using os.chmod.",
+          "The bash script must take the log file path as its first argument ($1), filter for 'ERROR' and 'WARN', and output the results to stdout.",
+          "Assume standard log format where IP is the first space-separated token.",
+          "Execute the bash script using subprocess.run and process its output in Python.",
+          "Output valid JSON to stdout containing total_errors, total_warnings, and a list of unique_error_ips (strings).",
+          "Expose a main() entrypoint guarded by if __name__ == '__main__'.",
+          "The bash script must include a valid shebang (e.g. #!/bin/bash)."
+        ],
+        "sample_log": "192.168.1.10 - - [22/Apr/2026:10:00:00 +0000] \"GET / HTTP/1.1\" 200 512\n10.0.0.5 - - [22/Apr/2026:10:01:00 +0000] \"POST /api HTTP/1.1\" 500 128 ERROR: database timeout\n192.168.1.11 - - [22/Apr/2026:10:02:00 +0000] \"GET /img.png HTTP/1.1\" 404 256 WARN: file not found\n10.0.0.5 - - [22/Apr/2026:10:03:00 +0000] \"GET /api HTTP/1.1\" 500 128 ERROR: database timeout\n",
+        "validation": {
+          "expected": {
+            "total_errors": 2,
+            "total_warnings": 1,
+            "unique_error_ips": [
+              "10.0.0.5"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "node_id": "codegen_round_1",
+      "agent_type": "executor",
+      "type": "generic",
+      "role": "root_coordinator",
+      "config": {
+        "from": "base",
+        "upload_path": "llm_worker",
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false,
+        "pass_env": [
+          "GEMINI_API_KEY",
+          "OPENAI_API_KEY",
+          "ANTHROPIC_API_KEY",
+          "GROQ_API_KEY"
+        ],
+        "environment": {
+          "LLM_MODEL": "gemini/gemini-2.5-flash"
+        },
+        "max_attempts": 2,
+        "retry_backoff_ms": 500,
+        "name_prefix": "codegen-r1",
+        "command": [
+          "bash",
+          "-c",
+          "tar -xzf vendor.tar.gz && python3 scripts/run_llm_step.py codegen 1"
+        ],
+        "output_message_type": "codegen_round_1_result",
+        "policy": "policies/api-egress.yaml",
+        "complete_on_message": true
+      }
+    },
+    {
+      "node_id": "review_round_1",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "from": "base",
+        "upload_path": "llm_worker",
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false,
+        "pass_env": [
+          "GEMINI_API_KEY",
+          "OPENAI_API_KEY",
+          "ANTHROPIC_API_KEY",
+          "GROQ_API_KEY"
+        ],
+        "environment": {
+          "LLM_MODEL": "gemini/gemini-2.5-flash"
+        },
+        "max_attempts": 2,
+        "retry_backoff_ms": 500,
+        "name_prefix": "review-r1",
+        "command": [
+          "bash",
+          "-c",
+          "tar -xzf vendor.tar.gz && python3 scripts/run_llm_step.py review 1"
+        ],
+        "output_message_type": "review_round_1_result",
+        "policy": "policies/api-egress.yaml",
+        "complete_on_message": true
+      }
+    },
+    {
+      "node_id": "codegen_round_2",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "from": "base",
+        "upload_path": "llm_worker",
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false,
+        "pass_env": [
+          "GEMINI_API_KEY",
+          "OPENAI_API_KEY",
+          "ANTHROPIC_API_KEY",
+          "GROQ_API_KEY"
+        ],
+        "environment": {
+          "LLM_MODEL": "gemini/gemini-2.5-flash"
+        },
+        "max_attempts": 2,
+        "retry_backoff_ms": 500,
+        "name_prefix": "codegen-r2",
+        "command": [
+          "bash",
+          "-c",
+          "tar -xzf vendor.tar.gz && python3 scripts/run_llm_step.py codegen 2"
+        ],
+        "output_message_type": "codegen_round_2_result",
+        "policy": "policies/api-egress.yaml",
+        "complete_on_message": true
+      }
+    },
+    {
+      "node_id": "review_round_2",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "from": "base",
+        "upload_path": "llm_worker",
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false,
+        "pass_env": [
+          "GEMINI_API_KEY",
+          "OPENAI_API_KEY",
+          "ANTHROPIC_API_KEY",
+          "GROQ_API_KEY"
+        ],
+        "environment": {
+          "LLM_MODEL": "gemini/gemini-2.5-flash"
+        },
+        "max_attempts": 2,
+        "retry_backoff_ms": 500,
+        "name_prefix": "review-r2",
+        "command": [
+          "bash",
+          "-c",
+          "tar -xzf vendor.tar.gz && python3 scripts/run_llm_step.py review 2"
+        ],
+        "output_message_type": "review_round_2_result",
+        "policy": "policies/api-egress.yaml",
+        "complete_on_message": true
+      }
+    },
+    {
+      "node_id": "codegen_round_3",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "from": "base",
+        "upload_path": "llm_worker",
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false,
+        "pass_env": [
+          "GEMINI_API_KEY",
+          "OPENAI_API_KEY",
+          "ANTHROPIC_API_KEY",
+          "GROQ_API_KEY"
+        ],
+        "environment": {
+          "LLM_MODEL": "gemini/gemini-2.5-flash"
+        },
+        "max_attempts": 2,
+        "retry_backoff_ms": 500,
+        "name_prefix": "codegen-r3",
+        "command": [
+          "bash",
+          "-c",
+          "tar -xzf vendor.tar.gz && python3 scripts/run_llm_step.py codegen 3"
+        ],
+        "output_message_type": "codegen_round_3_result",
+        "policy": "policies/api-egress.yaml",
+        "complete_on_message": true
+      }
+    },
+    {
+      "node_id": "validator",
+      "agent_type": "executor",
+      "type": "generic",
+      "config": {
+        "from": "base",
+        "upload_path": "llm_worker",
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker",
+        "no_keep": true,
+        "no_auto_providers": true,
+        "tty": false,
+        "pass_env": [
+          "GEMINI_API_KEY",
+          "GOOGLE_API_KEY"
+        ],
+        "environment": {
+          "LLM_MODEL": "gemini-2.5-flash"
+        },
+        "max_attempts": 2,
+        "retry_backoff_ms": 500,
+        "name_prefix": "validator",
+        "command": [
+          "python3",
+          "scripts/validate_candidate.py"
+        ],
+        "output_message_type": "validation_result",
+        "complete_job": true,
+        "policy": "policies/api-egress.yaml",
+        "complete_on_message": true
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "codegen_r1_to_review_r1",
+      "from_node": "codegen_round_1",
+      "to_node": "review_round_1",
+      "message_type": "codegen_round_1_result"
+    },
+    {
+      "edge_id": "review_r1_to_codegen_r2",
+      "from_node": "review_round_1",
+      "to_node": "codegen_round_2",
+      "message_type": "review_round_1_result"
+    },
+    {
+      "edge_id": "codegen_r2_to_review_r2",
+      "from_node": "codegen_round_2",
+      "to_node": "review_round_2",
+      "message_type": "codegen_round_2_result"
+    },
+    {
+      "edge_id": "review_r2_to_codegen_r3",
+      "from_node": "review_round_2",
+      "to_node": "codegen_round_3",
+      "message_type": "review_round_2_result"
+    },
+    {
+      "edge_id": "codegen_r3_to_validator",
+      "from_node": "codegen_round_3",
+      "to_node": "validator",
+      "message_type": "codegen_round_3_result"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  }
+}

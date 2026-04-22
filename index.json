@@ -1,11 +1,11 @@
 [
   {
-    "id": "general_openshell_worker_demo",
-    "path": "general_openshell_worker_demo",
-    "name": "General Openshell Worker Demo",
-    "description": "A blueprint for general openshell worker demo.",
-    "graph_id": "general_openshell_worker_demo_v2",
-    "job_name": "openshell-worker-demo"
+    "id": "general_openshell_worker_basic",
+    "path": "general_openshell_worker_basic",
+    "name": "General Openshell Worker Basic",
+    "description": "A blueprint for general openshell worker basic.",
+    "graph_id": "general_openshell_worker_basic_v2",
+    "job_name": "openshell-worker-basic"
   },
   {
     "id": "general_prime_sweep_scale",
@@ -56,12 +56,12 @@
     "job_name": "drug-discovery-infinite"
   },
   {
-    "id": "general_llm_codegen_review",
-    "path": "general_llm_codegen_review",
-    "name": "General Llm Codegen Review",
-    "description": "A blueprint for general llm codegen review.",
-    "graph_id": "general_llm_codegen_review_3_rounds",
-    "job_name": "llm-codegen-review-3-rounds"
+    "id": "general_openshell_llm_codegen",
+    "path": "general_openshell_llm_codegen",
+    "name": "General Openshell LLM Codegen",
+    "description": "A blueprint for general openshell llm codegen.",
+    "graph_id": "general_openshell_llm_codegen_3_rounds",
+    "job_name": "openshell-llm-codegen-3-rounds"
   },
   {
     "id": "general_test_message_flow",

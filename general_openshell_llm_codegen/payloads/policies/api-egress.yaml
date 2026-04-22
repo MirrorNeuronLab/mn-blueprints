@@ -1,0 +1,26 @@
+version: 1
+
+network_policies:
+  llm_egress:
+    name: llm-egress
+    endpoints:
+      # PyPI for pip install
+      - host: pypi.org
+        port: 443
+      - host: files.pythonhosted.org
+        port: 443
+      # Common LLM API endpoints
+      - host: generativelanguage.googleapis.com
+        port: 443
+      - host: api.openai.com
+        port: 443
+      - host: api.anthropic.com
+        port: 443
+    binaries:
+      - path: /sandbox/.venv/bin/pip
+      - path: /sandbox/.venv/bin/python
+      - path: /sandbox/.venv/bin/python3
+      - path: /usr/bin/python3
+      - path: /usr/local/bin/python3
+      - path: /usr/bin/bash
+      - path: /bin/bash

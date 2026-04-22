@@ -64,12 +64,12 @@
     "job_name": "llm-codegen-review-3-rounds"
   },
   {
-    "id": "business_marketing_research_flow",
-    "path": "business_marketing_research_flow",
-    "name": "Business Marketing Research Flow",
-    "description": "A blueprint for business marketing research flow.",
-    "graph_id": "marketing_research_flow_v1",
-    "job_name": "market-analysis"
+    "id": "general_test_message_flow",
+    "path": "general_test_message_flow",
+    "name": "General Test Message Flow",
+    "description": "A blueprint for testing general message routing and builtin actors.",
+    "graph_id": "general_test_message_flow_v1",
+    "job_name": "test-message-flow"
   },
   {
     "id": "finance_makert_observer",

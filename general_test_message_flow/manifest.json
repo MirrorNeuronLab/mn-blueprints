@@ -1,13 +1,13 @@
 {
   "manifest_version": "1.0",
-  "graph_id": "marketing_research_flow_v1",
-  "job_name": "market-analysis",
+  "graph_id": "general_test_message_flow_v1",
+  "job_name": "test-message-flow",
   "entrypoints": ["ingress"],
   "initial_inputs": {
     "ingress": [
       {
-        "topic": "electric vehicle charging adoption in New England",
-        "text": "Collect a short research summary."
+        "topic": "test topic",
+        "text": "Initiate test message flow."
       }
     ]
   },
@@ -18,7 +18,7 @@
       "type": "map",
       "role": "root_coordinator",
       "config": {
-        "emit_type": "research_request"
+        "emit_type": "test_request"
       }
     },
     {
@@ -42,13 +42,13 @@
       "edge_id": "ingress_to_retriever",
       "from_node": "ingress",
       "to_node": "retriever",
-      "message_type": "research_request"
+      "message_type": "test_request"
     },
     {
       "edge_id": "retriever_to_reviewer",
       "from_node": "retriever",
       "to_node": "reviewer",
-      "message_type": "research_request"
+      "message_type": "test_request"
     }
   ],
   "policies": {

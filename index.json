@@ -72,8 +72,8 @@
     "job_name": "test-message-flow"
   },
   {
-    "id": "finance_makert_observer",
-    "path": "finance_makert_observer",
+    "id": "finance_market_observer",
+    "path": "finance_market_observer",
     "name": "Finance Market Observer",
     "description": "A blueprint for finance market observer.",
     "graph_id": "finance_financial_market_simulation_v1",

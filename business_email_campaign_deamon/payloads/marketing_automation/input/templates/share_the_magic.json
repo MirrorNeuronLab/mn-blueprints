@@ -1,0 +1,11 @@
+{
+  "template_id": "share_the_magic",
+  "name": "Share the Magic",
+  "recommended_campaigns": ["referral_invite"],
+  "required_slots": ["preheader", "eyebrow", "headline", "body_sections", "cta_label", "cta_url", "secondary_text", "footer_text"],
+  "palette": {
+    "accent": "#9b3fb8",
+    "accent_soft": "#f8effd",
+    "text": "#42244e"
+  }
+}

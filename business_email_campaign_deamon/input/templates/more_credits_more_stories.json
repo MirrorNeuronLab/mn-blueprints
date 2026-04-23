@@ -1,0 +1,11 @@
+{
+  "template_id": "more_credits_more_stories",
+  "name": "More Credits More Stories",
+  "recommended_campaigns": ["credit_purchase_nudge"],
+  "required_slots": ["preheader", "eyebrow", "headline", "body_sections", "cta_label", "cta_url", "secondary_text", "footer_text"],
+  "palette": {
+    "accent": "#3558c8",
+    "accent_soft": "#edf2ff",
+    "text": "#1f2850"
+  }
+}

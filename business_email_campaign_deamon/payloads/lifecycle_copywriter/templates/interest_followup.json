@@ -1,0 +1,11 @@
+{
+  "template_id": "interest_followup",
+  "name": "Interest Follow-up",
+  "recommended_campaigns": ["interest_followup"],
+  "required_slots": ["preheader", "eyebrow", "headline", "body_sections", "cta_label", "cta_url", "secondary_text", "footer_text"],
+  "palette": {
+    "accent": "#1d4ed8",
+    "accent_soft": "#eff6ff",
+    "text": "#1e293b"
+  }
+}

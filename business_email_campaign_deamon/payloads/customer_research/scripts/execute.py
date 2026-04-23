@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from _synaptic_runtime.core import (
+    completion_json,
+    load_input_plan,
+    load_knowledge_section,
+    log_agent,
+    latest_sent_draft,
+    pending_ready_draft,
+    read_business_context,
+    recent_activities,
+    db_connect,
+)
+#
+    completion_json,
+    load_input_plan,
+    load_knowledge_section,
+    log_agent,
+    latest_sent_draft,
+    pending_ready_draft,
+    read_business_context,
+    recent_activities,
+)
+from _synaptic_skills.marketing_email import build_customer_brief, parse_source_payload
+
+
+AGENT_ID = "customer_research_agent"
+
+
+def fallback_brief(plan: dict, activities: list[dict]) -> dict:
+    return build_customer_brief(
+        plan=plan,
+        activities=activities,
+        segments=load_knowledge_section("segments"),
+        playbooks=load_knowledge_section("campaign_playbooks"),
+        offers_catalog=load_knowledge_section("offers_catalog"),
+        recent_memory=parse_source_payload(
+            (latest_sent_draft(plan["customer"]["customer_id"]) or {}).get(
+                "source_payload_json"
+            )
+        ),
+    )
+
+
+def main() -> None:
+    plan = load_input_plan()
+    customer = plan["customer"]
+    runtime_job_id = plan.get("runtime_job_id")
+
+    existing_draft = pending_ready_draft(customer["customer_id"])
+    if existing_draft is not None:
+        plan["existing_draft"] = existing_draft
+        log_agent(runtime_job_id, AGENT_ID, "Skipped research because a ready draft already exists.")
+        print(json.dumps(plan))
+        return
+
+    activities = recent_activities(customer["customer_id"], limit=5)
+    context_text = read_business_context()
+    segments = load_knowledge_section("segments")
+    playbooks = load_knowledge_section("campaign_playbooks")
+    offers_catalog = load_knowledge_section("offers_catalog")
+    
+    # Determine the campaign sequence
+    sequence = [
+        "first_story_activation",
+        "product_spotlight",
+        "download_conversion",
+        "referral_invite",
+        "credit_purchase_nudge"
+    ]
+    
+    past_campaigns = []
+    with db_connect() as conn:
+        rows = conn.execute(
+            "SELECT source_payload_json FROM email_drafts WHERE customer_id = ? AND status = 'sent' ORDER BY sent_at ASC",
+            (customer["customer_id"],)
+        ).fetchall()
+        for row in rows:
+            try:
+                sp = json.loads(row["source_payload_json"])
+                if "campaign_type" in sp:
+                    past_campaigns.append(sp["campaign_type"])
+            except:
+                pass
+
+    next_campaign = sequence[0]
+    for camp in sequence:
+        if camp not in past_campaigns:
+            next_campaign = camp
+            break
+
+    is_recent_reply = False
+    for act in activities:
+        if act.get("summary", "").startswith("Customer replied:"):
+            # Check if this reply was already followed up
+            if "reply_followup" not in past_campaigns:
+                is_recent_reply = True
+            break
+            
+    if is_recent_reply:
+        next_campaign = "reply_followup"
+        
+    plan["campaign_type"] = next_campaign
+    plan["goal"] = playbooks.get(next_campaign, {}).get("goal", "")
+    plan["success_metric"] = playbooks.get(next_campaign, {}).get("success_metric", "")
+
+    print(f"Customer Research Agent: Evaluated customer {customer['name']}", file=sys.stderr)
+    print(f"Customer Research Agent: Selected campaign step: {next_campaign}", file=sys.stderr)
+
+    latest_source = parse_source_payload(
+        (latest_sent_draft(customer["customer_id"]) or {}).get("source_payload_json")
+    )
+
+    system_prompt = (
+        "You are the customer research agent in a multi-agent email marketing system. "
+        "Return compact JSON only. Build a strategic brief for one high-quality marketing email. "
+        "Required keys: persona, customer_angle, job_to_be_done, pain_point, recommended_offer, "
+        "offer_reason, proof_points, objection_to_address, primary_cta, secondary_cta, angle_to_avoid, "
+        "recommended_template, activity_summary, tone. "
+        "If campaign_type is reply_followup, write the brief as if a helpful human is replying in-thread."
+    )
+    user_prompt = json.dumps(
+        {
+            "business_context": context_text,
+            "strategy": {
+                "campaign_type": plan.get("campaign_type"),
+                "audience_segment": plan.get("audience_segment"),
+                "primary_offer": plan.get("primary_offer"),
+                "why_now": plan.get("why_now"),
+                "goal": plan.get("goal"),
+                "success_metric": plan.get("success_metric"),
+            },
+            "customer": customer,
+            "recent_activities": activities,
+            "reply_context": plan.get("reply_context", {}),
+            "audience_segment_profile": segments.get(
+                plan.get("audience_segment", "general_audience"), {}
+            ),
+            "campaign_playbook": playbooks.get(plan.get("campaign_type", "product_spotlight"), {}),
+            "offers_catalog": offers_catalog,
+            "recent_email_memory": latest_source,
+            "task": "Create a concise but strategy-rich customer brief for a personalized marketing email.",
+        },
+        indent=2,
+    )
+
+    brief = completion_json(system_prompt, user_prompt, profile="secondary") or fallback_brief(plan, activities)
+    plan["customer_brief"] = brief
+    plan["recent_activities"] = activities
+    log_agent(
+        runtime_job_id,
+        AGENT_ID,
+        "Prepared customer research brief.",
+        details={
+            "activity_count": len(activities),
+            "campaign_type": plan.get("campaign_type"),
+            "recommended_template": brief.get("recommended_template"),
+        },
+    )
+    print(json.dumps(plan))
+
+
+if __name__ == "__main__":
+    main()

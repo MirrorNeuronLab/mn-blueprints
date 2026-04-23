@@ -1,0 +1,121 @@
+{
+  "business_context": "Bibblio helps parents turn real moments like bedtime resistance, big feelings, friendship challenges, school transitions, and confidence-building into personalized SEL picture books. Email should feel warm, practical, and emotionally intelligent, guiding parents from first story creation toward repeat story making, downloads, credit purchases, and referrals.",
+  "email_rules": {
+    "minimum_minutes_between_emails": 1440
+  },
+  "delivery": {
+    "test_recipient": "homerquan@gmail.com"
+  },
+  "campaign_playbooks": {
+    "first_story_activation": {
+      "goal": "Get a new parent to start their first personalized story.",
+      "success_metric": "First story draft started",
+      "why_now": "Signup intent is highest right after a parent joins and the parenting moment is still fresh.",
+      "offer_reason": "Lead with one emotionally relevant story idea so the first step feels simple and useful.",
+      "recommended_template": "moment_to_story",
+      "primary_cta_label": "Start your first story",
+      "secondary_cta_label": "See story ideas",
+      "secondary_url_slug": "create"
+    },
+    "draft_recovery": {
+      "goal": "Recover a partially started book before the parent loses momentum.",
+      "success_metric": "Draft resumed or completed",
+      "why_now": "The parent already invested effort, so a reassuring nudge can help them finish.",
+      "offer_reason": "Reconnect them to the child moment they were already trying to support.",
+      "recommended_template": "finish_your_book",
+      "primary_cta_label": "Finish your story",
+      "secondary_cta_label": "Return to your draft",
+      "secondary_url_slug": "my-books"
+    },
+    "download_conversion": {
+      "goal": "Move a completed story toward download, print, or keepsake use.",
+      "success_metric": "PDF download or print-intent click",
+      "why_now": "The story already exists, so the next step should feel celebratory and easy.",
+      "offer_reason": "Frame the completed book as something worth saving, sharing, or revisiting.",
+      "recommended_template": "story_reveal",
+      "primary_cta_label": "Download your book",
+      "secondary_cta_label": "See your books",
+      "secondary_url_slug": "my-books"
+    },
+    "credit_purchase_nudge": {
+      "goal": "Convert an engaged parent into a paid credit buyer for more story creation.",
+      "success_metric": "Credit checkout started or completed",
+      "why_now": "The parent has already seen the product's value and is most likely to pay for another story.",
+      "offer_reason": "Show what more credits unlock in terms of future parenting and keepsake moments.",
+      "recommended_template": "more_credits_more_stories",
+      "primary_cta_label": "Get more credits",
+      "secondary_cta_label": "See what you can make next",
+      "secondary_url_slug": "profile"
+    },
+    "next_story_idea": {
+      "goal": "Drive repeat creation with a fresh, specific story use case.",
+      "success_metric": "Second story started",
+      "why_now": "The parent has already created once and is primed for another meaningful moment.",
+      "offer_reason": "Give them a new use case so Bibblio feels useful beyond a one-off novelty.",
+      "recommended_template": "moment_to_story",
+      "primary_cta_label": "Create another story",
+      "secondary_cta_label": "Browse more ideas",
+      "secondary_url_slug": "gallery"
+    },
+    "referral_invite": {
+      "goal": "Turn a satisfied parent into an advocate who shares Bibblio with another parent.",
+      "success_metric": "Referral link copied or shared",
+      "why_now": "Parents are most likely to share right after seeing a story they are proud of.",
+      "offer_reason": "Keep the ask simple and appreciative, with a clear benefit for sharing now.",
+      "recommended_template": "share_the_magic",
+      "primary_cta_label": "Share your invite",
+      "secondary_cta_label": "Open your referral link",
+      "secondary_url_slug": "profile"
+    },
+    "winback_parent_moment": {
+      "goal": "Re-engage an inactive parent with a timely story idea tied to a familiar challenge.",
+      "success_metric": "Return visit or new draft started",
+      "why_now": "The product becomes relevant again when framed around a real parenting moment instead of generic features.",
+      "offer_reason": "Reconnect Bibblio to a challenge the parent may still want help with.",
+      "recommended_template": "moment_to_story",
+      "primary_cta_label": "Create a story for this moment",
+      "secondary_cta_label": "See gentle prompts",
+      "secondary_url_slug": "create"
+    },
+    "product_spotlight": {
+      "goal": "Drive a repeat creation or monetization click for an engaged parent.",
+      "success_metric": "Primary CTA click",
+      "why_now": "The parent has already seen value and may be ready for another story or a credit purchase.",
+      "offer_reason": "Lead with one relevant next use case instead of a feature list.",
+      "recommended_template": "moment_to_story",
+      "primary_cta_label": "Create another story",
+      "secondary_cta_label": "See what to make next",
+      "secondary_url_slug": "gallery"
+    },
+    "program_reminder": {
+      "goal": "Activate a new or inactive parent with a concrete story moment.",
+      "success_metric": "Activation CTA click",
+      "why_now": "A reminder works best when it brings the parent back to a real child need.",
+      "offer_reason": "Use one relevant scenario to make the first or next step feel easier.",
+      "recommended_template": "moment_to_story",
+      "primary_cta_label": "Start your first story",
+      "secondary_cta_label": "See story ideas",
+      "secondary_url_slug": "create"
+    },
+    "interest_followup": {
+      "goal": "Recover a high-intent parent after a partially completed story or post-creation step.",
+      "success_metric": "Return click",
+      "why_now": "The parent already showed strong intent, so a thoughtful follow-up can help them complete the story journey.",
+      "offer_reason": "Follow up on the exact story moment or keepsake action they were already exploring.",
+      "recommended_template": "finish_your_book",
+      "primary_cta_label": "Finish your story",
+      "secondary_cta_label": "Open your books",
+      "secondary_url_slug": "my-books"
+    },
+    "reply_followup": {
+      "goal": "Reply helpfully in the same thread and continue the relationship like a real person would.",
+      "success_metric": "Helpful reply sent in-thread",
+      "why_now": "The customer replied directly, so speed and human warmth matter more than campaign polish.",
+      "offer_reason": "Answer what they actually said first, then point to the next most relevant story or action.",
+      "recommended_template": "personal_reply",
+      "primary_cta_label": "Open Bibblio",
+      "secondary_cta_label": "Reply with more details",
+      "secondary_url_slug": "create"
+    }
+  }
+}

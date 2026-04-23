@@ -1,0 +1,11 @@
+{
+  "template_id": "moment_to_story",
+  "name": "Moment to Story",
+  "recommended_campaigns": ["first_story_activation", "next_story_idea", "winback_parent_moment", "program_reminder", "product_spotlight"],
+  "required_slots": ["preheader", "eyebrow", "headline", "body_sections", "cta_label", "cta_url", "secondary_text", "footer_text"],
+  "palette": {
+    "accent": "#c26a2e",
+    "accent_soft": "#fff4ea",
+    "text": "#3f3126"
+  }
+}

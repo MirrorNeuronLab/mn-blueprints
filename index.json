@@ -16,10 +16,10 @@
     "job_name": "prime-sweep-1000-workers"
   },
   {
-    "id": "general_divisibility_monitor_deamon",
-    "path": "general_divisibility_monitor_deamon",
+    "id": "general_native_live_deamon",
+    "path": "general_native_live_deamon",
     "name": "Divisibility Monitor Example",
-    "description": "This is a simple long-lived MirrorNeuron workflow that keeps running until you stop it manually.",
+    "description": "This is a simple long-lived MirrorNeuron workflow that keeps running until you stop it manually. Note: this uses native agents for fast simulation.",
     "graph_id": "general_divisibility_monitor_daemon_v1",
     "job_name": "divisibility-monitor"
   },
@@ -86,5 +86,13 @@
     "description": "A blueprint for science mpe simple push visualization.",
     "graph_id": "mpe_shared_world_visualization_v2",
     "job_name": "mpe-shared-world-visualization"
+  },
+  {
+    "id": "business_email_campaign_deamon",
+    "path": "business_email_campaign_deamon",
+    "name": "Business Email Campaign",
+    "description": "A long-lived email marketing blueprint utilizing Ollama and Gmail.",
+    "graph_id": "business_email_campaign_v1",
+    "job_name": "business-email-campaign"
   }
 ]

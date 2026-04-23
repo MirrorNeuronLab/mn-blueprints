@@ -1,0 +1,11 @@
+{
+  "template_id": "story_reveal",
+  "name": "Story Reveal",
+  "recommended_campaigns": ["download_conversion"],
+  "required_slots": ["preheader", "eyebrow", "headline", "body_sections", "cta_label", "cta_url", "secondary_text", "footer_text"],
+  "palette": {
+    "accent": "#a6503c",
+    "accent_soft": "#fff1ed",
+    "text": "#40241d"
+  }
+}

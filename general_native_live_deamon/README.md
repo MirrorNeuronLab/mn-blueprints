@@ -2,6 +2,8 @@
 
 This is a simple long-lived MirrorNeuron workflow that keeps running until you stop it manually.
 
+**Note:** This uses native agents for fast simulation.
+
 ## What it does
 
 1. `question_generator` emits a new random divisibility question every 10 seconds.
@@ -13,22 +15,16 @@ This is a simple long-lived MirrorNeuron workflow that keeps running until you s
 From the project root:
 
 ```bash
-./mn validate examples/general_divisibility_monitor_daemon
-./mn run examples/general_divisibility_monitor_daemon --no-await
-```
-
-For a detached end-to-end launcher that starts a background runtime, submits the job, prints the `job_id`, and exits while leaving the job running:
-
-```bash
-bash examples/general_divisibility_monitor_daemon/run_divisibility_e2e.sh
+mn validate mn-blueprints/general_native_live_deamon
+mn run mn-blueprints/general_native_live_deamon
 ```
 
 If you want to watch the job after starting it:
 
 ```bash
-./mn monitor
-./mn job agents <job_id>
-./mn job events <job_id>
+mn monitor
+mn job agents <job_id>
+mn job events <job_id>
 ```
 
 ## Notes

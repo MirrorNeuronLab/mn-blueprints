@@ -1,0 +1,131 @@
+{
+  "manifest_version": "1.0",
+  "graph_id": "financial_compliance_audit_v1",
+  "job_name": "compliance-audit",
+  "entrypoints": ["initializer"],
+  "initial_inputs": {
+    "initializer": [
+      {
+        "job_id": "audit_job_777",
+        "focus_id": "audit_task_1"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "node_id": "initializer",
+      "agent_type": "executor",
+      "type": "generic",
+      "role": "initializer",
+      "config": {
+        "from": "base",
+        "upload_path": "initializer",
+        "workdir": "/sandbox/job/initializer",
+        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/init.py"],
+        "pool": "default",
+        "pool_slots": 1,
+        "output_message_type": "init_done",
+        "no_keep": true, "no_auto_providers": true, "tty": false
+      }
+    },
+    {
+      "node_id": "interpreter",
+      "agent_type": "executor",
+      "type": "generic",
+      "role": "policy_interpreter",
+      "config": {
+        "from": "base",
+        "upload_path": "interpreter",
+        "workdir": "/sandbox/job/interpreter",
+        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/interpreter.py"],
+        "pool": "default",
+        "pool_slots": 1,
+        "output_message_type": "interpreter_done",
+        "no_keep": true, "no_auto_providers": true, "tty": false
+      }
+    },
+    {
+      "node_id": "extractor",
+      "agent_type": "executor",
+      "type": "generic",
+      "role": "evidence_extractor",
+      "config": {
+        "from": "base",
+        "upload_path": "extractor",
+        "workdir": "/sandbox/job/extractor",
+        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/extractor.py"],
+        "pool": "default",
+        "pool_slots": 1,
+        "output_message_type": "extractor_done",
+        "no_keep": true, "no_auto_providers": true, "tty": false
+      }
+    },
+    {
+      "node_id": "classifier",
+      "agent_type": "executor",
+      "type": "generic",
+      "role": "risk_classifier",
+      "config": {
+        "from": "base",
+        "upload_path": "classifier",
+        "workdir": "/sandbox/job/classifier",
+        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/classifier.py"],
+        "pool": "default",
+        "pool_slots": 1,
+        "output_message_type": "classifier_done",
+        "no_keep": true, "no_auto_providers": true, "tty": false
+      }
+    },
+    {
+      "node_id": "decision",
+      "agent_type": "executor",
+      "type": "generic",
+      "role": "decision_agent",
+      "config": {
+        "from": "base",
+        "upload_path": "decision",
+        "workdir": "/sandbox/job/decision",
+        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/decision.py"],
+        "pool": "default",
+        "pool_slots": 1,
+        "output_message_type": "decision_done",
+        "no_keep": true, "no_auto_providers": true, "tty": false
+      }
+    },
+    {
+      "node_id": "critic",
+      "agent_type": "executor",
+      "type": "generic",
+      "role": "critic_auditor",
+      "config": {
+        "from": "base",
+        "upload_path": "critic",
+        "workdir": "/sandbox/job/critic",
+        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/critic.py"],
+        "pool": "default",
+        "pool_slots": 1,
+        "output_message_type": "critic_done",
+        "no_keep": true, "no_auto_providers": true, "tty": false
+      }
+    },
+    {
+      "node_id": "sink",
+      "agent_type": "aggregator",
+      "type": "reduce",
+      "config": {
+        "complete_on_message": true
+      }
+    }
+  ],
+  "edges": [
+    { "from_node": "initializer", "to_node": "interpreter", "message_type": "init_done" },
+    { "from_node": "interpreter", "to_node": "extractor", "message_type": "interpreter_done" },
+    { "from_node": "extractor", "to_node": "classifier", "message_type": "extractor_done" },
+    { "from_node": "classifier", "to_node": "decision", "message_type": "classifier_done" },
+    { "from_node": "decision", "to_node": "critic", "message_type": "decision_done" },
+    { "from_node": "critic", "to_node": "sink", "message_type": "critic_done" }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  }
+}

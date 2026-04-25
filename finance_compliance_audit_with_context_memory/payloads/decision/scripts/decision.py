@@ -1,61 +1,116 @@
-import json, os, sys, grpc
-from pathlib import Path
-import context_pb2, context_pb2_grpc
+import json
+import sys
 
-def call_llm(system_prompt, user_prompt, mock_response):
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        print("WARNING: OPENAI_API_KEY not set. Falling back to mock response.", file=sys.stderr)
-        return json.dumps(mock_response)
-    try:
-        from openai import OpenAI
-        client = OpenAI(api_key=api_key)
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
-            response_format={"type": "json_object"}
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        print(f"LLM Error: {str(e)}. Falling back to mock.", file=sys.stderr)
-        return json.dumps(mock_response)
+from context_memory import (
+    add_item,
+    add_trace_event,
+    call_llm,
+    context_stub,
+    context_summary,
+    emit_state,
+    get_context,
+    link_items,
+    load_input,
+    make_content,
+    require_artifact,
+    transition_item,
+)
+
+
+ROLE = "decision_agent"
+
 
 def main():
     try:
-        input_data = json.loads(Path(os.environ["MIRROR_NEURON_INPUT_FILE"]).read_text())
-        source = json.loads(input_data["sandbox"]["stdout"]) if "sandbox" in input_data else input_data.get("input", input_data)
+        source = load_input()
         job_id, focus_id = source["job_id"], source["focus_id"]
+        artifact_ids = dict(source.get("artifact_ids", {}))
+        stub = context_stub()
 
-        channel = grpc.insecure_channel('host.docker.internal:50052')
-        stub = context_pb2_grpc.ContextEngineStub(channel)
+        items = get_context(stub, job_id, ROLE, focus_id, max_items=20)
+        risk_assessment = require_artifact(items, "risk_assessment")
+        structured_policy = require_artifact(items, "structured_policy")
+        structured_evidence = require_artifact(items, "structured_evidence")
+        context_str = context_summary(items)
 
-        res = stub.GetContext(context_pb2.GetContextRequest(job_id=job_id, agent_role="decision_agent", focus_id=focus_id, max_items=10))
-        context_str = "\n".join([f"[{item.type}]: {item.content_json}" for item in res.items])
-
-        sys_prompt = "You are a Decision Agent. Look at Risk Assessment and Policy. Produce the final audit decision. Output JSON with 'final_status' (failed or passed), 'severity', and 'decision_summary'."
+        sys_prompt = (
+            "You are a Decision Agent. Use the tested risk hypothesis, structured "
+            "policy, and structured evidence to produce a final audit decision. "
+            "Return JSON with final_status, severity, decision_summary, confirmed_risk, "
+            "evidence_refs, and confidence."
+        )
         user_prompt = f"Context:\n{context_str}\n\nTask: Output final decision."
-
         mock_resp = {
             "final_status": "failed",
             "severity": "medium",
-            "decision_summary": "Fee disclosure unclear based on risk assessment."
+            "decision_summary": "Fee disclosure timing is not clearly compliant.",
+            "confirmed_risk": True,
+            "evidence_refs": ["structured_evidence_1", "risk_assessment_1"],
+            "confidence": 0.84,
         }
-        llm_response = json.loads(call_llm(sys_prompt, user_prompt, mock_resp))
+        llm_response = call_llm(sys_prompt, user_prompt, mock_resp)
 
-        fd = context_pb2.MemoryItem(
-            id="final_decision_1",
-            type="FinalDecision",
-            status="validated",
-            source="decision_agent",
-            content_json=json.dumps(llm_response),
-            version=1
+        final_decision_id = "final_decision_1"
+        source_refs = [
+            risk_assessment["id"],
+            structured_policy["id"],
+            structured_evidence["id"],
+        ]
+        content = make_content(
+            goal_id=focus_id,
+            artifact_type="final_decision",
+            payload=llm_response,
+            allow_roles=["critic_auditor"],
+            source_refs=source_refs,
+            validation={
+                "risk_assessment_status": risk_assessment["status"],
+                "decision_basis_refs": source_refs,
+            },
         )
-        stub.AddItem(context_pb2.AddItemRequest(job_id=job_id, item=fd))
-        stub.LinkItems(context_pb2.LinkItemsRequest(job_id=job_id, source_id=focus_id, target_id="final_decision_1", relation="decides"))
+        add_item(
+            stub,
+            job_id,
+            final_decision_id,
+            "Decision",
+            "draft",
+            ROLE,
+            content,
+            confidence=float(llm_response.get("confidence", 0.82)),
+        )
+        for source_id in source_refs:
+            link_items(stub, job_id, source_id, final_decision_id, "informs_decision")
+        link_items(stub, job_id, focus_id, final_decision_id, "has_final_decision")
+        transition_item(stub, job_id, final_decision_id, status="validated")
 
-        print(json.dumps({"job_id": job_id, "focus_id": focus_id, "seen_by_decision": [i.type for i in res.items]}))
-    except Exception as e:
-        print(json.dumps({"error": str(e)}), file=sys.stderr)
+        risk_status = "confirmed" if llm_response.get("confirmed_risk") else "rejected"
+        transition_item(stub, job_id, risk_assessment["id"], status=risk_status)
+
+        trace_id = add_trace_event(
+            stub,
+            job_id,
+            focus_id,
+            ROLE,
+            "final_decision",
+            source_refs,
+            [final_decision_id],
+            f"Produced final decision and marked risk hypothesis {risk_status}.",
+        )
+
+        artifact_ids.update(
+            {
+                "final_decision": final_decision_id,
+                "decision_trace": trace_id,
+            }
+        )
+        emit_state(
+            source,
+            artifact_ids=artifact_ids,
+            seen_by_decision=[item["artifact_type"] or item["type"] for item in items],
+        )
+    except Exception as exc:
+        print(json.dumps({"error": str(exc)}), file=sys.stderr)
         sys.exit(1)
 
-if __name__ == "__main__": main()
+
+if __name__ == "__main__":
+    main()

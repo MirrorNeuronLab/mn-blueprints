@@ -1,63 +1,106 @@
-import json, os, sys, grpc
-from pathlib import Path
-import context_pb2, context_pb2_grpc
+import json
+import sys
 
-def call_llm(system_prompt, user_prompt, mock_response):
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        print("WARNING: OPENAI_API_KEY not set. Falling back to mock response.", file=sys.stderr)
-        return json.dumps(mock_response)
-    try:
-        from openai import OpenAI
-        client = OpenAI(api_key=api_key)
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
-            response_format={"type": "json_object"}
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        print(f"LLM Error: {str(e)}. Falling back to mock.", file=sys.stderr)
-        return json.dumps(mock_response)
+from context_memory import (
+    add_item,
+    add_trace_event,
+    call_llm,
+    context_stub,
+    context_summary,
+    emit_state,
+    get_context,
+    link_items,
+    load_input,
+    make_content,
+    require_artifact,
+    transition_item,
+)
+
+
+ROLE = "policy_interpreter"
+
 
 def main():
     try:
-        input_data = json.loads(Path(os.environ["MIRROR_NEURON_INPUT_FILE"]).read_text())
-        source = json.loads(input_data["sandbox"]["stdout"]) if "sandbox" in input_data else input_data.get("input", input_data)
+        source = load_input()
         job_id, focus_id = source["job_id"], source["focus_id"]
+        artifact_ids = dict(source.get("artifact_ids", {}))
+        stub = context_stub()
 
-        channel = grpc.insecure_channel('host.docker.internal:50052')
-        stub = context_pb2_grpc.ContextEngineStub(channel)
+        items = get_context(stub, job_id, ROLE, focus_id)
+        policy = require_artifact(items, "policy_document")
+        context_str = context_summary(items)
 
-        res = stub.GetContext(context_pb2.GetContextRequest(job_id=job_id, agent_role="policy_interpreter", focus_id=focus_id, max_items=10))
-        
-        context_str = "\n".join([f"[{item.type}]: {item.content_json}" for item in res.items])
-        
-        sys_prompt = "You are a Policy Interpreter. Convert raw policy documents into structured rules. Return JSON with 'policy_id', 'rule', and 'required_evidence' array."
+        sys_prompt = (
+            "You are a Policy Interpreter. Convert policy documents into structured, "
+            "testable rules. Do not use transcript facts. Return JSON with policy_id, "
+            "rule, required_evidence, prohibited_blind_spots, and confidence."
+        )
         user_prompt = f"Context:\n{context_str}\n\nTask: Extract structured policy rules."
-        
         mock_resp = {
             "policy_id": "FEE_DISCLOSURE_001",
             "rule": "Disclose fee before agreement",
-            "required_evidence": ["fee amount mentioned", "customer agreement after disclosure"]
+            "required_evidence": [
+                "fee amount mentioned",
+                "customer agreement occurs after fee disclosure",
+            ],
+            "prohibited_blind_spots": ["do not infer agreement timing without transcript order"],
+            "confidence": 0.93,
         }
-        
-        llm_response = json.loads(call_llm(sys_prompt, user_prompt, mock_resp))
+        llm_response = call_llm(sys_prompt, user_prompt, mock_resp)
 
-        sp = context_pb2.MemoryItem(
-            id="structured_policy_1",
-            type="StructuredPolicy",
-            status="validated",
-            source="policy_interpreter",
-            content_json=json.dumps(llm_response),
-            version=1
+        structured_policy_id = "structured_policy_1"
+        content = make_content(
+            goal_id=focus_id,
+            artifact_type="structured_policy",
+            payload=llm_response,
+            allow_roles=["risk_classifier", "decision_agent", "critic_auditor"],
+            source_refs=[policy["id"]],
+            validation={
+                "normalized_from": policy["id"],
+                "schema": "policy_id, rule, required_evidence",
+            },
         )
-        stub.AddItem(context_pb2.AddItemRequest(job_id=job_id, item=sp))
-        stub.LinkItems(context_pb2.LinkItemsRequest(job_id=job_id, source_id=focus_id, target_id="structured_policy_1", relation="interprets"))
+        add_item(
+            stub,
+            job_id,
+            structured_policy_id,
+            "Constraint",
+            "draft",
+            ROLE,
+            content,
+            confidence=float(llm_response.get("confidence", 0.9)),
+        )
+        link_items(stub, job_id, policy["id"], structured_policy_id, "interprets")
+        link_items(stub, job_id, focus_id, structured_policy_id, "has_structured_constraint")
+        transition_item(stub, job_id, structured_policy_id, status="validated")
 
-        print(json.dumps({"job_id": job_id, "focus_id": focus_id, "seen_by_interpreter": [i.type for i in res.items]}))
-    except Exception as e:
-        print(json.dumps({"error": str(e)}), file=sys.stderr)
+        trace_id = add_trace_event(
+            stub,
+            job_id,
+            focus_id,
+            ROLE,
+            "structured_policy",
+            [policy["id"]],
+            [structured_policy_id],
+            "Converted policy document into a structured constraint.",
+        )
+
+        artifact_ids.update(
+            {
+                "structured_policy": structured_policy_id,
+                "policy_trace": trace_id,
+            }
+        )
+        emit_state(
+            source,
+            artifact_ids=artifact_ids,
+            seen_by_interpreter=[item["artifact_type"] or item["type"] for item in items],
+        )
+    except Exception as exc:
+        print(json.dumps({"error": str(exc)}), file=sys.stderr)
         sys.exit(1)
 
-if __name__ == "__main__": main()
+
+if __name__ == "__main__":
+    main()

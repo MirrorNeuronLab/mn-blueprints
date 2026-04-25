@@ -1,61 +1,119 @@
-import json, os, sys, grpc
-from pathlib import Path
-import context_pb2, context_pb2_grpc
+import json
+import sys
+
+from context_memory import (
+    ALL_ROLES,
+    add_item,
+    add_trace_event,
+    context_stub,
+    emit_state,
+    link_items,
+    load_input,
+    make_content,
+    transition_item,
+)
+
 
 def main():
     try:
-        input_data = json.loads(Path(os.environ["MIRROR_NEURON_INPUT_FILE"]).read_text())
-        source = input_data.get("input", input_data)
+        source = load_input()
         job_id = source.get("job_id", "audit_job_777")
         focus_id = source.get("focus_id", "audit_task_1")
+        stub = context_stub()
 
-        channel = grpc.insecure_channel('host.docker.internal:50052')
-        stub = context_pb2_grpc.ContextEngineStub(channel)
-
-        # 1. Add Task
-        task = context_pb2.MemoryItem(
-            id=focus_id,
-            type="Task",
-            status="validated",
-            source="system",
-            content_json=json.dumps({"goal": "Perform financial compliance audit"}),
-            version=1
+        task_content = make_content(
+            goal_id=focus_id,
+            artifact_type="audit_task",
+            payload={
+                "case_id": "C_992",
+                "goal": "Perform financial compliance audit",
+                "question": "Did the agent disclose the fee before confirming customer agreement?",
+                "workflow": [
+                    "policy_interpreter",
+                    "evidence_extractor",
+                    "risk_classifier",
+                    "decision_agent",
+                    "critic_auditor",
+                ],
+            },
+            allow_roles=ALL_ROLES,
+            validation={"created_from": "blueprint_initial_input"},
         )
-        stub.AddItem(context_pb2.AddItemRequest(job_id=job_id, item=task))
+        add_item(stub, job_id, focus_id, "Task", "draft", "initializer", task_content)
 
-        # 2. Add Raw Transcript
-        transcript = context_pb2.MemoryItem(
-            id="transcript_1",
-            type="RawTranscript",
-            status="validated",
-            source="system",
-            content_json=json.dumps({
+        transcript_id = "transcript_1"
+        transcript_content = make_content(
+            goal_id=focus_id,
+            artifact_type="raw_transcript",
+            payload={
                 "call_id": "C_992",
-                "text": "Agent: I can waive that fee for you today. Customer: Oh, okay. Agent: The fee is $50. Do you agree?"
-            }),
-            version=1
+                "text": (
+                    "Agent: I can waive that fee for you today. "
+                    "Customer: Oh, okay. "
+                    "Agent: The fee is $50. Do you agree?"
+                ),
+            },
+            allow_roles=["evidence_extractor"],
+            validation={"source_kind": "fixture", "verbatim": True},
         )
-        stub.AddItem(context_pb2.AddItemRequest(job_id=job_id, item=transcript))
-        stub.LinkItems(context_pb2.LinkItemsRequest(job_id=job_id, source_id=focus_id, target_id="transcript_1", relation="has_transcript"))
+        add_item(
+            stub,
+            job_id,
+            transcript_id,
+            "Evidence",
+            "validated",
+            "initializer",
+            transcript_content,
+        )
+        link_items(stub, job_id, focus_id, transcript_id, "has_evidence")
 
-        # 3. Add Policy Document
-        policy = context_pb2.MemoryItem(
-            id="policy_1",
-            type="PolicyDocument",
-            status="validated",
-            source="system",
-            content_json=json.dumps({
+        policy_id = "policy_1"
+        policy_content = make_content(
+            goal_id=focus_id,
+            artifact_type="policy_document",
+            payload={
                 "rule_id": "FEE_DISCLOSURE_001",
-                "text": "Agent must clearly disclose any fee before confirming customer agreement."
-            }),
-            version=1
+                "text": "Agent must clearly disclose any fee before confirming customer agreement.",
+            },
+            allow_roles=["policy_interpreter"],
+            validation={"source_kind": "fixture", "authoritative": True},
         )
-        stub.AddItem(context_pb2.AddItemRequest(job_id=job_id, item=policy))
-        stub.LinkItems(context_pb2.LinkItemsRequest(job_id=job_id, source_id=focus_id, target_id="policy_1", relation="has_policy"))
+        add_item(
+            stub,
+            job_id,
+            policy_id,
+            "Constraint",
+            "validated",
+            "initializer",
+            policy_content,
+        )
+        link_items(stub, job_id, focus_id, policy_id, "has_constraint")
 
-        print(json.dumps({"job_id": job_id, "focus_id": focus_id}))
-    except Exception as e:
-        print(json.dumps({"error": str(e)}), file=sys.stderr)
+        transition_item(stub, job_id, focus_id, status="validated")
+        trace_id = add_trace_event(
+            stub,
+            job_id,
+            focus_id,
+            "initializer",
+            "seed_context",
+            [],
+            [focus_id, transcript_id, policy_id],
+            "Seeded task, raw transcript, and policy with role-specific ACLs.",
+        )
+
+        emit_state(
+            {"job_id": job_id, "focus_id": focus_id, **source},
+            artifact_ids={
+                "task": focus_id,
+                "raw_transcript": transcript_id,
+                "policy_document": policy_id,
+                "initializer_trace": trace_id,
+            },
+        )
+    except Exception as exc:
+        print(json.dumps({"error": str(exc)}), file=sys.stderr)
         sys.exit(1)
 
-if __name__ == "__main__": main()
+
+if __name__ == "__main__":
+    main()

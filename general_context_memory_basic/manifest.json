@@ -8,7 +8,7 @@
       {
         "request_id": "demo-context-001",
         "job_id": "job_ctx_123",
-        "goal": "Analyze network traffic"
+        "goal": "Analyze network traffic by pinging 127.0.0.1 twice."
       }
     ]
   },
@@ -24,13 +24,14 @@
         "upload_path": "planner",
         "upload_as": "planner",
         "workdir": "/sandbox/job/planner",
-        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/planner.py"],
+        "command": ["bash", "-c", "pip install protobuf grpcio openai && python3 scripts/planner.py"],
         "pool": "default",
         "pool_slots": 1,
         "output_message_type": "plan_ready",
         "no_keep": true,
         "no_auto_providers": true,
-        "tty": false
+        "tty": false,
+        "env": {"OPENAI_API_KEY": {"$ref": "env.OPENAI_API_KEY"}}
       }
     },
     {
@@ -44,13 +45,14 @@
         "upload_path": "executor",
         "upload_as": "executor",
         "workdir": "/sandbox/job/executor",
-        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/executor.py"],
+        "command": ["bash", "-c", "pip install protobuf grpcio openai && python3 scripts/executor.py"],
         "pool": "default",
         "pool_slots": 1,
         "output_message_type": "execution_result",
         "no_keep": true,
         "no_auto_providers": true,
-        "tty": false
+        "tty": false,
+        "env": {"OPENAI_API_KEY": {"$ref": "env.OPENAI_API_KEY"}}
       }
     },
     {

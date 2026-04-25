@@ -21,11 +21,9 @@
         "from": "base",
         "upload_path": "initializer",
         "workdir": "/sandbox/job/initializer",
-        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/init.py"],
-        "pool": "default",
-        "pool_slots": 1,
-        "output_message_type": "init_done",
-        "no_keep": true, "no_auto_providers": true, "tty": false
+        "command": ["bash", "-c", "pip install protobuf grpcio openai && python3 scripts/init.py"],
+        "pool": "default", "pool_slots": 1, "output_message_type": "init_done", "no_keep": true, "no_auto_providers": true, "tty": false,
+        "env": {"OPENAI_API_KEY": {"$ref": "env.OPENAI_API_KEY"}}
       }
     },
     {
@@ -37,11 +35,9 @@
         "from": "base",
         "upload_path": "interpreter",
         "workdir": "/sandbox/job/interpreter",
-        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/interpreter.py"],
-        "pool": "default",
-        "pool_slots": 1,
-        "output_message_type": "interpreter_done",
-        "no_keep": true, "no_auto_providers": true, "tty": false
+        "command": ["bash", "-c", "pip install protobuf grpcio openai && python3 scripts/interpreter.py"],
+        "pool": "default", "pool_slots": 1, "output_message_type": "interpreter_done", "no_keep": true, "no_auto_providers": true, "tty": false,
+        "env": {"OPENAI_API_KEY": {"$ref": "env.OPENAI_API_KEY"}}
       }
     },
     {
@@ -53,11 +49,9 @@
         "from": "base",
         "upload_path": "extractor",
         "workdir": "/sandbox/job/extractor",
-        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/extractor.py"],
-        "pool": "default",
-        "pool_slots": 1,
-        "output_message_type": "extractor_done",
-        "no_keep": true, "no_auto_providers": true, "tty": false
+        "command": ["bash", "-c", "pip install protobuf grpcio openai && python3 scripts/extractor.py"],
+        "pool": "default", "pool_slots": 1, "output_message_type": "extractor_done", "no_keep": true, "no_auto_providers": true, "tty": false,
+        "env": {"OPENAI_API_KEY": {"$ref": "env.OPENAI_API_KEY"}}
       }
     },
     {
@@ -69,11 +63,9 @@
         "from": "base",
         "upload_path": "classifier",
         "workdir": "/sandbox/job/classifier",
-        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/classifier.py"],
-        "pool": "default",
-        "pool_slots": 1,
-        "output_message_type": "classifier_done",
-        "no_keep": true, "no_auto_providers": true, "tty": false
+        "command": ["bash", "-c", "pip install protobuf grpcio openai && python3 scripts/classifier.py"],
+        "pool": "default", "pool_slots": 1, "output_message_type": "classifier_done", "no_keep": true, "no_auto_providers": true, "tty": false,
+        "env": {"OPENAI_API_KEY": {"$ref": "env.OPENAI_API_KEY"}}
       }
     },
     {
@@ -85,11 +77,9 @@
         "from": "base",
         "upload_path": "decision",
         "workdir": "/sandbox/job/decision",
-        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/decision.py"],
-        "pool": "default",
-        "pool_slots": 1,
-        "output_message_type": "decision_done",
-        "no_keep": true, "no_auto_providers": true, "tty": false
+        "command": ["bash", "-c", "pip install protobuf grpcio openai && python3 scripts/decision.py"],
+        "pool": "default", "pool_slots": 1, "output_message_type": "decision_done", "no_keep": true, "no_auto_providers": true, "tty": false,
+        "env": {"OPENAI_API_KEY": {"$ref": "env.OPENAI_API_KEY"}}
       }
     },
     {
@@ -101,11 +91,9 @@
         "from": "base",
         "upload_path": "critic",
         "workdir": "/sandbox/job/critic",
-        "command": ["bash", "-c", "pip install protobuf grpcio && python3 scripts/critic.py"],
-        "pool": "default",
-        "pool_slots": 1,
-        "output_message_type": "critic_done",
-        "no_keep": true, "no_auto_providers": true, "tty": false
+        "command": ["bash", "-c", "pip install protobuf grpcio openai && python3 scripts/critic.py"],
+        "pool": "default", "pool_slots": 1, "output_message_type": "critic_done", "no_keep": true, "no_auto_providers": true, "tty": false,
+        "env": {"OPENAI_API_KEY": {"$ref": "env.OPENAI_API_KEY"}}
       }
     },
     {

@@ -58,12 +58,19 @@ def repair_low_quality_email(plan: dict) -> dict:
     return plan
 
 
+def minimum_gap_minutes(rules: dict) -> int:
+    try:
+        return max(0, int(rules.get("minimum_minutes_between_emails", 5)))
+    except (TypeError, ValueError):
+        return 5
+
+
 def main() -> None:
     plan = load_input_plan()
     customer = plan["customer"]
     runtime_job_id = plan.get("runtime_job_id")
     rules = read_email_rules()
-    minimum_gap = 5
+    minimum_gap = minimum_gap_minutes(rules)
     now = datetime.now(timezone.utc).replace(microsecond=0)
 
     existing_draft = plan.get("existing_draft") or pending_ready_draft(customer["customer_id"])

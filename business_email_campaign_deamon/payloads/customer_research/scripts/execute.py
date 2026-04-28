@@ -7,17 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from _synaptic_runtime.core import (
     completion_json,
-    load_input_plan,
-    load_knowledge_section,
-    log_agent,
-    latest_sent_draft,
-    pending_ready_draft,
-    read_business_context,
-    recent_activities,
     db_connect,
-)
-#
-    completion_json,
     load_input_plan,
     load_knowledge_section,
     log_agent,

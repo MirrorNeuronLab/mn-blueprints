@@ -1,10 +1,12 @@
 {
   "business_context": "Bibblio helps parents turn real moments like bedtime resistance, big feelings, friendship challenges, school transitions, and confidence-building into personalized SEL picture books. Email should feel warm, practical, and emotionally intelligent, guiding parents from first story creation toward repeat story making, downloads, credit purchases, and referrals.",
   "email_rules": {
-    "minimum_minutes_between_emails": 5
+    "minimum_minutes_between_emails": 1
   },
   "delivery": {
-    "test_recipient": "homerquan@gmail.com"
+    "test_recipient": "homerquan@gmail.com",
+    "mode": "dry_run",
+    "quick_testing": true
   },
   "campaign_playbooks": {
     "first_story_activation": {

@@ -13,16 +13,23 @@ def main():
     default_llm_model = "ollama/gemma4:latest"
     default_test_email = "test@example.com"
     default_agentmail_inbox = "mn-demo@agentmail.to"
-    default_agentmail_api = "am_us_inbox_d7f3e9a38432ff1c0896e4d39f984d2396d4b54f97bdb225713a3804a9e45a15"
+    default_agentmail_api = ""
+    default_resend_from = ""
 
     # Prompts
     llm_base = input(f"Ollama API Base URL [{default_llm_base}]: ").strip() or default_llm_base
+    llm_base = llm_base.rstrip("/")
+    for suffix in ("/v1/chat/completions", "/v1"):
+        if llm_base.endswith(suffix):
+            llm_base = llm_base[: -len(suffix)]
     llm_model = input(f"Ollama Model [{default_llm_model}]: ").strip() or default_llm_model
     
     agentmail_inbox = input(f"AgentMail Inbox [{default_agentmail_inbox}]: ").strip() or default_agentmail_inbox
     agentmail_key = input(f"AgentMail API Key [{default_agentmail_api}]: ").strip() or default_agentmail_api
+    resend_key = input("Resend API Key (optional, used by email_send_resend_skill) []: ").strip()
+    resend_from = input(f"Resend From Email (optional) [{default_resend_from}]: ").strip() or default_resend_from
 
-    test_mode = input("Enable Test Mode? (Sends all emails to a test address) [Y/n]: ").strip().lower()
+    test_mode = input("Enable Quick Test Mode? (Dry-runs email delivery every 1 minute) [Y/n]: ").strip().lower()
     is_test_mode = test_mode in ["", "y", "yes", "true"]
     
     test_email = ""
@@ -54,6 +61,8 @@ def main():
             # Update AgentMail Settings
             env["AGENTMAIL_API_KEY"] = agentmail_key
             env["AGENTMAIL_INBOX"] = agentmail_inbox
+            env["RESEND_API_KEY"] = resend_key
+            env["RESEND_FROM_EMAIL"] = resend_from
             
             if "GMAIL_ADDRESS" in env:
                 del env["GMAIL_ADDRESS"]
@@ -65,8 +74,14 @@ def main():
             # Update Test Mode
             if is_test_mode:
                 env["SYNAPTIC_TEST_EMAIL_TO"] = test_email
+                env["SYNAPTIC_EMAIL_DELIVERY_MODE"] = "dry_run"
             else:
                 env["SYNAPTIC_TEST_EMAIL_TO"] = ""
+                env["SYNAPTIC_EMAIL_DELIVERY_MODE"] = "agentmail"
+
+    for node in manifest.get("nodes", []):
+        if node.get("node_id") == "monitor_scheduler_agent":
+            node.setdefault("config", {})["interval_ms"] = 60000 if is_test_mode else 300000
 
     # Mark as configured
     if "require_config" in manifest:

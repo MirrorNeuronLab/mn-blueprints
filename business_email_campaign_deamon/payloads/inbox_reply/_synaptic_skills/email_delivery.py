@@ -3,19 +3,40 @@ from __future__ import annotations
 import json
 import os
 import urllib.error
+import urllib.parse
 import urllib.request
 from typing import Any
 
-from agentmail import AgentMail
+try:
+    from mn_email_send_resend_skill import dry_run_email as skill_dry_run_email
+    from mn_email_send_resend_skill import send_resend_email
+except ImportError:
+    skill_dry_run_email = None
+    send_resend_email = None
+
+
+def dry_run_email(request: dict[str, Any]) -> dict[str, Any]:
+    if skill_dry_run_email is not None:
+        return skill_dry_run_email(request)
+    return {
+        "status": "sent",
+        "provider_id": "dry_run",
+        "http_status": 200,
+        "dry_run": True,
+    }
+
 
 def post_email(request: dict[str, Any]) -> dict[str, Any]:
+    if send_resend_email is not None:
+        resend_delivery = send_resend_email(request)
+        if resend_delivery.get("reason") != "missing_resend_credentials":
+            return resend_delivery
+
     api_key = os.environ.get("AGENTMAIL_API_KEY", "").strip()
     inbox_id = os.environ.get("AGENTMAIL_INBOX", "").strip()
     
     if not api_key or not inbox_id:
         return {"status": "skipped", "reason": "missing_agentmail_credentials"}
-
-    client = AgentMail(api_key=api_key)
 
     to_emails = request.get("to", [])
     if isinstance(to_emails, list):
@@ -23,20 +44,36 @@ def post_email(request: dict[str, Any]) -> dict[str, Any]:
     else:
         to_str = to_emails
 
+    body = json.dumps(
+        {
+            "to": to_str,
+            "subject": request.get("subject", ""),
+            "text": request.get("text", ""),
+            "html": request.get("html", None),
+            "headers": request.get("headers", {}),
+        }
+    ).encode("utf-8")
+    http_request = urllib.request.Request(
+        f"https://api.agentmail.to/v0/inboxes/{urllib.parse.quote(inbox_id, safe='')}/messages/send",
+        data=body,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        method="POST",
+    )
     try:
-        sent = client.inboxes.messages.send(
-            inbox_id=inbox_id,
-            to=to_str,
-            subject=request.get("subject", ""),
-            text=request.get("text", ""),
-            html=request.get("html", None)
-        )
+        with urllib.request.urlopen(http_request, timeout=30) as response:
+            payload = json.loads(response.read().decode("utf-8"))
         return {
             "status": "sent",
-            "provider_id": sent.message_id,
-            "http_status": 200,
+            "provider_id": payload.get("message_id") or payload.get("id"),
+            "http_status": response.status,
         }
-    except Exception as exc:
+    except urllib.error.HTTPError as exc:
+        raw = exc.read().decode("utf-8", errors="replace")
+        return {"status": "failed", "http_status": exc.code, "error": raw}
+    except urllib.error.URLError as exc:
         return {"status": "failed", "error": str(exc)}
 
 def post_slack_message(text: str) -> dict[str, Any]:

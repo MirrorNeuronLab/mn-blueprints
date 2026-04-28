@@ -116,7 +116,57 @@ def db_connect() -> sqlite3.Connection:
         target = os.environ["SYNAPTIC_DB_PATH"]
     conn = sqlite3.connect(target, timeout=30)
     conn.row_factory = sqlite3.Row
+    ensure_db_schema(conn)
     return conn
+
+
+def ensure_db_schema(conn: sqlite3.Connection) -> None:
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS email_drafts (
+            draft_id TEXT PRIMARY KEY,
+            customer_id TEXT,
+            runtime_job_id TEXT,
+            status TEXT,
+            subject TEXT,
+            preview_text TEXT,
+            body_text TEXT,
+            html_body TEXT,
+            scheduled_send_at TEXT,
+            prepared_at TEXT,
+            provider_id TEXT,
+            sent_at TEXT,
+            from_email TEXT,
+            thread_message_id TEXT,
+            in_reply_to_message_id TEXT,
+            references_message_ids_json TEXT,
+            source_payload_json TEXT
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS customer_marketing_activity (
+            activity_id TEXT PRIMARY KEY,
+            customer_id TEXT,
+            summary TEXT,
+            created_at TEXT
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS agent_logs (
+            runtime_job_id TEXT,
+            agent_id TEXT,
+            level TEXT,
+            message TEXT,
+            details_json TEXT,
+            created_at TEXT
+        )
+        """
+    )
+    conn.commit()
 
 
 def recent_activities(customer_id: str, limit: int = 5) -> list[dict[str, Any]]:
@@ -385,6 +435,10 @@ def _resolve_litellm_api_base(model: str, profile: str = "primary") -> str | Non
         for suffix in ("/v1beta/models", "/v1/models", "/models"):
             if value.endswith(suffix):
                 return value[: -len(suffix)] or None
+    if model.startswith("ollama/"):
+        for suffix in ("/v1/chat/completions", "/v1"):
+            if value.endswith(suffix):
+                return value[: -len(suffix)] or None
     return value
 
 
@@ -432,7 +486,7 @@ def completion_json(
     try:
         response = completion(**request_kwargs)
     except Exception as exc:
-        raise RuntimeError(str(exc)) from exc
+        return None
 
     try:
         finish_reason = response.choices[0].finish_reason

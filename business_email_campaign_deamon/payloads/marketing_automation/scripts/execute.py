@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 import json
 import os
 import sys
@@ -14,13 +16,40 @@ from _synaptic_runtime.core import (
     mark_draft_sent,
     read_delivery_settings,
 )
-from _synaptic_skills.email_delivery import post_email, post_slack_message
+from _synaptic_skills.email_delivery import dry_run_email, post_email, post_slack_message
 
 
 AGENT_ID = "marketing_automation_agent"
 
 
-def main() -> None:
+def quick_testing_enabled(delivery_settings: dict) -> bool:
+    values = [
+        os.environ.get("SYNAPTIC_QUICK_TEST_MODE", ""),
+        os.environ.get("SYNAPTIC_EMAIL_DRY_RUN", ""),
+        str(delivery_settings.get("quick_testing", "")),
+        str(delivery_settings.get("dry_run", "")),
+    ]
+    mode = (
+        os.environ.get("SYNAPTIC_EMAIL_DELIVERY_MODE", "")
+        or str(delivery_settings.get("mode", ""))
+    ).strip().lower()
+    if mode in {"agentmail", "live"}:
+        return False
+    return mode in {"dry_run", "dry-run", "test", "quick_test"} or any(
+        value.strip().lower() in {"1", "true", "yes", "on"} for value in values
+    )
+
+
+def log_email_sent_event(runtime_job_id: str | None, to_email: str, subject: str) -> None:
+    log_agent(
+        runtime_job_id,
+        AGENT_ID,
+        "Email sent event.",
+        details={"to": to_email, "subject": subject},
+    )
+
+
+def main(email_sender=None, slack_sender=None) -> None:
     plan = load_input_plan()
     runtime_job_id = plan.get("runtime_job_id")
     customer = plan["customer"]
@@ -34,6 +63,9 @@ def main() -> None:
         or str(delivery_settings.get("test_recipient", "")).strip()
     )
     actual_recipient = test_recipient or customer["email"]
+    quick_testing = quick_testing_enabled(delivery_settings)
+    send_email = email_sender or (dry_run_email if quick_testing else post_email)
+    send_slack = slack_sender or post_slack_message
     reply_context = dict(plan.get("reply_context") or {})
     email_headers = {"Idempotency-Key": saved_draft["draft_id"]}
     thread_message_id = str(reply_context.get("thread_message_id") or "").strip()
@@ -70,16 +102,20 @@ def main() -> None:
             "html": saved_draft["html_body"],
             "headers": email_headers,
         }
-        delivery = post_email(execution_request)
+        delivery = send_email(execution_request)
         if delivery["status"] == "sent":
             mark_draft_sent(saved_draft["draft_id"], delivery.get("provider_id"))
             add_marketing_activity(
                 customer["customer_id"],
                 f"Sent email: {saved_draft['subject']}",
             )
-            slack_delivery = post_slack_message(
-                f"Synaptic sent a customized email to {customer['name']} <{customer['email']}>."
-            )
+            log_email_sent_event(runtime_job_id, actual_recipient, saved_draft["subject"])
+            if quick_testing:
+                slack_delivery = {"status": "skipped", "reason": "quick_test_mode"}
+            else:
+                slack_delivery = send_slack(
+                    f"Synaptic sent a customized email to {customer['name']} <{customer['email']}>."
+                )
             log_agent(
                 runtime_job_id,
                 AGENT_ID,
@@ -90,6 +126,7 @@ def main() -> None:
                     "customer_email": customer["email"],
                     "delivery_recipient": actual_recipient,
                     "test_recipient_override": bool(test_recipient),
+                    "subject": saved_draft["subject"],
                 },
             )
         else:
@@ -104,6 +141,7 @@ def main() -> None:
                     "delivery_recipient": actual_recipient,
                     "test_recipient_override": bool(test_recipient),
                     "error": delivery.get("error"),
+                    "subject": saved_draft["subject"],
                 },
             )
 
@@ -117,12 +155,15 @@ def main() -> None:
                             "customer_id": customer["customer_id"],
                             "email": actual_recipient,
                             "customer_email": customer["email"],
+                            "subject": saved_draft["subject"],
                             "cycle": int(plan.get("cycle", 1)),
                             "status": delivery["status"],
                             "http_status": delivery.get("http_status"),
                             "provider_id": delivery.get("provider_id"),
                             "reason": delivery.get("reason"),
                             "error": delivery.get("error"),
+                            "dry_run": bool(delivery.get("dry_run")),
+                            "quick_testing": quick_testing,
                             "test_recipient_override": bool(test_recipient),
                         },
                     },

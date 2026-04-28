@@ -94,7 +94,7 @@ defmodule Synaptic.MonitorScheduler do
               "customer_id" => get_in(next_plan, ["customer", "customer_id"]),
               "scheduled_at" => scheduled_at
             }},
-           {:emit_to, "lifecycle_copywriter_agent", "plan_cycle", next_plan}
+           {:emit_to, "customer_research_agent", "plan_cycle", next_plan}
          ]}
     end
   end

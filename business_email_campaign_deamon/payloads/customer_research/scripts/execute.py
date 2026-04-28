@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from _synaptic_runtime.core import (
     completion_json,
     db_connect,
+    load_input_manifest,
     load_input_plan,
     load_knowledge_section,
     log_agent,
@@ -16,7 +17,11 @@ from _synaptic_runtime.core import (
     read_business_context,
     recent_activities,
 )
-from _synaptic_skills.marketing_email import build_customer_brief, parse_source_payload
+from _synaptic_skills.marketing_email import (
+    build_customer_brief,
+    infer_audience_segment,
+    parse_source_payload,
+)
 
 
 AGENT_ID = "customer_research_agent"
@@ -50,19 +55,47 @@ def main() -> None:
         return
 
     activities = recent_activities(customer["customer_id"], limit=5)
+    input_manifest = load_input_manifest()
     context_text = read_business_context()
     segments = load_knowledge_section("segments")
     playbooks = load_knowledge_section("campaign_playbooks")
     offers_catalog = load_knowledge_section("offers_catalog")
-    
-    # Determine the campaign sequence
-    sequence = [
-        "first_story_activation",
-        "product_spotlight",
-        "download_conversion",
-        "referral_invite",
-        "credit_purchase_nudge"
+    audience_segment = plan.get("audience_segment") or infer_audience_segment(customer, segments)
+    plan["audience_segment"] = audience_segment
+
+    parent_sequence = [
+        "parent_awareness",
+        "parent_education",
+        "parent_activation",
+        "parent_social_proof",
+        "parent_use_case",
+        "parent_reminder",
+        "parent_expansion",
     ]
+    teacher_sequence = [
+        "teacher_awareness",
+        "teacher_education",
+        "teacher_activation",
+        "teacher_social_proof",
+        "teacher_use_case",
+        "teacher_reminder",
+        "teacher_expansion",
+    ]
+    creator_sequence = [
+        "creator_awareness",
+        "creator_education",
+        "creator_activation",
+        "creator_social_proof",
+        "creator_use_case",
+        "creator_reminder",
+        "creator_expansion",
+    ]
+    if audience_segment == "teachers":
+        sequence = teacher_sequence
+    elif audience_segment == "creators_educators":
+        sequence = creator_sequence
+    else:
+        sequence = parent_sequence
     
     past_campaigns = []
     with db_connect() as conn:
@@ -108,7 +141,10 @@ def main() -> None:
 
     system_prompt = (
         "You are the customer research agent in a multi-agent email marketing system. "
-        "Return compact JSON only. Build a strategic brief for one high-quality marketing email. "
+        "Return compact JSON only. Build a strategic brief for one high-quality email in a 30-day, multi-step campaign. "
+        "Treat Bibblio as an Emotional Learning Content platform, not a bookstore. "
+        "Choose an angle for the selected audience and phase; never reuse a generic parent message for a teacher or creator. "
+        "Every brief must include at least two messaging triggers: emotional pain, identity, outcome, or ease. "
         "Required keys: persona, customer_angle, job_to_be_done, pain_point, recommended_offer, "
         "offer_reason, proof_points, objection_to_address, primary_cta, secondary_cta, angle_to_avoid, "
         "recommended_template, activity_summary, tone. "
@@ -117,6 +153,9 @@ def main() -> None:
     user_prompt = json.dumps(
         {
             "business_context": context_text,
+            "positioning": input_manifest.get("positioning", {}),
+            "funnel_strategy": input_manifest.get("funnel_strategy", {}),
+            "messaging_dna": input_manifest.get("messaging_dna", {}),
             "strategy": {
                 "campaign_type": plan.get("campaign_type"),
                 "audience_segment": plan.get("audience_segment"),
@@ -139,7 +178,21 @@ def main() -> None:
         indent=2,
     )
 
-    brief = completion_json(system_prompt, user_prompt, profile="secondary") or fallback_brief(plan, activities)
+    deterministic_brief = fallback_brief(plan, activities)
+    brief = completion_json(system_prompt, user_prompt, profile="secondary") or deterministic_brief
+    for key in (
+        "campaign_phase",
+        "subject_angle",
+        "recommended_template",
+        "primary_cta",
+        "secondary_cta",
+    ):
+        if deterministic_brief.get(key):
+            brief[key] = brief.get(key) or deterministic_brief[key]
+    if plan.get("campaign_type", "").startswith(("teacher_", "creator_")):
+        for key in ("recommended_offer", "offer_reason", "proof_points", "story_prompt_example"):
+            if deterministic_brief.get(key):
+                brief[key] = deterministic_brief[key]
     plan["customer_brief"] = brief
     plan["recent_activities"] = activities
     log_agent(

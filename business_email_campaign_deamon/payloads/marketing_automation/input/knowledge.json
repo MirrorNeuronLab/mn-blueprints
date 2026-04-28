@@ -14,6 +14,22 @@
     }
   },
   "segments": {
+    "teachers": {
+      "label": "Classroom teacher",
+      "keywords": ["teacher", "classroom", "school", "educator", "student", "curriculum"],
+      "job_to_be_done": "Support emotional development in the classroom with story-based moments that are easy to use.",
+      "pain_point": "SEL matters, but generic lessons can be hard to personalize and difficult to fit into the day.",
+      "objection_to_address": "Will this be practical enough for a real classroom and specific enough for my students?",
+      "tone": "professional, practical, classroom-aware"
+    },
+    "creators_educators": {
+      "label": "Creator or educator",
+      "keywords": ["creator", "author", "writer", "educator", "publisher", "coach", "therapist"],
+      "job_to_be_done": "Create purposeful emotional learning stories that can help children, parents, and classrooms.",
+      "pain_point": "They want to create meaningful children’s content but need a clear category, audience, and path to impact.",
+      "objection_to_address": "Is there real demand for this kind of emotional learning content?",
+      "tone": "purposeful, credible, opportunity-focused"
+    },
     "new_parents": {
       "label": "New parent creator",
       "keywords": ["parent", "mom", "mother", "dad", "father", "caregiver"],
@@ -111,6 +127,28 @@
           "Gives parents language for reassurance that feels concrete and familiar."
         ],
         "story_prompt_example": "Create a story about a child walking into school with jitters, finding a brave routine, and feeling safe enough to begin the day."
+      },
+      {
+        "id": "classroom_sel_story_pack",
+        "name": "Classroom SEL Story Pack",
+        "url_slug": "classroom",
+        "keywords": ["teacher", "classroom", "sel", "bullying", "anxiety", "friendship", "teamwork"],
+        "benefit_bullets": [
+          "Gives teachers story-based prompts for bullying, anxiety, friendship, teamwork, and classroom belonging.",
+          "Turns emotional check-ins into a practical five-minute classroom routine."
+        ],
+        "story_prompt_example": "Create a classroom story where students recognize a friendship conflict, practice empathy, and choose one repair step together."
+      },
+      {
+        "id": "creator_emotional_learning_story",
+        "name": "Creator Emotional Learning Story",
+        "url_slug": "creators",
+        "keywords": ["creator", "educator", "publish", "emotional learning", "sel", "content"],
+        "benefit_bullets": [
+          "Helps creators turn real childhood struggles into useful emotional learning stories.",
+          "Connects creator purpose with themes parents and teachers already need."
+        ],
+        "story_prompt_example": "Publish a story around one emotional theme, such as anxiety, confidence, friendship, bullying, or school transitions."
       },
       {
         "id": "personalized_keepsake_story",

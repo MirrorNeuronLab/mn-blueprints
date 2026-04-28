@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import sqlite3
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -36,10 +38,6 @@ def bundle_asset_dir(name: str) -> Path:
         if candidate.exists():
             return candidate
     return current.parents[2] / name
-
-
-def bundle_templates_dir() -> Path:
-    return bundle_asset_dir("templates")
 
 
 def bundle_input_dir() -> Path:
@@ -79,6 +77,9 @@ def load_input_manifest() -> dict[str, Any]:
         merged["email_rules"] = strategy["email_rules"]
     if "delivery" in strategy:
         merged["delivery"] = strategy["delivery"]
+    for key in ("positioning", "funnel_strategy", "messaging_dna", "campaign_playbooks"):
+        if key in strategy:
+            merged[key] = strategy[key]
     merged_knowledge = dict(knowledge)
     campaign_playbooks = strategy.get("campaign_playbooks", {})
     if isinstance(campaign_playbooks, dict):
@@ -97,14 +98,13 @@ def load_knowledge_section(section_name: str) -> dict[str, Any]:
 
 def load_template_library() -> dict[str, dict[str, Any]]:
     library: dict[str, dict[str, Any]] = {}
-    template_dirs = [bundle_templates_dir(), bundle_input_dir() / "templates"]
-    for templates_dir in template_dirs:
-        if not templates_dir.exists():
-            continue
-        for path in sorted(templates_dir.glob("*.json")):
-            payload = json.loads(path.read_text())
-            if isinstance(payload, dict) and payload.get("template_id"):
-                library[str(payload["template_id"])] = payload
+    templates_dir = bundle_input_dir() / "templates"
+    if not templates_dir.exists():
+        return library
+    for path in sorted(templates_dir.glob("*.json")):
+        payload = json.loads(path.read_text())
+        if isinstance(payload, dict) and payload.get("template_id"):
+            library[str(payload["template_id"])] = payload
     return library
 
 
@@ -491,7 +491,8 @@ def completion_json(
         request_kwargs["format"] = "json"
 
     try:
-        response = completion(**request_kwargs)
+        with contextlib.redirect_stdout(sys.stderr):
+            response = completion(**request_kwargs)
     except Exception as exc:
         return None
 

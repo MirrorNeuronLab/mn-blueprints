@@ -4,6 +4,7 @@ import ast
 import html
 import json
 import re
+from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 
@@ -11,6 +12,8 @@ from urllib.parse import urlencode
 GENERIC_MARKETING_PHRASES = (
     "ai children book creator",
     "ai book maker",
+    "bookstore",
+    "content library",
     "generic product",
     "use credits",
     "create a book",
@@ -207,6 +210,18 @@ def choose_primary_offer(
         if offer:
             return offer
 
+    if campaign_type.startswith("teacher_"):
+        offer = find_offer_by_keywords("sel") or find_offer_by_keywords(
+            "classroom", "teacher"
+        )
+        if offer:
+            return offer
+
+    if campaign_type.startswith("creator_"):
+        offer = find_offer_by_keywords("creator", "emotional learning", "publish")
+        if offer:
+            return offer
+
     if campaign_type == "referral_invite":
         offer = find_offer_by_keywords("referral", "invite", "share")
         if offer:
@@ -338,6 +353,12 @@ def build_customer_brief(
             "offer_reason",
             "It matches the customer's recent interest and gives them one simple decision to make.",
         ),
+        "campaign_phase": playbook.get("phase", ""),
+        "subject_angle": playbook.get("subject_angle", ""),
+        "messaging_triggers": playbook.get(
+            "messaging_triggers",
+            ["emotional pain", "identity", "outcome", "ease"],
+        )[:4],
         "proof_points": proof_points,
         "story_prompt_example": offer.get(
             "story_prompt_example",
@@ -372,6 +393,8 @@ def choose_best_subject(
     primary_offer: str,
 ) -> str:
     first_name = (customer.get("name") or "there").split()[0]
+    if first_name.lower().rstrip(".") in {"mr", "mrs", "ms", "miss", "dr"}:
+        first_name = str(customer.get("name") or first_name).strip()
 
     def score(candidate: str) -> tuple[int, int]:
         text = candidate.strip()
@@ -463,6 +486,8 @@ def normalize_structured_draft(
         "audience_segment": plan.get("audience_segment", "general_audience"),
     }
     first_name = (customer.get("name") or "there").split()[0]
+    if first_name.lower().rstrip(".") in {"mr", "mrs", "ms", "miss", "dr"}:
+        first_name = str(customer.get("name") or first_name).strip()
     offer = str(brief.get("recommended_offer") or strategy["primary_offer"])
     cta_meta = brief.get("primary_cta", {})
     proof_points = list(brief.get("proof_points", []))[:2]
@@ -470,8 +495,12 @@ def normalize_structured_draft(
     story_prompt_example = str(brief.get("story_prompt_example") or "").strip()
     reply_context = dict(plan.get("reply_context") or {})
     subject_candidates = list(raw.get("subject_candidates") or [])
+    campaign_type = strategy["campaign_type"]
+    is_sel_campaign = campaign_type.startswith(("parent_", "teacher_", "creator_"))
+    subject_angle = str(brief.get("subject_angle") or "").strip()
+    campaign_phase = str(brief.get("campaign_phase") or "").strip()
     if len(subject_candidates) < 2:
-        if strategy["campaign_type"] == "reply_followup":
+        if campaign_type == "reply_followup":
             subject_root = str(reply_context.get("subject") or f"Re: {offer}").strip()
             if subject_root and not subject_root.lower().startswith("re:"):
                 subject_root = f"Re: {subject_root}"
@@ -480,7 +509,26 @@ def normalize_structured_draft(
                 f"Re: {first_name}, thanks for replying",
                 "Re: Quick follow-up from Bibblio",
             ]
-        elif strategy["campaign_type"] in {
+        elif is_sel_campaign:
+            if campaign_type.startswith("teacher_"):
+                subject_candidates = [
+                    subject_angle or "Why students remember stories but forget lessons",
+                    "A practical SEL story idea for your classroom",
+                    "One classroom moment, one story-based check-in",
+                ]
+            elif campaign_type.startswith("creator_"):
+                subject_candidates = [
+                    subject_angle or "Turn real childhood struggles into meaningful stories",
+                    "A clearer category for purposeful children’s stories",
+                    "Create emotional learning content with real utility",
+                ]
+            else:
+                subject_candidates = [
+                    subject_angle or "What your child may not say out loud",
+                    f"{first_name}, a story idea for this week’s child moment",
+                    "A five-minute way into a bigger conversation",
+                ]
+        elif campaign_type in {
             "first_story_activation",
             "draft_recovery",
             "download_conversion",
@@ -504,28 +552,31 @@ def normalize_structured_draft(
         raw.get("preview_text")
         or (
             "A quick, personal follow-up to your reply."
-            if strategy["campaign_type"] == "reply_followup"
+            if campaign_type == "reply_followup"
             else (
-            f"Turn a real parenting moment into a personalized story with {offer}."
-            if strategy["campaign_type"]
-            in {
-                "first_story_activation",
-                "draft_recovery",
-                "download_conversion",
-                "credit_purchase_nudge",
-                "next_story_idea",
-                "referral_invite",
-                "winback_parent_moment",
-            }
-            else f"A practical recommendation inspired by your recent interest in {offer}."
+                f"Turn a real emotional learning moment into a personalized story with {offer}."
+                if is_sel_campaign
+                or campaign_type
+                in {
+                    "first_story_activation",
+                    "draft_recovery",
+                    "download_conversion",
+                    "credit_purchase_nudge",
+                    "next_story_idea",
+                    "referral_invite",
+                    "winback_parent_moment",
+                }
+                else f"A practical recommendation inspired by your recent interest in {offer}."
             )
         )
     ).strip()
-    headline = str(raw.get("headline") or offer).strip()
-    eyebrow = str(raw.get("eyebrow") or plan.get("goal") or "A useful next step").strip()
+    headline = str(raw.get("headline") or subject_angle or offer).strip()
+    eyebrow = str(
+        raw.get("eyebrow") or campaign_phase.replace("_", " ").title() or plan.get("goal") or "A useful next step"
+    ).strip()
     body_sections = normalize_body_sections(raw.get("body_sections") or [])
     if len(body_sections) < 2:
-        if strategy["campaign_type"] == "reply_followup":
+        if campaign_type == "reply_followup":
             sender_name = str(reply_context.get("from_name") or first_name).strip()
             inbound_summary = str(reply_context.get("text_body") or "").strip()
             if len(inbound_summary) > 220:
@@ -547,7 +598,35 @@ def normalize_structured_draft(
                     or "If it helps, I can point you to the best next story idea or the fastest way to finish what you started."
                 ),
             ]
-        elif strategy["campaign_type"] in {
+        elif is_sel_campaign:
+            if campaign_type.startswith("teacher_"):
+                body_sections = [
+                    f"Hi {first_name}, students often remember a story long after a lesson fades. That is why {offer} is built around classroom moments, not generic content.",
+                    proof_points[0]
+                    if proof_points
+                    else "It gives you a practical way to approach friendship, anxiety, bullying, confidence, or belonging without adding a heavy new curriculum.",
+                    story_prompt_example
+                    or "Start with one five-minute check-in: choose a classroom challenge, turn it into a story, and let students discuss the choice the character makes next.",
+                ]
+            elif campaign_type.startswith("creator_"):
+                body_sections = [
+                    f"Hi {first_name}, emotional learning content is becoming its own category: stories that help children understand real struggles through narrative.",
+                    proof_points[0]
+                    if proof_points
+                    else f"{offer} helps creators turn purpose into stories parents and teachers can actually use.",
+                    story_prompt_example
+                    or "Choose one theme, such as anxiety, friendship, bullying, confidence, or school transitions, and publish a story that gives children language for the moment.",
+                ]
+            else:
+                body_sections = [
+                    f"Hi {first_name}, when a child is carrying a big feeling, a story can sometimes open the door more gently than another lecture or question.",
+                    proof_points[0]
+                    if proof_points
+                    else f"{offer} helps turn one real moment into a personalized story your child can recognize and talk about.",
+                    story_prompt_example
+                    or "Pick one moment from this week, such as bedtime, friendship, confidence, or school jitters, and Bibblio will help shape it into a story in minutes.",
+                ]
+        elif campaign_type in {
             "first_story_activation",
             "draft_recovery",
             "download_conversion",
@@ -600,7 +679,7 @@ def normalize_structured_draft(
     ).strip()
     footer_variant = (
         str(raw.get("footer_variant") or "reply").strip() or "reply"
-        if strategy["campaign_type"] == "reply_followup"
+        if campaign_type == "reply_followup"
         else str(raw.get("footer_variant") or "default").strip() or "default"
     )
     signoff = str(raw.get("signoff") or brand.get("signoff_name") or "The Team").strip()
@@ -627,7 +706,7 @@ def normalize_structured_draft(
                 "signoff": signoff,
             }
         ),
-        "campaign_type": strategy["campaign_type"],
+        "campaign_type": campaign_type,
         "audience_segment": strategy["audience_segment"],
     }
 
@@ -693,12 +772,58 @@ def build_design_slots(*, plan: dict[str, Any], brand: dict[str, Any]) -> dict[s
     }
 
 
+def _find_design_template(name: str) -> str | None:
+    current = Path(__file__).resolve()
+    for parent in [current.parent, *current.parents]:
+        candidate = parent / "input" / "designs" / name
+        if candidate.exists():
+            return candidate.read_text()
+    return None
+
+
+def _render_design_template(source: str, context: dict[str, Any]) -> str:
+    def render_body_sections(match: re.Match[str]) -> str:
+        block = match.group(1)
+        return "".join(
+            block.replace("{{body_section}}", html.escape(str(section)))
+            for section in normalize_body_sections(context.get("body_sections", []))
+        )
+
+    rendered = re.sub(
+        r"\{\{#body_sections\}\}(.*?)\{\{/body_sections\}\}",
+        render_body_sections,
+        source,
+        flags=re.DOTALL,
+    )
+
+    def render_value(match: re.Match[str]) -> str:
+        key = match.group(1).strip()
+        return html.escape(str(context.get(key, "")))
+
+    return re.sub(r"\{\{\s*([a-zA-Z0-9_]+)\s*\}\}", render_value, rendered)
+
+
 def render_email_html(template: dict[str, Any], slots: dict[str, Any]) -> str:
     template_id = str(template.get("template_id", ""))
     palette = dict(template.get("palette", {}))
     accent = palette.get("accent", "#0f766e")
     accent_soft = palette.get("accent_soft", "#ecfeff")
     text_color = palette.get("text", "#1f2937")
+    design_template = str(
+        template.get("design_template")
+        or ("personal_reply.html" if template_id == "personal_reply" else "card_email.html")
+    )
+    design_source = _find_design_template(design_template)
+    if design_source:
+        return _render_design_template(
+            design_source,
+            {
+                **slots,
+                "accent": accent,
+                "accent_soft": accent_soft,
+                "text_color": text_color,
+            },
+        )
     if template_id == "personal_reply":
         body_sections = "".join(
             f"<p data-slot='body_section' style='margin:0 0 14px;font-size:16px;line-height:1.65;color:{text_color};font-family:Arial,sans-serif;'>{html.escape(section)}</p>"
@@ -819,6 +944,8 @@ def review_email_quality(
         issues.append("generic_positioning_language")
         score -= 12
     if plan.get("audience_segment") in {
+        "teachers",
+        "creators_educators",
         "new_parents",
         "engaged_creators",
         "repeat_story_builders",
@@ -909,6 +1036,27 @@ def select_template_name(
         "program_reminder": "program_reminder",
         "interest_followup": "interest_followup",
         "reply_followup": "personal_reply",
+        "parent_awareness": "moment_to_story",
+        "parent_education": "finish_your_book",
+        "parent_activation": "moment_to_story",
+        "parent_social_proof": "story_reveal",
+        "parent_use_case": "moment_to_story",
+        "parent_reminder": "finish_your_book",
+        "parent_expansion": "share_the_magic",
+        "teacher_awareness": "program_reminder",
+        "teacher_education": "interest_followup",
+        "teacher_activation": "moment_to_story",
+        "teacher_social_proof": "story_reveal",
+        "teacher_use_case": "product_spotlight",
+        "teacher_reminder": "interest_followup",
+        "teacher_expansion": "share_the_magic",
+        "creator_awareness": "program_reminder",
+        "creator_education": "product_spotlight",
+        "creator_activation": "moment_to_story",
+        "creator_social_proof": "story_reveal",
+        "creator_use_case": "product_spotlight",
+        "creator_reminder": "finish_your_book",
+        "creator_expansion": "share_the_magic",
         "first_story_activation": "moment_to_story",
         "draft_recovery": "finish_your_book",
         "download_conversion": "story_reveal",

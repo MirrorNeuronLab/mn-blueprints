@@ -2,10 +2,39 @@ from __future__ import annotations
 
 import json
 import os
+from pathlib import Path
+import sys
 import urllib.error
 import urllib.parse
 import urllib.request
 from typing import Any
+
+vendored_skills = Path(__file__).resolve().parents[1] / "mn_skills"
+if vendored_skills.exists():
+    sys.path.insert(0, str(vendored_skills))
+
+
+def load_local_env() -> None:
+    for env_path in (
+        Path(__file__).resolve().parents[1] / ".env",
+        Path(__file__).resolve().parents[1] / "mn_skills" / ".env",
+    ):
+        if not env_path.exists():
+            continue
+        for raw_line in env_path.read_text().splitlines():
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            value = value.strip()
+            if (value.startswith('"') and value.endswith('"')) or (
+                value.startswith("'") and value.endswith("'")
+            ):
+                value = value[1:-1]
+            os.environ.setdefault(key.strip(), value)
+
+
+load_local_env()
 
 try:
     from mn_email_send_resend_skill import dry_run_email as skill_dry_run_email

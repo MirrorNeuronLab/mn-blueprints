@@ -13,8 +13,12 @@ def utc_now() -> str:
 
 
 def get_plan(payload: dict[str, Any]) -> dict[str, Any]:
-    if "sandbox" in payload and "stdout" in payload["sandbox"]:
-        return json.loads(payload["sandbox"]["stdout"])
+    sandbox_stdout = str(payload.get("sandbox", {}).get("stdout") or "").strip()
+    if sandbox_stdout:
+        try:
+            return json.loads(sandbox_stdout)
+        except json.JSONDecodeError:
+            pass
     if "input" in payload:
         return payload["input"]
     return payload
@@ -297,7 +301,10 @@ def mark_draft_sent(draft_id: str, provider_id: str | None) -> dict[str, Any] | 
 
 
 def add_marketing_activity(customer_id: str, summary: str) -> None:
-    activity_id = f"activity_{utc_now().replace('-', '').replace(':', '').replace('+00:00', 'z').lower()}"
+    import uuid
+
+    timestamp = utc_now().replace('-', '').replace(':', '').replace('+00:00', 'z').lower()
+    activity_id = f"activity_{timestamp}_{uuid.uuid4().hex[:8]}"
     with db_connect() as conn:
         conn.execute(
             """

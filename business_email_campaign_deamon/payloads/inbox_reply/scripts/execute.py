@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+from pathlib import Path
 import sys
 import time
 import urllib.request
@@ -12,18 +13,47 @@ import urllib.parse
 import sqlite3
 from datetime import datetime, timezone
 
+vendored_skills = Path(__file__).resolve().parents[1] / "mn_skills"
+if vendored_skills.exists():
+    sys.path.insert(0, str(vendored_skills))
+
+
+def load_local_env() -> None:
+    for env_path in (
+        Path(__file__).resolve().parents[1] / ".env",
+        Path(__file__).resolve().parents[1] / "mn_skills" / ".env",
+    ):
+        if not env_path.exists():
+            continue
+        for raw_line in env_path.read_text().splitlines():
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            value = value.strip()
+            if (value.startswith('"') and value.endswith('"')) or (
+                value.startswith("'") and value.endswith("'")
+            ):
+                value = value[1:-1]
+            os.environ.setdefault(key.strip(), value)
+
+
+load_local_env()
+
 try:
     from mn_email_receive_agentmail_skill import AgentMailReceiveConfig
     from mn_email_receive_agentmail_skill import get_message as skill_get_message
     from mn_email_receive_agentmail_skill import list_unread_messages as skill_list_unread_messages
     from mn_email_receive_agentmail_skill import mark_read as skill_mark_read
     from mn_email_receive_agentmail_skill import send_reply as skill_send_reply
+    from mn_email_send_resend_skill import send_resend_email as skill_send_resend_email
 except ImportError:
     AgentMailReceiveConfig = None
     skill_get_message = None
     skill_list_unread_messages = None
     skill_mark_read = None
     skill_send_reply = None
+    skill_send_resend_email = None
 
 
 def utc_now() -> str:
@@ -224,7 +254,7 @@ def check_agentmail() -> list:
                 or msg.get("text")
                 or "No content provided."
             )
-            print(f"Processing email from {from_email}...")
+            print(f"Processing email from {from_email}...", file=sys.stderr)
             
             log_customer_reply(from_email, body)
             reply_text = generate_reply_via_llm(body)
@@ -279,11 +309,8 @@ def check_agentmail_with_skill() -> list:
 
             full_msg = skill_get_message(msg.message_id, config)
             body = full_msg.extracted_text or full_msg.text or msg.extracted_text or msg.text or "No content provided."
-            print(f"Processing email from {from_email}...")
+            print(f"Processing email from {from_email}...", file=sys.stderr)
             log_customer_reply(from_email, body)
-            reply_text = generate_reply_via_llm(body)
-            skill_send_reply(from_email, f"Re: {subject}", reply_text, config)
-            skill_mark_read(msg.message_id, config)
             processed.append({
                 "type": "agent_inbox_email_received",
                 "payload": {
@@ -292,12 +319,39 @@ def check_agentmail_with_skill() -> list:
                     "body": body[:500]
                 }
             })
+            reply_text = generate_reply_via_llm(body)
+            reply_delivery = {"status": "not_sent"}
+            try:
+                skill_send_reply(from_email, f"Re: {subject}", reply_text, config)
+                reply_delivery = {"status": "sent", "provider": "agentmail"}
+            except Exception as exc:
+                if skill_send_resend_email is not None:
+                    resend_result = skill_send_resend_email({
+                        "to": [from_email],
+                        "subject": f"Re: {subject}",
+                        "text": reply_text,
+                    })
+                    reply_delivery = {
+                        "status": resend_result.get("status"),
+                        "provider": "resend",
+                        "provider_id": resend_result.get("provider_id"),
+                        "error": resend_result.get("error"),
+                    }
+                else:
+                    reply_delivery = {
+                        "status": "failed",
+                        "provider": "agentmail",
+                        "error": str(exc),
+                    }
+            finally:
+                skill_mark_read(msg.message_id, config)
             processed.append({
                 "type": "agent_inbox_reply_sent",
                 "payload": {
                     "to": from_email,
                     "subject": f"Re: {subject}",
-                    "reply_text": reply_text
+                    "reply_text": reply_text,
+                    "delivery": reply_delivery,
                 }
             })
     except Exception as e:

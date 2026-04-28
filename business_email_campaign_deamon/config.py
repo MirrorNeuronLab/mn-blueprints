@@ -3,6 +3,26 @@ import json
 import os
 import sys
 
+
+def read_env_file(path):
+    values = {}
+    if not os.path.exists(path):
+        return values
+    with open(path, "r") as f:
+        for raw_line in f:
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            value = value.strip()
+            if (value.startswith('"') and value.endswith('"')) or (
+                value.startswith("'") and value.endswith("'")
+            ):
+                value = value[1:-1]
+            values[key.strip()] = value
+    return values
+
+
 def main():
     print("Welcome to the Business Email Campaign Settings Setup!")
     print("This will configure your blueprint to use Ollama and AgentMail.")
@@ -15,6 +35,17 @@ def main():
     default_agentmail_inbox = "mn-demo@agentmail.to"
     default_agentmail_api = ""
     default_resend_from = ""
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    resend_env = read_env_file(
+        os.path.join(repo_root, "mn-skills", "email_send_resend_skill", ".env")
+    )
+    agentmail_env = read_env_file(
+        os.path.join(repo_root, "mn-skills", "email_receive_agentmail_skill", ".env")
+    )
+    default_agentmail_inbox = agentmail_env.get("AGENTMAIL_INBOX", default_agentmail_inbox)
+    default_agentmail_api = agentmail_env.get("AGENTMAIL_API_KEY", default_agentmail_api)
+    default_resend_from = resend_env.get("RESEND_FROM_EMAIL", default_resend_from)
+    default_test_email = resend_env.get("RESEND_TEST_TO", default_test_email)
 
     # Prompts
     llm_base = input(f"Ollama API Base URL [{default_llm_base}]: ").strip() or default_llm_base
@@ -25,8 +56,9 @@ def main():
     llm_model = input(f"Ollama Model [{default_llm_model}]: ").strip() or default_llm_model
     
     agentmail_inbox = input(f"AgentMail Inbox [{default_agentmail_inbox}]: ").strip() or default_agentmail_inbox
-    agentmail_key = input(f"AgentMail API Key [{default_agentmail_api}]: ").strip() or default_agentmail_api
-    resend_key = input("Resend API Key (optional, used by email_send_resend_skill) []: ").strip()
+    agentmail_key_prompt = "AgentMail API Key [from .env]: " if default_agentmail_api else "AgentMail API Key []: "
+    agentmail_key = input(agentmail_key_prompt).strip() or default_agentmail_api
+    resend_key = input("Resend API Key (optional, used by email_send_resend_skill) [from .env]: ").strip() or resend_env.get("RESEND_API_KEY", "")
     resend_from = input(f"Resend From Email (optional) [{default_resend_from}]: ").strip() or default_resend_from
 
     test_mode = input("Enable Quick Test Mode? (Dry-runs email delivery every 1 minute) [Y/n]: ").strip().lower()

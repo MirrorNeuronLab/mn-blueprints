@@ -51,6 +51,11 @@ def log_email_sent_event(runtime_job_id: str | None, to_email: str, subject: str
 
 def main(email_sender=None, slack_sender=None) -> None:
     plan = load_input_plan()
+    if "customer" not in plan and isinstance(plan.get("original_plan"), dict):
+        outer_cycle = plan.get("cycle")
+        plan = dict(plan["original_plan"])
+        if outer_cycle is not None:
+            plan["cycle"] = outer_cycle
     runtime_job_id = plan.get("runtime_job_id")
     customer = plan["customer"]
     control_decision = plan.get("control_decision", {})
@@ -167,6 +172,19 @@ def main(email_sender=None, slack_sender=None) -> None:
                             "test_recipient_override": bool(test_recipient),
                         },
                     },
+                    *(
+                        [
+                            {
+                                "type": "email_sent",
+                                "payload": {
+                                    "to": actual_recipient,
+                                    "subject": saved_draft["subject"],
+                                },
+                            }
+                        ]
+                        if delivery["status"] == "sent"
+                        else []
+                    ),
                     *(
                         [
                             {

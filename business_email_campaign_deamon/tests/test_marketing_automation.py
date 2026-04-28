@@ -121,6 +121,13 @@ class MarketingAutomationTests(unittest.TestCase):
         self.assertEqual(sent_requests[0]["to"], ["homerquan@gmail.com"])
         self.assertEqual(payload["events"][0]["payload"]["status"], "sent")
         self.assertEqual(payload["events"][0]["payload"]["subject"], "A small story idea")
+        self.assertIn(
+            {
+                "type": "email_sent",
+                "payload": {"to": "homerquan@gmail.com", "subject": "A small story idea"},
+            },
+            payload["events"],
+        )
 
         with sqlite3.connect(self.db_path) as conn:
             log = conn.execute(
@@ -147,6 +154,13 @@ class MarketingAutomationTests(unittest.TestCase):
         self.assertEqual(event["provider_id"], "dry_run")
         self.assertTrue(event["dry_run"])
         self.assertTrue(event["quick_testing"])
+        self.assertIn(
+            {
+                "type": "email_sent",
+                "payload": {"to": "homerquan@gmail.com", "subject": "A small story idea"},
+            },
+            payload["events"],
+        )
 
 
 if __name__ == "__main__":

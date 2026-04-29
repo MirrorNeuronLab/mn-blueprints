@@ -14,6 +14,7 @@ from _synaptic_runtime.core import (
     load_knowledge_section,
     log_agent,
     mark_draft_sent,
+    pending_ready_draft,
     read_delivery_settings,
 )
 from _synaptic_skills.email_delivery import dry_run_email, post_email, post_slack_message
@@ -57,13 +58,107 @@ def is_last_campaign_step(campaign_type: str | None) -> bool:
     }
 
 
+def resolve_delivery_plan(payload: dict) -> dict:
+    """Unwrap MirrorNeuron executor envelopes until a sendable plan is found."""
+
+    candidates = [payload]
+    seen_ids: set[int] = set()
+    fallback_customer_plan: dict | None = None
+    while candidates:
+        candidate = candidates.pop(0)
+        if not isinstance(candidate, dict):
+            continue
+        marker = id(candidate)
+        if marker in seen_ids:
+            continue
+        seen_ids.add(marker)
+
+        if isinstance(candidate.get("customer"), dict) and isinstance(
+            candidate.get("saved_draft"), dict
+        ):
+            return candidate
+        if isinstance(candidate.get("customer"), dict) and fallback_customer_plan is None:
+            fallback_customer_plan = candidate
+
+        sandbox_stdout = str(candidate.get("sandbox", {}).get("stdout") or "").strip()
+        if sandbox_stdout:
+            try:
+                decoded = json.loads(sandbox_stdout)
+            except json.JSONDecodeError:
+                decoded = None
+            if isinstance(decoded, dict):
+                candidates.append(decoded)
+
+        for key in ("original_plan", "input", "body", "payload", "plan"):
+            nested = candidate.get(key)
+            if isinstance(nested, dict):
+                if key == "original_plan" and candidate.get("cycle") is not None:
+                    nested = dict(nested)
+                    nested["cycle"] = candidate["cycle"]
+                candidates.append(nested)
+
+    return fallback_customer_plan or payload
+
+
+def missing_plan_result(plan: dict, reason: str) -> dict:
+    cycle = plan.get("cycle", 1)
+    try:
+        cycle = int(cycle)
+    except (TypeError, ValueError):
+        cycle = 1
+    return {
+        "events": [
+            {
+                "type": "email_delivery_skipped",
+                "payload": {
+                    "status": "skipped",
+                    "reason": reason,
+                    "cycle": cycle,
+                },
+            }
+        ],
+        "emit_messages": [],
+        "next_state": {
+            "last_cycle": cycle,
+            "last_status": "skipped",
+            "reason": reason,
+        },
+    }
+
+
+def hydrate_saved_draft_from_db(plan: dict) -> dict:
+    if isinstance(plan.get("saved_draft"), dict):
+        return plan
+    customer = plan.get("customer")
+    if not isinstance(customer, dict):
+        return plan
+    customer_id = str(customer.get("customer_id") or "").strip()
+    if not customer_id:
+        return plan
+    ready_draft = pending_ready_draft(customer_id)
+    if ready_draft is None:
+        return plan
+    hydrated = dict(plan)
+    hydrated["saved_draft"] = ready_draft
+    hydrated.setdefault(
+        "control_decision",
+        {
+            "decision": "send_now",
+            "scheduled_send_at": ready_draft.get("scheduled_send_at"),
+            "rule_name": "pending_ready_draft_fallback",
+        },
+    )
+    return hydrated
+
+
 def main(email_sender=None, slack_sender=None) -> None:
-    plan = load_input_plan()
-    if "customer" not in plan and isinstance(plan.get("original_plan"), dict):
-        outer_cycle = plan.get("cycle")
-        plan = dict(plan["original_plan"])
-        if outer_cycle is not None:
-            plan["cycle"] = outer_cycle
+    plan = hydrate_saved_draft_from_db(resolve_delivery_plan(load_input_plan()))
+    if "customer" not in plan:
+        print(json.dumps(missing_plan_result(plan, "missing_customer_plan")))
+        return
+    if "saved_draft" not in plan or not isinstance(plan.get("saved_draft"), dict):
+        print(json.dumps(missing_plan_result(plan, "missing_saved_draft")))
+        return
     runtime_job_id = plan.get("runtime_job_id")
     customer = plan["customer"]
     control_decision = plan.get("control_decision", {})

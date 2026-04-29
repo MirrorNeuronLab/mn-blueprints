@@ -29,8 +29,19 @@ def init_runtime_db(path: str) -> None:
                 draft_id TEXT PRIMARY KEY,
                 customer_id TEXT,
                 status TEXT,
+                subject TEXT,
+                preview_text TEXT,
+                body_text TEXT,
+                html_body TEXT,
+                scheduled_send_at TEXT,
+                prepared_at TEXT,
                 provider_id TEXT,
-                sent_at TEXT
+                sent_at TEXT,
+                from_email TEXT,
+                thread_message_id TEXT,
+                in_reply_to_message_id TEXT,
+                references_message_ids_json TEXT,
+                source_payload_json TEXT
             )
             """
         )
@@ -57,8 +68,37 @@ def init_runtime_db(path: str) -> None:
             """
         )
         conn.execute(
-            "INSERT INTO email_drafts (draft_id, customer_id, status) VALUES (?, ?, 'ready')",
-            ("draft_test", "cust_1"),
+            """
+            INSERT INTO email_drafts (
+                draft_id,
+                customer_id,
+                status,
+                subject,
+                preview_text,
+                body_text,
+                html_body,
+                scheduled_send_at,
+                prepared_at,
+                provider_id,
+                sent_at,
+                from_email,
+                thread_message_id,
+                in_reply_to_message_id,
+                references_message_ids_json,
+                source_payload_json
+            ) VALUES (?, ?, 'ready', ?, ?, ?, ?, ?, ?, '', '', ?, '', '', '[]', '{}')
+            """,
+            (
+                "draft_test",
+                "cust_1",
+                "A small story idea",
+                "A tiny preview",
+                "Plain text body",
+                "<p>Plain text body</p>",
+                "2026-04-15T00:20:00+00:00",
+                "2026-04-15T00:19:30+00:00",
+                "hello@example.com",
+            ),
         )
 
 
@@ -163,6 +203,110 @@ class MarketingAutomationTests(unittest.TestCase):
             },
             payload["events"],
         )
+
+    def test_unwraps_nested_original_plan_before_sending(self):
+        self.write_plan()
+        original_plan = json.loads(Path(self.input_path).read_text())
+        Path(self.input_path).write_text(
+            json.dumps({"original_plan": original_plan, "cycle": 4})
+        )
+        os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
+        module = load_execute_module()
+
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            module.main(
+                email_sender=lambda _request: {
+                    "status": "sent",
+                    "provider_id": "fake_provider",
+                    "http_status": 200,
+                },
+                slack_sender=lambda _text: {"status": "sent", "channel": "#test"},
+            )
+
+        payload = json.loads(output.getvalue())
+        event = payload["events"][0]["payload"]
+        self.assertEqual(event["status"], "sent")
+        self.assertEqual(event["cycle"], 4)
+
+    def test_prefers_sandbox_stdout_plan_with_saved_draft_over_original_input(self):
+        self.write_plan()
+        original_plan = json.loads(Path(self.input_path).read_text())
+        sent_plan = dict(original_plan)
+        sent_plan["cycle"] = 5
+        envelope = {
+            "input": {
+                "customer": original_plan["customer"],
+                "cycle": 5,
+            },
+            "sandbox": {
+                "stdout": json.dumps(sent_plan),
+            },
+        }
+        Path(self.input_path).write_text(json.dumps(envelope))
+        os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
+        module = load_execute_module()
+
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            module.main(
+                email_sender=lambda _request: {
+                    "status": "sent",
+                    "provider_id": "fake_provider",
+                    "http_status": 200,
+                },
+                slack_sender=lambda _text: {"status": "sent", "channel": "#test"},
+            )
+
+        payload = json.loads(output.getvalue())
+        event = payload["events"][0]["payload"]
+        self.assertEqual(event["status"], "sent")
+        self.assertEqual(event["cycle"], 5)
+
+    def test_skips_non_delivery_control_messages_without_crashing(self):
+        Path(self.input_path).write_text(json.dumps({"events": [], "cycle": 2}))
+        module = load_execute_module()
+
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            module.main()
+
+        payload = json.loads(output.getvalue())
+        self.assertEqual(payload["events"][0]["type"], "email_delivery_skipped")
+        self.assertEqual(payload["events"][0]["payload"]["reason"], "missing_customer_plan")
+        self.assertEqual(payload["emit_messages"], [])
+
+    def test_loads_pending_ready_draft_when_runtime_message_lacks_saved_draft(self):
+        plan = {
+            "runtime_job_id": "job_1",
+            "cycle": 2,
+            "customer": {
+                "customer_id": "cust_1",
+                "name": "Avery",
+                "email": "avery@example.com",
+            },
+            "control_decision": {"decision": "send_now"},
+            "policy_decision": {"decision": "allow"},
+        }
+        Path(self.input_path).write_text(json.dumps(plan))
+        os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
+        module = load_execute_module()
+
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            module.main(
+                email_sender=lambda _request: {
+                    "status": "sent",
+                    "provider_id": "fake_provider",
+                    "http_status": 200,
+                },
+                slack_sender=lambda _text: {"status": "sent", "channel": "#test"},
+            )
+
+        payload = json.loads(output.getvalue())
+        event = payload["events"][0]["payload"]
+        self.assertEqual(event["status"], "sent")
+        self.assertEqual(event["subject"], "A small story idea")
 
 
 if __name__ == "__main__":

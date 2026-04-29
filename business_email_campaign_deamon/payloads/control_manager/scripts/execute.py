@@ -70,6 +70,25 @@ def test_recipient_mode() -> bool:
     return bool(os.environ.get("SYNAPTIC_TEST_EMAIL_TO", "").strip())
 
 
+def print_plan_with_delivery_emit(plan: dict) -> None:
+    body = dict(plan)
+    body.pop("emit_messages", None)
+    result = dict(plan)
+    result["emit_messages"] = [
+        {
+            "to": "marketing_automation_agent",
+            "type": "control_manager_result",
+            "body": body,
+            "class": "event",
+            "headers": {
+                "schema_ref": "com.synaptic.control_manager.result",
+                "schema_version": "1.0.0",
+            },
+        }
+    ]
+    print(json.dumps(result))
+
+
 def main() -> None:
     plan = load_input_plan()
     customer = plan["customer"]
@@ -96,7 +115,7 @@ def main() -> None:
             "Evaluated existing ready draft.",
             details={"decision": decision, "scheduled_send_at": existing_draft["scheduled_send_at"]},
         )
-        print(json.dumps(plan))
+        print_plan_with_delivery_emit(plan)
         return
 
     draft = plan.get("draft", {})
@@ -166,7 +185,7 @@ def main() -> None:
             "quality_score": review["score"],
         },
     )
-    print(json.dumps(plan))
+    print_plan_with_delivery_emit(plan)
 
 
 if __name__ == "__main__":

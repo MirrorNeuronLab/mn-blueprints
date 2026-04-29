@@ -15,15 +15,44 @@ def utc_now() -> str:
 
 
 def get_plan(payload: dict[str, Any]) -> dict[str, Any]:
-    sandbox_stdout = str(payload.get("sandbox", {}).get("stdout") or "").strip()
-    if sandbox_stdout:
-        try:
-            return json.loads(sandbox_stdout)
-        except json.JSONDecodeError:
-            pass
-    if "input" in payload:
-        return payload["input"]
-    return payload
+    candidates = [payload]
+    fallback_plan: dict[str, Any] | None = None
+    fallback_input: dict[str, Any] | None = None
+    seen_ids: set[int] = set()
+
+    while candidates:
+        candidate = candidates.pop(0)
+        if not isinstance(candidate, dict):
+            continue
+        marker = id(candidate)
+        if marker in seen_ids:
+            continue
+        seen_ids.add(marker)
+
+        if isinstance(candidate.get("customer"), dict) and fallback_plan is None:
+            fallback_plan = candidate
+
+        sandbox_stdout = str(candidate.get("sandbox", {}).get("stdout") or "").strip()
+        if sandbox_stdout:
+            try:
+                decoded = json.loads(sandbox_stdout)
+            except json.JSONDecodeError:
+                decoded = None
+            if isinstance(decoded, dict):
+                return get_plan(decoded)
+
+        for key in ("body", "payload", "result", "message", "data"):
+            nested = candidate.get(key)
+            if isinstance(nested, dict):
+                candidates.append(nested)
+
+        nested_input = candidate.get("input")
+        if isinstance(nested_input, dict):
+            if fallback_input is None:
+                fallback_input = nested_input
+            candidates.append(nested_input)
+
+    return fallback_plan or fallback_input or payload
 
 
 def load_input_plan() -> dict[str, Any]:
@@ -170,7 +199,113 @@ def ensure_db_schema(conn: sqlite3.Connection) -> None:
         )
         """
     )
+    seed_db_if_empty(conn)
     conn.commit()
+
+
+def load_bootstrap_seed() -> dict[str, Any]:
+    seed_path = bundle_input_dir() / "data" / "bootstrap_seed.json"
+    if not seed_path.exists():
+        return {}
+    payload = json.loads(seed_path.read_text())
+    return payload if isinstance(payload, dict) else {}
+
+
+def _table_count(conn: sqlite3.Connection, table_name: str) -> int:
+    row = conn.execute(f"SELECT COUNT(*) AS count FROM {table_name}").fetchone()
+    return int(row["count"] if row is not None else 0)
+
+
+def seed_db_if_empty(conn: sqlite3.Connection) -> None:
+    if _table_count(conn, "email_drafts") or _table_count(conn, "customer_marketing_activity"):
+        return
+
+    seed = load_bootstrap_seed()
+    if not seed:
+        return
+
+    for activity in seed.get("customer_marketing_activity", seed.get("activities", [])):
+        if not isinstance(activity, dict):
+            continue
+        activity_id = str(activity.get("activity_id") or "").strip()
+        customer_id = str(activity.get("customer_id") or "").strip()
+        summary = str(activity.get("summary") or "").strip()
+        if not activity_id or not customer_id or not summary:
+            continue
+        conn.execute(
+            """
+            INSERT OR IGNORE INTO customer_marketing_activity (
+                activity_id,
+                customer_id,
+                summary,
+                created_at
+            ) VALUES (?, ?, ?, ?)
+            """,
+            (
+                activity_id,
+                customer_id,
+                summary,
+                str(activity.get("created_at") or utc_now()),
+            ),
+        )
+
+    for draft in seed.get("email_drafts", []):
+        if not isinstance(draft, dict):
+            continue
+        draft_id = str(draft.get("draft_id") or "").strip()
+        customer_id = str(draft.get("customer_id") or "").strip()
+        if not draft_id or not customer_id:
+            continue
+        source_payload = draft.get("source_payload_json", {})
+        if isinstance(source_payload, str):
+            source_payload_json = source_payload
+        else:
+            source_payload_json = json.dumps(source_payload or {}, sort_keys=True)
+        references = draft.get("references_message_ids_json", "[]")
+        if not isinstance(references, str):
+            references = json.dumps(references or [], sort_keys=True)
+        conn.execute(
+            """
+            INSERT OR IGNORE INTO email_drafts (
+                draft_id,
+                customer_id,
+                runtime_job_id,
+                status,
+                subject,
+                preview_text,
+                body_text,
+                html_body,
+                scheduled_send_at,
+                prepared_at,
+                provider_id,
+                sent_at,
+                from_email,
+                thread_message_id,
+                in_reply_to_message_id,
+                references_message_ids_json,
+                source_payload_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                draft_id,
+                customer_id,
+                str(draft.get("runtime_job_id") or "seed"),
+                str(draft.get("status") or "sent"),
+                str(draft.get("subject") or ""),
+                str(draft.get("preview_text") or ""),
+                str(draft.get("body_text") or ""),
+                str(draft.get("html_body") or ""),
+                str(draft.get("scheduled_send_at") or ""),
+                str(draft.get("prepared_at") or ""),
+                str(draft.get("provider_id") or ""),
+                str(draft.get("sent_at") or ""),
+                str(draft.get("from_email") or ""),
+                str(draft.get("thread_message_id") or ""),
+                str(draft.get("in_reply_to_message_id") or ""),
+                references,
+                source_payload_json,
+            ),
+        )
 
 
 def recent_activities(customer_id: str, limit: int = 5) -> list[dict[str, Any]]:

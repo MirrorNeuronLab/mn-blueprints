@@ -70,6 +70,10 @@ MN_BLUEPRINT_QUICK_TEST=1 python3 generate_bundle.py --quick-test
 
 Generated blueprints shrink worker counts, durations, retries, and delays. LLM/email/API-facing paths use mock or dry-run providers where supported.
 
+### Runtime DB seed
+
+Fresh SQLite databases are bootstrapped from `input/data/bootstrap_seed.json`. The seed includes mock customer history, recent activities, and one sent draft so agents have enough context after deleting and recreating the DB. The runtime only loads this file when both `email_drafts` and `customer_marketing_activity` are empty.
+
 ### Output contract
 
 CLI output is intentionally uniform:

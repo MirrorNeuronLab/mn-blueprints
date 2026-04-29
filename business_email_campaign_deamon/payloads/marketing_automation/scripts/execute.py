@@ -10,12 +10,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from _synaptic_runtime.core import (
     add_marketing_activity,
+    db_connect,
     load_input_plan,
     load_knowledge_section,
     log_agent,
     mark_draft_sent,
     pending_ready_draft,
     read_delivery_settings,
+    utc_now,
 )
 from _synaptic_skills.email_delivery import dry_run_email, post_email, post_slack_message
 
@@ -126,6 +128,114 @@ def missing_plan_result(plan: dict, reason: str) -> dict:
     }
 
 
+def test_action_key(plan: dict) -> str:
+    for key in ("campaign_type", "action_type", "plan_id"):
+        value = str(plan.get(key) or "").strip()
+        if value:
+            return value
+    customer = plan.get("customer") if isinstance(plan.get("customer"), dict) else {}
+    return f"customer:{customer.get('customer_id', 'unknown')}:cycle:{plan.get('cycle', 1)}"
+
+
+def reserve_test_delivery_action(
+    *, test_recipient: str, plan: dict, saved_draft: dict
+) -> tuple[bool, str]:
+    action_key = test_action_key(plan)
+    timestamp = utc_now()
+    with db_connect() as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS test_delivery_actions (
+                test_recipient TEXT NOT NULL,
+                action_key TEXT NOT NULL,
+                customer_id TEXT,
+                draft_id TEXT,
+                subject TEXT,
+                status TEXT,
+                created_at TEXT,
+                updated_at TEXT,
+                PRIMARY KEY (test_recipient, action_key)
+            )
+            """
+        )
+        cursor = conn.execute(
+            """
+            INSERT OR IGNORE INTO test_delivery_actions (
+                test_recipient,
+                action_key,
+                customer_id,
+                draft_id,
+                subject,
+                status,
+                created_at,
+                updated_at
+            ) VALUES (?, ?, ?, ?, ?, 'reserved', ?, ?)
+            """,
+            (
+                test_recipient,
+                action_key,
+                str(plan.get("customer", {}).get("customer_id") or ""),
+                str(saved_draft.get("draft_id") or ""),
+                str(saved_draft.get("subject") or ""),
+                timestamp,
+                timestamp,
+            ),
+        )
+        conn.commit()
+    return cursor.rowcount == 1, action_key
+
+
+def complete_test_delivery_action(
+    *, test_recipient: str, action_key: str, status: str
+) -> None:
+    with db_connect() as conn:
+        conn.execute(
+            """
+            UPDATE test_delivery_actions
+            SET status = ?,
+                updated_at = ?
+            WHERE test_recipient = ?
+              AND action_key = ?
+            """,
+            (status, utc_now(), test_recipient, action_key),
+        )
+        conn.commit()
+
+
+def duplicate_test_action_result(
+    *, plan: dict, saved_draft: dict, test_recipient: str, action_key: str
+) -> dict:
+    cycle = plan.get("cycle", 1)
+    try:
+        cycle = int(cycle)
+    except (TypeError, ValueError):
+        cycle = 1
+    return {
+        "events": [
+            {
+                "type": "email_delivery_skipped",
+                "payload": {
+                    "status": "skipped",
+                    "reason": "duplicate_test_action",
+                    "action_key": action_key,
+                    "cycle": cycle,
+                    "email": test_recipient,
+                    "customer_id": plan.get("customer", {}).get("customer_id"),
+                    "subject": saved_draft.get("subject"),
+                    "test_recipient_override": True,
+                },
+            }
+        ],
+        "emit_messages": [],
+        "next_state": {
+            "last_cycle": cycle,
+            "last_status": "skipped",
+            "reason": "duplicate_test_action",
+            "action_key": action_key,
+        },
+    }
+
+
 def hydrate_saved_draft_from_db(plan: dict) -> dict:
     if isinstance(plan.get("saved_draft"), dict):
         return plan
@@ -193,6 +303,8 @@ def main(email_sender=None, slack_sender=None) -> None:
     if thread_message_id and thread_message_id not in references_message_ids:
         email_headers["References"] = " ".join([*references_message_ids, thread_message_id]).strip()
         
+    reserved_test_action_key: str | None = None
+
     if policy_decision.get("decision") == "block":
         delivery = {"status": "blocked", "reason": "deliverability_policy_block"}
         slack_delivery = {"status": "not_sent", "reason": "email_not_successful"}
@@ -204,6 +316,36 @@ def main(email_sender=None, slack_sender=None) -> None:
         }
         slack_delivery = {"status": "not_sent", "reason": "email_not_successful"}
     else:
+        if test_recipient:
+            reserved, reserved_test_action_key = reserve_test_delivery_action(
+                test_recipient=test_recipient,
+                plan=plan,
+                saved_draft=saved_draft,
+            )
+            if not reserved:
+                log_agent(
+                    runtime_job_id,
+                    AGENT_ID,
+                    "Skipped duplicate test-mode campaign action.",
+                    details={
+                        "action_key": reserved_test_action_key,
+                        "test_recipient": test_recipient,
+                        "customer_id": customer.get("customer_id"),
+                        "subject": saved_draft.get("subject"),
+                    },
+                )
+                print(
+                    json.dumps(
+                        duplicate_test_action_result(
+                            plan=plan,
+                            saved_draft=saved_draft,
+                            test_recipient=test_recipient,
+                            action_key=reserved_test_action_key,
+                        )
+                    )
+                )
+                return
+
         execution_request = {
             "to": [actual_recipient],
             "subject": saved_draft["subject"],
@@ -212,6 +354,12 @@ def main(email_sender=None, slack_sender=None) -> None:
             "headers": email_headers,
         }
         delivery = send_email(execution_request)
+        if reserved_test_action_key is not None:
+            complete_test_delivery_action(
+                test_recipient=test_recipient,
+                action_key=reserved_test_action_key,
+                status=str(delivery.get("status") or "unknown"),
+            )
         if delivery["status"] == "sent":
             mark_draft_sent(saved_draft["draft_id"], delivery.get("provider_id"))
             add_marketing_activity(
@@ -224,7 +372,7 @@ def main(email_sender=None, slack_sender=None) -> None:
             else:
                 slack_delivery = send_slack(
                     f"Synaptic sent a customized email to {customer['name']} <{customer['email']}>."
-                )
+                ) or {}
             log_agent(
                 runtime_job_id,
                 AGENT_ID,
@@ -298,7 +446,7 @@ def main(email_sender=None, slack_sender=None) -> None:
                                     "email": actual_recipient,
                                     "customer_email": customer["email"],
                                     "cycle": int(plan.get("cycle", 1)),
-                                    "status": slack_delivery["status"],
+                                    "status": slack_delivery.get("status", "unknown"),
                                     "channel": slack_delivery.get("channel", "#claw"),
                                 },
                             }

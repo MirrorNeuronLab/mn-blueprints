@@ -6,6 +6,9 @@ from pathlib import Path
 
 sys.path.append("/Users/homer/Projects/BioTarget")
 from extract_utils import extract_payload
+from logging_utils import get_logger
+
+logger = get_logger("mn.blueprint.drug_discovery.manager")
 
 def load_context():
     return json.loads(Path(os.environ["MIRROR_NEURON_CONTEXT_FILE"]).read_text())
@@ -17,7 +20,7 @@ def write_log(progress_log, message_text):
     with open(progress_log, "a") as f:
         f.write(message_text)
         f.flush()
-    print(message_text, end="", file=sys.stderr)
+    logger.info(message_text.strip())
 
 def main():
     try:
@@ -105,9 +108,7 @@ def main():
             print(json.dumps({"complete_job": True}))
             
     except Exception as e:
-        import traceback
-        with open("/tmp/mirror_neuron_manager_error.log", "a") as f:
-            f.write(traceback.format_exc() + "\n")
+        logger.exception("Manager failed")
 
 if __name__ == "__main__":
     main()

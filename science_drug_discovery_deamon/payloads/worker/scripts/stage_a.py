@@ -7,6 +7,9 @@ from pathlib import Path
 sys.path.append("/Users/homer/Projects/BioTarget")
 from extract_utils import extract_payload
 from biotarget.stages.stage_a_discovery import stage_a_target_discovery
+from logging_utils import get_logger
+
+logger = get_logger("mn.blueprint.drug_discovery.stage_a")
 
 
 def load_message():
@@ -18,7 +21,7 @@ def main():
     payload = extract_payload(message)
     disease = payload.get("disease", "Alzheimer")
 
-    print(f"[*] Stage A: Discovering targets for {disease}", file=sys.stderr)
+    logger.info("Stage A: discovering targets for %s", disease)
     targets = stage_a_target_discovery(disease)
     top_targets = targets[:3]
 

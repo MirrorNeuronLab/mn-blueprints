@@ -125,6 +125,7 @@ class MarketingAutomationTests(unittest.TestCase):
         plan = {
             "runtime_job_id": "job_1",
             "cycle": 2,
+            "campaign_type": "parent_awareness",
             "customer": {
                 "customer_id": "cust_1",
                 "name": "Avery",
@@ -307,6 +308,58 @@ class MarketingAutomationTests(unittest.TestCase):
         event = payload["events"][0]["payload"]
         self.assertEqual(event["status"], "sent")
         self.assertEqual(event["subject"], "A small story idea")
+
+    def test_test_mode_sends_only_one_email_per_campaign_action(self):
+        self.write_plan()
+        os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
+        module = load_execute_module()
+        sent_requests = []
+
+        def fake_email_sender(request):
+            sent_requests.append(request)
+            return {"status": "sent", "provider_id": "fake_provider", "http_status": 200}
+
+        first_output = io.StringIO()
+        with contextlib.redirect_stdout(first_output):
+            module.main(email_sender=fake_email_sender, slack_sender=lambda _text: {})
+
+        second_output = io.StringIO()
+        with contextlib.redirect_stdout(second_output):
+            module.main(email_sender=fake_email_sender, slack_sender=lambda _text: {})
+
+        first_payload = json.loads(first_output.getvalue())
+        second_payload = json.loads(second_output.getvalue())
+        self.assertEqual(len(sent_requests), 1)
+        self.assertEqual(first_payload["events"][0]["payload"]["status"], "sent")
+        self.assertEqual(second_payload["events"][0]["type"], "email_delivery_skipped")
+        self.assertEqual(
+            second_payload["events"][0]["payload"]["reason"],
+            "duplicate_test_action",
+        )
+        self.assertEqual(second_payload["emit_messages"], [])
+
+    def test_test_mode_sent_non_final_action_emits_next_cycle(self):
+        self.write_plan()
+        os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
+        os.environ["SYNAPTIC_EMIT_CYCLE_TRIGGER"] = "true"
+        module = load_execute_module()
+
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            module.main(
+                email_sender=lambda _request: {
+                    "status": "sent",
+                    "provider_id": "fake_provider",
+                    "http_status": 200,
+                },
+                slack_sender=lambda _text: {},
+            )
+
+        payload = json.loads(output.getvalue())
+        self.assertEqual(payload["events"][0]["payload"]["status"], "sent")
+        self.assertEqual(payload["emit_messages"][0]["to"], "monitor_scheduler_agent")
+        self.assertEqual(payload["emit_messages"][0]["type"], "cycle_trigger")
+        self.assertEqual(payload["emit_messages"][0]["body"]["cycle"], 3)
 
 
 if __name__ == "__main__":

@@ -70,6 +70,20 @@
       "status": "ready",
       "subject": "Ava, your next story can help a friend start",
       "preview_text": "Share Bibblio with another parent who wants a confidence-building keepsake.",
+      "eyebrow": "Share the magic",
+      "headline": "Ava, your courage story can help another family begin",
+      "body_sections": [
+        "Hi Ava, your first-day-of-school courage story is exactly the kind of keepsake another parent would love to make.",
+        "Invite a friend to try Bibblio and help them turn a big feeling into a colorful bedtime story.",
+        "It only takes a small moment to give another child words for bravery."
+      ],
+      "cta_label": "Invite a parent friend",
+      "cta_url_slug": "refer",
+      "secondary_text": "Built for warm family moments, classroom courage, and stories children want to revisit.",
+      "footer_variant": "default",
+      "signoff": "Maya",
+      "template": "share_the_magic",
+      "render_from_template": true,
       "body_text": "Hi Ava, your first-day-of-school courage story is exactly the kind of keepsake another parent would love to make. Invite a friend to try Bibblio and help them turn a big feeling into a colorful bedtime story.",
       "html_body": "<p>Hi Ava, your first-day-of-school courage story is exactly the kind of keepsake another parent would love to make.</p><p>Invite a friend to try Bibblio and help them turn a big feeling into a colorful bedtime story.</p>",
       "scheduled_send_at": "2026-04-15T00:20:00+00:00",
@@ -82,9 +96,10 @@
       "references_message_ids_json": "[]",
       "source_payload_json": {
         "campaign_type": "referral_invite",
+        "audience_segment": "new_parents",
         "primary_offer": "Bravery and New Experience Story",
         "design": {
-          "template": "story_reveal"
+          "template": "share_the_magic"
         }
       }
     },
@@ -95,6 +110,20 @@
       "status": "ready",
       "subject": "Mr. Davis, turn one class story into a reading series",
       "preview_text": "A simple next step for more classroom teamwork stories.",
+      "eyebrow": "Classroom story series",
+      "headline": "Turn one class story into a week of reading together",
+      "body_sections": [
+        "Hi Mr. Davis, your classroom teamwork story can become the first chapter in a printable reading series.",
+        "Create a second story with the same class heroes and give students another reason to read, reflect, and talk together.",
+        "Bibblio keeps the next step light: one classroom moment, one story prompt, one shared conversation."
+      ],
+      "cta_label": "Create the next class story",
+      "cta_url_slug": "classroom",
+      "secondary_text": "Use the story as a five-minute check-in for teamwork, friendship, or confidence.",
+      "footer_variant": "educator",
+      "signoff": "Maya",
+      "template": "product_spotlight",
+      "render_from_template": true,
       "body_text": "Hi Mr. Davis, your classroom teamwork story can become the first chapter in a printable reading series. Create a second story with the same class heroes and give students another reason to read together.",
       "html_body": "<p>Hi Mr. Davis, your classroom teamwork story can become the first chapter in a printable reading series.</p><p>Create a second story with the same class heroes and give students another reason to read together.</p>",
       "scheduled_send_at": "2026-04-15T00:20:00+00:00",
@@ -107,9 +136,10 @@
       "references_message_ids_json": "[]",
       "source_payload_json": {
         "campaign_type": "educator_engagement",
+        "audience_segment": "teachers",
         "primary_offer": "Classroom Teamwork Story",
         "design": {
-          "template": "story_reveal"
+          "template": "product_spotlight"
         }
       }
     },

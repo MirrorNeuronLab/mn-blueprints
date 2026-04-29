@@ -1,6 +1,8 @@
 import json
+import logging
 import os
 import sys
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 import grpc
@@ -18,6 +20,97 @@ ALL_ROLES = [
 ]
 
 TRACE_ROLES = ["decision_agent", "critic_auditor"]
+
+
+class JsonLogFormatter(logging.Formatter):
+    def format(self, record):
+        event = {
+            "timestamp": self.formatTime(record, "%Y-%m-%dT%H:%M:%S%z"),
+            "level": record.levelname,
+            "logger": record.name,
+            "message": record.getMessage(),
+        }
+        structured = getattr(record, "structured", None)
+        if isinstance(structured, dict):
+            event.update(structured)
+        if record.exc_info:
+            event["exception"] = self.formatException(record.exc_info)
+        return json.dumps(event, sort_keys=True, default=str)
+
+
+_CONTEXT_LOGGER = None
+
+
+def context_logging_enabled():
+    return os.environ.get("MN_CONTEXT_VIEW_LOG", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+def get_context_logger():
+    global _CONTEXT_LOGGER
+    if _CONTEXT_LOGGER is not None:
+        return _CONTEXT_LOGGER
+
+    logger = logging.getLogger("mn.context_view")
+    logger.setLevel(os.environ.get("MN_CONTEXT_VIEW_LOG_LEVEL", "INFO").upper())
+    logger.propagate = False
+
+    if not logger.handlers:
+        formatter = JsonLogFormatter()
+        destination = os.environ.get("MN_CONTEXT_VIEW_LOG_DEST", "both").strip().lower()
+
+        if destination in {"stdout", "both", "cloud"}:
+            stream_handler = logging.StreamHandler(sys.stderr)
+            stream_handler.setFormatter(formatter)
+            logger.addHandler(stream_handler)
+
+        if destination in {"file", "both"}:
+            log_file = Path(os.environ.get("MN_CONTEXT_VIEW_LOG_FILE", "/tmp/mn-context-agent/context_views.jsonl"))
+            log_file.parent.mkdir(parents=True, exist_ok=True)
+            max_bytes = int(os.environ.get("MN_CONTEXT_VIEW_LOG_MAX_BYTES", str(10 * 1024 * 1024)))
+            backup_count = int(os.environ.get("MN_CONTEXT_VIEW_LOG_BACKUP_COUNT", "5"))
+            file_handler = RotatingFileHandler(log_file, maxBytes=max_bytes, backupCount=backup_count)
+            file_handler.setFormatter(formatter)
+            logger.addHandler(file_handler)
+
+    _CONTEXT_LOGGER = logger
+    return logger
+
+
+def content_for_log(content):
+    return {key: value for key, value in content.items() if key != "acl"}
+
+
+def log_context_view(job_id, role, focus_id, max_items, items):
+    if not context_logging_enabled():
+        return
+
+    payload = {
+        "event": "agent_context_view",
+        "job_id": job_id,
+        "agent_role": role,
+        "focus_id": focus_id,
+        "max_items": max_items,
+        "returned_count": len(items),
+        "items": [
+            {
+                "id": item["id"],
+                "type": item["type"],
+                "artifact_type": item["artifact_type"],
+                "status": item["status"],
+                "source": item["source"],
+                "confidence": item["confidence"],
+                "version": item["version"],
+                "content": content_for_log(item["content"]),
+            }
+            for item in items
+        ],
+    }
+    get_context_logger().info("agent received context", extra={"structured": payload})
 
 
 def parse_json_payload(raw):
@@ -177,6 +270,7 @@ def get_context(stub, job_id, role, focus_id, max_items=12):
                 "content": content,
             }
         )
+    log_context_view(job_id, role, focus_id, max_items, items)
     return items
 
 
@@ -207,11 +301,11 @@ def context_summary(items):
 def call_llm(system_prompt, user_prompt, mock_response):
     quick_mode = os.environ.get("MN_BLUEPRINT_QUICK_TEST", "").strip().lower() in {"1", "true", "yes", "on"}
     if quick_mode:
-        print("STATUS: quick test mode enabled; using mock LLM response.", file=sys.stderr)
+        get_context_logger().info("quick test mode enabled; using mock LLM response")
         return mock_response if isinstance(mock_response, dict) else json.dumps(mock_response)
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
-        print("WARNING: OPENAI_API_KEY not set. Falling back to mock response.", file=sys.stderr)
+        get_context_logger().warning("OPENAI_API_KEY not set; falling back to mock response")
         return mock_response
     try:
         from openai import OpenAI
@@ -227,7 +321,7 @@ def call_llm(system_prompt, user_prompt, mock_response):
         )
         return parse_json_payload(response.choices[0].message.content)
     except Exception as exc:
-        print(f"LLM Error: {exc}. Falling back to mock.", file=sys.stderr)
+        get_context_logger().exception("LLM error; falling back to mock")
         return mock_response
 
 

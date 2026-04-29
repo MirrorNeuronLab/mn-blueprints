@@ -1,15 +1,21 @@
-from pathlib import Path
 import logging
 import os
 import sys
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
-logger = logging.getLogger("mn.blueprint.business_email")
-logger.setLevel(os.environ.get("MIRROR_NEURON_LOG_LEVEL", "INFO").upper())
-logger.propagate = False
-if not logger.handlers:
+
+def get_logger(name: str) -> logging.Logger:
+    logger = logging.getLogger(name)
+    logger.setLevel(os.environ.get("MIRROR_NEURON_LOG_LEVEL", "INFO").upper())
+    logger.propagate = False
+    if logger.handlers:
+        return logger
+
     formatter = logging.Formatter("%(asctime)s %(levelname)s [%(name)s] %(message)s")
-    log_path = Path(os.environ.get("MIRROR_NEURON_BLUEPRINT_LOG_PATH", "/tmp/mn-business-email.log"))
+    log_path = Path(
+        os.environ.get("MIRROR_NEURON_BLUEPRINT_LOG_PATH", "/tmp/mn-drug-discovery.log")
+    )
     try:
         log_path.parent.mkdir(parents=True, exist_ok=True)
         handler = RotatingFileHandler(
@@ -21,12 +27,4 @@ if not logger.handlers:
         handler = logging.StreamHandler(sys.stderr)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-
-
-skills_dir = Path(__file__).resolve().parent / "mn_skills"
-if skills_dir.exists():
-    sys.path.insert(0, str(skills_dir))
-
-shared_skills_dir = Path(__file__).resolve().parent.parent / "_shared_skills"
-if shared_skills_dir.exists():
-    sys.path.insert(0, str(shared_skills_dir))
+    return logger

@@ -180,7 +180,8 @@ def test_fresh_runtime_db_is_seeded_from_input_data(tmp_path):
                 "'activities': conn.execute('SELECT COUNT(*) FROM customer_marketing_activity').fetchone()[0], "
                 "'drafts': conn.execute('SELECT COUNT(*) FROM email_drafts').fetchone()[0], "
                 "'sent_drafts': conn.execute(\"SELECT COUNT(*) FROM email_drafts WHERE status = 'sent'\").fetchone()[0], "
-                "'ready_drafts': conn.execute(\"SELECT COUNT(*) FROM email_drafts WHERE status = 'ready'\").fetchone()[0]"
+                "'ready_drafts': conn.execute(\"SELECT COUNT(*) FROM email_drafts WHERE status = 'ready'\").fetchone()[0], "
+                "'ready_html': conn.execute(\"SELECT html_body FROM email_drafts WHERE status = 'ready' ORDER BY draft_id LIMIT 1\").fetchone()[0]"
                 "}; "
                 "conn.close(); "
                 "conn = db_connect(); "
@@ -188,7 +189,8 @@ def test_fresh_runtime_db_is_seeded_from_input_data(tmp_path):
                 "'activities': conn.execute('SELECT COUNT(*) FROM customer_marketing_activity').fetchone()[0], "
                 "'drafts': conn.execute('SELECT COUNT(*) FROM email_drafts').fetchone()[0], "
                 "'sent_drafts': conn.execute(\"SELECT COUNT(*) FROM email_drafts WHERE status = 'sent'\").fetchone()[0], "
-                "'ready_drafts': conn.execute(\"SELECT COUNT(*) FROM email_drafts WHERE status = 'ready'\").fetchone()[0]"
+                "'ready_drafts': conn.execute(\"SELECT COUNT(*) FROM email_drafts WHERE status = 'ready'\").fetchone()[0], "
+                "'ready_html': conn.execute(\"SELECT html_body FROM email_drafts WHERE status = 'ready' ORDER BY draft_id LIMIT 1\").fetchone()[0]"
                 "}; "
                 "conn.close(); "
                 "print(json.dumps({'first': first, 'second': second}, sort_keys=True))"
@@ -207,6 +209,8 @@ def test_fresh_runtime_db_is_seeded_from_input_data(tmp_path):
     assert counts["drafts"] >= 3
     assert counts["sent_drafts"] >= 1
     assert counts["ready_drafts"] >= 2
+    assert "Story moments to explore" in counts["ready_html"]
+    assert "data-slot=\"headline\"" in counts["ready_html"]
     assert payload["second"] == counts
 
 

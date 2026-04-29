@@ -72,7 +72,11 @@ Generated blueprints shrink worker counts, durations, retries, and delays. LLM/e
 
 ### Runtime DB seed
 
-Fresh SQLite databases are bootstrapped from `input/data/bootstrap_seed.json`. The seed includes mock customer history, recent activities, and one sent draft so agents have enough context after deleting and recreating the DB. The runtime only loads this file when both `email_drafts` and `customer_marketing_activity` are empty.
+Fresh SQLite databases are bootstrapped from `input/data/bootstrap_seed.json`. The seed includes mock customer history, recent activities, ready drafts, and sent draft history so agents have enough context after deleting and recreating the DB. Ready seed drafts are rendered through the same `input/designs` templates used by `quick_preview_emails.py`, so runtime sends should match the colorful preview design instead of stale inline HTML. The runtime only loads this file when both `email_drafts` and `customer_marketing_activity` are empty.
+
+### Test recipient mode
+
+When `SYNAPTIC_TEST_EMAIL_TO` is set, all outbound emails are redirected to that address. To avoid one test inbox receiving the same campaign action from multiple mock customers, the marketing automation agent reserves one send per `campaign_type` for that test recipient. Duplicate test-mode actions emit `email_delivery_skipped` with `reason: duplicate_test_action` and do not continue that duplicate branch. Non-duplicate actions still emit `cycle_trigger` so the campaign sequence can advance through the planned funnel.
 
 ### Output contract
 

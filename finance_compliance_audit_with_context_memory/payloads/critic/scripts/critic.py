@@ -8,6 +8,7 @@ from context_memory import (
     context_stub,
     context_summary,
     emit_state,
+    get_context_logger,
     get_context,
     link_items,
     load_input,
@@ -112,6 +113,7 @@ def main():
             snapshot_redis_url=snapshot_redis_url,
         )
     except Exception as exc:
+        get_context_logger().exception("Agent failed")
         print(json.dumps({"error": str(exc)}), file=sys.stderr)
         sys.exit(1)
 

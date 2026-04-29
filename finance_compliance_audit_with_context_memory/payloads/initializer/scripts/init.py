@@ -7,6 +7,7 @@ from context_memory import (
     add_trace_event,
     context_stub,
     emit_state,
+    get_context_logger,
     link_items,
     load_input,
     make_content,
@@ -111,6 +112,7 @@ def main():
             },
         )
     except Exception as exc:
+        get_context_logger().exception("Agent failed")
         print(json.dumps({"error": str(exc)}), file=sys.stderr)
         sys.exit(1)
 

@@ -15,6 +15,9 @@ sys.modules["drugclip.utils.chemistry"] = m
 sys.path.append("/Users/homer/Projects/BioTarget")
 from extract_utils import extract_payload
 from biotarget.stages.stage_d_evaluation import run_gnina
+from logging_utils import get_logger
+
+logger = get_logger("mn.blueprint.drug_discovery.stage_d")
 
 
 def load_context() -> dict:
@@ -40,14 +43,11 @@ def main():
     candidates = payload.get("candidates", [])
 
     if not structures:
-        print("[!] No structures found in payload", file=sys.stderr)
+        logger.error("No structures found in payload")
         sys.exit(1)
 
     pdb_path = structures[0]["path"]
-    print(
-        f"[*] Stage D: Evaluating {len(candidates)} candidates against {pdb_path}",
-        file=sys.stderr,
-    )
+    logger.info("Stage D: evaluating %d candidates against %s", len(candidates), pdb_path)
 
     evaluations = []
     for smiles in candidates:

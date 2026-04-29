@@ -2,7 +2,6 @@ defmodule Synaptic.InboxPoller do
   use MirrorNeuron.AgentTemplate
 
   alias MirrorNeuron.Message
-  alias MirrorNeuron.Runtime
 
   @impl true
   def init(node) do
@@ -17,6 +16,7 @@ defmodule Synaptic.InboxPoller do
 
       "tick" ->
         payload = payload(message) || %{}
+
         if Map.get(payload, "token") == state.scheduled_token do
           next_state = schedule_next_tick(state, context, interval_ms(state.config))
           {:ok, next_state, [{:emit_to, "inbox_reply_agent", "poll", %{}}]}
@@ -37,24 +37,19 @@ defmodule Synaptic.InboxPoller do
   defp schedule_next_tick(state, context, delay_ms) do
     token = :os.system_time(:millisecond)
 
-    spawn(fn ->
-      if delay_ms > 0 do
-        Process.sleep(delay_ms)
-      end
-
-      Runtime.deliver(
-        context.job_id,
-        context.node.node_id,
-        Message.new(
-          context.job_id,
-          context.node.node_id,
-          context.node.node_id,
-          "tick",
-          %{"token" => token},
-          class: "control"
-        )
-      )
-    end)
+    Process.send_after(
+      self(),
+      {:mirror_neuron_scheduled_message,
+       Message.new(
+         context.job_id,
+         context.node.node_id,
+         context.node.node_id,
+         "tick",
+         %{"token" => token},
+         class: "control"
+       )},
+      delay_ms
+    )
 
     %{state | scheduled_token: token}
   end

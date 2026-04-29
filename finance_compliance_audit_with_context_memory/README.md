@@ -86,6 +86,42 @@ When an agent requests context, the engine first filters by graph relevance, exp
 
 Blueprint helper scripts and payloads report important running status as JSON lines on stderr. Each line includes `ts`, `level`, `blueprint`, `phase`, and `message`, with optional `details`. This keeps stdout reserved for bundle paths or machine-readable result JSON.
 
+### Agent context view logging
+
+Each agent can also log the exact projected context it received from the Context Engine. This uses Python's standard `logging` package with JSON formatting, so it works locally and can later be routed to cloud handlers such as AWS CloudWatch (`watchtower`), Google Cloud Logging (`google-cloud-logging`), or OpenTelemetry without changing agent logic.
+
+It is disabled by default. Enable it for diagnostic runs only:
+
+```bash
+MN_CONTEXT_VIEW_LOG=1 \
+MN_CONTEXT_VIEW_LOG_DEST=stdout \
+mn run finance_compliance_audit_with_context_memory
+```
+
+For local files with rotation:
+
+```bash
+MN_CONTEXT_VIEW_LOG=1 \
+MN_CONTEXT_VIEW_LOG_DEST=file \
+MN_CONTEXT_VIEW_LOG_FILE=/tmp/mn-context-agent/context_views.jsonl \
+mn run finance_compliance_audit_with_context_memory
+```
+
+Supported destinations:
+
+- `stdout`: JSON logs to stderr, useful for containers and cloud log collectors.
+- `file`: rotating JSONL file via `logging.handlers.RotatingFileHandler`.
+- `both`: writes to stderr and file.
+- `cloud`: currently aliases stdout/stderr, ready for a future cloud logging handler.
+
+Useful limits:
+
+- `MN_CONTEXT_VIEW_LOG_MAX_BYTES`: file rotation size, default `10485760`.
+- `MN_CONTEXT_VIEW_LOG_BACKUP_COUNT`: rotated file count, default `5`.
+- `MN_CONTEXT_VIEW_LOG_LEVEL`: default `INFO`.
+
+Each record has `event=agent_context_view`, `job_id`, `agent_role`, `focus_id`, `returned_count`, and the list of projected items. The helper strips `acl` before logging so debug output reflects agent-visible content.
+
 ### Quick test mode
 
 Use quick test mode for cheap logic validation before calling paid or slow external systems:

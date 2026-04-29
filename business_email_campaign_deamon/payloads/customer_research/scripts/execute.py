@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import logging
 import sys
 from pathlib import Path
 
@@ -25,6 +26,7 @@ from _synaptic_skills.marketing_email import (
 
 
 AGENT_ID = "customer_research_agent"
+logger = logging.getLogger("mn.blueprint.business_email.customer_research")
 
 
 def fallback_brief(plan: dict, activities: list[dict]) -> dict:
@@ -132,8 +134,8 @@ def main() -> None:
     plan["goal"] = playbooks.get(next_campaign, {}).get("goal", "")
     plan["success_metric"] = playbooks.get(next_campaign, {}).get("success_metric", "")
 
-    print(f"Customer Research Agent: Evaluated customer {customer['name']}", file=sys.stderr)
-    print(f"Customer Research Agent: Selected campaign step: {next_campaign}", file=sys.stderr)
+    logger.info("Evaluated customer %s", customer["name"])
+    logger.info("Selected campaign step: %s", next_campaign)
 
     latest_source = parse_source_payload(
         (latest_sent_draft(customer["customer_id"]) or {}).get("source_payload_json")

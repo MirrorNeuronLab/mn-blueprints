@@ -8,6 +8,9 @@ from pathlib import Path
 sys.path.append("/Users/homer/Projects/BioTarget")
 from extract_utils import extract_payload
 from biotarget.stages.stage_b_structure import stage_b_structure_generation
+from logging_utils import get_logger
+
+logger = get_logger("mn.blueprint.drug_discovery.stage_b")
 
 
 def load_message():
@@ -20,10 +23,7 @@ def main():
     disease = payload.get("disease", "Alzheimer")
     targets = payload.get("targets", [])
 
-    print(
-        f"[*] Stage B: Generating structures for {len(targets)} targets",
-        file=sys.stderr,
-    )
+    logger.info("Stage B: generating structures for %d targets", len(targets))
     structures = stage_b_structure_generation(targets, engine="openfold3")
 
     shared_dir = "/tmp/biotarget_shared"

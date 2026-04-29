@@ -6,6 +6,9 @@ from pathlib import Path
 
 sys.path.append("/Users/homer/Projects/BioTarget")
 from extract_utils import extract_payload
+from logging_utils import get_logger
+
+logger = get_logger("mn.blueprint.drug_discovery.stage_e")
 
 
 def load_context() -> dict:
@@ -34,7 +37,7 @@ def main():
     gene = structures[0].get("gene", "Unknown") if structures else "Unknown"
     pdb_path = structures[0].get("path", "Unknown") if structures else "Unknown"
 
-    print(f"[*] Stage E: Ranking and reporting for {disease}", file=sys.stderr)
+    logger.info("Stage E: ranking and reporting for %s", disease)
 
     best_evals = []
     for eval_res in evaluations:

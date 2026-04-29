@@ -2,12 +2,39 @@ from __future__ import annotations
 
 import contextlib
 import json
+import logging
 import os
 import sqlite3
 import sys
+from logging.handlers import RotatingFileHandler
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+
+def configure_logging() -> logging.Logger:
+    logger = logging.getLogger("mn.blueprint.business_email")
+    logger.setLevel(os.environ.get("MIRROR_NEURON_LOG_LEVEL", "INFO").upper())
+    logger.propagate = False
+    if logger.handlers:
+        return logger
+    formatter = logging.Formatter("%(asctime)s %(levelname)s [%(name)s] %(message)s")
+    log_path = Path(os.environ.get("MIRROR_NEURON_BLUEPRINT_LOG_PATH", "/tmp/mn-business-email.log"))
+    try:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        handler = RotatingFileHandler(
+            log_path,
+            maxBytes=int(os.environ.get("MIRROR_NEURON_LOG_MAX_BYTES", "1048576")),
+            backupCount=int(os.environ.get("MIRROR_NEURON_LOG_BACKUP_COUNT", "5")),
+        )
+    except OSError:
+        handler = logging.StreamHandler(sys.stderr)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
+
+
+logger = configure_logging()
 
 
 def utc_now() -> str:
@@ -216,6 +243,66 @@ def _table_count(conn: sqlite3.Connection, table_name: str) -> int:
     return int(row["count"] if row is not None else 0)
 
 
+def _source_payload_dict(raw: Any) -> dict[str, Any]:
+    if isinstance(raw, dict):
+        return dict(raw)
+    if isinstance(raw, str) and raw.strip():
+        try:
+            payload = json.loads(raw)
+        except json.JSONDecodeError:
+            return {}
+        return payload if isinstance(payload, dict) else {}
+    return {}
+
+
+def _seed_draft_payload(draft: dict[str, Any]) -> dict[str, Any]:
+    explicit = draft.get("draft")
+    if isinstance(explicit, dict):
+        return dict(explicit)
+    payload = {
+        "subject": draft.get("subject", ""),
+        "preview_text": draft.get("preview_text", ""),
+        "eyebrow": draft.get("eyebrow", ""),
+        "headline": draft.get("headline", draft.get("subject", "")),
+        "body_sections": draft.get("body_sections", []),
+        "cta_label": draft.get("cta_label", "Open Bibblio"),
+        "cta_url_slug": draft.get("cta_url_slug", "create"),
+        "secondary_text": draft.get("secondary_text", ""),
+        "footer_variant": draft.get("footer_variant", "default"),
+        "signoff": draft.get("signoff", "Maya"),
+    }
+    return {key: value for key, value in payload.items() if value not in ("", [], None)}
+
+
+def render_seed_draft_html(draft: dict[str, Any], source_payload: dict[str, Any]) -> str:
+    html_body = str(draft.get("html_body") or "")
+    if not draft.get("render_from_template"):
+        return html_body
+    try:
+        from _synaptic_skills.marketing_email import build_design_slots, render_email_html
+
+        draft_payload = _seed_draft_payload(draft)
+        if not draft_payload:
+            return html_body
+        template_name = str(
+            draft.get("template")
+            or source_payload.get("design", {}).get("template")
+            or "moment_to_story"
+        )
+        template = load_template_library().get(template_name)
+        if not template:
+            return html_body
+        plan = dict(source_payload)
+        plan.setdefault("campaign_type", source_payload.get("campaign_type", template_name))
+        plan.setdefault("audience_segment", source_payload.get("audience_segment", "new_parents"))
+        plan["draft"] = draft_payload
+        plan["design"] = {"template": template_name}
+        slots = build_design_slots(plan=plan, brand=load_knowledge_section("brand"))
+        return render_email_html(template, slots)
+    except Exception:
+        return html_body
+
+
 def seed_db_if_empty(conn: sqlite3.Connection) -> None:
     if _table_count(conn, "email_drafts") or _table_count(conn, "customer_marketing_activity"):
         return
@@ -256,11 +343,14 @@ def seed_db_if_empty(conn: sqlite3.Connection) -> None:
         customer_id = str(draft.get("customer_id") or "").strip()
         if not draft_id or not customer_id:
             continue
-        source_payload = draft.get("source_payload_json", {})
-        if isinstance(source_payload, str):
-            source_payload_json = source_payload
-        else:
-            source_payload_json = json.dumps(source_payload or {}, sort_keys=True)
+        source_payload = _source_payload_dict(draft.get("source_payload_json", {}))
+        draft_payload = _seed_draft_payload(draft)
+        if draft_payload:
+            source_payload.setdefault("draft", draft_payload)
+        if draft.get("template"):
+            source_payload.setdefault("design", {"template": str(draft["template"])})
+        source_payload_json = json.dumps(source_payload or {}, sort_keys=True)
+        html_body = render_seed_draft_html(draft, source_payload)
         references = draft.get("references_message_ids_json", "[]")
         if not isinstance(references, str):
             references = json.dumps(references or [], sort_keys=True)
@@ -294,7 +384,7 @@ def seed_db_if_empty(conn: sqlite3.Connection) -> None:
                 str(draft.get("subject") or ""),
                 str(draft.get("preview_text") or ""),
                 str(draft.get("body_text") or ""),
-                str(draft.get("html_body") or ""),
+                html_body,
                 str(draft.get("scheduled_send_at") or ""),
                 str(draft.get("prepared_at") or ""),
                 str(draft.get("provider_id") or ""),
@@ -463,6 +553,7 @@ def log_agent(
 ) -> None:
     if not runtime_job_id:
         return
+    logger.info("%s: %s", agent_id, message, extra={"details": details or {}})
     with db_connect() as conn:
         conn.execute(
             """

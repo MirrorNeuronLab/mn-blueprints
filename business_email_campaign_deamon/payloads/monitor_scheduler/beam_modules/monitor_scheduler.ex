@@ -2,7 +2,6 @@ defmodule Synaptic.MonitorScheduler do
   use MirrorNeuron.AgentTemplate
 
   alias MirrorNeuron.Message
-  alias MirrorNeuron.Runtime
 
   @impl true
   def init(node) do
@@ -104,24 +103,19 @@ defmodule Synaptic.MonitorScheduler do
   defp schedule_next_tick(state, context, delay_ms) do
     token = state.cycle + 1
 
-    spawn(fn ->
-      if delay_ms > 0 do
-        Process.sleep(delay_ms)
-      end
-
-      Runtime.deliver(
-        context.job_id,
-        context.node.node_id,
-        Message.new(
-          context.job_id,
-          context.node.node_id,
-          context.node.node_id,
-          "tick",
-          %{"token" => token},
-          class: "control"
-        )
-      )
-    end)
+    Process.send_after(
+      self(),
+      {:mirror_neuron_scheduled_message,
+       Message.new(
+         context.job_id,
+         context.node.node_id,
+         context.node.node_id,
+         "tick",
+         %{"token" => token},
+         class: "control"
+       )},
+      delay_ms
+    )
 
     %{state | scheduled_token: token}
   end

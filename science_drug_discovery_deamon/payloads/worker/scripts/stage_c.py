@@ -7,6 +7,9 @@ import random
 
 sys.path.append("/Users/homer/Projects/BioTarget")
 from extract_utils import extract_payload
+from logging_utils import get_logger
+
+logger = get_logger("mn.blueprint.drug_discovery.stage_c")
 
 
 def get_seed_smiles():
@@ -32,7 +35,7 @@ def main():
     targets = payload.get("targets", [])
     structures = payload.get("structures", [])
 
-    print(f"[*] Stage C: Generating candidates for {disease}", file=sys.stderr)
+    logger.info("Stage C: generating candidates for %s", disease)
 
     # Select 3 random smiles to represent generated candidates since drugclip is mock
     candidates = random.sample(get_seed_smiles(), 3)

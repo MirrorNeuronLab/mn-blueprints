@@ -1,20 +1,47 @@
 import json
+import logging
 import os
 import sys
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 import subprocess
 import grpc
 import context_pb2
 import context_pb2_grpc
 
+
+def _setup_logger():
+    logger = logging.getLogger("mn.blueprint.context_memory_basic.executor")
+    logger.setLevel(os.environ.get("MIRROR_NEURON_LOG_LEVEL", "INFO").upper())
+    logger.propagate = False
+    if logger.handlers:
+        return logger
+    formatter = logging.Formatter("%(asctime)s %(levelname)s [%(name)s] %(message)s")
+    log_path = Path(os.environ.get("MIRROR_NEURON_BLUEPRINT_LOG_PATH", "/tmp/mn-blueprint.log"))
+    try:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        handler = RotatingFileHandler(
+            log_path,
+            maxBytes=int(os.environ.get("MIRROR_NEURON_LOG_MAX_BYTES", "1048576")),
+            backupCount=int(os.environ.get("MIRROR_NEURON_LOG_BACKUP_COUNT", "5")),
+        )
+    except OSError:
+        handler = logging.StreamHandler(sys.stderr)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
+
+
+logger = _setup_logger()
+
 def call_llm(system_prompt, user_prompt, mock_response):
     quick_mode = os.environ.get("MN_BLUEPRINT_QUICK_TEST", "").strip().lower() in {"1", "true", "yes", "on"}
     if quick_mode:
-        print("STATUS: quick test mode enabled; using mock LLM response.", file=sys.stderr)
+        logger.info("quick test mode enabled; using mock LLM response")
         return json.dumps(mock_response)
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
-        print("WARNING: OPENAI_API_KEY not set. Falling back to mock response.", file=sys.stderr)
+        logger.warning("OPENAI_API_KEY not set; falling back to mock response")
         return json.dumps(mock_response)
     try:
         from openai import OpenAI
@@ -29,7 +56,7 @@ def call_llm(system_prompt, user_prompt, mock_response):
         )
         return response.choices[0].message.content
     except Exception as e:
-        print(f"LLM Error: {str(e)}. Falling back to mock.", file=sys.stderr)
+        logger.exception("LLM error; falling back to mock")
         return json.dumps(mock_response)
 
 def main():
@@ -94,6 +121,7 @@ def main():
         }))
         
     except Exception as e:
+        logger.exception("Executor failed")
         print(json.dumps({"error": str(e)}), file=sys.stderr)
         sys.exit(1)
 

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 from pathlib import Path
 import sys
@@ -12,6 +13,8 @@ import urllib.parse
 
 import sqlite3
 from datetime import datetime, timezone
+
+logger = logging.getLogger("mn.blueprint.business_email.inbox_reply")
 
 vendored_skills = Path(__file__).resolve().parents[1] / "mn_skills"
 if vendored_skills.exists():
@@ -125,10 +128,10 @@ def log_customer_reply(from_email: str, body: str):
             (activity_id, customer_id, summary, utc_now()),
         )
         conn.commit()
-        print(f"Logged reply activity for customer: {customer_id}", file=sys.stderr)
+        logger.info("Logged reply activity for customer: %s", customer_id)
         conn.close()
     except Exception as e:
-        print(f"Error logging reply to db: {e}", file=sys.stderr)
+        logger.exception("Error logging reply to db")
 
 
 def generate_reply_via_llm(body_content):
@@ -171,7 +174,7 @@ def generate_reply_via_llm(body_content):
             else:
                 return "Thank you for reaching out. Your message has been received."
     except Exception as e:
-        print(f"Error calling LLM: {e}", file=sys.stderr)
+        logger.exception("Error calling LLM")
         return "Thank you for your message. We have received it."
 
 def agentmail_request(method: str, path: str, body: dict | None = None, query: dict | None = None) -> dict:
@@ -254,7 +257,7 @@ def check_agentmail() -> list:
                 or msg.get("text")
                 or "No content provided."
             )
-            print(f"Processing email from {from_email}...", file=sys.stderr)
+            logger.info("Processing email from %s", from_email)
             
             log_customer_reply(from_email, body)
             reply_text = generate_reply_via_llm(body)
@@ -288,7 +291,7 @@ def check_agentmail() -> list:
             })
             
     except Exception as e:
-        print(f"AgentMail Fetch/Reply Error: {e}", file=sys.stderr)
+        logger.exception("AgentMail fetch/reply error")
     return processed
 
 
@@ -309,7 +312,7 @@ def check_agentmail_with_skill() -> list:
 
             full_msg = skill_get_message(msg.message_id, config)
             body = full_msg.extracted_text or full_msg.text or msg.extracted_text or msg.text or "No content provided."
-            print(f"Processing email from {from_email}...", file=sys.stderr)
+            logger.info("Processing email from %s", from_email)
             log_customer_reply(from_email, body)
             processed.append({
                 "type": "agent_inbox_email_received",
@@ -355,7 +358,7 @@ def check_agentmail_with_skill() -> list:
                 }
             })
     except Exception as e:
-        print(f"AgentMail Fetch/Reply Error: {e}", file=sys.stderr)
+        logger.exception("AgentMail fetch/reply error")
     return processed
 
 def main():

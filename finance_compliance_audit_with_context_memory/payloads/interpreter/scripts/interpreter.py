@@ -8,6 +8,7 @@ from context_memory import (
     context_stub,
     context_summary,
     emit_state,
+    get_context_logger,
     get_context,
     link_items,
     load_input,
@@ -98,6 +99,7 @@ def main():
             seen_by_interpreter=[item["artifact_type"] or item["type"] for item in items],
         )
     except Exception as exc:
+        get_context_logger().exception("Agent failed")
         print(json.dumps({"error": str(exc)}), file=sys.stderr)
         sys.exit(1)
 

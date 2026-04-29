@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "financial_compliance_audit_v1",
   "job_name": "compliance-audit",
+  "requiredContextEngine": true,
   "entrypoints": [
     "initializer"
   ],
@@ -21,12 +22,22 @@
       "role": "initializer",
       "config": {
         "from": "base",
-        "upload_path": "initializer",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_paths": [
+          {
+            "source": "initializer",
+            "target": "initializer"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
         "workdir": "/sandbox/job/initializer",
         "command": [
           "bash",
           "-c",
-          "pip install protobuf grpcio openai && python3 scripts/init.py"
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/init.py"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -38,7 +49,21 @@
           "OPENAI_API_KEY": {
             "$ref": "env.OPENAI_API_KEY"
           }
-        }
+        },
+        "pass_env": [
+          "OPENAI_API_KEY",
+          "OPENAI_MODEL",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT"
+        ]
       }
     },
     {
@@ -48,12 +73,22 @@
       "role": "policy_interpreter",
       "config": {
         "from": "base",
-        "upload_path": "interpreter",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_paths": [
+          {
+            "source": "interpreter",
+            "target": "interpreter"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
         "workdir": "/sandbox/job/interpreter",
         "command": [
           "bash",
           "-c",
-          "pip install protobuf grpcio openai && python3 scripts/interpreter.py"
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/interpreter.py"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -65,7 +100,21 @@
           "OPENAI_API_KEY": {
             "$ref": "env.OPENAI_API_KEY"
           }
-        }
+        },
+        "pass_env": [
+          "OPENAI_API_KEY",
+          "OPENAI_MODEL",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT"
+        ]
       }
     },
     {
@@ -75,12 +124,22 @@
       "role": "evidence_extractor",
       "config": {
         "from": "base",
-        "upload_path": "extractor",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_paths": [
+          {
+            "source": "extractor",
+            "target": "extractor"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
         "workdir": "/sandbox/job/extractor",
         "command": [
           "bash",
           "-c",
-          "pip install protobuf grpcio openai && python3 scripts/extractor.py"
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/extractor.py"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -92,7 +151,21 @@
           "OPENAI_API_KEY": {
             "$ref": "env.OPENAI_API_KEY"
           }
-        }
+        },
+        "pass_env": [
+          "OPENAI_API_KEY",
+          "OPENAI_MODEL",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT"
+        ]
       }
     },
     {
@@ -102,12 +175,22 @@
       "role": "risk_classifier",
       "config": {
         "from": "base",
-        "upload_path": "classifier",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_paths": [
+          {
+            "source": "classifier",
+            "target": "classifier"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
         "workdir": "/sandbox/job/classifier",
         "command": [
           "bash",
           "-c",
-          "pip install protobuf grpcio openai && python3 scripts/classifier.py"
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/classifier.py"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -119,7 +202,21 @@
           "OPENAI_API_KEY": {
             "$ref": "env.OPENAI_API_KEY"
           }
-        }
+        },
+        "pass_env": [
+          "OPENAI_API_KEY",
+          "OPENAI_MODEL",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT"
+        ]
       }
     },
     {
@@ -129,12 +226,22 @@
       "role": "decision_agent",
       "config": {
         "from": "base",
-        "upload_path": "decision",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_paths": [
+          {
+            "source": "decision",
+            "target": "decision"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
         "workdir": "/sandbox/job/decision",
         "command": [
           "bash",
           "-c",
-          "pip install protobuf grpcio openai && python3 scripts/decision.py"
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/decision.py"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -146,7 +253,21 @@
           "OPENAI_API_KEY": {
             "$ref": "env.OPENAI_API_KEY"
           }
-        }
+        },
+        "pass_env": [
+          "OPENAI_API_KEY",
+          "OPENAI_MODEL",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT"
+        ]
       }
     },
     {
@@ -156,12 +277,22 @@
       "role": "critic_auditor",
       "config": {
         "from": "base",
-        "upload_path": "critic",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_paths": [
+          {
+            "source": "critic",
+            "target": "critic"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
         "workdir": "/sandbox/job/critic",
         "command": [
           "bash",
           "-c",
-          "pip install protobuf grpcio openai && python3 scripts/critic.py"
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/critic.py"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -173,7 +304,21 @@
           "OPENAI_API_KEY": {
             "$ref": "env.OPENAI_API_KEY"
           }
-        }
+        },
+        "pass_env": [
+          "OPENAI_API_KEY",
+          "OPENAI_MODEL",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT"
+        ]
       }
     },
     {

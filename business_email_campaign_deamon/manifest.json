@@ -4,6 +4,7 @@
   "long_lived": true,
   "graph_id": "business_email_campaign_v1",
   "job_name": "business-email-campaign",
+  "requiredContextEngine": false,
   "entrypoints": [
     "ingress"
   ],

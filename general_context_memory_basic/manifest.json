@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "general_context_memory_basic_v1",
   "job_name": "context-memory-basic",
+  "requiredContextEngine": true,
   "entrypoints": [
     "planner_node"
   ],

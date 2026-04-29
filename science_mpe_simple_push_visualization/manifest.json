@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "mpe_shared_world_visualization_v2",
   "job_name": "mpe-shared-world-visualization",
+  "requiredContextEngine": false,
   "entrypoints": [
     "ingress"
   ],

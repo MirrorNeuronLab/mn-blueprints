@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "general_openshell_worker_basic_v2",
   "job_name": "openshell-worker-basic",
+  "requiredContextEngine": false,
   "entrypoints": [
     "shell_worker"
   ],

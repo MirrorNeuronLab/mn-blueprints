@@ -96,11 +96,11 @@
     "job_name": "business-email-campaign"
   },
   {
-    "id": "stream-live-backpressure",
-    "path": "stream-live-backpressure",
-    "name": "Stream Live Backpressure",
-    "description": "A live stream blueprint that demonstrates bounded queues, propagated backpressure, and retry-later external input handling.",
-    "graph_id": "stream_live_backpressure_v1",
-    "job_name": "stream-live-backpressure"
+    "id": "general_stream_live_backpressure",
+    "path": "general_stream_live_backpressure",
+    "name": "General Stream Live Backpressure",
+    "description": "A live stream blueprint that demonstrates bounded queues, propagated backpressure, slow agents, and retry-later external input handling.",
+    "graph_id": "general_stream_live_backpressure_v1",
+    "job_name": "general_stream_live_backpressure"
   }
 ]

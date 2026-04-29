@@ -111,6 +111,13 @@ def main():
                 "initializer_trace": trace_id,
             },
         )
+    except RuntimeError as exc:
+        if str(exc).startswith("Context Engine is unavailable"):
+            print(json.dumps({"error": str(exc), "fatal": True}), file=sys.stderr)
+            sys.exit(1)
+        get_context_logger().exception("Agent failed")
+        print(json.dumps({"error": str(exc)}), file=sys.stderr)
+        sys.exit(1)
     except Exception as exc:
         get_context_logger().exception("Agent failed")
         print(json.dumps({"error": str(exc)}), file=sys.stderr)

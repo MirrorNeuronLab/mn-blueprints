@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "general_test_message_flow_v1",
   "job_name": "test-message-flow",
+  "requiredContextEngine": false,
   "entrypoints": [
     "ingress"
   ],

@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "general_divisibility_monitor_daemon_v1",
   "job_name": "divisibility-monitor",
+  "requiredContextEngine": false,
   "daemon": true,
   "entrypoints": [
     "question_generator"

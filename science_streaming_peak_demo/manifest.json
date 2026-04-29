@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "science_streaming_peak_demo_v1",
   "job_name": "streaming-peak-demo",
+  "requiredContextEngine": false,
   "entrypoints": [
     "ingress"
   ],

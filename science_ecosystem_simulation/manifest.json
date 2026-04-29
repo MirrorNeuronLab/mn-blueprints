@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "science_ecosystem_simulation_v1",
   "job_name": "ecosystem-simulation",
+  "requiredContextEngine": false,
   "entrypoints": [
     "ingress"
   ],

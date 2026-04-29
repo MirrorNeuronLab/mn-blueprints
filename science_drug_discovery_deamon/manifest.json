@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "science_drug_discovery_daemon_loop",
   "job_name": "drug-discovery-infinite",
+  "requiredContextEngine": false,
   "entrypoints": [
     "target_discovery"
   ],

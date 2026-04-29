@@ -141,9 +141,35 @@ def load_input():
 
 
 def context_stub():
-    endpoint = os.environ.get("CONTEXT_ENGINE_ADDR", "host.docker.internal:50052")
-    channel = grpc.insecure_channel(endpoint)
-    return context_pb2_grpc.ContextEngineStub(channel)
+    configured = os.environ.get("CONTEXT_ENGINE_ADDR", "").strip()
+    ready_timeout = float(os.environ.get("CONTEXT_ENGINE_READY_TIMEOUT_SECONDS", "0.5"))
+    candidates = [
+        configured,
+        "localhost:50052",
+        "127.0.0.1:50052",
+        "host.docker.internal:50052",
+    ]
+    endpoints = [
+        endpoint
+        for index, endpoint in enumerate(candidates)
+        if endpoint and endpoint not in candidates[:index]
+    ]
+    errors = []
+
+    for endpoint in endpoints:
+        channel = grpc.insecure_channel(endpoint)
+        try:
+            grpc.channel_ready_future(channel).result(timeout=ready_timeout)
+            return context_pb2_grpc.ContextEngineStub(channel)
+        except Exception as exc:
+            channel.close()
+            reason = str(exc) or exc.__class__.__name__
+            errors.append(f"{endpoint}: {reason}")
+
+    raise RuntimeError(
+        "Context Engine is unavailable. Start it on port 50052 or set CONTEXT_ENGINE_ADDR. "
+        f"Tried: {'; '.join(errors)}"
+    )
 
 
 def acl(allow_roles, projection_fields=None):

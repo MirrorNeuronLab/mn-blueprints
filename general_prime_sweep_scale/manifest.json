@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "prime_sweep_100_workers",
   "job_name": "prime-sweep-100-workers",
+  "requiredContextEngine": false,
   "entrypoints": [
     "dispatcher"
   ],

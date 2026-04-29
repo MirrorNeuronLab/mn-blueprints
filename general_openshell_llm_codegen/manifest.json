@@ -2,6 +2,7 @@
   "manifest_version": "1.0",
   "graph_id": "general_openshell_llm_codegen_3_rounds",
   "job_name": "openshell-llm-codegen-3-rounds",
+  "requiredContextEngine": false,
   "entrypoints": [
     "codegen_round_1"
   ],

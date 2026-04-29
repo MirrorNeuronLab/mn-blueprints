@@ -2,7 +2,9 @@
   "manifest_version": "1.0",
   "graph_id": "general_openshell_worker_basic_v2",
   "job_name": "openshell-worker-basic",
-  "entrypoints": ["shell_worker"],
+  "entrypoints": [
+    "shell_worker"
+  ],
   "initial_inputs": {
     "shell_worker": [
       {
@@ -24,7 +26,10 @@
         "upload_path": "word_count",
         "upload_as": "word_count",
         "workdir": "/sandbox/job/word_count",
-        "command": ["bash", "scripts/collect_metrics.sh"],
+        "command": [
+          "bash",
+          "scripts/collect_metrics.sh"
+        ],
         "policy": "policies/api-egress.yaml",
         "pool": "default",
         "pool_slots": 1,
@@ -44,7 +49,10 @@
         "upload_path": "report",
         "upload_as": "report",
         "workdir": "/sandbox/job/report",
-        "command": ["python3", "scripts/build_report.py"],
+        "command": [
+          "python3",
+          "scripts/build_report.py"
+        ],
         "policy": "policies/api-egress.yaml",
         "pool": "default",
         "pool_slots": 1,
@@ -79,5 +87,23 @@
   ],
   "policies": {
     "recovery_mode": "cluster_recover"
+  },
+  "metadata": {
+    "blueprint_id": "general_openshell_worker_basic",
+    "status_logging": {
+      "format": "jsonl",
+      "stream": "stderr",
+      "env": "MN_BLUEPRINT_LOG_LEVEL"
+    },
+    "quick_test": {
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1",
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs."
+    },
+    "output_contract": {
+      "stdout": "single JSON object, event envelope, or bundle path",
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr"
+    }
   }
 }

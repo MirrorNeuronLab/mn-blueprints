@@ -2,7 +2,9 @@
   "manifest_version": "1.0",
   "graph_id": "science_drug_discovery_daemon_loop",
   "job_name": "drug-discovery-infinite",
-  "entrypoints": ["target_discovery"],
+  "entrypoints": [
+    "target_discovery"
+  ],
   "initial_inputs": {
     "target_discovery": [
       {
@@ -22,7 +24,10 @@
         "pool": "default",
         "pool_slots": 1,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "command": ["python3", "scripts/stage_a.py"],
+        "command": [
+          "python3",
+          "scripts/stage_a.py"
+        ],
         "output_message_type": "targets_ready"
       }
     },
@@ -37,7 +42,10 @@
         "pool": "default",
         "pool_slots": 1,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "command": ["python3", "scripts/stage_b.py"],
+        "command": [
+          "python3",
+          "scripts/stage_b.py"
+        ],
         "output_message_type": "structures_ready"
       }
     },
@@ -52,7 +60,10 @@
         "pool": "default",
         "pool_slots": 1,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "command": ["python3", "scripts/stage_c.py"],
+        "command": [
+          "python3",
+          "scripts/stage_c.py"
+        ],
         "output_message_type": "candidates_ready"
       }
     },
@@ -67,7 +78,10 @@
         "pool": "default",
         "pool_slots": 1,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "command": ["python3", "scripts/stage_d.py"],
+        "command": [
+          "python3",
+          "scripts/stage_d.py"
+        ],
         "output_message_type": "evaluations_ready"
       }
     },
@@ -82,7 +96,10 @@
         "pool": "default",
         "pool_slots": 1,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "command": ["python3", "scripts/stage_e.py"],
+        "command": [
+          "python3",
+          "scripts/stage_e.py"
+        ],
         "output_message_type": "pipeline_complete"
       }
     },
@@ -97,7 +114,10 @@
         "pool": "default",
         "pool_slots": 1,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "command": ["python3", "scripts/manager.py"]
+        "command": [
+          "python3",
+          "scripts/manager.py"
+        ]
       }
     }
   ],
@@ -159,5 +179,23 @@
   ],
   "policies": {
     "recovery_mode": "cluster_recover"
+  },
+  "metadata": {
+    "blueprint_id": "science_drug_discovery_deamon",
+    "status_logging": {
+      "format": "jsonl",
+      "stream": "stderr",
+      "env": "MN_BLUEPRINT_LOG_LEVEL"
+    },
+    "quick_test": {
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1",
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs."
+    },
+    "output_contract": {
+      "stdout": "single JSON object, event envelope, or bundle path",
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr"
+    }
   }
 }

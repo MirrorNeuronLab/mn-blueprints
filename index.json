@@ -94,5 +94,13 @@
     "description": "A long-lived email marketing blueprint utilizing Ollama and Gmail.",
     "graph_id": "business_email_campaign_v1",
     "job_name": "business-email-campaign"
+  },
+  {
+    "id": "stream-live-backpressure",
+    "path": "stream-live-backpressure",
+    "name": "Stream Live Backpressure",
+    "description": "A live stream blueprint that demonstrates bounded queues, propagated backpressure, and retry-later external input handling.",
+    "graph_id": "stream_live_backpressure_v1",
+    "job_name": "stream-live-backpressure"
   }
 ]

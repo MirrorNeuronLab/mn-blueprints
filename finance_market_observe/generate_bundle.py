@@ -4,7 +4,14 @@ import json
 import secrets
 import shutil
 import random
+import sys
 from pathlib import Path
+
+sys.path.insert(
+    0,
+    str(Path(__file__).resolve().parents[2] / "mn-skills" / "blueprint_support_skill" / "src"),
+)
+from mn_blueprint_support import apply_quick_test, log_status, progress, write_manifest
 
 
 def build_manifest(args: argparse.Namespace) -> dict:
@@ -172,7 +179,29 @@ def main() -> None:
         type=Path,
         default=Path(__file__).resolve().parent,
     )
+    parser.add_argument(
+        "--quick-test",
+        action="store_true",
+        help="Generate a tiny deterministic market bundle for fast validation.",
+    )
     args = parser.parse_args()
+
+    quick_test = apply_quick_test(
+        args,
+        {
+            "traders": 5,
+            "duration_seconds": 5,
+            "tick_seconds": 1,
+            "tick_delay_ms": 0,
+            "seed": 42,
+        },
+    )
+    log_status(
+        "finance_market_observe",
+        "generating market observation bundle",
+        phase="generate",
+        details={"quick_test": quick_test, "traders": args.traders},
+    )
 
     if args.seed is None:
         args.seed = secrets.randbelow(1_000_000_000)
@@ -187,10 +216,16 @@ def main() -> None:
     beam_modules_src = root / "payloads" / "beam_modules"
     beam_modules_dest = payloads_dir / "beam_modules"
     if bundle_dir.resolve() != Path(__file__).resolve().parent:
-        shutil.copytree(beam_modules_src, beam_modules_dest)
+        shutil.copytree(beam_modules_src, beam_modules_dest, dirs_exist_ok=True)
 
     manifest = build_manifest(args)
-    (bundle_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    write_manifest(
+        bundle_dir / "manifest.json",
+        manifest,
+        blueprint_id="finance_market_observe",
+        quick_test=quick_test,
+    )
+    print(progress("bundle generated", 1, 1), file=sys.stderr)
     print(bundle_dir)
 
 

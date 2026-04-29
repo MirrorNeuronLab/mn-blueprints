@@ -4,7 +4,14 @@ import json
 import math
 import secrets
 import shutil
+import sys
 from pathlib import Path
+
+sys.path.insert(
+    0,
+    str(Path(__file__).resolve().parents[2] / "mn-skills" / "blueprint_support_skill" / "src"),
+)
+from mn_blueprint_support import apply_quick_test, log_status, progress, write_manifest
 
 
 def build_manifest(args: argparse.Namespace) -> dict:
@@ -169,7 +176,33 @@ def main() -> None:
         type=Path,
         default=Path(__file__).resolve().parent,
     )
+    parser.add_argument(
+        "--quick-test",
+        action="store_true",
+        help="Generate a tiny deterministic simulation bundle for fast validation.",
+    )
     args = parser.parse_args()
+
+    quick_test = apply_quick_test(
+        args,
+        {
+            "animals": 40,
+            "regions": 2,
+            "duration_seconds": 30,
+            "tick_seconds": 5,
+            "tick_delay_ms": 0,
+            "local_top_k": 5,
+            "max_attempts": 1,
+            "retry_backoff_ms": 0,
+            "seed": 42,
+        },
+    )
+    log_status(
+        "science_ecosystem_simulation",
+        "generating ecosystem simulation bundle",
+        phase="generate",
+        details={"quick_test": quick_test, "regions": args.regions, "animals": args.animals},
+    )
 
     args.animals = max(args.animals, 10)
     args.regions = max(args.regions, 2)
@@ -191,10 +224,16 @@ def main() -> None:
     beam_modules_src = root / "payloads" / "beam_modules"
     beam_modules_dest = payloads_dir / "beam_modules"
     if bundle_dir.resolve() != Path(__file__).resolve().parent:
-        shutil.copytree(beam_modules_src, beam_modules_dest)
+        shutil.copytree(beam_modules_src, beam_modules_dest, dirs_exist_ok=True)
 
     manifest = build_manifest(args)
-    (bundle_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    write_manifest(
+        bundle_dir / "manifest.json",
+        manifest,
+        blueprint_id="science_ecosystem_simulation",
+        quick_test=quick_test,
+    )
+    print(progress("bundle generated", 1, 1), file=sys.stderr)
     print(bundle_dir)
 
 

@@ -7,6 +7,10 @@ import context_pb2
 import context_pb2_grpc
 
 def call_llm(system_prompt, user_prompt, mock_response):
+    quick_mode = os.environ.get("MN_BLUEPRINT_QUICK_TEST", "").strip().lower() in {"1", "true", "yes", "on"}
+    if quick_mode:
+        print("STATUS: quick test mode enabled; using mock LLM response.", file=sys.stderr)
+        return json.dumps(mock_response)
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
         print("WARNING: OPENAI_API_KEY not set. Falling back to mock response.", file=sys.stderr)

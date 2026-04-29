@@ -2,7 +2,9 @@
   "manifest_version": "1.0",
   "graph_id": "general_test_message_flow_v1",
   "job_name": "test-message-flow",
-  "entrypoints": ["ingress"],
+  "entrypoints": [
+    "ingress"
+  ],
   "initial_inputs": {
     "ingress": [
       {
@@ -53,5 +55,23 @@
   ],
   "policies": {
     "recovery_mode": "local_restart"
+  },
+  "metadata": {
+    "blueprint_id": "general_test_message_flow",
+    "status_logging": {
+      "format": "jsonl",
+      "stream": "stderr",
+      "env": "MN_BLUEPRINT_LOG_LEVEL"
+    },
+    "quick_test": {
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1",
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs."
+    },
+    "output_contract": {
+      "stdout": "single JSON object, event envelope, or bundle path",
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr"
+    }
   }
 }

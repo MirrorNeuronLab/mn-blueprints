@@ -2,7 +2,14 @@
 import argparse
 import json
 import shutil
+import sys
 from pathlib import Path
+
+sys.path.insert(
+    0,
+    str(Path(__file__).resolve().parents[2] / "mn-skills" / "blueprint_support_skill" / "src"),
+)
+from mn_blueprint_support import apply_quick_test, log_status, progress, write_manifest
 
 
 def default_task() -> dict:
@@ -207,7 +214,22 @@ def main() -> None:
         default=Path(__file__).resolve().parent,
         help="Directory to write generated bundles into",
     )
+    parser.add_argument(
+        "--quick-test",
+        action="store_true",
+        help="Use local mock LLM responses and one attempt for cheap logic validation.",
+    )
     args = parser.parse_args()
+    quick_test = apply_quick_test(
+        args,
+        {"model": "mock/local-codegen", "max_attempts": 1, "retry_backoff_ms": 0},
+    )
+    log_status(
+        "general_openshell_llm_codegen",
+        "generating LLM codegen bundle",
+        phase="generate",
+        details={"quick_test": quick_test, "model": args.model},
+    )
 
     script_dir = Path(__file__).resolve().parent
     template_payloads = script_dir / "payloads"
@@ -225,8 +247,21 @@ def main() -> None:
         retry_backoff_ms=max(args.retry_backoff_ms, 0),
         task=default_task(),
     )
+    if quick_test:
+        for node in manifest["nodes"]:
+            config = node.get("config", {})
+            env = dict(config.get("environment") or {})
+            env["MN_BLUEPRINT_QUICK_TEST"] = "1"
+            env["LLM_MOCK_MODE"] = "1"
+            config["environment"] = env
 
-    (bundle_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    write_manifest(
+        bundle_dir / "manifest.json",
+        manifest,
+        blueprint_id="general_openshell_llm_codegen",
+        quick_test=quick_test,
+    )
+    print(progress("bundle generated", 1, 1), file=sys.stderr)
     print(bundle_dir)
 
 

@@ -2,10 +2,17 @@
 import argparse
 import json
 import shutil
+import sys
 from pathlib import Path
 
 
 from typing import Optional
+
+sys.path.insert(
+    0,
+    str(Path(__file__).resolve().parents[2] / "mn-skills" / "blueprint_support_skill" / "src"),
+)
+from mn_blueprint_support import apply_quick_test, log_status, progress, write_manifest
 
 
 def build_chunks(
@@ -220,7 +227,31 @@ def main() -> None:
         default=Path(__file__).resolve().parent,
         help="Directory to write generated bundles into",
     )
+    parser.add_argument(
+        "--quick-test",
+        action="store_true",
+        help="Generate a tiny deterministic bundle for cheap logic validation.",
+    )
     args = parser.parse_args()
+
+    quick_test = apply_quick_test(
+        args,
+        {
+            "workers": 3,
+            "start": 101,
+            "end": 149,
+            "chunk_size": 17,
+            "wave_size": 3,
+            "wave_delay_ms": 0,
+            "max_attempts": 1,
+        },
+    )
+    log_status(
+        "general_prime_sweep_scale",
+        "generating prime sweep bundle",
+        phase="generate",
+        details={"quick_test": quick_test, "workers": args.workers},
+    )
 
     if args.end is not None and args.end < args.start:
         raise SystemExit("--end must be greater than or equal to --start")
@@ -258,8 +289,14 @@ def main() -> None:
         max(args.max_attempts, 1),
         max(args.retry_backoff_ms, 0),
     )
-    (bundle_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    write_manifest(
+        bundle_dir / "manifest.json",
+        manifest,
+        blueprint_id="general_prime_sweep_scale",
+        quick_test=quick_test,
+    )
 
+    print(progress("bundle generated", 1, 1), file=sys.stderr)
     print(bundle_dir)
 
 

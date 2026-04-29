@@ -28,6 +28,30 @@ def extract_payload(message: dict) -> dict:
 
 def call_llm(system_instruction: str, prompt: str, schema: dict) -> dict:
     model = os.environ.get("LLM_MODEL", "gemini/gemini-2.5-flash")
+    if os.environ.get("LLM_MOCK_MODE", "").strip().lower() in {"1", "true", "yes", "on"}:
+        if "code" in schema["properties"]:
+            return {
+                "file_name": "inventory_report.py",
+                "summary": "Mock quick-test implementation.",
+                "changes": ["Generated deterministic local code without calling an LLM."],
+                "code": (
+                    "import json\n\n"
+                    "def build_report(records, low_stock_threshold=5):\n"
+                    "    total_quantity=sum(item['quantity'] for item in records)\n"
+                    "    total_value=round(sum(item['quantity']*item['price'] for item in records),2)\n"
+                    "    cats={}\n"
+                    "    for item in records: cats[item['category']]=cats.get(item['category'],0)+item['quantity']\n"
+                    "    return {'total_quantity': total_quantity, 'total_value': total_value, "
+                    "'category_totals': [{'category': k, 'quantity': cats[k]} for k in sorted(cats)], "
+                    "'low_stock_skus': sorted(item['sku'] for item in records if item['quantity'] <= low_stock_threshold)}\n"
+                ),
+            }
+        return {
+            "summary": "Mock quick-test review passed.",
+            "strengths": ["Deterministic local response."],
+            "improvement_suggestions": [],
+            "risk_flags": [],
+        }
     
     # We append the schema instruction to the system prompt to guide models
     system_prompt_with_schema = (

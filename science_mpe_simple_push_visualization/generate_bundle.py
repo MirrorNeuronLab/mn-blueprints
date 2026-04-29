@@ -2,7 +2,14 @@
 import argparse
 import json
 import shutil
+import sys
 from pathlib import Path
+
+sys.path.insert(
+    0,
+    str(Path(__file__).resolve().parents[2] / "mn-skills" / "blueprint_support_skill" / "src"),
+)
+from mn_blueprint_support import apply_quick_test, log_status, progress, write_manifest
 
 
 def build_manifest(args: argparse.Namespace) -> dict:
@@ -141,7 +148,30 @@ def main() -> None:
         type=Path,
         default=Path(__file__).resolve().parent,
     )
+    parser.add_argument(
+        "--quick-test",
+        action="store_true",
+        help="Generate a tiny deterministic MPE visualization bundle.",
+    )
     args = parser.parse_args()
+
+    quick_test = apply_quick_test(
+        args,
+        {
+            "good_agents": 2,
+            "adversaries": 2,
+            "obstacles": 1,
+            "max_cycles": 5,
+            "seed": 42,
+            "policy_mode": "random",
+        },
+    )
+    log_status(
+        "science_mpe_simple_push_visualization",
+        "generating MPE visualization bundle",
+        phase="generate",
+        details={"quick_test": quick_test, "cycles": args.max_cycles},
+    )
 
     args.good_agents = max(args.good_agents, 1)
     args.adversaries = max(args.adversaries, 1)
@@ -159,7 +189,13 @@ def main() -> None:
         shutil.copytree(root / "payloads", payloads_dir, dirs_exist_ok=True)
 
     manifest = build_manifest(args)
-    (bundle_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    write_manifest(
+        bundle_dir / "manifest.json",
+        manifest,
+        blueprint_id="science_mpe_simple_push_visualization",
+        quick_test=quick_test,
+    )
+    print(progress("bundle generated", 1, 1), file=sys.stderr)
     print(bundle_dir)
 
 

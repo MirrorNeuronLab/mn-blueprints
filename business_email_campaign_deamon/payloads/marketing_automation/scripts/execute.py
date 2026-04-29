@@ -49,6 +49,14 @@ def log_email_sent_event(runtime_job_id: str | None, to_email: str, subject: str
     )
 
 
+def is_last_campaign_step(campaign_type: str | None) -> bool:
+    return campaign_type in {
+        "parent_expansion",
+        "teacher_expansion",
+        "creator_expansion",
+    }
+
+
 def main(email_sender=None, slack_sender=None) -> None:
     plan = load_input_plan()
     if "customer" not in plan and isinstance(plan.get("original_plan"), dict):
@@ -69,6 +77,7 @@ def main(email_sender=None, slack_sender=None) -> None:
     )
     actual_recipient = test_recipient or customer["email"]
     quick_testing = quick_testing_enabled(delivery_settings)
+    fast_test_sequence = bool(test_recipient)
     send_email = email_sender or (dry_run_email if quick_testing else post_email)
     send_slack = slack_sender or post_slack_message
     reply_context = dict(plan.get("reply_context") or {})
@@ -221,7 +230,14 @@ def main(email_sender=None, slack_sender=None) -> None:
                                 },
                             }
                         ]
-                        if os.environ.get("SYNAPTIC_EMIT_CYCLE_TRIGGER", "true").lower() != "false"
+                        if (
+                            os.environ.get("SYNAPTIC_EMIT_CYCLE_TRIGGER", "true").lower() != "false"
+                            and not (
+                                fast_test_sequence
+                                and delivery["status"] == "sent"
+                                and is_last_campaign_step(plan.get("campaign_type"))
+                            )
+                        )
                         else []
                     )
                 ],

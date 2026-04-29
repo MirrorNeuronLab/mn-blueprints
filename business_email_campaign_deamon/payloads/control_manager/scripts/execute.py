@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -65,23 +66,29 @@ def minimum_gap_minutes(rules: dict) -> int:
         return 5
 
 
+def test_recipient_mode() -> bool:
+    return bool(os.environ.get("SYNAPTIC_TEST_EMAIL_TO", "").strip())
+
+
 def main() -> None:
     plan = load_input_plan()
     customer = plan["customer"]
     runtime_job_id = plan.get("runtime_job_id")
     rules = read_email_rules()
     minimum_gap = minimum_gap_minutes(rules)
+    is_test_mode = test_recipient_mode()
     now = datetime.now(timezone.utc).replace(microsecond=0)
 
     existing_draft = plan.get("existing_draft") or pending_ready_draft(customer["customer_id"])
     if existing_draft is not None:
         scheduled_send_at = parse_time(existing_draft["scheduled_send_at"]) or now
-        decision = "send_now" if scheduled_send_at <= now else "wait"
+        decision = "send_now" if is_test_mode or scheduled_send_at <= now else "wait"
         plan["saved_draft"] = existing_draft
         plan["control_decision"] = {
             "decision": decision,
             "scheduled_send_at": existing_draft["scheduled_send_at"],
             "rule_name": "minimum_minutes_between_emails",
+            "test_recipient_mode": is_test_mode,
         }
         log_agent(
             runtime_job_id,
@@ -119,7 +126,7 @@ def main() -> None:
             "Repaired low-quality email before saving draft.",
             details={"quality_score": review["score"], "issues": review["issues"]},
         )
-    if plan.get("campaign_type") == "reply_followup":
+    if is_test_mode or plan.get("campaign_type") == "reply_followup":
         earliest_send_at = now
     else:
         last_sent_at = parse_time(latest_sent["sent_at"]) if latest_sent else None
@@ -146,6 +153,7 @@ def main() -> None:
         "rule_name": "minimum_minutes_between_emails",
         "quality_score": review["score"],
         "quality_issues": review["issues"],
+        "test_recipient_mode": is_test_mode,
     }
     plan["prepared_at"] = utc_now()
     log_agent(

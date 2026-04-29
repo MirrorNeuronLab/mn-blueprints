@@ -143,7 +143,8 @@
       "config": {
         "module": "Synaptic.MonitorScheduler",
         "module_source": "monitor_scheduler/beam_modules/monitor_scheduler.ex",
-        "interval_ms": 300000
+        "interval_ms": 0,
+        "fast_test_mode": true
       }
     },
     {

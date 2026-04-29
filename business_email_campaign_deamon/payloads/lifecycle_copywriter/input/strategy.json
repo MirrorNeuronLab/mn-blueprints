@@ -4,29 +4,73 @@
     "category": "Emotional Learning Content platform",
     "core_claim": "Emotional learning stories co-created by teachers, parents, and creators.",
     "strategic_frame": "Emotional OS for children, powered by stories.",
-    "not_this": ["bookstore", "generic newsletter", "feature-first AI writing tool"],
+    "not_this": [
+      "bookstore",
+      "generic newsletter",
+      "feature-first AI writing tool"
+    ],
     "write_like": "Professional, emotionally intelligent, specific, and outcome-oriented. Lead with the human moment before the product."
   },
   "email_rules": {
     "minimum_minutes_between_emails": 1
   },
   "delivery": {
-    "test_recipient": "homerquan@gmail.com",
-    "mode": "dry_run",
-    "quick_testing": true
+    "test_recipient": "",
+    "mode": "agentmail",
+    "quick_testing": false
   },
   "funnel_strategy": {
     "duration_days": 30,
-    "parallel_funnels": ["teachers", "parents", "creators_educators"],
-    "phase_order": ["awareness", "education", "activation", "social_proof", "use_case", "reminder", "expansion"],
+    "parallel_funnels": [
+      "teachers",
+      "parents",
+      "creators_educators"
+    ],
+    "phase_order": [
+      "awareness",
+      "education",
+      "activation",
+      "social_proof",
+      "use_case",
+      "reminder",
+      "expansion"
+    ],
     "cadence": [
-      {"day": 1, "phase": "awareness", "goal": "Hook the problem"},
-      {"day": 3, "phase": "education", "goal": "Reframe the category"},
-      {"day": 5, "phase": "activation", "goal": "Drive first action"},
-      {"day": 8, "phase": "social_proof", "goal": "Build trust"},
-      {"day": 12, "phase": "use_case", "goal": "Show practical value"},
-      {"day": 18, "phase": "reminder", "goal": "Convert without pressure"},
-      {"day": 25, "phase": "expansion", "goal": "Invite others into the loop"}
+      {
+        "day": 1,
+        "phase": "awareness",
+        "goal": "Hook the problem"
+      },
+      {
+        "day": 3,
+        "phase": "education",
+        "goal": "Reframe the category"
+      },
+      {
+        "day": 5,
+        "phase": "activation",
+        "goal": "Drive first action"
+      },
+      {
+        "day": 8,
+        "phase": "social_proof",
+        "goal": "Build trust"
+      },
+      {
+        "day": 12,
+        "phase": "use_case",
+        "goal": "Show practical value"
+      },
+      {
+        "day": 18,
+        "phase": "reminder",
+        "goal": "Convert without pressure"
+      },
+      {
+        "day": 25,
+        "phase": "expansion",
+        "goal": "Invite others into the loop"
+      }
     ]
   },
   "messaging_dna": {
@@ -77,11 +121,11 @@
       "audience": "parents",
       "goal": "Get a parent to turn a real child situation into a story tonight.",
       "success_metric": "First story draft started",
-      "subject_angle": "Turn your child’s real situation into a story tonight",
+      "subject_angle": "Turn your child\u2019s real situation into a story tonight",
       "why_now": "The most useful story is often tied to a moment that is already happening this week.",
       "offer_reason": "Reduce friction with one concrete emotional scenario and a five-minute first step.",
       "recommended_template": "moment_to_story",
-      "primary_cta_label": "Create your child’s story",
+      "primary_cta_label": "Create your child\u2019s story",
       "secondary_cta_label": "Use a starter prompt",
       "secondary_url_slug": "create"
     },
@@ -129,7 +173,7 @@
       "audience": "parents",
       "goal": "Encourage parents to share or co-create a story privately or publicly.",
       "success_metric": "Share or invite click",
-      "subject_angle": "Share your child’s story, privately or with someone who cares",
+      "subject_angle": "Share your child\u2019s story, privately or with someone who cares",
       "why_now": "A meaningful story can become a bridge between parent, child, teacher, and extended family.",
       "offer_reason": "Position sharing as care and collaboration, not promotion.",
       "recommended_template": "share_the_magic",
@@ -194,7 +238,7 @@
       "audience": "teachers",
       "goal": "Make Bibblio sticky with weekly story packs and classroom usage ideas.",
       "success_metric": "Story pack click",
-      "subject_angle": "This week’s story pack: friendship, anxiety, and courage",
+      "subject_angle": "This week\u2019s story pack: friendship, anxiety, and courage",
       "why_now": "A weekly pack makes SEL practice easier to repeat.",
       "offer_reason": "Give concrete five-minute emotional check-ins using stories.",
       "recommended_template": "product_spotlight",
@@ -248,7 +292,7 @@
       "success_metric": "Education click",
       "subject_angle": "The new category: Emotional Learning Content",
       "why_now": "Creators need a clear category frame before they invest effort.",
-      "offer_reason": "Explain why emotional learning stories are distinct from ordinary children’s content.",
+      "offer_reason": "Explain why emotional learning stories are distinct from ordinary children\u2019s content.",
       "recommended_template": "product_spotlight",
       "primary_cta_label": "Learn the category",
       "secondary_cta_label": "See examples",

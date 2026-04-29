@@ -127,9 +127,21 @@ defmodule Synaptic.MonitorScheduler do
   end
 
   defp interval_ms(config) do
+    if fast_test_mode?(config) do
+      0
+    else
+      configured_interval_ms(config)
+    end
+  end
+
+  defp configured_interval_ms(config) do
     case Map.get(config, "interval_ms", 60_000) do
       value when is_integer(value) and value >= 0 -> value
       _ -> 60_000
     end
+  end
+
+  defp fast_test_mode?(config) do
+    Map.get(config, "fast_test_mode", false) == true
   end
 end

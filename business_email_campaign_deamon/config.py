@@ -61,7 +61,7 @@ def main():
     resend_key = input("Resend API Key (optional, used by email_send_resend_skill) [from .env]: ").strip() or resend_env.get("RESEND_API_KEY", "")
     resend_from = input(f"Resend From Email (optional) [{default_resend_from}]: ").strip() or default_resend_from
 
-    test_mode = input("Enable Quick Test Mode? (Dry-runs email delivery every 1 minute) [Y/n]: ").strip().lower()
+    test_mode = input("Enable Test Mode? (Send real emails to the test address as fast as each draft is ready) [Y/n]: ").strip().lower()
     is_test_mode = test_mode in ["", "y", "yes", "true"]
     
     test_email = ""
@@ -106,14 +106,15 @@ def main():
             # Update Test Mode
             if is_test_mode:
                 env["SYNAPTIC_TEST_EMAIL_TO"] = test_email
-                env["SYNAPTIC_EMAIL_DELIVERY_MODE"] = "dry_run"
+                env["SYNAPTIC_EMAIL_DELIVERY_MODE"] = "agentmail"
             else:
                 env["SYNAPTIC_TEST_EMAIL_TO"] = ""
                 env["SYNAPTIC_EMAIL_DELIVERY_MODE"] = "agentmail"
 
     for node in manifest.get("nodes", []):
         if node.get("node_id") == "monitor_scheduler_agent":
-            node.setdefault("config", {})["interval_ms"] = 60000 if is_test_mode else 300000
+            node.setdefault("config", {})["fast_test_mode"] = is_test_mode
+            node.setdefault("config", {})["interval_ms"] = 0 if is_test_mode else 300000
 
     # Mark as configured
     if "require_config" in manifest:

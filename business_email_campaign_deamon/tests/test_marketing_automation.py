@@ -103,6 +103,7 @@ class MarketingAutomationTests(unittest.TestCase):
 
     def test_injected_email_sender_logs_sent_event(self):
         self.write_plan()
+        os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
         module = load_execute_module()
         sent_requests = []
 
@@ -118,13 +119,13 @@ class MarketingAutomationTests(unittest.TestCase):
             module.main(email_sender=fake_email_sender, slack_sender=fake_slack_sender)
 
         payload = json.loads(output.getvalue())
-        self.assertEqual(sent_requests[0]["to"], ["homerquan@gmail.com"])
+        self.assertEqual(sent_requests[0]["to"], ["test@example.com"])
         self.assertEqual(payload["events"][0]["payload"]["status"], "sent")
         self.assertEqual(payload["events"][0]["payload"]["subject"], "A small story idea")
         self.assertIn(
             {
                 "type": "email_sent",
-                "payload": {"to": "homerquan@gmail.com", "subject": "A small story idea"},
+                "payload": {"to": "test@example.com", "subject": "A small story idea"},
             },
             payload["events"],
         )
@@ -136,12 +137,13 @@ class MarketingAutomationTests(unittest.TestCase):
         self.assertIsNotNone(log)
         self.assertEqual(
             json.loads(log[0]),
-            {"to": "homerquan@gmail.com", "subject": "A small story idea"},
+            {"to": "test@example.com", "subject": "A small story idea"},
         )
 
     def test_quick_testing_mode_dry_runs_without_email_sender(self):
         self.write_plan()
         os.environ["SYNAPTIC_EMAIL_DELIVERY_MODE"] = "dry_run"
+        os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
         module = load_execute_module()
 
         output = io.StringIO()
@@ -157,7 +159,7 @@ class MarketingAutomationTests(unittest.TestCase):
         self.assertIn(
             {
                 "type": "email_sent",
-                "payload": {"to": "homerquan@gmail.com", "subject": "A small story idea"},
+                "payload": {"to": "test@example.com", "subject": "A small story idea"},
             },
             payload["events"],
         )

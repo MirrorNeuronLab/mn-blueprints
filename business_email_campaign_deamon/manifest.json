@@ -201,7 +201,21 @@
         "output_message_type": "customer_research_result",
         "no_keep": true,
         "no_auto_providers": true,
-        "tty": false
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "customer_research",
+            "target": "customer_research"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          }
+        ]
       }
     },
     {
@@ -258,7 +272,21 @@
         "output_message_type": "lifecycle_copywriter_result",
         "no_keep": true,
         "no_auto_providers": true,
-        "tty": false
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "lifecycle_copywriter",
+            "target": "lifecycle_copywriter"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          }
+        ]
       }
     },
     {
@@ -315,7 +343,21 @@
         "output_message_type": "email_designer_result",
         "no_keep": true,
         "no_auto_providers": true,
-        "tty": false
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "email_designer",
+            "target": "email_designer"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          }
+        ]
       }
     },
     {
@@ -372,7 +414,21 @@
         "output_message_type": "deliverability_ops_result",
         "no_keep": true,
         "no_auto_providers": true,
-        "tty": false
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "deliverability_ops",
+            "target": "deliverability_ops"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          }
+        ]
       }
     },
     {
@@ -429,7 +485,21 @@
         "output_message_type": "control_manager_result",
         "no_keep": true,
         "no_auto_providers": true,
-        "tty": false
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "control_manager",
+            "target": "control_manager"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          }
+        ]
       }
     },
     {
@@ -486,7 +556,21 @@
         "output_message_type": null,
         "no_keep": true,
         "no_auto_providers": true,
-        "tty": false
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "marketing_automation",
+            "target": "marketing_automation"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          }
+        ]
       }
     },
     {
@@ -542,7 +626,21 @@
         "pool_slots": 1,
         "no_keep": true,
         "no_auto_providers": true,
-        "tty": false
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "inbox_reply",
+            "target": "inbox_reply"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          }
+        ]
       }
     },
     {

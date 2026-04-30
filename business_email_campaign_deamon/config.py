@@ -109,6 +109,15 @@ def main():
             env["AGENTMAIL_INBOX"] = agentmail_inbox
             env["RESEND_API_KEY"] = resend_key
             env["RESEND_FROM_EMAIL"] = resend_from
+            env["SLACK_DEFAULT_CHANNEL"] = "#claw"
+            for key in (
+                "SLACK_BOT_TOKEN",
+                "SLACK_API_BASE_URL",
+                "MIRROR_NEURON_SLACK_BOT_TOKEN",
+                "MIRROR_NEURON_SLACK_DEFAULT_CHANNEL",
+                "MIRROR_NEURON_SLACK_API_BASE_URL",
+            ):
+                env.pop(key, None)
             
             if "GMAIL_ADDRESS" in env:
                 del env["GMAIL_ADDRESS"]

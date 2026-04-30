@@ -1,4 +1,5 @@
 import os
+import importlib.util
 import json
 import subprocess
 import sys
@@ -7,6 +8,15 @@ from pathlib import Path
 
 BLUEPRINT_DIR = Path(__file__).resolve().parents[1]
 PAYLOADS_DIR = BLUEPRINT_DIR / "payloads"
+
+
+def load_customer_research_execute_module():
+    execute_path = PAYLOADS_DIR / "customer_research" / "scripts" / "execute.py"
+    spec = importlib.util.spec_from_file_location("customer_research_execute", execute_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
 
 
 def test_payload_sitecustomize_exposes_shared_marketing_skill():
@@ -118,6 +128,116 @@ def test_host_local_uploads_shared_skills_with_each_executor():
         assert "_shared_skills/business_email_campaign_skill" in sources
         assert "_shared_skills/mn_email_delivery_skill" in sources
         assert "_shared_skills/mn_litellm_communicate_skill" in sources
+
+
+def test_manifest_sets_slack_channel_but_not_credentials():
+    manifest = json.loads((BLUEPRINT_DIR / "manifest.json").read_text())
+    secret_slack_keys = {
+        "SLACK_BOT_TOKEN",
+        "SLACK_API_BASE_URL",
+        "MIRROR_NEURON_SLACK_BOT_TOKEN",
+        "MIRROR_NEURON_SLACK_DEFAULT_CHANNEL",
+        "MIRROR_NEURON_SLACK_API_BASE_URL",
+    }
+
+    for node in manifest["nodes"]:
+        env = node.get("config", {}).get("environment", {})
+        if env:
+            assert not secret_slack_keys & set(env)
+            assert env.get("SLACK_DEFAULT_CHANNEL") == "#claw"
+
+
+def test_campaign_template_selection_keeps_newsletters_on_card_design():
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(PAYLOADS_DIR / "email_designer")
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            """
+from _synaptic_runtime.core import load_template_library
+from _synaptic_skills.marketing_email import select_template_name
+
+lib = load_template_library()
+for campaign in ["program_reminder", "interest_followup", "product_spotlight", "newsletter"]:
+    name = select_template_name(plan={"campaign_type": campaign}, template_library=lib)
+    assert lib[name]["design_template"] == "card_email.html", (campaign, name)
+reply = select_template_name(plan={"campaign_type": "reply_followup"}, template_library=lib)
+assert lib[reply]["design_template"] == "personal_reply.html"
+print("ok")
+""",
+        ],
+        cwd=BLUEPRINT_DIR,
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == "ok"
+
+
+def test_customer_reply_activity_alone_does_not_select_reply_followup():
+    module = load_customer_research_execute_module()
+    activities = [{"summary": "Customer replied: This sounds interesting."}]
+
+    assert (
+        module.should_select_reply_followup(
+            plan={"reply_context": {"subject": "Re: Bibblio", "text_body": "Interested"}},
+            activities=activities,
+            past_campaigns=[],
+        )
+        is False
+    )
+
+    assert (
+        module.should_select_reply_followup(
+            plan={
+                "reply_context": {
+                    "subject": "Re: Bibblio",
+                    "text_body": "Interested",
+                    "in_reply_to_message_id": "msg_123",
+                }
+            },
+            activities=activities,
+            past_campaigns=[],
+        )
+        is True
+    )
+
+
+def test_slack_defaults_to_claw_channel_without_channel_env():
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(PAYLOADS_DIR / "_shared_skills")
+    env["SLACK_BOT_TOKEN"] = "test-token"
+    env.pop("SLACK_DEFAULT_CHANNEL", None)
+    env.pop("MIRROR_NEURON_SLACK_DEFAULT_CHANNEL", None)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            """
+import urllib.error
+import mn_email_delivery_skill.email_delivery as email_delivery
+
+def fake_urlopen(request, timeout):
+    raise urllib.error.URLError("stop")
+
+email_delivery.urllib.request.urlopen = fake_urlopen
+result = email_delivery.post_slack_message("hello", channel=None)
+print(result["channel"])
+""",
+        ],
+        cwd=BLUEPRINT_DIR,
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == "#claw"
 
 
 def test_customer_research_runs_with_blueprint_local_campaign_skill(tmp_path):

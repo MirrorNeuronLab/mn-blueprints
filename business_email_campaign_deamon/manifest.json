@@ -165,9 +165,6 @@
           "scripts/execute.py"
         ],
         "environment": {
-          "SLACK_BOT_TOKEN": "",
-          "SLACK_DEFAULT_CHANNEL": "#claw",
-          "SLACK_API_BASE_URL": "https://slack.com/api/chat.postMessage",
           "LITELLM_API_KEY": "",
           "LITELLM_API_BASE": "http://192.168.4.173:11434",
           "LITELLM_MODEL": "ollama/gemma4:latest",
@@ -179,7 +176,8 @@
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
-          "RESEND_FROM_EMAIL": "homer@bibblio.app"
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw"
         },
         "pool": "default",
         "pool_slots": 1,
@@ -224,9 +222,6 @@
           "scripts/execute.py"
         ],
         "environment": {
-          "SLACK_BOT_TOKEN": "",
-          "SLACK_DEFAULT_CHANNEL": "#claw",
-          "SLACK_API_BASE_URL": "https://slack.com/api/chat.postMessage",
           "LITELLM_API_KEY": "",
           "LITELLM_API_BASE": "http://192.168.4.173:11434",
           "LITELLM_MODEL": "ollama/gemma4:latest",
@@ -238,7 +233,8 @@
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
-          "RESEND_FROM_EMAIL": "homer@bibblio.app"
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw"
         },
         "pool": "default",
         "pool_slots": 1,
@@ -283,9 +279,6 @@
           "scripts/execute.py"
         ],
         "environment": {
-          "SLACK_BOT_TOKEN": "",
-          "SLACK_DEFAULT_CHANNEL": "#claw",
-          "SLACK_API_BASE_URL": "https://slack.com/api/chat.postMessage",
           "LITELLM_API_KEY": "",
           "LITELLM_API_BASE": "http://192.168.4.173:11434",
           "LITELLM_MODEL": "ollama/gemma4:latest",
@@ -297,7 +290,8 @@
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
-          "RESEND_FROM_EMAIL": "homer@bibblio.app"
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw"
         },
         "pool": "default",
         "pool_slots": 1,
@@ -342,9 +336,6 @@
           "scripts/execute.py"
         ],
         "environment": {
-          "SLACK_BOT_TOKEN": "",
-          "SLACK_DEFAULT_CHANNEL": "#claw",
-          "SLACK_API_BASE_URL": "https://slack.com/api/chat.postMessage",
           "LITELLM_API_KEY": "",
           "LITELLM_API_BASE": "http://192.168.4.173:11434",
           "LITELLM_MODEL": "ollama/gemma4:latest",
@@ -356,7 +347,8 @@
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
-          "RESEND_FROM_EMAIL": "homer@bibblio.app"
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw"
         },
         "pool": "default",
         "pool_slots": 1,
@@ -401,9 +393,6 @@
           "scripts/execute.py"
         ],
         "environment": {
-          "SLACK_BOT_TOKEN": "",
-          "SLACK_DEFAULT_CHANNEL": "#claw",
-          "SLACK_API_BASE_URL": "https://slack.com/api/chat.postMessage",
           "LITELLM_API_KEY": "",
           "LITELLM_API_BASE": "http://192.168.4.173:11434",
           "LITELLM_MODEL": "ollama/gemma4:latest",
@@ -415,7 +404,8 @@
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
-          "RESEND_FROM_EMAIL": "homer@bibblio.app"
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw"
         },
         "pool": "default",
         "pool_slots": 1,
@@ -460,9 +450,6 @@
           "scripts/execute.py"
         ],
         "environment": {
-          "SLACK_BOT_TOKEN": "",
-          "SLACK_DEFAULT_CHANNEL": "#claw",
-          "SLACK_API_BASE_URL": "https://slack.com/api/chat.postMessage",
           "LITELLM_API_KEY": "",
           "LITELLM_API_BASE": "http://192.168.4.173:11434",
           "LITELLM_MODEL": "ollama/gemma4:latest",
@@ -474,7 +461,8 @@
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
-          "RESEND_FROM_EMAIL": "homer@bibblio.app"
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw"
         },
         "pool": "default",
         "pool_slots": 1,
@@ -519,9 +507,6 @@
           "scripts/execute.py"
         ],
         "environment": {
-          "SLACK_BOT_TOKEN": "",
-          "SLACK_DEFAULT_CHANNEL": "#claw",
-          "SLACK_API_BASE_URL": "https://slack.com/api/chat.postMessage",
           "LITELLM_API_KEY": "",
           "LITELLM_API_BASE": "http://192.168.4.173:11434",
           "LITELLM_MODEL": "ollama/gemma4:latest",
@@ -533,7 +518,8 @@
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
-          "RESEND_FROM_EMAIL": "homer@bibblio.app"
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw"
         },
         "pool": "default",
         "pool_slots": 1,

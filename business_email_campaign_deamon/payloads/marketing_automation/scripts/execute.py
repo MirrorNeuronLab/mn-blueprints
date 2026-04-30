@@ -20,6 +20,11 @@ from _synaptic_runtime.core import (
     utc_now,
 )
 from _synaptic_skills.email_delivery import dry_run_email, post_email, post_slack_message
+from _synaptic_skills.marketing_email import (
+    build_design_slots,
+    render_email_html,
+    select_template_name,
+)
 
 
 AGENT_ID = "marketing_automation_agent"
@@ -245,13 +250,112 @@ def safe_send_slack_round_report(send_slack, message: str) -> dict:
         }
 
 
+def parse_json_object(raw) -> dict:
+    if isinstance(raw, dict):
+        return dict(raw)
+    if isinstance(raw, str) and raw.strip():
+        try:
+            decoded = json.loads(raw)
+        except json.JSONDecodeError:
+            return {}
+        return decoded if isinstance(decoded, dict) else {}
+    return {}
+
+
+def html_matches_design_template(html_body: str, design_template: str) -> bool:
+    if not html_body:
+        return False
+    if design_template == "card_email.html":
+        return (
+            "Story moments to explore" in html_body
+            and "background-image:linear-gradient(135deg,#dff5fb" in html_body
+        )
+    if design_template == "personal_reply.html":
+        return (
+            "data-slot=\"body_section\"" in html_body
+            and "Story moments to explore" not in html_body
+            and "Manage preferences" not in html_body
+            and "Unsubscribe" not in html_body
+        )
+    return "data-slot=" in html_body or "data-slot='" in html_body
+
+
+def plan_with_source_payload(plan: dict, saved_draft: dict) -> dict:
+    source_payload = parse_json_object(saved_draft.get("source_payload_json"))
+    if not source_payload:
+        return plan
+    merged = dict(source_payload)
+    merged.update({key: value for key, value in plan.items() if value not in (None, "", {})})
+    return merged
+
+
+def render_delivery_html(plan: dict, saved_draft: dict, brand: dict) -> str:
+    """Return template-rendered HTML for delivery when enough draft context exists."""
+
+    saved_html = str(saved_draft.get("html_body") or "")
+    initial_design = plan.get("design") if isinstance(plan.get("design"), dict) else {}
+    design_html = str(initial_design.get("html_body") or "")
+    render_plan = plan_with_source_payload(plan, saved_draft)
+    design = render_plan.get("design") if isinstance(render_plan.get("design"), dict) else {}
+    design_html = str(design.get("html_body") or design_html)
+
+    draft = render_plan.get("draft") if isinstance(render_plan.get("draft"), dict) else {}
+    draft = {
+        "subject": saved_draft.get("subject", ""),
+        "preview_text": saved_draft.get("preview_text", ""),
+        "eyebrow": render_plan.get("campaign_type", "A useful next step"),
+        "headline": saved_draft.get("subject", ""),
+        "body_sections": [saved_draft.get("body_text", "")],
+        "cta_label": "Open Bibblio",
+        "cta_url_slug": "discover",
+        "secondary_text": "",
+        "footer_variant": "default",
+        "signoff": brand.get("signoff_name", "The Team"),
+        **draft,
+    }
+    render_plan["draft"] = draft
+
+    try:
+        from _synaptic_runtime.core import load_template_library
+
+        template_library = load_template_library()
+        template_name = str(design.get("template") or "")
+        if template_name not in template_library:
+            template_name = select_template_name(
+                plan=render_plan,
+                template_library=template_library,
+            )
+        if template_name not in template_library:
+            return design_html or saved_html
+        design_template = str(
+            template_library[template_name].get("design_template") or "card_email.html"
+        )
+        if html_matches_design_template(design_html, design_template):
+            return design_html
+        if html_matches_design_template(saved_html, design_template):
+            return saved_html
+        slots = build_design_slots(plan=render_plan, brand=brand)
+        return render_email_html(template_library[template_name], slots)
+    except Exception:
+        return design_html or saved_html
+
+
+def delivery_draft(plan: dict, saved_draft: dict, brand: dict) -> dict:
+    hydrated = dict(saved_draft)
+    hydrated["html_body"] = render_delivery_html(plan, saved_draft, brand)
+    return hydrated
+
+
 def test_action_key(plan: dict) -> str:
+    runtime_job_id = str(plan.get("runtime_job_id") or "local").strip() or "local"
+    customer = plan.get("customer") if isinstance(plan.get("customer"), dict) else {}
+    customer_id = str(customer.get("customer_id") or "unknown").strip() or "unknown"
+    cycle = cycle_number(plan)
     for key in ("campaign_type", "action_type", "plan_id"):
         value = str(plan.get(key) or "").strip()
         if value:
-            return value
-    customer = plan.get("customer") if isinstance(plan.get("customer"), dict) else {}
-    return f"customer:{customer.get('customer_id', 'unknown')}:cycle:{plan.get('cycle', 1)}"
+            return f"{runtime_job_id}:cycle:{cycle}:customer:{customer_id}:action:{value}"
+    return f"{runtime_job_id}:cycle:{cycle}:customer:{customer_id}"
 
 
 def reserve_test_delivery_action(
@@ -389,6 +493,7 @@ def main(email_sender=None, slack_sender=None) -> None:
     policy_decision = plan.get("policy_decision", {})
     delivery_settings = read_delivery_settings()
     brand = load_knowledge_section("brand")
+    saved_draft = delivery_draft(plan, saved_draft, brand)
     test_recipient = (
         os.environ.get("SYNAPTIC_TEST_EMAIL_TO", "").strip()
         or str(delivery_settings.get("test_recipient", "")).strip()
@@ -516,18 +621,15 @@ def main(email_sender=None, slack_sender=None) -> None:
         draft_id=str(saved_draft["draft_id"]),
         status=str(delivery.get("status") or "unknown"),
     )
-    if quick_testing:
-        slack_delivery = {"status": "skipped", "reason": "quick_test_mode"}
-    else:
-        slack_delivery = safe_send_slack_round_report(
-            send_slack,
-            format_round_slack_report(
-                round_stats=round_stats,
-                customer=customer,
-                actual_recipient=actual_recipient,
-                status=str(delivery.get("status") or "unknown"),
-            )
+    slack_delivery = safe_send_slack_round_report(
+        send_slack,
+        format_round_slack_report(
+            round_stats=round_stats,
+            customer=customer,
+            actual_recipient=actual_recipient,
+            status=str(delivery.get("status") or "unknown"),
         )
+    )
     log_agent(
         runtime_job_id,
         AGENT_ID,

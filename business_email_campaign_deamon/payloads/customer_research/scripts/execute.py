@@ -29,6 +29,31 @@ AGENT_ID = "customer_research_agent"
 logger = logging.getLogger("mn.blueprint.business_email.customer_research")
 
 
+def has_thread_reply_context(plan: dict) -> bool:
+    reply_context = plan.get("reply_context") or {}
+    if not isinstance(reply_context, dict):
+        return False
+    for key in ("thread_message_id", "in_reply_to_message_id", "message_id"):
+        if str(reply_context.get(key) or "").strip():
+            return True
+    references = reply_context.get("references_message_ids")
+    return isinstance(references, list) and any(str(ref or "").strip() for ref in references)
+
+
+def should_select_reply_followup(
+    *,
+    plan: dict,
+    activities: list[dict],
+    past_campaigns: list[str],
+) -> bool:
+    if "reply_followup" in past_campaigns or not has_thread_reply_context(plan):
+        return False
+    return any(
+        str(activity.get("summary") or "").startswith("Customer replied:")
+        for activity in activities
+    )
+
+
 def fallback_brief(plan: dict, activities: list[dict]) -> dict:
     return build_customer_brief(
         plan=plan,
@@ -119,15 +144,11 @@ def main() -> None:
             next_campaign = camp
             break
 
-    is_recent_reply = False
-    for act in activities:
-        if act.get("summary", "").startswith("Customer replied:"):
-            # Check if this reply was already followed up
-            if "reply_followup" not in past_campaigns:
-                is_recent_reply = True
-            break
-            
-    if is_recent_reply:
+    if should_select_reply_followup(
+        plan=plan,
+        activities=activities,
+        past_campaigns=past_campaigns,
+    ):
         next_campaign = "reply_followup"
         
     plan["campaign_type"] = next_campaign

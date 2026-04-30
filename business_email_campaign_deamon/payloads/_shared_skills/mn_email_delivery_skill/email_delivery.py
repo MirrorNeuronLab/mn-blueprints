@@ -117,7 +117,11 @@ def post_slack_message(text: str, *, channel: str | None = None) -> dict[str, An
     token = _env_value("MIRROR_NEURON_SLACK_BOT_TOKEN", "SLACK_BOT_TOKEN")
     channel = (
         channel
-        or _env_value("MIRROR_NEURON_SLACK_DEFAULT_CHANNEL", "SLACK_DEFAULT_CHANNEL")
+        or _env_value(
+            "MIRROR_NEURON_SLACK_DEFAULT_CHANNEL",
+            "SLACK_DEFAULT_CHANNEL",
+            default="#claw",
+        )
     ).strip()
     if not token:
         return {

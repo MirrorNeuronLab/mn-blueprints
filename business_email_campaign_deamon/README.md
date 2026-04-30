@@ -76,11 +76,11 @@ Fresh SQLite databases are bootstrapped from `input/data/bootstrap_seed.json`. T
 
 ### Test recipient mode
 
-When `SYNAPTIC_TEST_EMAIL_TO` is set, all outbound emails are redirected to that address. To avoid one test inbox receiving the same campaign action from multiple mock customers, the marketing automation agent reserves one send per `campaign_type` for that test recipient. Duplicate test-mode actions emit `email_delivery_skipped` with `reason: duplicate_test_action` and do not continue that duplicate branch. Non-duplicate actions still emit `cycle_trigger` so the campaign sequence can advance through the planned funnel.
+When `SYNAPTIC_TEST_EMAIL_TO` is set, all outbound emails are redirected to that address. To avoid one test inbox receiving the exact same job action twice, the marketing automation agent reserves each runtime job, cycle, customer, and campaign action for that test recipient. Duplicate test-mode actions emit `email_delivery_skipped` with `reason: duplicate_test_action` and do not continue that duplicate branch. Non-duplicate actions still emit `cycle_trigger` so the campaign sequence can advance through the planned funnel.
 
 ### Slack round reports
 
-Set `SLACK_BOT_TOKEN` or `MIRROR_NEURON_SLACK_BOT_TOKEN`, plus `SLACK_DEFAULT_CHANNEL` or `MIRROR_NEURON_SLACK_DEFAULT_CHANNEL`, to post delivery summaries to Slack. After every email delivery attempt, the marketing automation agent reports the current round totals: succeeded, failed, and attempted.
+Set `SLACK_BOT_TOKEN` or `MIRROR_NEURON_SLACK_BOT_TOKEN` before running the blueprint to post delivery summaries to Slack. The non-secret channel env var `SLACK_DEFAULT_CHANNEL` is set to `#claw` in `manifest.json`; `MIRROR_NEURON_SLACK_DEFAULT_CHANNEL` can override it at runtime. Bot tokens are read from the runtime environment and are not stored in `manifest.json`. After every email delivery attempt, the marketing automation agent reports the current round totals: succeeded, failed, and attempted.
 
 ### Output contract
 

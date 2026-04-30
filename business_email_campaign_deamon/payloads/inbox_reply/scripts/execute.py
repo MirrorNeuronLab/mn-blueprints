@@ -16,6 +16,8 @@ from datetime import datetime, timezone
 
 logger = logging.getLogger("mn.blueprint.business_email.inbox_reply")
 
+payload_root = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(payload_root))
 vendored_skills = Path(__file__).resolve().parents[1] / "mn_skills"
 if vendored_skills.exists():
     sys.path.insert(0, str(vendored_skills))
@@ -61,9 +63,95 @@ except ImportError:
     skill_send_reply = None
     skill_send_resend_email = None
 
+try:
+    from business_email_campaign_skill import build_design_slots, render_email_html
+    from mn_email_delivery_skill import post_slack_message
+except ImportError:
+    build_design_slots = None
+    render_email_html = None
+    post_slack_message = None
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def load_json_file(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text())
+    except json.JSONDecodeError:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def payload_input_dir() -> Path:
+    payload_input = Path(__file__).resolve().parents[1] / "input"
+    if payload_input.exists():
+        return payload_input
+    return Path(__file__).resolve().parents[3] / "input"
+
+
+def load_brand() -> dict:
+    knowledge = load_json_file(payload_input_dir() / "knowledge.json")
+    brand = knowledge.get("brand", {})
+    return brand if isinstance(brand, dict) else {}
+
+
+def load_template(template_id: str) -> dict:
+    template = load_json_file(payload_input_dir() / "templates" / f"{template_id}.json")
+    return template if template.get("template_id") else {}
+
+
+def render_reply_html(*, subject: str, reply_text: str, inbound_body: str = "") -> str:
+    if build_design_slots is None or render_email_html is None:
+        return ""
+    brand = load_brand()
+    template = load_template("personal_reply")
+    if not template:
+        return ""
+    body_sections = [reply_text.strip() or "Thank you for your message. We have received it."]
+    plan = {
+        "campaign_type": "reply_followup",
+        "audience_segment": "inbound_reply",
+        "primary_offer": "Bibblio",
+        "goal": "Reply to an inbound message",
+        "reply_context": {"subject": subject, "text_body": inbound_body},
+        "customer": {
+            "customer_id": "inbound_reply",
+            "name": "there",
+            "email": "",
+        },
+        "draft": {
+            "subject": f"Re: {subject}",
+            "preview_text": "A quick personal reply from Bibblio.",
+            "eyebrow": "Thanks for writing",
+            "headline": "A quick note back from Bibblio",
+            "body_sections": body_sections,
+            "cta_label": "Visit Bibblio",
+            "cta_url_slug": "discover",
+            "secondary_text": "You can reply here with any other details and we will keep helping.",
+            "footer_variant": "reply",
+            "signoff": brand.get("signoff_name", "Maya"),
+        },
+    }
+    slots = build_design_slots(plan=plan, brand=brand)
+    return render_email_html(template, slots)
+
+
+def send_slack_reply_report(*, to_email: str, subject: str, delivery: dict) -> dict:
+    if post_slack_message is None:
+        return {"status": "skipped", "reason": "slack_skill_unavailable"}
+    status = str(delivery.get("status") or "unknown")
+    message = (
+        f"Business email inbox reply report: reply to <{to_email}> was {status}. "
+        f"Subject: Re: {subject}"
+    )
+    try:
+        return post_slack_message(message) or {}
+    except Exception as exc:
+        return {"status": "failed", "reason": "slack_report_error", "error": str(exc)}
 
 def log_customer_reply(from_email: str, body: str):
     db_path = "/tmp/mn_business_email_campaign.db"
@@ -236,11 +324,27 @@ def check_agentmail() -> list:
             
             log_customer_reply(from_email, body)
             reply_text = generate_reply_via_llm(body)
+            reply_html = render_reply_html(
+                subject=subject,
+                reply_text=reply_text,
+                inbound_body=body,
+            )
             
             agentmail_request(
                 "POST",
                 f"/v0/inboxes/{inbox_path}/messages/send",
-                body={"to": from_email, "subject": f"Re: {subject}", "text": reply_text},
+                body={
+                    "to": from_email,
+                    "subject": f"Re: {subject}",
+                    "text": reply_text,
+                    "html": reply_html or None,
+                },
+            )
+            reply_delivery = {"status": "sent", "provider": "agentmail"}
+            slack_delivery = send_slack_reply_report(
+                to_email=from_email,
+                subject=subject,
+                delivery=reply_delivery,
             )
             # Mark as read so we don't process it again
             agentmail_request(
@@ -261,7 +365,10 @@ def check_agentmail() -> list:
                 "payload": {
                     "to": from_email,
                     "subject": f"Re: {subject}",
-                    "reply_text": reply_text
+                    "reply_text": reply_text,
+                    "html_template": "personal_reply" if reply_html else None,
+                    "delivery": reply_delivery,
+                    "slack": slack_delivery,
                 }
             })
             
@@ -298,9 +405,23 @@ def check_agentmail_with_skill() -> list:
                 }
             })
             reply_text = generate_reply_via_llm(body)
+            reply_html = render_reply_html(
+                subject=subject,
+                reply_text=reply_text,
+                inbound_body=body,
+            )
             reply_delivery = {"status": "not_sent"}
             try:
-                skill_send_reply(from_email, f"Re: {subject}", reply_text, config)
+                agentmail_request(
+                    "POST",
+                    f"/v0/inboxes/{urllib.parse.quote(config.inbox_id, safe='')}/messages/send",
+                    body={
+                        "to": from_email,
+                        "subject": f"Re: {subject}",
+                        "text": reply_text,
+                        "html": reply_html or None,
+                    },
+                )
                 reply_delivery = {"status": "sent", "provider": "agentmail"}
             except Exception as exc:
                 if skill_send_resend_email is not None:
@@ -308,6 +429,7 @@ def check_agentmail_with_skill() -> list:
                         "to": [from_email],
                         "subject": f"Re: {subject}",
                         "text": reply_text,
+                        "html": reply_html or None,
                     })
                     reply_delivery = {
                         "status": resend_result.get("status"),
@@ -323,13 +445,20 @@ def check_agentmail_with_skill() -> list:
                     }
             finally:
                 skill_mark_read(msg.message_id, config)
+            slack_delivery = send_slack_reply_report(
+                to_email=from_email,
+                subject=subject,
+                delivery=reply_delivery,
+            )
             processed.append({
                 "type": "agent_inbox_reply_sent",
                 "payload": {
                     "to": from_email,
                     "subject": f"Re: {subject}",
                     "reply_text": reply_text,
+                    "html_template": "personal_reply" if reply_html else None,
                     "delivery": reply_delivery,
+                    "slack": slack_delivery,
                 }
             })
     except Exception as e:

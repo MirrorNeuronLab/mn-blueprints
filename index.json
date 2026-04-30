@@ -32,6 +32,14 @@
     "job_name": "slack-money-monitor"
   },
   {
+    "id": "financial_market_realtime_advisor_deamon",
+    "path": "financial_market_realtime_advisor_deamon",
+    "name": "Financial Market Realtime Advisor Daemon",
+    "description": "A live financial market advisor daemon that streams simulated market data, generates advice, and can optionally post advice to Slack.",
+    "graph_id": "financial_market_realtime_advisor_deamon_v1",
+    "job_name": "financial_market_realtime_advisor_deamon"
+  },
+  {
     "id": "science_ecosystem_simulation",
     "path": "science_ecosystem_simulation",
     "name": "Science Ecosystem Simulation",
@@ -40,12 +48,12 @@
     "job_name": "ecosystem-simulation"
   },
   {
-    "id": "science_streaming_peak_demo",
-    "path": "science_streaming_peak_demo",
-    "name": "Science Streaming Peak Demo",
-    "description": "A blueprint for science streaming peak demo.",
-    "graph_id": "science_streaming_peak_demo_v1",
-    "job_name": "streaming-peak-demo"
+    "id": "general_stream_basic_deamon",
+    "path": "general_stream_basic_deamon",
+    "name": "General Stream Basic Daemon",
+    "description": "A live-mode blueprint that continuously sends telemetry chunks between agents using MirrorNeuron stream messages until manually cancelled.",
+    "graph_id": "general_stream_basic_deamon_v1",
+    "job_name": "general_stream_basic_deamon"
   },
   {
     "id": "science_drug_discovery_deamon",
@@ -96,11 +104,11 @@
     "job_name": "business-email-campaign"
   },
   {
-    "id": "general_stream_live_backpressure",
-    "path": "general_stream_live_backpressure",
-    "name": "General Stream Live Backpressure",
-    "description": "A live stream blueprint that demonstrates bounded queues, propagated backpressure, slow agents, and retry-later external input handling.",
-    "graph_id": "general_stream_live_backpressure_v1",
-    "job_name": "general_stream_live_backpressure"
+    "id": "general_stream_live_backpressure_deamon",
+    "path": "general_stream_live_backpressure_deamon",
+    "name": "General Stream Live Backpressure Daemon",
+    "description": "A never-ending live stream daemon that demonstrates bounded queues, propagated backpressure, slow agents, and retry-later external input handling.",
+    "graph_id": "general_stream_live_backpressure_deamon_v1",
+    "job_name": "general_stream_live_backpressure_deamon"
   }
 ]

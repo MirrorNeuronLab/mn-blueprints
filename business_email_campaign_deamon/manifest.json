@@ -199,6 +199,10 @@
           {
             "source": "_shared_skills/mn_email_delivery_skill",
             "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
           }
         ]
       }
@@ -254,6 +258,10 @@
           {
             "source": "_shared_skills/mn_email_delivery_skill",
             "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
           }
         ]
       }
@@ -309,6 +317,10 @@
           {
             "source": "_shared_skills/mn_email_delivery_skill",
             "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
           }
         ]
       }
@@ -364,6 +376,10 @@
           {
             "source": "_shared_skills/mn_email_delivery_skill",
             "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
           }
         ]
       }
@@ -419,6 +435,10 @@
           {
             "source": "_shared_skills/mn_email_delivery_skill",
             "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
           }
         ]
       }
@@ -474,6 +494,10 @@
           {
             "source": "_shared_skills/mn_email_delivery_skill",
             "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
           }
         ]
       }
@@ -528,6 +552,10 @@
           {
             "source": "_shared_skills/mn_email_delivery_skill",
             "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
           }
         ]
       }

@@ -19,6 +19,9 @@ logger = logging.getLogger("mn.blueprint.business_email.inbox_reply")
 vendored_skills = Path(__file__).resolve().parents[1] / "mn_skills"
 if vendored_skills.exists():
     sys.path.insert(0, str(vendored_skills))
+shared_skills = Path(__file__).resolve().parents[2] / "_shared_skills"
+if shared_skills.exists():
+    sys.path.insert(0, str(shared_skills))
 
 
 def load_local_env() -> None:
@@ -135,45 +138,17 @@ def log_customer_reply(from_email: str, body: str):
 
 
 def generate_reply_via_llm(body_content):
-    api_base = os.environ.get("LITELLM_API_BASE", "http://192.168.4.173:11434").rstrip("/")
-    model = os.environ.get("LITELLM_MODEL", "ollama/gemma4:latest")
-    for suffix in ("/v1/chat/completions", "/v1"):
-        if api_base.endswith(suffix):
-            api_base = api_base[: -len(suffix)]
-    
-    if "ollama" in model:
-        url = f"{api_base}/api/chat"
-        actual_model = model.replace("ollama/", "")
-        payload = {
-            "model": actual_model,
-            "messages": [
-                {"role": "system", "content": "You are a warm, helpful customer support representative for Bibblio, a company that makes personalized children's SEL (social-emotional learning) picture books. Keep your response friendly but concise (1-3 sentences max)."},
-                {"role": "user", "content": f"Customer email body:\n{body_content}"}
-            ],
-            "stream": False
-        }
-    else:
-        url = f"{api_base}/v1/chat/completions"
-        payload = {
-            "model": model,
-            "messages": [
-                {"role": "system", "content": "You are a warm, helpful customer support representative for Bibblio, a company that makes personalized children's SEL (social-emotional learning) picture books. Keep your response friendly but concise (1-3 sentences max)."},
-                {"role": "user", "content": f"Customer email body:\n{body_content}"}
-            ]
-        }
-
-    req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={'Content-Type': 'application/json'})
-    
     try:
-        with urllib.request.urlopen(req, timeout=30) as response:
-            res = json.loads(response.read().decode('utf-8'))
-            if "message" in res:
-                return res["message"]["content"]
-            elif "choices" in res:
-                return res["choices"][0]["message"]["content"]
-            else:
-                return "Thank you for reaching out. Your message has been received."
-    except Exception as e:
+        from mn_litellm_communicate_skill import completion_text
+
+        return completion_text(
+            "You are a warm, helpful customer support representative for Bibblio, "
+            "a company that makes personalized children's SEL (social-emotional learning) "
+            "picture books. Keep your response friendly but concise (1-3 sentences max).",
+            f"Customer email body:\n{body_content}",
+            fallback="Thank you for your message. We have received it.",
+        )
+    except Exception:
         logger.exception("Error calling LLM")
         return "Thank you for your message. We have received it."
 

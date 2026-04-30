@@ -117,6 +117,7 @@ def test_host_local_uploads_shared_skills_with_each_executor():
         sources = {entry["source"] for entry in upload_paths}
         assert "_shared_skills/business_email_campaign_skill" in sources
         assert "_shared_skills/mn_email_delivery_skill" in sources
+        assert "_shared_skills/mn_litellm_communicate_skill" in sources
 
 
 def test_customer_research_runs_with_blueprint_local_campaign_skill(tmp_path):

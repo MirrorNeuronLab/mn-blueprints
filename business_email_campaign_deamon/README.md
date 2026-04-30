@@ -97,5 +97,6 @@ Reusable helpers live in `mn-skills` instead of being reimplemented inside bluep
 - `blueprint_support_skill`: logging, progress, quick-test, and manifest helpers.
 - `marketing_email_skill`: generic draft normalization, CTA/footer, template rendering, and quality-check helpers.
 - `email_delivery_skill`: dry-run/live email and Slack delivery wrappers.
+- `litellm_communicate_skill`: shared LiteLLM-compatible text and JSON generation with local Ollama fallback.
 
 Task-specific campaign strategy lives in this blueprint under `payloads/_shared_skills/business_email_campaign_skill`. That package contains the business audience segmentation, customer brief, offer selection, and template mapping used only by this campaign. Host-local agents upload that shared folder with their own payload so the blueprint works even when the system `python3` running the sandbox does not have any workspace packages installed.

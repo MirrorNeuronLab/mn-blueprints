@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import contextlib
 import json
 import logging
 import os
@@ -577,92 +576,18 @@ def log_agent(
         conn.commit()
 
 
-def _resolve_litellm_model(profile: str = "primary") -> str:
-    return os.environ.get("LITELLM_MODEL", "ollama/gemma4:latest").strip()
-
-
-def _resolve_litellm_api_key(model: str, profile: str = "primary") -> str:
-    return os.environ.get("LITELLM_API_KEY", "").strip()
-
-
-def _resolve_litellm_api_base(model: str, profile: str = "primary") -> str | None:
-    api_base = os.environ.get("LITELLM_API_BASE", "").strip()
-    if not api_base and model.startswith("ollama/"):
-        api_base = "http://localhost:11434"
-    if api_base is None:
-        return None
-    value = api_base
-    if not value:
-        return None
-    if model.startswith("ollama/"):
-        for suffix in ("/v1/chat/completions", "/v1"):
-            if value.endswith(suffix):
-                return value[: -len(suffix)] or None
-    return value
-
-
 def completion_json(
     system_prompt: str, user_prompt: str, *, profile: str = "primary"
 ) -> dict[str, Any] | None:
-    model = _resolve_litellm_model(profile)
-    api_key = _resolve_litellm_api_key(model, profile)
-    api_base = _resolve_litellm_api_base(model, profile)
-
-    if not api_key and not model.startswith("ollama/"):
-        return None
-
     try:
-        import litellm
-        from litellm import completion
+        shared_skills_dir = bundle_asset_dir("_shared_skills")
+        if str(shared_skills_dir) not in sys.path:
+            sys.path.insert(0, str(shared_skills_dir))
+        from mn_litellm_communicate_skill import completion_json as shared_completion_json
     except ImportError:
         return None
 
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_prompt},
-    ]
-    request_kwargs: dict[str, Any] = {
-        "model": model,
-        "messages": messages,
-        "max_tokens": 800,
-    }
-    if api_key:
-        request_kwargs["api_key"] = api_key
-    if api_base:
-        request_kwargs["api_base"] = api_base
-
-    supported_params: set[str] = set()
     try:
-        supported_params = set(litellm.get_supported_openai_params(model=model) or [])
+        return shared_completion_json(system_prompt, user_prompt)
     except Exception:
-        supported_params = set()
-
-    if "response_format" in supported_params:
-        request_kwargs["response_format"] = {"type": "json_object"}
-    if model.startswith("ollama/"):
-        request_kwargs["format"] = "json"
-
-    try:
-        with contextlib.redirect_stdout(sys.stderr):
-            response = completion(**request_kwargs)
-    except Exception as exc:
         return None
-
-    try:
-        finish_reason = response.choices[0].finish_reason
-        content = response.choices[0].message.content
-    except (AttributeError, IndexError, KeyError, TypeError) as exc:
-        raise RuntimeError(f"Unexpected LiteLLM response format: {response}") from exc
-
-    if finish_reason == "length":
-        return None
-
-    try:
-        return json.loads(content)
-    except json.JSONDecodeError:
-        # Some providers return truncated or non-strict JSON even when asked for JSON.
-        # In that case we fall back to the deterministic local generator instead of
-        # failing the whole agent pipeline.
-        return None
-    except Exception as exc:
-        raise RuntimeError(f"Unexpected LiteLLM response format: {response}") from exc

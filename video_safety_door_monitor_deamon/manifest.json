@@ -1,0 +1,112 @@
+{
+  "manifest_version": "1.0",
+  "graph_id": "video_safety_door_monitor_deamon_v1",
+  "job_name": "video_safety_door_monitor_deamon",
+  "requiredContextEngine": false,
+  "daemon": true,
+  "entrypoints": [
+    "ingress"
+  ],
+  "initial_inputs": {
+    "ingress": [
+      {
+        "scenario": "door_camera_safety_monitor",
+        "description": "Continuously sample a 24/7 door camera or looping demo video, ask Nemotron 3 through Ollama whether a person is visible, and send Slack alerts when someone is detected.",
+        "ollama_base_url": "http://192.168.4.173:11434",
+        "ollama_model": "nemotron3:33b",
+        "slack_optional": true
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "node_id": "ingress",
+      "agent_type": "router",
+      "type": "map",
+      "role": "root_coordinator",
+      "config": {
+        "emit_type": "video_monitor_start"
+      }
+    },
+    {
+      "node_id": "door_camera_tick_source",
+      "agent_type": "module",
+      "type": "stream",
+      "role": "door_camera_sampler",
+      "config": {
+        "module": "MirrorNeuron.Examples.VideoSafetyDoorMonitor.DoorCameraTickSource",
+        "module_source": "beam_modules/door_camera_tick_source.ex",
+        "interval_ms": 5000,
+        "camera_id": "front-door",
+        "target_node": "person_detector"
+      }
+    },
+    {
+      "node_id": "person_detector",
+      "agent_type": "executor",
+      "type": "stream",
+      "role": "nemotron3_video_safety_detector",
+      "config": {
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_path": "person_detector",
+        "upload_as": "person_detector",
+        "workdir": "/sandbox/job/person_detector",
+        "command": [
+          "python3",
+          "scripts/analyze_door_camera_frame.py"
+        ],
+        "output_message_type": null,
+        "environment": {
+          "OLLAMA_BASE_URL": "http://192.168.4.173:11434",
+          "OLLAMA_MODEL": "nemotron3:33b",
+          "OLLAMA_THINK": "false",
+          "VIDEO_SOURCE_URI": "samples/door-demo.mp4",
+          "FRAME_SAMPLE_SECONDS": "5.0",
+          "FRAME_JPEG_MAX_WIDTH": "896",
+          "PERSON_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
+          "PERSON_ALERT_COOLDOWN_SECONDS": "60",
+          "SLACK_ALERT_ENABLED": "true",
+          "SLACK_DEFAULT_CHANNEL": "#safety",
+          "SLACK_MESSAGE_PREFIX": "Door camera safety alert",
+          "MN_BLUEPRINT_LOG_LEVEL": "info"
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "ingress_to_tick_source",
+      "from_node": "ingress",
+      "to_node": "door_camera_tick_source",
+      "message_type": "video_monitor_start"
+    },
+    {
+      "edge_id": "tick_source_to_person_detector",
+      "from_node": "door_camera_tick_source",
+      "to_node": "person_detector",
+      "message_type": "door_camera_frame_tick"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover",
+    "stream_mode": "live"
+  },
+  "metadata": {
+    "blueprint_id": "video_safety_door_monitor_deamon",
+    "status_logging": {
+      "format": "jsonl",
+      "stream": "stderr",
+      "env": "MN_BLUEPRINT_LOG_LEVEL"
+    },
+    "quick_test": {
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1",
+      "description": "Quick test mode shortens the sample interval, disables Slack, and uses mock VLM detection unless OLLAMA_LIVE_IN_QUICK_TEST=1."
+    },
+    "output_contract": {
+      "stdout": "single JSON object, event envelope, or bundle path",
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr"
+    }
+  }
+}

@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -28,6 +30,104 @@ from _synaptic_skills.marketing_email import (
 
 
 AGENT_ID = "marketing_automation_agent"
+
+
+def safe_artifact_slug(value: object, fallback: str = "email") -> str:
+    slug = re.sub(r"[^A-Za-z0-9_.-]+", "-", str(value or "").strip()).strip("-")
+    return slug[:80] or fallback
+
+
+def sent_email_copy_root(runtime_job_id: str | None) -> Path:
+    override = os.environ.get("SYNAPTIC_SENT_EMAIL_COPY_DIR", "").strip()
+    if override:
+        return Path(override)
+    job_id = safe_artifact_slug(
+        runtime_job_id
+        or os.environ.get("MIRROR_NEURON_JOB_ID")
+        or os.environ.get("SYNAPTIC_JOB_ID"),
+        "mn-business-email-local",
+    )
+    job_folder = job_id if job_id.startswith("mn_") else f"mn_{job_id}"
+    return Path("/tmp") / job_folder
+
+
+def save_sent_email_copy(
+    *,
+    runtime_job_id: str | None,
+    cycle: int,
+    customer: dict,
+    saved_draft: dict,
+    actual_recipient: str,
+    execution_request: dict,
+    delivery: dict,
+    plan: dict,
+) -> dict:
+    root = sent_email_copy_root(runtime_job_id)
+    email_dir = root / "sent_emails"
+    email_dir.mkdir(parents=True, exist_ok=True)
+
+    timestamp = utc_now()
+    prefix = "-".join(
+        [
+            timestamp.replace("-", "").replace(":", "").replace("+00:00", "Z"),
+            f"cycle-{cycle}",
+            safe_artifact_slug(customer.get("customer_id"), "customer"),
+            safe_artifact_slug(saved_draft.get("draft_id"), "draft"),
+            str(time.time_ns()),
+        ]
+    )
+    html_path = email_dir / f"{prefix}.html"
+    text_path = email_dir / f"{prefix}.txt"
+    metadata_path = email_dir / f"{prefix}.json"
+
+    html_body = str(execution_request.get("html") or "")
+    text_body = str(execution_request.get("text") or "")
+    html_path.write_text(html_body, encoding="utf-8")
+    text_path.write_text(text_body, encoding="utf-8")
+    metadata = {
+        "timestamp": timestamp,
+        "runtime_job_id": runtime_job_id,
+        "cycle": cycle,
+        "agent_id": AGENT_ID,
+        "customer_id": customer.get("customer_id"),
+        "customer_email": customer.get("email"),
+        "recipient": actual_recipient,
+        "subject": saved_draft.get("subject"),
+        "draft_id": saved_draft.get("draft_id"),
+        "campaign_type": plan.get("campaign_type"),
+        "template": (plan.get("design") or {}).get("template")
+        if isinstance(plan.get("design"), dict)
+        else None,
+        "provider_id": delivery.get("provider_id"),
+        "delivery_status": delivery.get("status"),
+        "headers": execution_request.get("headers", {}),
+        "html_path": str(html_path),
+        "text_path": str(text_path),
+        "has_card_email_marker": "Story moments to explore" in html_body,
+        "has_card_gradient": "background-image:linear-gradient(135deg,#dff5fb" in html_body,
+        "has_personal_reply_marker": (
+            "data-slot=\"body_section\"" in html_body
+            and "Story moments to explore" not in html_body
+        ),
+    }
+    metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True), encoding="utf-8")
+    return {
+        "status": "saved",
+        "root": str(root),
+        "html_path": str(html_path),
+        "text_path": str(text_path),
+        "metadata_path": str(metadata_path),
+        "html_content": html_body,
+        "text_content": text_body,
+        "metadata": metadata,
+    }
+
+
+def safe_save_sent_email_copy(**kwargs) -> dict:
+    try:
+        return save_sent_email_copy(**kwargs)
+    except Exception as exc:
+        return {"status": "failed", "reason": "sent_email_copy_error", "error": str(exc)}
 
 
 def quick_testing_enabled(delivery_settings: dict) -> bool:
@@ -63,6 +163,37 @@ def is_last_campaign_step(campaign_type: str | None) -> bool:
         "teacher_expansion",
         "creator_expansion",
     }
+
+
+def parse_positive_int(value: object) -> int | None:
+    try:
+        parsed = int(str(value or "").strip())
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed > 0 else None
+
+
+def max_test_cycles() -> int:
+    return parse_positive_int(os.environ.get("SYNAPTIC_MAX_TEST_CYCLES")) or 3
+
+
+def should_emit_cycle_trigger(
+    *,
+    delivery_status: str | None,
+    cycle: int,
+    fast_test_sequence: bool,
+    campaign_type: str | None,
+) -> bool:
+    if os.environ.get("SYNAPTIC_EMIT_CYCLE_TRIGGER", "true").lower() == "false":
+        return False
+    if delivery_status != "sent":
+        return False
+    if fast_test_sequence and cycle >= max_test_cycles():
+        return False
+    return not (
+        fast_test_sequence
+        and is_last_campaign_step(campaign_type)
+    )
 
 
 def resolve_delivery_plan(payload: dict) -> dict:
@@ -280,6 +411,36 @@ def html_matches_design_template(html_body: str, design_template: str) -> bool:
     return "data-slot=" in html_body or "data-slot='" in html_body
 
 
+def has_thread_reply_context(plan: dict) -> bool:
+    reply_context = plan.get("reply_context") or {}
+    if not isinstance(reply_context, dict):
+        return False
+    for key in ("thread_message_id", "in_reply_to_message_id", "message_id"):
+        if str(reply_context.get(key) or "").strip():
+            return True
+    references = reply_context.get("references_message_ids")
+    return isinstance(references, list) and any(str(ref or "").strip() for ref in references)
+
+
+def normalize_delivery_render_plan(render_plan: dict) -> dict:
+    if render_plan.get("campaign_type") != "reply_followup" or has_thread_reply_context(render_plan):
+        return render_plan
+
+    normalized = dict(render_plan)
+    normalized["campaign_type"] = "product_spotlight"
+
+    customer_brief = dict(normalized.get("customer_brief") or {})
+    if customer_brief.get("recommended_template") == "personal_reply":
+        customer_brief.pop("recommended_template", None)
+    normalized["customer_brief"] = customer_brief
+
+    design = dict(normalized.get("design") or {})
+    if design.get("template") == "personal_reply":
+        design.pop("template", None)
+    normalized["design"] = design
+    return normalized
+
+
 def plan_with_source_payload(plan: dict, saved_draft: dict) -> dict:
     source_payload = parse_json_object(saved_draft.get("source_payload_json"))
     if not source_payload:
@@ -296,6 +457,7 @@ def render_delivery_html(plan: dict, saved_draft: dict, brand: dict) -> str:
     initial_design = plan.get("design") if isinstance(plan.get("design"), dict) else {}
     design_html = str(initial_design.get("html_body") or "")
     render_plan = plan_with_source_payload(plan, saved_draft)
+    render_plan = normalize_delivery_render_plan(render_plan)
     design = render_plan.get("design") if isinstance(render_plan.get("design"), dict) else {}
     design_html = str(design.get("html_body") or design_html)
 
@@ -506,6 +668,7 @@ def main(email_sender=None, slack_sender=None) -> None:
     send_slack = slack_sender or post_slack_message
     reply_context = dict(plan.get("reply_context") or {})
     email_headers = {"Idempotency-Key": saved_draft["draft_id"]}
+    sent_email_copy = None
     thread_message_id = str(reply_context.get("thread_message_id") or "").strip()
     in_reply_to_message_id = str(
         reply_context.get("in_reply_to_message_id") or thread_message_id
@@ -580,6 +743,16 @@ def main(email_sender=None, slack_sender=None) -> None:
                 status=str(delivery.get("status") or "unknown"),
             )
         if delivery["status"] == "sent":
+            sent_email_copy = safe_save_sent_email_copy(
+                runtime_job_id=runtime_job_id,
+                cycle=cycle,
+                customer=customer,
+                saved_draft=saved_draft,
+                actual_recipient=actual_recipient,
+                execution_request=execution_request,
+                delivery=delivery,
+                plan=plan,
+            )
             mark_draft_sent(saved_draft["draft_id"], delivery.get("provider_id"))
             add_marketing_activity(
                 customer["customer_id"],
@@ -597,6 +770,7 @@ def main(email_sender=None, slack_sender=None) -> None:
                     "delivery_recipient": actual_recipient,
                     "test_recipient_override": bool(test_recipient),
                     "subject": saved_draft["subject"],
+                    "sent_email_copy": sent_email_copy,
                 },
             )
         else:
@@ -661,6 +835,7 @@ def main(email_sender=None, slack_sender=None) -> None:
                             "dry_run": bool(delivery.get("dry_run")),
                             "quick_testing": quick_testing,
                             "test_recipient_override": bool(test_recipient),
+                            "sent_email_copy": sent_email_copy,
                         },
                     },
                     *(
@@ -710,13 +885,11 @@ def main(email_sender=None, slack_sender=None) -> None:
                                 },
                             }
                         ]
-                        if (
-                            os.environ.get("SYNAPTIC_EMIT_CYCLE_TRIGGER", "true").lower() != "false"
-                            and not (
-                                fast_test_sequence
-                                and delivery["status"] == "sent"
-                                and is_last_campaign_step(plan.get("campaign_type"))
-                            )
+                        if should_emit_cycle_trigger(
+                            delivery_status=delivery.get("status"),
+                            cycle=cycle,
+                            fast_test_sequence=fast_test_sequence,
+                            campaign_type=plan.get("campaign_type"),
                         )
                         else []
                     )

@@ -201,6 +201,10 @@
           {
             "source": "_shared_skills/mn_litellm_communicate_skill",
             "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ]
       }
@@ -258,6 +262,10 @@
           {
             "source": "_shared_skills/mn_litellm_communicate_skill",
             "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ]
       }
@@ -315,6 +323,10 @@
           {
             "source": "_shared_skills/mn_litellm_communicate_skill",
             "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ]
       }
@@ -372,6 +384,10 @@
           {
             "source": "_shared_skills/mn_litellm_communicate_skill",
             "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ]
       }
@@ -429,6 +445,10 @@
           {
             "source": "_shared_skills/mn_litellm_communicate_skill",
             "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ]
       }
@@ -486,6 +506,10 @@
           {
             "source": "_shared_skills/mn_litellm_communicate_skill",
             "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ]
       }
@@ -542,6 +566,10 @@
           {
             "source": "_shared_skills/mn_litellm_communicate_skill",
             "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ]
       }

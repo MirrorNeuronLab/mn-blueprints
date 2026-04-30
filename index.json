@@ -110,5 +110,13 @@
     "description": "A never-ending live stream daemon that demonstrates bounded queues, propagated backpressure, slow agents, and retry-later external input handling.",
     "graph_id": "general_stream_live_backpressure_deamon_v1",
     "job_name": "general_stream_live_backpressure_deamon"
+  },
+  {
+    "id": "video_safety_door_monitor_deamon",
+    "path": "video_safety_door_monitor_deamon",
+    "name": "Video Safety Door Monitor Daemon",
+    "description": "A 24/7 door-camera monitor that samples live video, asks Nemotron 3 through Ollama whether a person is visible, and sends Slack alerts with cooldowns.",
+    "graph_id": "video_safety_door_monitor_deamon_v1",
+    "job_name": "video_safety_door_monitor_deamon"
   }
 ]

@@ -10,6 +10,12 @@ import urllib.request
 from dataclasses import dataclass
 from typing import Any
 
+try:
+    from mn_external_rate_limit_skill import call_with_rate_limit
+except ImportError:  # pragma: no cover - optional sibling skill
+    def call_with_rate_limit(key, func, *args, rate_limit_min_interval_seconds=None, **kwargs):
+        return func(*args, **kwargs)
+
 
 class LLMError(RuntimeError):
     pass
@@ -36,9 +42,9 @@ def resolve_config() -> LLMConfig:
         model=model,
         api_base=_normalize_api_base(api_base),
         api_key=os.environ.get("LITELLM_API_KEY", "").strip(),
-        timeout_seconds=float(os.environ.get("LITELLM_TIMEOUT_SECONDS", "60")),
+        timeout_seconds=float(os.environ.get("LITELLM_TIMEOUT_SECONDS", "3")),
         max_tokens=int(os.environ.get("LITELLM_MAX_TOKENS", "800")),
-        num_retries=max(int(os.environ.get("LITELLM_NUM_RETRIES", "2")), 0),
+        num_retries=max(int(os.environ.get("LITELLM_NUM_RETRIES", "0")), 0),
         retry_backoff_seconds=max(float(os.environ.get("LITELLM_RETRY_BACKOFF_SECONDS", "1.0")), 0.0),
     )
 
@@ -119,7 +125,12 @@ def _completion_with_litellm(messages: list[dict[str, str]], config: LLMConfig) 
         request_kwargs["format"] = "json"
 
     with contextlib.redirect_stdout(sys.stderr):
-        response = completion(**request_kwargs)
+        response = call_with_rate_limit(
+            f"llm.{config.model}",
+            completion,
+            rate_limit_min_interval_seconds=1.0,
+            **request_kwargs,
+        )
 
     return response.choices[0].message.content or ""
 
@@ -180,7 +191,13 @@ def _post_json(url: str, payload: dict[str, Any], config: LLMConfig) -> dict[str
     )
 
     try:
-        with urllib.request.urlopen(request, timeout=config.timeout_seconds) as response:
+        with call_with_rate_limit(
+            f"llm.{config.model}",
+            urllib.request.urlopen,
+            request,
+            timeout=config.timeout_seconds,
+            rate_limit_min_interval_seconds=1.0,
+        ) as response:
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         body = exc.read().decode("utf-8", errors="replace")

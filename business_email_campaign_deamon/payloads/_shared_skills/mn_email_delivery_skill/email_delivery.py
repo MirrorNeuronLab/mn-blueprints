@@ -43,6 +43,12 @@ except ImportError:
     skill_dry_run_email = None
     send_resend_email = None
 
+try:
+    from mn_external_rate_limit_skill import call_with_rate_limit
+except ImportError:  # pragma: no cover - optional sibling skill
+    def call_with_rate_limit(key, func, *args, rate_limit_min_interval_seconds=None, **kwargs):
+        return func(*args, **kwargs)
+
 
 def dry_run_email(request: dict[str, Any]) -> dict[str, Any]:
     if skill_dry_run_email is not None:
@@ -56,15 +62,20 @@ def dry_run_email(request: dict[str, Any]) -> dict[str, Any]:
 
 
 def post_email(request: dict[str, Any]) -> dict[str, Any]:
+    resend_delivery: dict[str, Any] | None = None
     if send_resend_email is not None:
         resend_delivery = send_resend_email(request)
-        if resend_delivery.get("reason") != "missing_resend_credentials":
+        if resend_delivery.get("status") == "sent":
             return resend_delivery
+        if resend_delivery.get("reason") != "missing_resend_credentials":
+            pass
 
     api_key = os.environ.get("AGENTMAIL_API_KEY", "").strip()
     inbox_id = os.environ.get("AGENTMAIL_INBOX", "").strip()
     
     if not api_key or not inbox_id:
+        if resend_delivery and resend_delivery.get("reason") != "missing_resend_credentials":
+            return resend_delivery
         return {"status": "skipped", "reason": "missing_agentmail_credentials"}
 
     to_emails = request.get("to", [])
@@ -92,18 +103,43 @@ def post_email(request: dict[str, Any]) -> dict[str, Any]:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(http_request, timeout=30) as response:
+        with call_with_rate_limit(
+            "agentmail.api",
+            urllib.request.urlopen,
+            http_request,
+            timeout=30,
+            rate_limit_min_interval_seconds=0.5,
+        ) as response:
             payload = json.loads(response.read().decode("utf-8"))
         return {
             "status": "sent",
             "provider_id": payload.get("message_id") or payload.get("id"),
             "http_status": response.status,
+            **(
+                {
+                    "fallback_from_provider": "resend",
+                    "fallback_reason": resend_delivery.get("reason")
+                    or resend_delivery.get("error")
+                    or "resend_failed",
+                    "fallback_http_status": resend_delivery.get("http_status"),
+                }
+                if resend_delivery and resend_delivery.get("reason") != "missing_resend_credentials"
+                else {}
+            ),
         }
     except urllib.error.HTTPError as exc:
         raw = exc.read().decode("utf-8", errors="replace")
-        return {"status": "failed", "http_status": exc.code, "error": raw}
+        result = {"status": "failed", "http_status": exc.code, "error": raw}
+        if resend_delivery and resend_delivery.get("reason") != "missing_resend_credentials":
+            result["reason"] = "all_email_providers_failed"
+            result["resend_delivery"] = resend_delivery
+        return result
     except urllib.error.URLError as exc:
-        return {"status": "failed", "error": str(exc)}
+        result = {"status": "failed", "error": str(exc)}
+        if resend_delivery and resend_delivery.get("reason") != "missing_resend_credentials":
+            result["reason"] = "all_email_providers_failed"
+            result["resend_delivery"] = resend_delivery
+        return result
 
 def _env_value(*names: str, default: str = "") -> str:
     for name in names:
@@ -151,7 +187,13 @@ def post_slack_message(text: str, *, channel: str | None = None) -> dict[str, An
         method="POST",
     )
     try:
-        with urllib.request.urlopen(http_request, timeout=30) as response:
+        with call_with_rate_limit(
+            "slack.chat.postMessage",
+            urllib.request.urlopen,
+            http_request,
+            timeout=30,
+            rate_limit_min_interval_seconds=1.0,
+        ) as response:
             payload = json.loads(response.read().decode("utf-8"))
             return {
                 "status": "sent" if payload.get("ok") else "failed",

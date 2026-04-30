@@ -108,6 +108,7 @@ class MarketingAutomationTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.db_path = os.path.join(self.tmp.name, "runtime.db")
         self.input_path = os.path.join(self.tmp.name, "input.json")
+        self.sent_email_copy_dir = os.path.join(self.tmp.name, "sent_email_copies")
         init_runtime_db(self.db_path)
         os.environ["SYNAPTIC_DB_PATH"] = self.db_path
         os.environ["SYNAPTIC_DB_CONNECTION"] = f"sqlite:///{self.db_path}"
@@ -115,6 +116,7 @@ class MarketingAutomationTests(unittest.TestCase):
         os.environ["SYNAPTIC_TEST_EMAIL_TO"] = ""
         os.environ["SYNAPTIC_EMAIL_DELIVERY_MODE"] = "agentmail"
         os.environ["SYNAPTIC_EMIT_CYCLE_TRIGGER"] = "false"
+        os.environ["SYNAPTIC_SENT_EMAIL_COPY_DIR"] = self.sent_email_copy_dir
 
     def tearDown(self):
         os.environ.clear()
@@ -167,6 +169,16 @@ class MarketingAutomationTests(unittest.TestCase):
         self.assertIn("Plain text body", sent_requests[0]["html"])
         self.assertEqual(payload["events"][0]["payload"]["status"], "sent")
         self.assertEqual(payload["events"][0]["payload"]["subject"], "A small story idea")
+        sent_copy = payload["events"][0]["payload"]["sent_email_copy"]
+        self.assertEqual(sent_copy["status"], "saved")
+        self.assertTrue(Path(sent_copy["html_path"]).exists())
+        self.assertTrue(Path(sent_copy["text_path"]).exists())
+        self.assertTrue(Path(sent_copy["metadata_path"]).exists())
+        self.assertIn("Plain text body", Path(sent_copy["html_path"]).read_text())
+        metadata = json.loads(Path(sent_copy["metadata_path"]).read_text())
+        self.assertEqual(metadata["runtime_job_id"], "job_1")
+        self.assertEqual(metadata["recipient"], "test@example.com")
+        self.assertTrue(metadata["has_card_email_marker"])
         self.assertIn("round 2 report: 1 succeeded, 0 failed", slack_messages[0])
         self.assertIn(
             {
@@ -232,6 +244,47 @@ class MarketingAutomationTests(unittest.TestCase):
         self.assertIn("Story moments to explore", sent_requests[0]["html"])
         self.assertIn("background-image:linear-gradient(135deg,#dff5fb", sent_requests[0]["html"])
         self.assertNotIn("background-color:#f5f1e8", sent_requests[0]["html"])
+
+    def test_delivery_rerenders_stale_reply_followup_as_card_without_thread_context(self):
+        self.write_plan()
+        plan = json.loads(Path(self.input_path).read_text())
+        plan.pop("campaign_type", None)
+        plan["saved_draft"]["html_body"] = (
+            '<html><body><p data-slot="body_section">Old personal reply</p></body></html>'
+        )
+        plan["saved_draft"]["source_payload_json"] = json.dumps(
+            {
+                "campaign_type": "reply_followup",
+                "customer": plan["customer"],
+                "customer_brief": {"recommended_template": "personal_reply"},
+                "draft": {
+                    "subject": "Re: A small story idea",
+                    "body_sections": ["Plain text body"],
+                },
+                "design": {
+                    "template": "personal_reply",
+                    "html_body": '<html><body><p data-slot="body_section">Old personal reply</p></body></html>',
+                },
+            }
+        )
+        Path(self.input_path).write_text(json.dumps(plan))
+        os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
+        module = load_execute_module()
+        sent_requests = []
+
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            module.main(
+                email_sender=lambda request: sent_requests.append(request)
+                or {"status": "sent", "provider_id": "fake_provider", "http_status": 200},
+                slack_sender=lambda _text: {"status": "sent", "channel": "#test"},
+            )
+
+        payload = json.loads(output.getvalue())
+        self.assertEqual(payload["events"][0]["payload"]["status"], "sent")
+        self.assertIn("Story moments to explore", sent_requests[0]["html"])
+        self.assertIn("background-image:linear-gradient(135deg,#dff5fb", sent_requests[0]["html"])
+        self.assertNotIn("Old personal reply", sent_requests[0]["html"])
 
     def test_quick_testing_mode_dry_runs_without_email_sender(self):
         self.write_plan()
@@ -451,6 +504,50 @@ class MarketingAutomationTests(unittest.TestCase):
         self.assertEqual(payload["emit_messages"][0]["to"], "monitor_scheduler_agent")
         self.assertEqual(payload["emit_messages"][0]["type"], "cycle_trigger")
         self.assertEqual(payload["emit_messages"][0]["body"]["cycle"], 3)
+
+    def test_failed_delivery_does_not_emit_next_cycle(self):
+        self.write_plan()
+        os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
+        os.environ["SYNAPTIC_EMIT_CYCLE_TRIGGER"] = "true"
+        module = load_execute_module()
+
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            module.main(
+                email_sender=lambda _request: {
+                    "status": "failed",
+                    "error": "provider throttled",
+                },
+                slack_sender=lambda _text: {},
+            )
+
+        payload = json.loads(output.getvalue())
+        self.assertEqual(payload["events"][0]["payload"]["status"], "failed")
+        self.assertEqual(payload["emit_messages"], [])
+
+    def test_test_mode_default_cycle_cap_stops_next_cycle(self):
+        self.write_plan()
+        plan = json.loads(Path(self.input_path).read_text())
+        plan["cycle"] = 3
+        Path(self.input_path).write_text(json.dumps(plan))
+        os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
+        os.environ["SYNAPTIC_EMIT_CYCLE_TRIGGER"] = "true"
+        module = load_execute_module()
+
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            module.main(
+                email_sender=lambda _request: {
+                    "status": "sent",
+                    "provider_id": "fake_provider",
+                    "http_status": 200,
+                },
+                slack_sender=lambda _text: {},
+            )
+
+        payload = json.loads(output.getvalue())
+        self.assertEqual(payload["events"][0]["payload"]["status"], "sent")
+        self.assertEqual(payload["emit_messages"], [])
 
     def test_round_slack_report_accumulates_success_and_failure_counts(self):
         self.write_plan()

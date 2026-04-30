@@ -5,6 +5,7 @@ import json
 import logging
 import os
 from pathlib import Path
+import re
 import sys
 import time
 import urllib.request
@@ -74,6 +75,90 @@ except ImportError:
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def safe_artifact_slug(value: object, fallback: str = "email") -> str:
+    slug = re.sub(r"[^A-Za-z0-9_.-]+", "-", str(value or "").strip()).strip("-")
+    return slug[:80] or fallback
+
+
+def sent_email_copy_root(runtime_job_id: str | None = None) -> Path:
+    override = os.environ.get("SYNAPTIC_SENT_EMAIL_COPY_DIR", "").strip()
+    if override:
+        return Path(override)
+    job_id = safe_artifact_slug(
+        runtime_job_id
+        or os.environ.get("MIRROR_NEURON_JOB_ID")
+        or os.environ.get("SYNAPTIC_JOB_ID"),
+        "mn-business-email-local",
+    )
+    job_folder = job_id if job_id.startswith("mn_") else f"mn_{job_id}"
+    return Path("/tmp") / job_folder
+
+
+def save_sent_email_copy(
+    *,
+    runtime_job_id: str | None,
+    to_email: str,
+    subject: str,
+    text_body: str,
+    html_body: str,
+    delivery: dict,
+    source: str,
+) -> dict:
+    root = sent_email_copy_root(runtime_job_id)
+    email_dir = root / "sent_emails"
+    email_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = utc_now()
+    prefix = "-".join(
+        [
+            timestamp.replace("-", "").replace(":", "").replace("+00:00", "Z"),
+            "inbox-reply",
+            safe_artifact_slug(to_email, "recipient"),
+            str(time.time_ns()),
+        ]
+    )
+    html_path = email_dir / f"{prefix}.html"
+    text_path = email_dir / f"{prefix}.txt"
+    metadata_path = email_dir / f"{prefix}.json"
+    html_path.write_text(str(html_body or ""), encoding="utf-8")
+    text_path.write_text(str(text_body or ""), encoding="utf-8")
+    metadata = {
+        "timestamp": timestamp,
+        "runtime_job_id": runtime_job_id,
+        "agent_id": "inbox_reply_agent",
+        "source": source,
+        "recipient": to_email,
+        "subject": f"Re: {subject}",
+        "delivery_status": delivery.get("status"),
+        "provider": delivery.get("provider"),
+        "provider_id": delivery.get("provider_id"),
+        "html_path": str(html_path),
+        "text_path": str(text_path),
+        "has_card_email_marker": "Story moments to explore" in str(html_body or ""),
+        "has_personal_reply_marker": (
+            "data-slot=\"body_section\"" in str(html_body or "")
+            and "Story moments to explore" not in str(html_body or "")
+        ),
+    }
+    metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True), encoding="utf-8")
+    return {
+        "status": "saved",
+        "root": str(root),
+        "html_path": str(html_path),
+        "text_path": str(text_path),
+        "metadata_path": str(metadata_path),
+        "html_content": str(html_body or ""),
+        "text_content": str(text_body or ""),
+        "metadata": metadata,
+    }
+
+
+def safe_save_sent_email_copy(**kwargs) -> dict:
+    try:
+        return save_sent_email_copy(**kwargs)
+    except Exception as exc:
+        return {"status": "failed", "reason": "sent_email_copy_error", "error": str(exc)}
 
 
 def load_json_file(path: Path) -> dict:
@@ -341,6 +426,15 @@ def check_agentmail() -> list:
                 },
             )
             reply_delivery = {"status": "sent", "provider": "agentmail"}
+            sent_email_copy = safe_save_sent_email_copy(
+                runtime_job_id=os.environ.get("MIRROR_NEURON_JOB_ID") or os.environ.get("SYNAPTIC_JOB_ID"),
+                to_email=from_email,
+                subject=subject,
+                text_body=reply_text,
+                html_body=reply_html,
+                delivery=reply_delivery,
+                source="inbox_reply_agentmail",
+            )
             slack_delivery = send_slack_reply_report(
                 to_email=from_email,
                 subject=subject,
@@ -369,6 +463,7 @@ def check_agentmail() -> list:
                     "html_template": "personal_reply" if reply_html else None,
                     "delivery": reply_delivery,
                     "slack": slack_delivery,
+                    "sent_email_copy": sent_email_copy,
                 }
             })
             
@@ -450,6 +545,20 @@ def check_agentmail_with_skill() -> list:
                 subject=subject,
                 delivery=reply_delivery,
             )
+            sent_email_copy = (
+                safe_save_sent_email_copy(
+                    runtime_job_id=os.environ.get("MIRROR_NEURON_JOB_ID")
+                    or os.environ.get("SYNAPTIC_JOB_ID"),
+                    to_email=from_email,
+                    subject=subject,
+                    text_body=reply_text,
+                    html_body=reply_html,
+                    delivery=reply_delivery,
+                    source="inbox_reply_skill",
+                )
+                if reply_delivery.get("status") == "sent"
+                else None
+            )
             processed.append({
                 "type": "agent_inbox_reply_sent",
                 "payload": {
@@ -459,6 +568,7 @@ def check_agentmail_with_skill() -> list:
                     "html_template": "personal_reply" if reply_html else None,
                     "delivery": reply_delivery,
                     "slack": slack_delivery,
+                    "sent_email_copy": sent_email_copy,
                 }
             })
     except Exception as e:

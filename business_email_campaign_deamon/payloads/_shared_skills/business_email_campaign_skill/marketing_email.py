@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import html
 import json
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -774,6 +775,16 @@ def build_design_slots(*, plan: dict[str, Any], brand: dict[str, Any]) -> dict[s
 
 def _find_design_template(name: str) -> str | None:
     current = Path(__file__).resolve()
+    roots: list[Path] = []
+    for env_key in ("MIRROR_NEURON_WORKDIR", "PWD"):
+        env_value = os.environ.get(env_key, "").strip()
+        if env_value:
+            roots.append(Path(env_value))
+    roots.append(Path.cwd())
+    for root in roots:
+        candidate = root / "input" / "designs" / name
+        if candidate.exists():
+            return candidate.read_text()
     for parent in [current.parent, *current.parents]:
         candidate = parent / "input" / "designs" / name
         if candidate.exists():
@@ -1022,12 +1033,29 @@ def parse_source_payload(raw: Any) -> dict[str, Any]:
     return {}
 
 
+def has_thread_reply_context(plan: dict[str, Any]) -> bool:
+    reply_context = plan.get("reply_context") or {}
+    if not isinstance(reply_context, dict):
+        return False
+    for key in ("thread_message_id", "in_reply_to_message_id", "message_id"):
+        if str(reply_context.get(key) or "").strip():
+            return True
+    references = reply_context.get("references_message_ids")
+    return isinstance(references, list) and any(str(ref or "").strip() for ref in references)
+
+
+def allows_personal_reply_template(plan: dict[str, Any]) -> bool:
+    return plan.get("campaign_type") == "reply_followup" and has_thread_reply_context(plan)
+
+
 def select_template_name(
     *,
     plan: dict[str, Any],
     template_library: dict[str, dict[str, Any]],
 ) -> str:
     recommended = plan.get("customer_brief", {}).get("recommended_template")
+    if recommended == "personal_reply" and not allows_personal_reply_template(plan):
+        recommended = None
     if recommended in template_library:
         return str(recommended)
 
@@ -1035,7 +1063,9 @@ def select_template_name(
         "product_spotlight": "product_spotlight",
         "program_reminder": "program_reminder",
         "interest_followup": "interest_followup",
-        "reply_followup": "personal_reply",
+        "reply_followup": (
+            "personal_reply" if allows_personal_reply_template(plan) else "product_spotlight"
+        ),
         "parent_awareness": "moment_to_story",
         "parent_education": "finish_your_book",
         "parent_activation": "moment_to_story",

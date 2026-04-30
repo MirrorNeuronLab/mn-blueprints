@@ -76,11 +76,13 @@ Fresh SQLite databases are bootstrapped from `input/data/bootstrap_seed.json`. T
 
 ### Test recipient mode
 
-When `SYNAPTIC_TEST_EMAIL_TO` is set, all outbound emails are redirected to that address. To avoid one test inbox receiving the exact same job action twice, the marketing automation agent reserves each runtime job, cycle, customer, and campaign action for that test recipient. Duplicate test-mode actions emit `email_delivery_skipped` with `reason: duplicate_test_action` and do not continue that duplicate branch. Non-duplicate actions still emit `cycle_trigger` so the campaign sequence can advance through the planned funnel.
+When `SYNAPTIC_TEST_EMAIL_TO` is set, all outbound emails are redirected to that address. To avoid one test inbox receiving the exact same job action twice, the marketing automation agent reserves each runtime job, cycle, customer, and campaign action for that test recipient. Duplicate test-mode actions emit `email_delivery_skipped` with `reason: duplicate_test_action` and do not continue that duplicate branch. Successful non-duplicate actions can emit `cycle_trigger` so the campaign sequence can advance through the planned funnel; failed, blocked, or waiting deliveries stop the loop. Test-recipient mode also stops after `SYNAPTIC_MAX_TEST_CYCLES` cycles, defaulting to 3, to avoid repeated sends to one inbox during debugging.
 
 ### Slack round reports
 
 Set `SLACK_BOT_TOKEN` or `MIRROR_NEURON_SLACK_BOT_TOKEN` before running the blueprint to post delivery summaries to Slack. The non-secret channel env var `SLACK_DEFAULT_CHANNEL` is set to `#claw` in `manifest.json`; `MIRROR_NEURON_SLACK_DEFAULT_CHANNEL` can override it at runtime. Bot tokens are read from the runtime environment and are not stored in `manifest.json`. After every email delivery attempt, the marketing automation agent reports the current round totals: succeeded, failed, and attempted.
+
+External calls made through the shared email and LLM skills are throttled by `mn_external_rate_limit_skill`. Override intervals with `MN_EXTERNAL_RATE_LIMIT_<KEY>_SECONDS`, set the shared state directory with `MN_EXTERNAL_RATE_LIMIT_STATE_DIR`, or disable throttling locally with `MN_EXTERNAL_RATE_LIMIT_DISABLED=1`.
 
 ### Output contract
 

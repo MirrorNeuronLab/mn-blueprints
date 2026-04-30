@@ -128,6 +128,7 @@ def test_host_local_uploads_shared_skills_with_each_executor():
         assert "_shared_skills/business_email_campaign_skill" in sources
         assert "_shared_skills/mn_email_delivery_skill" in sources
         assert "_shared_skills/mn_litellm_communicate_skill" in sources
+        assert "_shared_skills/mn_external_rate_limit_skill" in sources
 
 
 def test_manifest_sets_slack_channel_but_not_credentials():
@@ -163,7 +164,23 @@ lib = load_template_library()
 for campaign in ["program_reminder", "interest_followup", "product_spotlight", "newsletter"]:
     name = select_template_name(plan={"campaign_type": campaign}, template_library=lib)
     assert lib[name]["design_template"] == "card_email.html", (campaign, name)
-reply = select_template_name(plan={"campaign_type": "reply_followup"}, template_library=lib)
+newsletter = select_template_name(
+    plan={
+        "campaign_type": "newsletter",
+        "customer_brief": {"recommended_template": "personal_reply"},
+    },
+    template_library=lib,
+)
+assert lib[newsletter]["design_template"] == "card_email.html"
+stale_reply = select_template_name(plan={"campaign_type": "reply_followup"}, template_library=lib)
+assert lib[stale_reply]["design_template"] == "card_email.html"
+reply = select_template_name(
+    plan={
+        "campaign_type": "reply_followup",
+        "reply_context": {"in_reply_to_message_id": "msg_123"},
+    },
+    template_library=lib,
+)
 assert lib[reply]["design_template"] == "personal_reply.html"
 print("ok")
 """,

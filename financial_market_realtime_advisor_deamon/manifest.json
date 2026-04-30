@@ -39,7 +39,8 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "module": "MirrorNeuron.Examples.FinancialMarket.ExchangeAgent",
-        "module_source": "beam_modules/exchange_agent.ex"
+        "module_source": "beam_modules/exchange_agent.ex",
+        "llm_market_data_every_ticks": 30
       }
     },
     {
@@ -103,7 +104,41 @@
           "python3",
           "scripts/analyze_stock_signal.py"
         ],
-        "output_message_type": null
+        "output_message_type": null,
+        "environment": {
+          "LLM_SIGNAL_EVERY_EVENTS": "30",
+          "LLM_SIGNAL_MIN_CONFIDENCE": "0.72"
+        }
+      }
+    },
+    {
+      "node_id": "llm_market_explainer",
+      "agent_type": "executor",
+      "type": "stream",
+      "role": "market_explanation_agent",
+      "config": {
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_path": "llm_market_explainer",
+        "upload_as": "llm_market_explainer",
+        "workdir": "/sandbox/job/llm_market_explainer",
+        "command": [
+          "python3",
+          "scripts/explain_market.py"
+        ],
+        "output_message_type": null,
+        "environment": {
+          "LITELLM_MODEL": "ollama/gemma4:latest",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_TIMEOUT_SECONDS": "60.0",
+          "LITELLM_MAX_TOKENS": "800",
+          "LITELLM_NUM_RETRIES": "2",
+          "LITELLM_RETRY_BACKOFF_SECONDS": "1.0",
+          "LLM_EXPLANATION_INTERVAL_EVENTS": "0",
+          "LLM_EXPLANATION_INTERVAL_SECONDS": "300.0",
+          "LLM_EXPLANATION_MAX_PENDING": "25",
+          "LLM_EXPLANATION_RETRY_DELAY_SECONDS": "5.0"
+        }
       }
     },
     {
@@ -116,7 +151,7 @@
         "module_source": "beam_modules/market_advisor_agent.ex",
         "advice_interval_ticks": 5,
         "important_move_pct": 1.5,
-        "slack_enabled": false,
+        "slack_enabled": true,
         "slack_channel": "#claw",
         "slack_policy": {
           "mode": "important_only",
@@ -139,6 +174,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -155,6 +191,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -171,6 +208,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -187,6 +225,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -203,6 +242,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -219,6 +259,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "mean_reversion",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -235,6 +276,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -251,6 +293,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -267,6 +310,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -283,6 +327,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -299,6 +344,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "mean_reversion",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -315,6 +361,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -331,6 +378,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -347,6 +395,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -363,6 +412,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -379,6 +429,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "momentum",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -395,6 +446,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -411,6 +463,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "market_maker",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -427,6 +480,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "mean_reversion",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -443,6 +497,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -459,6 +514,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "market_maker",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -475,6 +531,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -491,6 +548,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "momentum",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -507,6 +565,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "noise",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -523,6 +582,7 @@
         "tick_delay_ms": 1000,
         "live_mode": true,
         "strategy": "momentum",
+        "llm_order_sample_rate": 20,
         "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
         "module_source": "beam_modules/trader_agent.ex"
       }
@@ -558,6 +618,18 @@
       "from_node": "stock_signal_analyzer",
       "to_node": "market_advisor",
       "message_type": "market_signal"
+    },
+    {
+      "edge_id": "llm_explainer_to_advisor",
+      "from_node": "llm_market_explainer",
+      "to_node": "market_advisor",
+      "message_type": "llm_market_explanation"
+    },
+    {
+      "edge_id": "llm_explainer_self_retry",
+      "from_node": "llm_market_explainer",
+      "to_node": "llm_market_explainer",
+      "message_type": "retry_llm_explanation"
     },
     {
       "edge_id": "exchange_to_advisor",

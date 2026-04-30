@@ -1,34 +1,63 @@
 {
   "manifest_version": "1.0",
   "graph_id": "general_openshell_llm_codegen_3_rounds",
-  "job_name": "openshell-llm-codegen-3-rounds",
-  "requiredContextEngine": false,
+  "job_name": "llm-codegen-review-3-rounds",
   "entrypoints": [
     "codegen_round_1"
   ],
   "initial_inputs": {
     "codegen_round_1": [
       {
-        "task_id": "log-anomaly-detector",
-        "title": "Log Anomaly Detector CLI with Dynamic Helper",
-        "description": "Create a Python 3 script named log_analyzer.py. The script must parse a web server log file passed with --log-file. Instead of doing all the parsing in pure Python, the script MUST dynamically create an auxiliary bash script named /tmp/log_parser_helper.sh that uses standard Unix tools (like grep/awk) to filter lines containing the word 'ERROR' or 'WARN'. The Python script should then execute this helper script via subprocess, read its output, and print a JSON summary containing total_errors, total_warnings, and unique_error_ips.",
+        "task_id": "inventory-report-cli",
+        "title": "Inventory report CLI",
+        "description": "Create a Python 3 script named inventory_report.py. The script must read a JSON array of inventory records from a file passed with --input or from stdin when --input is omitted. Each record has sku, category, quantity, and price. The CLI must support --format text|json and --low-stock-threshold (default 5).",
         "requirements": [
           "Use only the Python standard library.",
-          "Dynamically write a bash script to /tmp/log_parser_helper.sh and make it executable using os.chmod.",
-          "The bash script must take the log file path as its first argument ($1), filter for 'ERROR' and 'WARN', and output the results to stdout.",
-          "Assume standard log format where IP is the first space-separated token.",
-          "Execute the bash script using subprocess.run and process its output in Python.",
-          "Output valid JSON to stdout containing total_errors, total_warnings, and a list of unique_error_ips (strings).",
-          "Expose a main() entrypoint guarded by if __name__ == '__main__'.",
-          "The bash script must include a valid shebang (e.g. #!/bin/bash)."
+          "Include a pure function build_report(records, low_stock_threshold=5).",
+          "The JSON output must include total_quantity, total_value, category_totals, and low_stock_skus.",
+          "Category totals must be sorted alphabetically by category name.",
+          "low_stock_skus must be sorted alphabetically.",
+          "Round total_value to two decimal places.",
+          "Expose a main() entrypoint and guard it with if __name__ == '__main__'."
         ],
-        "sample_log": "192.168.1.10 - - [22/Apr/2026:10:00:00 +0000] \"GET / HTTP/1.1\" 200 512\n10.0.0.5 - - [22/Apr/2026:10:01:00 +0000] \"POST /api HTTP/1.1\" 500 128 ERROR: database timeout\n192.168.1.11 - - [22/Apr/2026:10:02:00 +0000] \"GET /img.png HTTP/1.1\" 404 256 WARN: file not found\n10.0.0.5 - - [22/Apr/2026:10:03:00 +0000] \"GET /api HTTP/1.1\" 500 128 ERROR: database timeout\n",
+        "sample_records": [
+          {
+            "sku": "A-100",
+            "category": "books",
+            "quantity": 3,
+            "price": 12.5
+          },
+          {
+            "sku": "B-200",
+            "category": "books",
+            "quantity": 7,
+            "price": 8.0
+          },
+          {
+            "sku": "C-300",
+            "category": "games",
+            "quantity": 2,
+            "price": 59.99
+          }
+        ],
         "validation": {
+          "low_stock_threshold": 4,
           "expected": {
-            "total_errors": 2,
-            "total_warnings": 1,
-            "unique_error_ips": [
-              "10.0.0.5"
+            "total_quantity": 12,
+            "total_value": 213.48,
+            "category_totals": [
+              {
+                "category": "books",
+                "quantity": 10
+              },
+              {
+                "category": "games",
+                "quantity": 2
+              }
+            ],
+            "low_stock_skus": [
+              "A-100",
+              "C-300"
             ]
           }
         }
@@ -46,29 +75,32 @@
         "upload_path": "llm_worker",
         "upload_as": "llm_worker",
         "workdir": "/sandbox/job/llm_worker",
+        "pool": "default",
+        "pool_slots": 1,
         "no_keep": true,
         "no_auto_providers": true,
         "tty": false,
         "pass_env": [
-          "GEMINI_API_KEY",
-          "OPENAI_API_KEY",
-          "ANTHROPIC_API_KEY",
-          "GROQ_API_KEY"
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY"
         ],
         "environment": {
-          "LLM_MODEL": "gemini/gemini-2.5-flash"
+          "LITELLM_MODEL": "ollama/gemma4:latest",
+          "LITELLM_API_BASE": "http://localhost:11434",
+          "LITELLM_API_KEY": ""
         },
         "max_attempts": 2,
         "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
         "name_prefix": "codegen-r1",
         "command": [
-          "bash",
-          "-c",
-          "tar -xzf vendor.tar.gz && python3 scripts/run_llm_step.py codegen 1"
+          "python3",
+          "scripts/run_llm_step.py",
+          "codegen",
+          "1"
         ],
-        "output_message_type": "codegen_round_1_result",
-        "policy": "policies/api-egress.yaml",
-        "complete_on_message": true
+        "output_message_type": "codegen_round_1_result"
       }
     },
     {
@@ -80,29 +112,32 @@
         "upload_path": "llm_worker",
         "upload_as": "llm_worker",
         "workdir": "/sandbox/job/llm_worker",
+        "pool": "default",
+        "pool_slots": 1,
         "no_keep": true,
         "no_auto_providers": true,
         "tty": false,
         "pass_env": [
-          "GEMINI_API_KEY",
-          "OPENAI_API_KEY",
-          "ANTHROPIC_API_KEY",
-          "GROQ_API_KEY"
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY"
         ],
         "environment": {
-          "LLM_MODEL": "gemini/gemini-2.5-flash"
+          "LITELLM_MODEL": "ollama/gemma4:latest",
+          "LITELLM_API_BASE": "http://localhost:11434",
+          "LITELLM_API_KEY": ""
         },
         "max_attempts": 2,
         "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
         "name_prefix": "review-r1",
         "command": [
-          "bash",
-          "-c",
-          "tar -xzf vendor.tar.gz && python3 scripts/run_llm_step.py review 1"
+          "python3",
+          "scripts/run_llm_step.py",
+          "review",
+          "1"
         ],
-        "output_message_type": "review_round_1_result",
-        "policy": "policies/api-egress.yaml",
-        "complete_on_message": true
+        "output_message_type": "review_round_1_result"
       }
     },
     {
@@ -114,29 +149,32 @@
         "upload_path": "llm_worker",
         "upload_as": "llm_worker",
         "workdir": "/sandbox/job/llm_worker",
+        "pool": "default",
+        "pool_slots": 1,
         "no_keep": true,
         "no_auto_providers": true,
         "tty": false,
         "pass_env": [
-          "GEMINI_API_KEY",
-          "OPENAI_API_KEY",
-          "ANTHROPIC_API_KEY",
-          "GROQ_API_KEY"
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY"
         ],
         "environment": {
-          "LLM_MODEL": "gemini/gemini-2.5-flash"
+          "LITELLM_MODEL": "ollama/gemma4:latest",
+          "LITELLM_API_BASE": "http://localhost:11434",
+          "LITELLM_API_KEY": ""
         },
         "max_attempts": 2,
         "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
         "name_prefix": "codegen-r2",
         "command": [
-          "bash",
-          "-c",
-          "tar -xzf vendor.tar.gz && python3 scripts/run_llm_step.py codegen 2"
+          "python3",
+          "scripts/run_llm_step.py",
+          "codegen",
+          "2"
         ],
-        "output_message_type": "codegen_round_2_result",
-        "policy": "policies/api-egress.yaml",
-        "complete_on_message": true
+        "output_message_type": "codegen_round_2_result"
       }
     },
     {
@@ -148,29 +186,32 @@
         "upload_path": "llm_worker",
         "upload_as": "llm_worker",
         "workdir": "/sandbox/job/llm_worker",
+        "pool": "default",
+        "pool_slots": 1,
         "no_keep": true,
         "no_auto_providers": true,
         "tty": false,
         "pass_env": [
-          "GEMINI_API_KEY",
-          "OPENAI_API_KEY",
-          "ANTHROPIC_API_KEY",
-          "GROQ_API_KEY"
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY"
         ],
         "environment": {
-          "LLM_MODEL": "gemini/gemini-2.5-flash"
+          "LITELLM_MODEL": "ollama/gemma4:latest",
+          "LITELLM_API_BASE": "http://localhost:11434",
+          "LITELLM_API_KEY": ""
         },
         "max_attempts": 2,
         "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
         "name_prefix": "review-r2",
         "command": [
-          "bash",
-          "-c",
-          "tar -xzf vendor.tar.gz && python3 scripts/run_llm_step.py review 2"
+          "python3",
+          "scripts/run_llm_step.py",
+          "review",
+          "2"
         ],
-        "output_message_type": "review_round_2_result",
-        "policy": "policies/api-egress.yaml",
-        "complete_on_message": true
+        "output_message_type": "review_round_2_result"
       }
     },
     {
@@ -182,29 +223,32 @@
         "upload_path": "llm_worker",
         "upload_as": "llm_worker",
         "workdir": "/sandbox/job/llm_worker",
+        "pool": "default",
+        "pool_slots": 1,
         "no_keep": true,
         "no_auto_providers": true,
         "tty": false,
         "pass_env": [
-          "GEMINI_API_KEY",
-          "OPENAI_API_KEY",
-          "ANTHROPIC_API_KEY",
-          "GROQ_API_KEY"
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY"
         ],
         "environment": {
-          "LLM_MODEL": "gemini/gemini-2.5-flash"
+          "LITELLM_MODEL": "ollama/gemma4:latest",
+          "LITELLM_API_BASE": "http://localhost:11434",
+          "LITELLM_API_KEY": ""
         },
         "max_attempts": 2,
         "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
         "name_prefix": "codegen-r3",
         "command": [
-          "bash",
-          "-c",
-          "tar -xzf vendor.tar.gz && python3 scripts/run_llm_step.py codegen 3"
+          "python3",
+          "scripts/run_llm_step.py",
+          "codegen",
+          "3"
         ],
-        "output_message_type": "codegen_round_3_result",
-        "policy": "policies/api-egress.yaml",
-        "complete_on_message": true
+        "output_message_type": "codegen_round_3_result"
       }
     },
     {
@@ -216,15 +260,20 @@
         "upload_path": "llm_worker",
         "upload_as": "llm_worker",
         "workdir": "/sandbox/job/llm_worker",
+        "pool": "default",
+        "pool_slots": 1,
         "no_keep": true,
         "no_auto_providers": true,
         "tty": false,
         "pass_env": [
-          "GEMINI_API_KEY",
-          "GOOGLE_API_KEY"
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY"
         ],
         "environment": {
-          "LLM_MODEL": "gemini-2.5-flash"
+          "LITELLM_MODEL": "ollama/gemma4:latest",
+          "LITELLM_API_BASE": "http://localhost:11434",
+          "LITELLM_API_KEY": ""
         },
         "max_attempts": 2,
         "retry_backoff_ms": 500,
@@ -234,9 +283,7 @@
           "scripts/validate_candidate.py"
         ],
         "output_message_type": "validation_result",
-        "complete_job": true,
-        "policy": "policies/api-egress.yaml",
-        "complete_on_message": true
+        "complete_job": true
       }
     }
   ],
@@ -285,12 +332,12 @@
     "quick_test": {
       "enabled": false,
       "env": "MN_BLUEPRINT_QUICK_TEST=1",
-      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs."
+      "description": "Uses smaller deterministic inputs and local mock providers where external resources are optional."
     },
     "output_contract": {
-      "stdout": "single JSON object, event envelope, or bundle path",
+      "stdout": "single JSON object or bundle path",
       "events": "typed event objects with payload",
-      "status": "JSON lines on stderr"
+      "status": "sent to stderr as JSON lines"
     }
   }
 }

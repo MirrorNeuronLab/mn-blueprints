@@ -103,7 +103,8 @@ defmodule MirrorNeuron.Examples.FinancialMarket.ExchangeAgent do
         "tick" => tick,
         "last_price" => new_price,
         "bid_depth" => Enum.sum(Enum.map(new_bids, fn {_, q, _} -> q end)),
-        "ask_depth" => Enum.sum(Enum.map(new_asks, fn {_, q, _} -> q end))
+        "ask_depth" => Enum.sum(Enum.map(new_asks, fn {_, q, _} -> q end)),
+        "trades" => new_trades
       }
 
       trade_actions =
@@ -118,7 +119,7 @@ defmodule MirrorNeuron.Examples.FinancialMarket.ExchangeAgent do
         trade_actions ++
           [
             {:emit, "market_data", market_data, [class: "event"]}
-          ]
+          ] ++ llm_market_actions(state, tick, market_data)
 
       if state.live_mode or tick < state.duration_seconds do
         {:ok, schedule_tick(%{state | tick: tick}, context, tick + 1), actions}
@@ -143,6 +144,16 @@ defmodule MirrorNeuron.Examples.FinancialMarket.ExchangeAgent do
   end
 
   defp process_scheduled_tick(_message, state, _context), do: {:ok, state, []}
+
+  defp llm_market_actions(state, tick, market_data) do
+    every = Map.get(state.config, "llm_market_data_every_ticks", 30)
+
+    if every > 0 and (tick == 1 or rem(tick, every) == 0) do
+      [{:emit_to, "llm_market_explainer", "market_data", market_data, [class: "event"]}]
+    else
+      []
+    end
+  end
 
   defp schedule_tick(state, context, tick) do
     token = state.schedule_seq + 1

@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+src/generate_fake_data_skill.egg-info/PKG-INFO
+src/generate_fake_data_skill.egg-info/SOURCES.txt
+src/generate_fake_data_skill.egg-info/dependency_links.txt
+src/generate_fake_data_skill.egg-info/requires.txt
+src/generate_fake_data_skill.egg-info/top_level.txt
+src/mn_generate_fake_data_skill/__init__.py
+src/mn_generate_fake_data_skill/__main__.py
+src/mn_generate_fake_data_skill/fake_data.py
+tests/test_fake_data.py

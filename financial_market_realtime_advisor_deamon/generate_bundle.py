@@ -38,6 +38,7 @@ def build_manifest(args: argparse.Namespace) -> dict:
                 **shared_config,
                 "module": "MirrorNeuron.Examples.FinancialMarket.ExchangeAgent",
                 "module_source": "beam_modules/exchange_agent.ex",
+                "llm_market_data_every_ticks": args.llm_market_data_every_ticks,
             },
         },
         {
@@ -88,6 +89,37 @@ def build_manifest(args: argparse.Namespace) -> dict:
                 "workdir": "/sandbox/job/stock_signal_analyzer",
                 "command": ["python3", "scripts/analyze_stock_signal.py"],
                 "output_message_type": None,
+                "environment": {
+                    "LLM_SIGNAL_EVERY_EVENTS": str(args.llm_signal_every_events),
+                    "LLM_SIGNAL_MIN_CONFIDENCE": str(args.llm_signal_min_confidence),
+                },
+            },
+        },
+        {
+            "node_id": "llm_market_explainer",
+            "agent_type": "executor",
+            "type": "stream",
+            "role": "market_explanation_agent",
+            "config": {
+                "runner_module": "MirrorNeuron.Runner.HostLocal",
+                "upload_path": "llm_market_explainer",
+                "upload_as": "llm_market_explainer",
+                "workdir": "/sandbox/job/llm_market_explainer",
+                "command": ["python3", "scripts/explain_market.py"],
+                "output_message_type": None,
+                "environment": {
+                    "LITELLM_MODEL": args.litellm_model,
+                    "LITELLM_API_BASE": args.litellm_api_base,
+                    "LITELLM_API_KEY": args.litellm_api_key,
+                    "LITELLM_TIMEOUT_SECONDS": str(args.litellm_timeout_seconds),
+                    "LITELLM_MAX_TOKENS": str(args.litellm_max_tokens),
+                    "LITELLM_NUM_RETRIES": str(args.litellm_num_retries),
+                    "LITELLM_RETRY_BACKOFF_SECONDS": str(args.litellm_retry_backoff_seconds),
+                    "LLM_EXPLANATION_INTERVAL_EVENTS": str(args.llm_explanation_interval_events),
+                    "LLM_EXPLANATION_INTERVAL_SECONDS": str(args.llm_explanation_interval_seconds),
+                    "LLM_EXPLANATION_MAX_PENDING": str(args.llm_explanation_max_pending),
+                    "LLM_EXPLANATION_RETRY_DELAY_SECONDS": str(args.llm_explanation_retry_delay_seconds),
+                },
             },
         },
         {
@@ -145,6 +177,18 @@ def build_manifest(args: argparse.Namespace) -> dict:
             "message_type": "market_signal",
         },
         {
+            "edge_id": "llm_explainer_to_advisor",
+            "from_node": "llm_market_explainer",
+            "to_node": "market_advisor",
+            "message_type": "llm_market_explanation",
+        },
+        {
+            "edge_id": "llm_explainer_self_retry",
+            "from_node": "llm_market_explainer",
+            "to_node": "llm_market_explainer",
+            "message_type": "retry_llm_explanation",
+        },
+        {
             "edge_id": "exchange_to_advisor",
             "from_node": "exchange",
             "to_node": "market_advisor",
@@ -169,6 +213,7 @@ def build_manifest(args: argparse.Namespace) -> dict:
                 "config": {
                     **shared_config,
                     "strategy": strategy,
+                    "llm_order_sample_rate": args.llm_order_sample_rate,
                     "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
                     "module_source": "beam_modules/trader_agent.ex",
                 },
@@ -233,9 +278,25 @@ def main() -> None:
     parser.add_argument("--max-daily-move", type=float, default=0.06)
     parser.add_argument("--stock-interval-min-ms", type=int, default=1000)
     parser.add_argument("--stock-interval-max-ms", type=int, default=1000)
+    parser.add_argument("--litellm-model", default="ollama/gemma4:latest")
+    parser.add_argument("--litellm-api-base", default="http://192.168.4.173:11434")
+    parser.add_argument("--litellm-api-key", default="")
+    parser.add_argument("--litellm-timeout-seconds", type=float, default=60.0)
+    parser.add_argument("--litellm-max-tokens", type=int, default=800)
+    parser.add_argument("--litellm-num-retries", type=int, default=2)
+    parser.add_argument("--litellm-retry-backoff-seconds", type=float, default=1.0)
+    parser.add_argument("--llm-market-data-every-ticks", type=int, default=30)
+    parser.add_argument("--llm-order-sample-rate", type=int, default=20)
+    parser.add_argument("--llm-signal-every-events", type=int, default=30)
+    parser.add_argument("--llm-signal-min-confidence", type=float, default=0.72)
+    parser.add_argument("--llm-explanation-interval-events", type=int, default=0)
+    parser.add_argument("--llm-explanation-interval-seconds", type=float, default=300.0)
+    parser.add_argument("--llm-explanation-max-pending", type=int, default=25)
+    parser.add_argument("--llm-explanation-retry-delay-seconds", type=float, default=5.0)
     parser.add_argument("--advice-interval-ticks", type=int, default=5)
     parser.add_argument("--important-move-pct", type=float, default=1.5)
-    parser.add_argument("--slack-enabled", action="store_true")
+    parser.add_argument("--slack-enabled", action="store_true", default=True)
+    parser.add_argument("--slack-disabled", action="store_false", dest="slack_enabled")
     parser.add_argument("--slack-channel", default="#claw")
     parser.add_argument("--slack-policy-mode", default="important_only")
     parser.add_argument("--slack-min-confidence", type=float, default=0.65)
@@ -260,6 +321,14 @@ def main() -> None:
             "tick_delay_ms": 100,
             "stock_interval_min_ms": 50,
             "stock_interval_max_ms": 50,
+            "llm_explanation_interval_events": 12,
+            "llm_explanation_interval_seconds": 0,
+            "llm_explanation_retry_delay_seconds": 0.05,
+            "llm_market_data_every_ticks": 12,
+            "llm_order_sample_rate": 10,
+            "llm_signal_every_events": 12,
+            "litellm_timeout_seconds": 1.0,
+            "litellm_num_retries": 0,
             "advice_interval_ticks": 2,
             "slack_cooldown_ticks_per_symbol": 5,
             "slack_digest_every_ticks": 20,
@@ -275,6 +344,18 @@ def main() -> None:
     args.slack_min_confidence = min(max(args.slack_min_confidence, 0.0), 1.0)
     args.slack_cooldown_ticks_per_symbol = max(args.slack_cooldown_ticks_per_symbol, 0)
     args.slack_digest_every_ticks = max(args.slack_digest_every_ticks, 0)
+    args.litellm_timeout_seconds = max(args.litellm_timeout_seconds, 0.1)
+    args.litellm_max_tokens = max(args.litellm_max_tokens, 1)
+    args.litellm_num_retries = max(args.litellm_num_retries, 0)
+    args.litellm_retry_backoff_seconds = max(args.litellm_retry_backoff_seconds, 0.0)
+    args.llm_market_data_every_ticks = max(args.llm_market_data_every_ticks, 0)
+    args.llm_order_sample_rate = max(args.llm_order_sample_rate, 0)
+    args.llm_signal_every_events = max(args.llm_signal_every_events, 0)
+    args.llm_signal_min_confidence = min(max(args.llm_signal_min_confidence, 0.0), 1.0)
+    args.llm_explanation_interval_events = max(args.llm_explanation_interval_events, 0)
+    args.llm_explanation_interval_seconds = max(args.llm_explanation_interval_seconds, 0.0)
+    args.llm_explanation_max_pending = max(args.llm_explanation_max_pending, 1)
+    args.llm_explanation_retry_delay_seconds = max(args.llm_explanation_retry_delay_seconds, 0.0)
     args.symbols = ",".join(symbol.strip() for symbol in args.symbols.split(",") if symbol.strip())
 
     log_status(
@@ -300,7 +381,7 @@ def main() -> None:
 
     if bundle_dir.resolve() != root:
         shutil.copytree(root / "payloads" / "beam_modules", beam_modules_dest, dirs_exist_ok=True)
-        for payload_name in ["fake_stock_stream", "stock_signal_analyzer"]:
+        for payload_name in ["fake_stock_stream", "stock_signal_analyzer", "llm_market_explainer"]:
             shutil.copytree(
                 root / "payloads" / payload_name,
                 payloads_dir / payload_name,
@@ -324,6 +405,16 @@ def main() -> None:
     shutil.copytree(
         fake_data_skill_src,
         fake_data_skill_dest,
+        ignore=shutil.ignore_patterns("__pycache__", ".pytest_cache", "*.pyc"),
+    )
+
+    litellm_skill_src = root.parents[1] / "mn-skills" / "litellm_communicate_skill"
+    litellm_skill_dest = payloads_dir / "llm_market_explainer" / "_shared_skills" / "litellm_communicate_skill"
+    if litellm_skill_dest.exists():
+        shutil.rmtree(litellm_skill_dest)
+    shutil.copytree(
+        litellm_skill_src,
+        litellm_skill_dest,
         ignore=shutil.ignore_patterns("__pycache__", ".pytest_cache", "*.pyc"),
     )
 

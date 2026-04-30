@@ -195,6 +195,18 @@ def format_message(symbol: str, price: float, action: str, confidence: float, in
     )
 
 
+def should_emit_to_llm(signal: dict, signals_seen: int) -> bool:
+    every = int(os.environ.get("LLM_SIGNAL_EVERY_EVENTS", "30"))
+    min_confidence = float(os.environ.get("LLM_SIGNAL_MIN_CONFIDENCE", "0.72"))
+    action = signal.get("action")
+    confidence = float(signal.get("confidence", 0.0) or 0.0)
+
+    if action in {"buy_watch", "sell_or_reduce_watch"} and confidence >= min_confidence:
+        return True
+
+    return every > 0 and signals_seen % every == 0
+
+
 def main() -> None:
     context = load_json_env("MIRROR_NEURON_CONTEXT_FILE")
     tick = load_json_env("MIRROR_NEURON_INPUT_FILE")
@@ -215,13 +227,25 @@ def main() -> None:
         "signals_seen": int(state.get("signals_seen", 0)) + 1,
         "last_signal": signal,
     }
+    signals_seen = next_state["signals_seen"]
 
-    result = {
-        "next_state": next_state,
-        "events": [{"type": "stock_signal_generated", "payload": signal}],
-        "emit_messages": [
+    emit_messages = [
+        {
+            "to": "market_advisor",
+            "type": "market_signal",
+            "class": "event",
+            "payload": signal,
+            "headers": {
+                "schema_ref": "com.mirrorneuron.finance.stock_decision_signal",
+                "schema_version": "1.0.0",
+            },
+        }
+    ]
+
+    if should_emit_to_llm(signal, signals_seen):
+        emit_messages.append(
             {
-                "to": "market_advisor",
+                "to": "llm_market_explainer",
                 "type": "market_signal",
                 "class": "event",
                 "payload": signal,
@@ -230,7 +254,12 @@ def main() -> None:
                     "schema_version": "1.0.0",
                 },
             }
-        ],
+        )
+
+    result = {
+        "next_state": next_state,
+        "events": [{"type": "stock_signal_generated", "payload": signal}],
+        "emit_messages": emit_messages,
     }
 
     print(json.dumps(result))

@@ -83,12 +83,26 @@ def main():
             # Update LLM Settings
             env["LITELLM_API_BASE"] = llm_base
             env["LITELLM_MODEL"] = llm_model
-            env["PRIMARY_LITELLM_API_BASE"] = llm_base
-            env["PRIMARY_LITELLM_MODEL"] = llm_model
-            env["SECONDARY_LITELLM_API_BASE"] = llm_base
-            env["SECONDARY_LITELLM_MODEL"] = llm_model
-            env["TERTIARY_LITELLM_API_BASE"] = llm_base
-            env["TERTIARY_LITELLM_MODEL"] = llm_model
+            env["LITELLM_API_KEY"] = env.get("LITELLM_API_KEY", "")
+            for key in [
+                "PRIMARY_LITELLM_API_KEY",
+                "PRIMARY_LITELLM_API_BASE",
+                "PRIMARY_LITELLM_MODEL",
+                "SECONDARY_LITELLM_API_KEY",
+                "SECONDARY_LITELLM_API_BASE",
+                "SECONDARY_LITELLM_MODEL",
+                "TERTIARY_LITELLM_API_BASE",
+                "TERTIARY_LITELLM_MODEL",
+                "LLM_API_KEY",
+                "LLM_API_BASE",
+                "LLM_MODEL",
+                "OLLAMA_API_BASE",
+                "GEMINI_API_KEY",
+                "GEMINI_API_BASE_URL",
+                "GEMINI_MODEL",
+                "SYNAPTIC_LLM_CONFIG",
+            ]:
+                env.pop(key, None)
             
             # Update AgentMail Settings
             env["AGENTMAIL_API_KEY"] = agentmail_key

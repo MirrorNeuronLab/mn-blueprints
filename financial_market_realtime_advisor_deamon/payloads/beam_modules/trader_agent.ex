@@ -24,6 +24,7 @@ defmodule MirrorNeuron.Examples.FinancialMarket.TraderAgent do
       "market_data" ->
         payload = payload(message)
         last_price = payload["last_price"]
+        tick = payload["tick"]
 
         history = [last_price | Enum.take(state.price_history, 9)]
         state = %{state | price_history: history}
@@ -33,24 +34,34 @@ defmodule MirrorNeuron.Examples.FinancialMarket.TraderAgent do
         actions =
           case action do
             {"buy", p, q} ->
-              [
-                {:emit_to, "exchange", "place_order",
-                 %{"side" => "buy", "price" => p, "quantity" => q, "agent_id" => state.agent_id},
-                 []}
-              ]
+              order = %{
+                "side" => "buy",
+                "price" => p,
+                "quantity" => q,
+                "agent_id" => state.agent_id,
+                "strategy" => state.strategy,
+                "tick" => tick
+              }
+
+              [{:emit_to, "exchange", "place_order", order, []}] ++
+                llm_order_actions(state, tick, order)
 
             {"sell", p, q} ->
-              [
-                {:emit_to, "exchange", "place_order",
-                 %{"side" => "sell", "price" => p, "quantity" => q, "agent_id" => state.agent_id},
-                 []}
-              ]
+              order = %{
+                "side" => "sell",
+                "price" => p,
+                "quantity" => q,
+                "agent_id" => state.agent_id,
+                "strategy" => state.strategy,
+                "tick" => tick
+              }
+
+              [{:emit_to, "exchange", "place_order", order, []}] ++
+                llm_order_actions(state, tick, order)
 
             _ ->
               []
           end
-
-        tick = payload["tick"]
 
         actions =
           if not state.live_mode and tick >= state.duration_seconds do
@@ -138,6 +149,16 @@ defmodule MirrorNeuron.Examples.FinancialMarket.TraderAgent do
   end
 
   def decide(_, _, _), do: nil
+
+  defp llm_order_actions(state, tick, order) do
+    sample_rate = Map.get(state.config, "llm_order_sample_rate", 20)
+
+    if sample_rate > 0 and is_integer(tick) and rem(tick, sample_rate) == 0 do
+      [{:emit_to, "llm_market_explainer", "trader_order", order, [class: "event"]}]
+    else
+      []
+    end
+  end
 
   @impl true
   def inspect_state(state) do

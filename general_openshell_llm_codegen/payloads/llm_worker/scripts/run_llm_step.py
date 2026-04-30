@@ -27,7 +27,9 @@ def extract_payload(message: dict) -> dict:
     return body
 
 def call_llm(system_instruction: str, prompt: str, schema: dict) -> dict:
-    model = os.environ.get("LLM_MODEL", "gemini/gemini-2.5-flash")
+    model = os.environ.get("LITELLM_MODEL", "ollama/gemma4:latest")
+    api_base = os.environ.get("LITELLM_API_BASE", "").strip()
+    api_key = os.environ.get("LITELLM_API_KEY", "").strip()
     if os.environ.get("LLM_MOCK_MODE", "").strip().lower() in {"1", "true", "yes", "on"}:
         if "code" in schema["properties"]:
             return {
@@ -61,15 +63,22 @@ def call_llm(system_instruction: str, prompt: str, schema: dict) -> dict:
     )
 
     try:
-        response = litellm.completion(
-            model=model,
-            messages=[
+        request_kwargs = {
+            "model": model,
+            "messages": [
                 {"role": "system", "content": system_prompt_with_schema},
-                {"role": "user", "content": prompt}
+                {"role": "user", "content": prompt},
             ],
-            response_format={"type": "json_object"},
-            temperature=0.2
-        )
+            "response_format": {"type": "json_object"},
+            "temperature": 0.2,
+        }
+        if api_base:
+            request_kwargs["api_base"] = api_base
+        if api_key:
+            request_kwargs["api_key"] = api_key
+        if model.startswith("ollama/"):
+            request_kwargs["format"] = "json"
+        response = litellm.completion(**request_kwargs)
     except Exception as e:
         raise RuntimeError(f"LiteLLM API request failed: {e}")
 

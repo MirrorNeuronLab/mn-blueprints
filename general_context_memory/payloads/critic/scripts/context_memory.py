@@ -2,6 +2,8 @@ import json
 import logging
 import os
 import sys
+import urllib.error
+import urllib.request
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
@@ -329,16 +331,44 @@ def call_llm(system_prompt, user_prompt, mock_response):
     if quick_mode:
         get_context_logger().info("quick test mode enabled; using mock LLM response")
         return mock_response if isinstance(mock_response, dict) else json.dumps(mock_response)
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if not api_key:
-        get_context_logger().warning("OPENAI_API_KEY not set; falling back to mock response")
-        return mock_response
+
+    model = os.environ.get("LITELLM_MODEL", "ollama/gemma4:latest").strip()
+    api_base = os.environ.get("LITELLM_API_BASE", "").strip()
+    api_key = os.environ.get("LITELLM_API_KEY", "").strip()
+    timeout = float(os.environ.get("LITELLM_TIMEOUT_SECONDS", "60"))
+
     try:
+        if model.startswith("ollama/"):
+            api_base = (api_base or "http://localhost:11434").rstrip("/")
+            payload = {
+                "model": model.removeprefix("ollama/"),
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                "stream": False,
+                "format": "json",
+            }
+            request = urllib.request.Request(
+                f"{api_base}/api/chat",
+                data=json.dumps(payload).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                data = json.loads(response.read().decode("utf-8"))
+            return parse_json_payload(data.get("message", {}).get("content", "{}"))
+
         from openai import OpenAI
 
-        client = OpenAI(api_key=api_key)
+        base_url = api_base.rstrip("/") if api_base else None
+        if base_url:
+            for suffix in ("/v1/chat/completions", "/chat/completions"):
+                if base_url.endswith(suffix):
+                    base_url = base_url[: -len(suffix)]
+        client = OpenAI(api_key=api_key or "unused", base_url=base_url)
         response = client.chat.completions.create(
-            model=os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
+            model=model.split("/", 1)[1] if model.startswith("openai/") else model,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},

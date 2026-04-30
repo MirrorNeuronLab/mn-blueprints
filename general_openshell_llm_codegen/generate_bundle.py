@@ -51,7 +51,7 @@ def default_task() -> dict:
     }
 
 
-def build_manifest(model: str, max_attempts: int, retry_backoff_ms: int, task: dict) -> dict:
+def build_manifest(model: str, api_base: str, api_key: str, max_attempts: int, retry_backoff_ms: int, task: dict) -> dict:
     upload_config = {
         "from": "base",
         "upload_path": "llm_worker",
@@ -62,8 +62,12 @@ def build_manifest(model: str, max_attempts: int, retry_backoff_ms: int, task: d
         "no_keep": True,
         "no_auto_providers": True,
         "tty": False,
-        "pass_env": ["GEMINI_API_KEY", "GOOGLE_API_KEY"],
-        "environment": {"LLM_MODEL": model},
+        "pass_env": ["LITELLM_MODEL", "LITELLM_API_BASE", "LITELLM_API_KEY"],
+        "environment": {
+            "LITELLM_MODEL": model,
+            "LITELLM_API_BASE": api_base,
+            "LITELLM_API_KEY": api_key,
+        },
         "max_attempts": max_attempts,
         "retry_backoff_ms": retry_backoff_ms,
     }
@@ -193,8 +197,18 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate the LLM codegen/review loop bundle.")
     parser.add_argument(
         "--model",
-        default="gemini-2.5-flash-lite",
-        help="Gemini model to expose to worker payloads, defaults to gemini-2.5-flash-lite",
+        default="ollama/gemma4:latest",
+        help="LiteLLM model to expose to worker payloads, defaults to ollama/gemma4:latest",
+    )
+    parser.add_argument(
+        "--api-base",
+        default="http://localhost:11434",
+        help="LiteLLM API base URL, defaults to local Ollama",
+    )
+    parser.add_argument(
+        "--api-key",
+        default="",
+        help="Optional LiteLLM API key",
     )
     parser.add_argument(
         "--max-attempts",
@@ -243,6 +257,8 @@ def main() -> None:
 
     manifest = build_manifest(
         model=args.model,
+        api_base=args.api_base,
+        api_key=args.api_key,
         max_attempts=max(args.max_attempts, 1),
         retry_backoff_ms=max(args.retry_backoff_ms, 0),
         task=default_task(),

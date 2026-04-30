@@ -1,0 +1,10 @@
+[project]
+name = "mn-litellm-communicate-skill"
+version = "0.1.0"
+description = "Shared LiteLLM-compatible LLM wrapper for MirrorNeuron blueprints"
+requires-python = ">=3.9"
+dependencies = []
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

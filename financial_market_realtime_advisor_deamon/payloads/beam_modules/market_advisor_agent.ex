@@ -4,6 +4,8 @@ defmodule MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent do
 
   alias MirrorNeuron.Skills.SlackCommunicateSkill
 
+  @max_slack_chunk_chars 1_200
+
   @impl true
   def init(node) do
     {:ok,
@@ -46,11 +48,13 @@ defmodule MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent do
 
         actions =
           if should_publish do
-            maybe_send_slack(next_state.config, advice)
+            slack_delivery = maybe_send_market_tick_slack(next_state.config, advice, pct)
 
             [
               {:event, :market_advice_generated,
-               Map.put(advice, "slack_enabled", slack_enabled?(next_state.config))}
+               advice
+               |> Map.put("slack_enabled", slack_enabled?(next_state.config))
+               |> Map.put("slack_delivery", slack_delivery)}
             ]
           else
             []
@@ -70,13 +74,15 @@ defmodule MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent do
         signal_count = state.signal_count + 1
         {slack_messages, slack_symbols} = slack_messages_for_signal(signal, state, signal_count)
 
-        Enum.each(slack_messages, &maybe_send_slack(state.config, %{"message" => &1}))
+        slack_deliveries =
+          Enum.map(slack_messages, &maybe_send_slack(state.config, %{"message" => &1}))
 
         advice =
           signal
           |> Map.put("slack_enabled", slack_enabled?(state.config))
           |> Map.put("slack_policy", slack_policy_summary(state.config))
           |> Map.put("slack_message_count", length(slack_messages))
+          |> Map.put("slack_delivery", slack_deliveries)
           |> Map.put("source", "stock_signal_analyzer")
 
         {:ok,
@@ -87,6 +93,21 @@ defmodule MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent do
              slack_symbols: slack_symbols,
              latest_signals: update_latest_signals(state.latest_signals, signal)
          },
+         [
+           {:event, :market_advice_generated, advice}
+         ]}
+
+      "llm_market_explanation" ->
+        explanation = payload(message) || %{}
+        slack_delivery = maybe_send_slack(state.config, explanation)
+
+        advice =
+          explanation
+          |> Map.put("slack_enabled", slack_enabled?(state.config))
+          |> Map.put("slack_delivery", slack_delivery)
+          |> Map.put("source", "llm_market_explainer")
+
+        {:ok, %{state | advice_count: state.advice_count + 1},
          [
            {:event, :market_advice_generated, advice}
          ]}
@@ -113,6 +134,16 @@ defmodule MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent do
     threshold = Map.get(state.config, "important_move_pct", 1.5)
 
     tick == 1 or tick - state.last_sent_tick >= interval or abs(pct) >= threshold
+  end
+
+  defp maybe_send_market_tick_slack(config, advice, pct) do
+    threshold = Map.get(config, "important_move_pct", 1.5)
+
+    if abs(pct) >= threshold do
+      maybe_send_slack(config, advice)
+    else
+      %{"status" => "skipped", "reason" => "routine_market_tick"}
+    end
   end
 
   defp signal_for(change, pct, market_data) do
@@ -201,11 +232,15 @@ defmodule MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent do
     next_watch = next_watch_text(signal)
     change_text = if action_changed?, do: "Signal changed: ", else: ""
 
-    "#{change_text}#{symbol} shifted to #{action} at #{price}, confidence #{confidence}. " <>
-      "Why: #{reason}. " <>
-      "Indicators: MACD #{Map.get(indicators, "macd", "n/a")}, RSI #{Map.get(indicators, "rsi_14", "warming")}, momentum #{Map.get(indicators, "momentum_5_pct", "warming")}%. " <>
-      "Watch next: #{next_watch}. " <>
+    [
+      "*#{change_text}#{symbol}: #{action}*",
+      "Price: #{price} | Confidence: #{confidence}",
+      "Why: #{reason}",
+      "Indicators: MACD #{Map.get(indicators, "macd", "n/a")} | RSI #{Map.get(indicators, "rsi_14", "warming")} | Momentum #{Map.get(indicators, "momentum_5_pct", "warming")}%",
+      "Watch next: #{next_watch}",
       mock_data_claim()
+    ]
+    |> Enum.join("\n")
   end
 
   defp format_digest(latest_signals) do
@@ -214,11 +249,14 @@ defmodule MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent do
     sells = top_symbols(signals, "sell_or_reduce_watch")
     strongest = strongest_signal(signals)
 
-    "Market advisor digest. " <>
-      "Buy watch: #{join_or_none(buys)}. " <>
-      "Sell/reduce watch: #{join_or_none(sells)}. " <>
-      "Strongest setup: #{strongest}. " <>
+    [
+      "*Market advisor digest*",
+      "Buy watch: #{join_or_none(buys)}",
+      "Sell/reduce watch: #{join_or_none(sells)}",
+      "Strongest setup: #{strongest}",
       mock_data_claim()
+    ]
+    |> Enum.join("\n")
   end
 
   defp top_symbols(signals, action) do
@@ -288,17 +326,177 @@ defmodule MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent do
   defp maybe_send_slack(config, advice) do
     if slack_enabled?(config) do
       channel = System.get_env("SLACK_DEFAULT_CHANNEL") || Map.get(config, "slack_channel", "#claw")
+      chunks = slack_chunks(advice)
+      deliveries = Enum.map(chunks, &send_slack_chunk(&1, channel))
+      summarize_deliveries(deliveries)
+    else
+      %{"status" => "disabled"}
+    end
+  end
 
-      case SlackCommunicateSkill.send_message(ensure_mock_data_claim(advice["message"]), channel: channel) do
-        {:ok, result} ->
-          Logger.info("[MarketAdvisor] Sent advice to Slack: #{inspect(result)}")
+  defp send_slack_chunk(text, channel) do
+    case SlackCommunicateSkill.send_message(text, channel: channel) do
+      {:ok, result} ->
+        Logger.info("[MarketAdvisor] Sent advice to Slack: #{inspect(result)}")
+        %{"status" => "sent", "channel" => Map.get(result, :channel), "ts" => Map.get(result, :ts)}
 
-        {:skipped, result} ->
-          Logger.warning("[MarketAdvisor] Skipped Slack advice: #{inspect(result)}")
+      {:skipped, result} ->
+        Logger.warning("[MarketAdvisor] Skipped Slack advice: #{inspect(result)}")
+        %{
+          "status" => "skipped",
+          "reason" => Map.get(result, :reason),
+          "channel" => Map.get(result, :channel)
+        }
 
-        {:error, result} ->
-          Logger.error("[MarketAdvisor] Failed to send Slack advice: #{inspect(result)}")
+      {:error, result} ->
+        Logger.error("[MarketAdvisor] Failed to send Slack advice: #{inspect(result)}")
+        %{
+          "status" => "error",
+          "reason" => Map.get(result, :reason),
+          "channel" => Map.get(result, :channel),
+          "error" => Map.get(result, :error) || Map.get(result, :body)
+        }
+    end
+  end
+
+  defp summarize_deliveries([]), do: %{"status" => "skipped", "reason" => "empty_slack_message"}
+
+  defp summarize_deliveries(deliveries) do
+    status =
+      cond do
+        Enum.all?(deliveries, &(Map.get(&1, "status") == "sent")) -> "sent"
+        Enum.any?(deliveries, &(Map.get(&1, "status") == "sent")) -> "partial"
+        Enum.any?(deliveries, &(Map.get(&1, "status") == "error")) -> "error"
+        true -> "skipped"
       end
+
+    %{
+      "status" => status,
+      "chunk_count" => length(deliveries),
+      "sent_count" => Enum.count(deliveries, &(Map.get(&1, "status") == "sent")),
+      "chunks" => deliveries
+    }
+  end
+
+  defp slack_chunks(%{"headline" => headline} = advice) when is_binary(headline) do
+    chunks =
+      [
+        llm_headline_chunk(advice),
+        llm_context_chunk(advice),
+        llm_watch_chunk(advice)
+      ]
+      |> Enum.reject(&blank?/1)
+
+    Enum.map(chunks, &ensure_mock_data_claim/1)
+  end
+
+  defp slack_chunks(advice) do
+    advice
+    |> Map.get("message", "")
+    |> ensure_mock_data_claim()
+    |> split_long_message()
+  end
+
+  defp llm_headline_chunk(advice) do
+    [
+      "*Financial market advisory*",
+      "*Takeaway:* #{short_text(Map.get(advice, "headline"), 260)}",
+      maybe_line("*Summary:*", Map.get(advice, "summary"), 520)
+    ]
+    |> Enum.reject(&blank?/1)
+    |> Enum.join("\n")
+  end
+
+  defp llm_context_chunk(advice) do
+    context = Map.get(advice, "context", %{})
+    market = Map.get(context, "market", %{})
+    signals = context |> Map.get("latest_stock_signals", []) |> Enum.take(4)
+    traders = context |> Map.get("top_traders", []) |> Enum.take(3)
+
+    [
+      "*Current read*",
+      "Market: price #{Map.get(market, "last_price", "n/a")} | move #{Map.get(market, "move_pct", "n/a")}% | recent trades #{Map.get(market, "recent_trade_count", "n/a")}",
+      signal_lines(signals),
+      trader_lines(traders)
+    ]
+    |> List.flatten()
+    |> Enum.reject(&blank?/1)
+    |> Enum.join("\n")
+  end
+
+  defp llm_watch_chunk(advice) do
+    [
+      "*Watch next:* #{short_text(Map.get(advice, "watch_next"), 520)}",
+      maybe_line("*Risk:*", Map.get(advice, "risk_note"), 420)
+    ]
+    |> Enum.reject(&blank?/1)
+    |> Enum.join("\n")
+  end
+
+  defp signal_lines([]), do: []
+
+  defp signal_lines(signals) do
+    ["Signals:" | Enum.map(signals, &signal_line/1)]
+  end
+
+  defp signal_line(signal) do
+    symbol = Map.get(signal, "symbol", "UNKNOWN")
+    action = Map.get(signal, "action", "hold_watch") |> human_action()
+    confidence = signal |> Map.get("confidence", 0.0) |> to_float() |> percent()
+    price = signal |> Map.get("price", "n/a")
+    "- #{symbol}: #{action} at #{price}, #{confidence}"
+  end
+
+  defp trader_lines([]), do: []
+
+  defp trader_lines(traders) do
+    ["Trader activity:" | Enum.map(traders, &trader_line/1)]
+  end
+
+  defp trader_line(trader) do
+    agent_id = Map.get(trader, "agent_id", "unknown")
+    buys = Map.get(trader, "buy_orders", 0)
+    sells = Map.get(trader, "sell_orders", 0)
+    notional = trader |> Map.get("notional", 0.0) |> to_float() |> Float.round(2)
+    "- #{agent_id}: buy orders #{buys}, sell orders #{sells}, notional #{notional}"
+  end
+
+  defp maybe_line(_label, value, _limit) when value in [nil, ""], do: ""
+  defp maybe_line(label, value, limit), do: "#{label} #{short_text(value, limit)}"
+
+  defp short_text(value, limit) do
+    text = value |> to_string() |> String.trim()
+
+    if String.length(text) > limit do
+      String.slice(text, 0, limit) <> "..."
+    else
+      text
+    end
+  end
+
+  defp split_long_message(message) do
+    message = ensure_mock_data_claim(message)
+
+    if String.length(message) <= @max_slack_chunk_chars do
+      [message]
+    else
+      message
+      |> String.split("\n", trim: true)
+      |> Enum.chunk_every(6)
+      |> Enum.map(&(Enum.join(&1, "\n")))
+      |> Enum.flat_map(&split_oversized_chunk/1)
+      |> Enum.map(&ensure_mock_data_claim/1)
+    end
+  end
+
+  defp split_oversized_chunk(chunk) do
+    if String.length(chunk) <= @max_slack_chunk_chars do
+      [chunk]
+    else
+      chunk
+      |> String.graphemes()
+      |> Enum.chunk_every(@max_slack_chunk_chars - String.length(mock_data_claim()) - 4)
+      |> Enum.map(&Enum.join/1)
     end
   end
 
@@ -311,6 +509,8 @@ defmodule MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent do
       "#{message} #{mock_data_claim()}"
     end
   end
+
+  defp blank?(value), do: String.trim(to_string(value || "")) == ""
 
   defp slack_enabled?(config) do
     SlackCommunicateSkill.enabled?(config)

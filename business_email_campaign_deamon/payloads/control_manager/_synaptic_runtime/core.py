@@ -578,96 +578,22 @@ def log_agent(
 
 
 def _resolve_litellm_model(profile: str = "primary") -> str:
-    profile_prefix = "PRIMARY_" if profile == "primary" else "SECONDARY_"
-    model = (
-        os.environ.get(f"{profile_prefix}LITELLM_MODEL")
-        or os.environ.get(f"{profile_prefix}LLM_MODEL")
-        or (
-            os.environ.get("LITELLM_MODEL")
-            if profile == "primary"
-            else None
-        )
-        or (
-            os.environ.get("LLM_MODEL")
-            if profile == "primary"
-            else None
-        )
-        or (
-            os.environ.get("GEMINI_MODEL")
-            if profile == "primary"
-            else None
-        )
-        or "gemini/gemini-2.5-flash"
-    ).strip()
-    if model.startswith("gemini/") or model.startswith("ollama/") or "/" in model:
-        return model
-    ollama_base = (
-        os.environ.get(f"{profile_prefix}LITELLM_API_BASE")
-        or os.environ.get("OLLAMA_API_BASE")
-    )
-    if ollama_base:
-        return f"ollama/{model}"
-    return f"gemini/{model}"
+    return os.environ.get("LITELLM_MODEL", "ollama/gemma4:latest").strip()
 
 
 def _resolve_litellm_api_key(model: str, profile: str = "primary") -> str:
-    profile_prefix = "PRIMARY_" if profile == "primary" else "SECONDARY_"
-    return (
-        os.environ.get(f"{profile_prefix}LITELLM_API_KEY")
-        or os.environ.get(f"{profile_prefix}LLM_API_KEY")
-        or (
-            os.environ.get("LITELLM_API_KEY")
-            if profile == "primary"
-            else None
-        )
-        or (
-            os.environ.get("LLM_API_KEY")
-            if profile == "primary"
-            else None
-        )
-        or (
-            os.environ.get("GEMINI_API_KEY", "")
-            if model.startswith("gemini/")
-            else ""
-        )
-    ).strip()
+    return os.environ.get("LITELLM_API_KEY", "").strip()
 
 
 def _resolve_litellm_api_base(model: str, profile: str = "primary") -> str | None:
-    profile_prefix = "PRIMARY_" if profile == "primary" else "SECONDARY_"
-    api_base = (
-        os.environ.get(f"{profile_prefix}LITELLM_API_BASE")
-        or os.environ.get(f"{profile_prefix}LLM_API_BASE")
-        or (
-            os.environ.get("LITELLM_API_BASE")
-            if profile == "primary"
-            else None
-        )
-        or (
-            os.environ.get("LLM_API_BASE")
-            if profile == "primary"
-            else None
-        )
-        or (
-            os.environ.get("GEMINI_API_BASE_URL")
-            if model.startswith("gemini/")
-            else None
-        )
-        or (
-            os.environ.get("OLLAMA_API_BASE")
-            if model.startswith("ollama/")
-            else None
-        )
-    )
+    api_base = os.environ.get("LITELLM_API_BASE", "").strip()
+    if not api_base and model.startswith("ollama/"):
+        api_base = "http://localhost:11434"
     if api_base is None:
         return None
-    value = api_base.strip()
+    value = api_base
     if not value:
         return None
-    if model.startswith("gemini/"):
-        for suffix in ("/v1beta/models", "/v1/models", "/models"):
-            if value.endswith(suffix):
-                return value[: -len(suffix)] or None
     if model.startswith("ollama/"):
         for suffix in ("/v1/chat/completions", "/v1"):
             if value.endswith(suffix):

@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: generate-fake-data-skill
+Version: 0.1.0
+Summary: Generate batch or streaming fake data from JSON specs for MirrorNeuron blueprints.
+Requires-Python: >=3.9
+Requires-Dist: Faker>=19

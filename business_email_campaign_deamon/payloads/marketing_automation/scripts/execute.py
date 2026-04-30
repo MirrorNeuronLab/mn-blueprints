@@ -103,11 +103,7 @@ def resolve_delivery_plan(payload: dict) -> dict:
 
 
 def missing_plan_result(plan: dict, reason: str) -> dict:
-    cycle = plan.get("cycle", 1)
-    try:
-        cycle = int(cycle)
-    except (TypeError, ValueError):
-        cycle = 1
+    cycle = cycle_number(plan)
     return {
         "events": [
             {
@@ -126,6 +122,127 @@ def missing_plan_result(plan: dict, reason: str) -> dict:
             "reason": reason,
         },
     }
+
+
+def cycle_number(plan: dict) -> int:
+    cycle = plan.get("cycle", 1)
+    try:
+        return int(cycle)
+    except (TypeError, ValueError):
+        return 1
+
+
+def delivery_count_bucket(status: str | None) -> str:
+    return "success" if status == "sent" else "failed"
+
+
+def record_round_delivery_attempt(
+    *,
+    runtime_job_id: str | None,
+    cycle: int,
+    customer_id: str,
+    draft_id: str,
+    status: str | None,
+) -> dict:
+    job_key = str(runtime_job_id or "local")
+    bucket = delivery_count_bucket(status)
+    timestamp = utc_now()
+    with db_connect() as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS email_round_delivery_attempts (
+                runtime_job_id TEXT NOT NULL,
+                cycle INTEGER NOT NULL,
+                customer_id TEXT NOT NULL,
+                draft_id TEXT NOT NULL,
+                status TEXT NOT NULL,
+                count_bucket TEXT NOT NULL,
+                created_at TEXT,
+                updated_at TEXT,
+                PRIMARY KEY (runtime_job_id, cycle, customer_id, draft_id)
+            )
+            """
+        )
+        conn.execute(
+            """
+            INSERT INTO email_round_delivery_attempts (
+                runtime_job_id,
+                cycle,
+                customer_id,
+                draft_id,
+                status,
+                count_bucket,
+                created_at,
+                updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(runtime_job_id, cycle, customer_id, draft_id) DO UPDATE SET
+                status = excluded.status,
+                count_bucket = excluded.count_bucket,
+                updated_at = excluded.updated_at
+            """,
+            (
+                job_key,
+                cycle,
+                customer_id,
+                draft_id,
+                str(status or "unknown"),
+                bucket,
+                timestamp,
+                timestamp,
+            ),
+        )
+        row = conn.execute(
+            """
+            SELECT
+                SUM(CASE WHEN count_bucket = 'success' THEN 1 ELSE 0 END) AS success_count,
+                SUM(CASE WHEN count_bucket = 'failed' THEN 1 ELSE 0 END) AS failed_count,
+                COUNT(*) AS attempted_count
+            FROM email_round_delivery_attempts
+            WHERE runtime_job_id = ?
+              AND cycle = ?
+            """,
+            (job_key, cycle),
+        ).fetchone()
+        conn.commit()
+
+    return {
+        "runtime_job_id": job_key,
+        "cycle": cycle,
+        "success_count": int(row["success_count"] or 0),
+        "failed_count": int(row["failed_count"] or 0),
+        "attempted_count": int(row["attempted_count"] or 0),
+    }
+
+
+def format_round_slack_report(
+    *, round_stats: dict, customer: dict, actual_recipient: str, status: str
+) -> str:
+    readable_status = {
+        "sent": "sent",
+        "failed": "failed",
+        "blocked": "blocked",
+        "waiting": "waiting",
+        "skipped": "skipped",
+    }.get(status, status or "unknown")
+    return (
+        f"Business email campaign round {round_stats['cycle']} report: "
+        f"{round_stats['success_count']} succeeded, "
+        f"{round_stats['failed_count']} failed "
+        f"({round_stats['attempted_count']} attempted). "
+        f"Latest: {customer.get('name', 'Unknown customer')} <{actual_recipient}> "
+        f"was {readable_status}."
+    )
+
+
+def safe_send_slack_round_report(send_slack, message: str) -> dict:
+    try:
+        return send_slack(message) or {}
+    except Exception as exc:
+        return {
+            "status": "failed",
+            "reason": "slack_report_error",
+            "error": str(exc),
+        }
 
 
 def test_action_key(plan: dict) -> str:
@@ -205,11 +322,7 @@ def complete_test_delivery_action(
 def duplicate_test_action_result(
     *, plan: dict, saved_draft: dict, test_recipient: str, action_key: str
 ) -> dict:
-    cycle = plan.get("cycle", 1)
-    try:
-        cycle = int(cycle)
-    except (TypeError, ValueError):
-        cycle = 1
+    cycle = cycle_number(plan)
     return {
         "events": [
             {
@@ -281,6 +394,7 @@ def main(email_sender=None, slack_sender=None) -> None:
         or str(delivery_settings.get("test_recipient", "")).strip()
     )
     actual_recipient = test_recipient or customer["email"]
+    cycle = cycle_number(plan)
     quick_testing = quick_testing_enabled(delivery_settings)
     fast_test_sequence = bool(test_recipient)
     send_email = email_sender or (dry_run_email if quick_testing else post_email)
@@ -367,12 +481,6 @@ def main(email_sender=None, slack_sender=None) -> None:
                 f"Sent email: {saved_draft['subject']}",
             )
             log_email_sent_event(runtime_job_id, actual_recipient, saved_draft["subject"])
-            if quick_testing:
-                slack_delivery = {"status": "skipped", "reason": "quick_test_mode"}
-            else:
-                slack_delivery = send_slack(
-                    f"Synaptic sent a customized email to {customer['name']} <{customer['email']}>."
-                ) or {}
             log_agent(
                 runtime_job_id,
                 AGENT_ID,
@@ -387,7 +495,6 @@ def main(email_sender=None, slack_sender=None) -> None:
                 },
             )
         else:
-            slack_delivery = {"status": "not_sent", "reason": "email_not_successful"}
             log_agent(
                 runtime_job_id,
                 AGENT_ID,
@@ -402,6 +509,36 @@ def main(email_sender=None, slack_sender=None) -> None:
                 },
             )
 
+    round_stats = record_round_delivery_attempt(
+        runtime_job_id=runtime_job_id,
+        cycle=cycle,
+        customer_id=str(customer["customer_id"]),
+        draft_id=str(saved_draft["draft_id"]),
+        status=str(delivery.get("status") or "unknown"),
+    )
+    if quick_testing:
+        slack_delivery = {"status": "skipped", "reason": "quick_test_mode"}
+    else:
+        slack_delivery = safe_send_slack_round_report(
+            send_slack,
+            format_round_slack_report(
+                round_stats=round_stats,
+                customer=customer,
+                actual_recipient=actual_recipient,
+                status=str(delivery.get("status") or "unknown"),
+            )
+        )
+    log_agent(
+        runtime_job_id,
+        AGENT_ID,
+        "Reported email round delivery summary.",
+        details={
+            **round_stats,
+            "slack_status": slack_delivery.get("status", "unknown"),
+            "slack_channel": slack_delivery.get("channel"),
+        },
+    )
+
     print(
         json.dumps(
             {
@@ -413,7 +550,7 @@ def main(email_sender=None, slack_sender=None) -> None:
                             "email": actual_recipient,
                             "customer_email": customer["email"],
                             "subject": saved_draft["subject"],
-                            "cycle": int(plan.get("cycle", 1)),
+                            "cycle": cycle,
                             "status": delivery["status"],
                             "http_status": delivery.get("http_status"),
                             "provider_id": delivery.get("provider_id"),
@@ -437,23 +574,21 @@ def main(email_sender=None, slack_sender=None) -> None:
                         if delivery["status"] == "sent"
                         else []
                     ),
-                    *(
-                        [
-                            {
-                                "type": "slack_confirmation_attempted",
-                                "payload": {
-                                    "customer_id": customer["customer_id"],
-                                    "email": actual_recipient,
-                                    "customer_email": customer["email"],
-                                    "cycle": int(plan.get("cycle", 1)),
-                                    "status": slack_delivery.get("status", "unknown"),
-                                    "channel": slack_delivery.get("channel", "#claw"),
-                                },
-                            }
-                        ]
-                        if delivery["status"] == "sent"
-                        else []
-                    ),
+                    {
+                        "type": "slack_round_report_attempted",
+                        "payload": {
+                            "customer_id": customer["customer_id"],
+                            "email": actual_recipient,
+                            "customer_email": customer["email"],
+                            "cycle": cycle,
+                            "success_count": round_stats["success_count"],
+                            "failed_count": round_stats["failed_count"],
+                            "attempted_count": round_stats["attempted_count"],
+                            "status": slack_delivery.get("status", "unknown"),
+                            "channel": slack_delivery.get("channel", "#claw"),
+                            "reason": slack_delivery.get("reason"),
+                        },
+                    },
                 ],
                 "emit_messages": [
                     *(
@@ -463,7 +598,7 @@ def main(email_sender=None, slack_sender=None) -> None:
                                 "type": "cycle_trigger",
                                 "body": {
                                     "status": delivery["status"],
-                                    "cycle": int(plan.get("cycle", 1)) + 1,
+                                    "cycle": cycle + 1,
                                     "original_plan": plan,
                                 },
                                 "class": "event",
@@ -485,8 +620,9 @@ def main(email_sender=None, slack_sender=None) -> None:
                     )
                 ],
                 "next_state": {
-                    "last_cycle": int(plan.get("cycle", 1)),
+                    "last_cycle": cycle,
                     "last_status": delivery["status"],
+                    "last_round_delivery_report": round_stats,
                 },
             }
         )

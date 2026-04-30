@@ -147,12 +147,14 @@ class MarketingAutomationTests(unittest.TestCase):
         os.environ["SYNAPTIC_TEST_EMAIL_TO"] = "test@example.com"
         module = load_execute_module()
         sent_requests = []
+        slack_messages = []
 
         def fake_email_sender(request):
             sent_requests.append(request)
             return {"status": "sent", "provider_id": "fake_provider", "http_status": 200}
 
-        def fake_slack_sender(_text):
+        def fake_slack_sender(text):
+            slack_messages.append(text)
             return {"status": "sent", "channel": "#test"}
 
         output = io.StringIO()
@@ -163,6 +165,25 @@ class MarketingAutomationTests(unittest.TestCase):
         self.assertEqual(sent_requests[0]["to"], ["test@example.com"])
         self.assertEqual(payload["events"][0]["payload"]["status"], "sent")
         self.assertEqual(payload["events"][0]["payload"]["subject"], "A small story idea")
+        self.assertIn("round 2 report: 1 succeeded, 0 failed", slack_messages[0])
+        self.assertIn(
+            {
+                "type": "slack_round_report_attempted",
+                "payload": {
+                    "customer_id": "cust_1",
+                    "email": "test@example.com",
+                    "customer_email": "avery@example.com",
+                    "cycle": 2,
+                    "success_count": 1,
+                    "failed_count": 0,
+                    "attempted_count": 1,
+                    "status": "sent",
+                    "channel": "#test",
+                    "reason": None,
+                },
+            },
+            payload["events"],
+        )
         self.assertIn(
             {
                 "type": "email_sent",
@@ -360,6 +381,84 @@ class MarketingAutomationTests(unittest.TestCase):
         self.assertEqual(payload["emit_messages"][0]["to"], "monitor_scheduler_agent")
         self.assertEqual(payload["emit_messages"][0]["type"], "cycle_trigger")
         self.assertEqual(payload["emit_messages"][0]["body"]["cycle"], 3)
+
+    def test_round_slack_report_accumulates_success_and_failure_counts(self):
+        self.write_plan()
+        module = load_execute_module()
+        slack_messages = []
+
+        first_output = io.StringIO()
+        with contextlib.redirect_stdout(first_output):
+            module.main(
+                email_sender=lambda _request: {
+                    "status": "sent",
+                    "provider_id": "fake_provider",
+                    "http_status": 200,
+                },
+                slack_sender=lambda text: slack_messages.append(text)
+                or {"status": "sent", "channel": "#test"},
+            )
+
+        second_plan = json.loads(Path(self.input_path).read_text())
+        second_plan["customer"] = {
+            "customer_id": "cust_2",
+            "name": "Blake",
+            "email": "blake@example.com",
+        }
+        second_plan["saved_draft"] = {
+            **second_plan["saved_draft"],
+            "draft_id": "draft_failed",
+        }
+        Path(self.input_path).write_text(json.dumps(second_plan))
+
+        second_output = io.StringIO()
+        with contextlib.redirect_stdout(second_output):
+            module.main(
+                email_sender=lambda _request: {"status": "failed", "error": "boom"},
+                slack_sender=lambda text: slack_messages.append(text)
+                or {"status": "sent", "channel": "#test"},
+            )
+
+        first_payload = json.loads(first_output.getvalue())
+        second_payload = json.loads(second_output.getvalue())
+        self.assertIn("round 2 report: 1 succeeded, 0 failed", slack_messages[0])
+        self.assertIn("round 2 report: 1 succeeded, 1 failed", slack_messages[1])
+        self.assertEqual(
+            first_payload["next_state"]["last_round_delivery_report"]["success_count"],
+            1,
+        )
+        self.assertEqual(
+            second_payload["next_state"]["last_round_delivery_report"]["failed_count"],
+            1,
+        )
+
+    def test_slack_report_error_does_not_fail_email_delivery(self):
+        self.write_plan()
+        module = load_execute_module()
+
+        def broken_slack_sender(_text):
+            raise RuntimeError("slack api unavailable")
+
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            module.main(
+                email_sender=lambda _request: {
+                    "status": "sent",
+                    "provider_id": "fake_provider",
+                    "http_status": 200,
+                },
+                slack_sender=broken_slack_sender,
+            )
+
+        payload = json.loads(output.getvalue())
+        self.assertEqual(payload["events"][0]["payload"]["status"], "sent")
+        slack_event = next(
+            event
+            for event in payload["events"]
+            if event["type"] == "slack_round_report_attempted"
+        )
+        self.assertEqual(slack_event["payload"]["status"], "failed")
+        self.assertEqual(slack_event["payload"]["reason"], "slack_report_error")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,135 @@
+{
+  "daemon": false,
+  "edges": [
+    {
+      "edge_id": "ingress_to_retriever",
+      "from_node": "ingress",
+      "message_type": "ingress_result",
+      "to_node": "retriever"
+    },
+    {
+      "edge_id": "retriever_to_reviewer",
+      "from_node": "retriever",
+      "message_type": "retriever_result",
+      "to_node": "reviewer"
+    }
+  ],
+  "entrypoints": [
+    "ingress"
+  ],
+  "graph_id": "general_python_defined_basic_v1",
+  "initial_inputs": {
+    "ingress": [
+      {
+        "args": [
+          "electric vehicle charging adoption in New England"
+        ],
+        "kwargs": {}
+      }
+    ]
+  },
+  "job_name": "general-python-defined-basic-v1",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "general_python_defined_basic",
+    "compiler_version": "0.2.0",
+    "generated_at": "2026-04-30T11:17:52+00:00",
+    "generated_by": "mn-python-sdk",
+    "manifest_schema": "1.0",
+    "python_source_mode": true,
+    "quick_test": {
+      "enabled": true
+    },
+    "source_hash": "c993088c8960dd6f902b82ca04978cf0f5a6d2f44208041786ccce1c0ab2e7bc"
+  },
+  "nodes": [
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "1",
+          "MN_PY_FINAL": "0",
+          "MN_PY_METHOD": "ingress",
+          "MN_PY_OUTPUT_TYPE": "ingress_result",
+          "MN_PY_OWNER_CLASS": "ResearchAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-ingress",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "timeout_seconds": 10,
+        "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
+      },
+      "node_id": "ingress",
+      "role": "root_coordinator",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "1",
+          "MN_PY_FINAL": "0",
+          "MN_PY_METHOD": "retriever",
+          "MN_PY_OUTPUT_TYPE": "retriever_result",
+          "MN_PY_OWNER_CLASS": "ResearchAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-retriever",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "timeout_seconds": 10,
+        "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
+      },
+      "node_id": "retriever",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "1",
+          "MN_PY_FINAL": "1",
+          "MN_PY_METHOD": "reviewer",
+          "MN_PY_OUTPUT_TYPE": "reviewer_result",
+          "MN_PY_OWNER_CLASS": "ResearchAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-reviewer",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "timeout_seconds": 10,
+        "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
+      },
+      "node_id": "reviewer",
+      "type": "reduce"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  }
+}

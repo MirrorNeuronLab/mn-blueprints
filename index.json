@@ -8,6 +8,22 @@
     "job_name": "openshell-worker-basic"
   },
   {
+    "id": "general_python_defined_basic",
+    "path": "general_python_defined_basic",
+    "name": "General Python Defined Basic",
+    "description": "A pure Python workflow compiled by mn-python-sdk into a MirrorNeuron bundle.",
+    "graph_id": "general_python_defined_basic_v1",
+    "job_name": "general-python-defined-basic-v1"
+  },
+  {
+    "id": "general_python_defined_advanced_deamon",
+    "path": "general_python_defined_advanced_deamon",
+    "name": "General Python Defined Advanced Deamon",
+    "description": "A pure Python daemon workflow compiled by mn-python-sdk into a live MirrorNeuron bundle.",
+    "graph_id": "general_python_defined_advanced_deamon_v1",
+    "job_name": "general-python-defined-advanced-deamon-v1"
+  },
+  {
     "id": "general_prime_sweep_scale",
     "path": "general_prime_sweep_scale",
     "name": "General Prime Sweep Scale",

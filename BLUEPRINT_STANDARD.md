@@ -6,7 +6,7 @@ The standard exists to make the library more than a set of demos: every blueprin
 
 The reusable implementation lives in focused modules under `mn-skills/blueprint_support_skill/src/mn_blueprint_support/`. `standard.py` remains a compatibility facade that re-exports the public contract, while implementation lives in modules such as `config.py`, `input_adapters.py`, `run_store.py`, `runtime.py`, `worker_contract.py`, `observability.py`, `web_ui.py`, `cli_runtime.py`, `llm.py`, `scenarios.py`, `product_catalog.py`, `catalog_loader.py`, `solution_runner.py`, and `scaffold.py`.
 
-The shared skill owns the reusable framework pieces: blueprint metadata loading, stable identity, config merging, input adapters, output adapter resolution, run-store artifacts, logging helpers, runtime context, common CLI execution, first-run setup, local user config persistence, and run observability. Blueprint folders own concrete product and scenario data through `product.json`, `scenario.json`, `manifest.json`, and `config/default.json`.
+The shared skill owns the reusable framework pieces: blueprint metadata loading, stable identity, config merging, input adapters, output adapter resolution, run-store artifacts, logging helpers, runtime context, common CLI execution, first-run setup, local user config persistence, and run observability. The root `index.json` owns portfolio/product catalog data, while blueprint folders own concrete scenario and runtime data through `scenario.json`, `manifest.json`, and `config/default.json`.
 
 All local user state defaults to `~/.mn`: runs live in `~/.mn/runs`, local config lives in `~/.mn/config.json`, and support logs live in `~/.mn/logs`. Older legacy-home references should be treated as migrated to `~/.mn`.
 
@@ -16,7 +16,7 @@ Each blueprint is separated into seven concerns:
 
 | Concern | Source | Purpose |
 |---|---|---|
-| Metadata | `manifest.json`, `config/default.json`, and blueprint `README.md` | Describes the product use case, target users, graph topology, runtime features, and output contract. |
+| Metadata | Root `index.json`, `manifest.json`, `config/default.json`, and blueprint `README.md` | Describes the product use case, target users, graph topology, runtime features, and output contract. |
 | Config | `config/default.json` plus `mn_blueprint_support.config.load_config` | Controls how the blueprint runs without changing code. |
 | Inputs | `inputs` config section, payload fixtures, and `mn_blueprint_support.input_adapters.resolve_input_overrides` | Defines where data comes from. Defaults to mock data and supports real adapters. |
 | Simulation / logic | Worker payloads, blueprint-owned `scenario.json`, or specialized code | Evolves domain state over time. |

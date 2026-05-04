@@ -130,9 +130,10 @@ Every blueprint folder contains:
 - `description` in the manifest as a short plain-text explanation of what the blueprint is.
 - `config/default.json` with standard identity, mock inputs, simulation settings, LLM settings, outputs, logging, and adapter declarations.
 - `scenario.json` for data-driven simulation blueprints, including metrics, actions, default inputs, agent role, and final artifact type.
-- `product.json` for portfolio positioning, including target users, commercial value, customization path, simulation type, and output narrative.
 - `payloads/` with worker scripts, generated runners, policies, fixtures, or domain assets.
 - `README.md` with what the blueprint is, why it matters, how to run it, what to customize, and how to interpret outputs.
+
+The root `index.json` is the portfolio catalog source of truth. Each entry includes the runnable blueprint identity plus a nested `product` block for target users, commercial value, customization path, simulation type, and output narrative.
 
 The shared execution support lives in `mn-skills/blueprint_support_skill`. This repository intentionally contains blueprint assets only: manifests, configs, payloads, docs, and tests.
 

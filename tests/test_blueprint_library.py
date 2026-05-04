@@ -24,13 +24,32 @@ def test_index_entries_point_to_loadable_blueprint_folders() -> None:
     assert index
     ids = [entry["id"] for entry in index]
     assert len(ids) == len(set(ids))
+    assert not list(ROOT.glob("*/product.json"))
+    required_product_fields = {
+        "agent_role",
+        "customizable_for",
+        "customize",
+        "example",
+        "investor",
+        "one_line",
+        "output",
+        "problem",
+        "runtime_features",
+        "simulation_type",
+        "target_users",
+    }
 
     for entry in index:
         blueprint_dir = ROOT / entry["path"]
         manifest_path = blueprint_dir / "manifest.json"
         payloads_dir = blueprint_dir / "payloads"
+        product = entry.get("product")
         assert blueprint_dir.exists(), entry
         assert manifest_path.exists(), entry
+        assert isinstance(product, dict), entry
+        assert required_product_fields.issubset(product), entry
+        assert "blueprint_id" not in product
+        assert "title" not in product
         manifest = json.loads(manifest_path.read_text())
         if manifest["metadata"].get("python_source_mode") is True:
             assert "python_workflow" in manifest["metadata"], entry
@@ -100,6 +119,7 @@ def test_python_sdk_source_blueprints_run_directly_and_generate_bundle(
     assert (bundle_dir / "payloads" / "mn_python_workflow" / "mn_worker.py").exists()
     assert (bundle_dir / "requirements.txt").exists()
     assert (bundle_dir / "config" / "default.json").exists()
+    assert not (bundle_dir / "product.json").exists()
     manifest = json.loads((blueprint_dir / "manifest.json").read_text())
     for include_path in manifest["metadata"]["python_workflow"].get("includes", []):
         assert (bundle_dir / "payloads" / "mn_python_workflow" / "source" / include_path).exists()
@@ -126,12 +146,14 @@ def test_every_blueprint_declares_standard_config_and_interfaces() -> None:
         "result.json",
         "final_artifact.json",
     }
-    for blueprint_id in PRODUCT_PROFILES:
+    index = json.loads((ROOT / "index.json").read_text())
+    blueprint_ids = [entry["id"] for entry in index]
+    assert set(PRODUCT_PROFILES) == set(blueprint_ids)
+
+    for blueprint_id in blueprint_ids:
         config_path = ROOT / blueprint_id / "config" / "default.json"
-        product_path = ROOT / blueprint_id / "product.json"
         manifest_path = ROOT / blueprint_id / "manifest.json"
         assert config_path.exists(), f"{blueprint_id} missing config/default.json"
-        assert product_path.exists(), f"{blueprint_id} missing product.json"
 
         config = json.loads(config_path.read_text())
         assert required_sections.issubset(config), blueprint_id

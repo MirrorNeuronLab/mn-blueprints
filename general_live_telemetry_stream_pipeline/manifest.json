@@ -1,0 +1,172 @@
+{
+  "daemon": true,
+  "description": "Move live telemetry chunks through stream workers and summarize the evolving signal.",
+  "edges": [
+    {
+      "edge_id": "ingress_to_source",
+      "from_node": "ingress",
+      "message_type": "stream_start",
+      "to_node": "telemetry_source"
+    },
+    {
+      "edge_id": "source_to_detector",
+      "from_node": "telemetry_source",
+      "message_type": "telemetry_chunk",
+      "to_node": "peak_detector"
+    }
+  ],
+  "entrypoints": [
+    "ingress"
+  ],
+  "graph_id": "general_live_telemetry_stream_pipeline_v1",
+  "initial_inputs": {
+    "ingress": [
+      {
+        "description": "Continuously produce gzipped NDJSON telemetry chunks between stream agents until manually cancelled.",
+        "scenario": "telemetry_stream"
+      }
+    ]
+  },
+  "job_name": "general-live-telemetry-stream-pipeline",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "general_live_telemetry_stream_pipeline",
+    "category": "general",
+    "customizable_for": "IoT telemetry, application logs, market data, operational sensors.",
+    "description": "Move live telemetry chunks through stream workers and summarize the evolving signal.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Stream processor and summarizer.",
+    "name": "Live Telemetry Stream Pipeline",
+    "output": "Signal summary and stream result artifacts.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object, event envelope, or bundle path"
+    },
+    "problem_solved": "Streaming systems require backpressure-aware routing, stateful workers, and outputs that remain interpretable as events arrive.",
+    "quick_test": {
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "stream agents",
+      "live events",
+      "stateful summarization",
+      "daemon mode"
+    ],
+    "simulation_type": "Live telemetry stream.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Developers building event-stream workflows and runtime observability paths."
+  },
+  "name": "Live Telemetry Stream Pipeline",
+  "nodes": [
+    {
+      "agent_type": "router",
+      "config": {
+        "emit_type": "stream_start"
+      },
+      "node_id": "ingress",
+      "role": "root_coordinator",
+      "type": "map"
+    },
+    {
+      "agent_type": "module",
+      "config": {
+        "baseline": 24,
+        "chunk_size": 6,
+        "content_encoding": "gzip",
+        "device_id": "sensor-alpha",
+        "interval_ms": 1000,
+        "jitter": 4,
+        "module": "MirrorNeuron.Examples.StreamBasicDaemon.TelemetrySource",
+        "module_source": "beam_modules/telemetry_source.ex",
+        "peak_every": 20,
+        "peak_height": 55,
+        "target_node": "peak_detector"
+      },
+      "node_id": "telemetry_source",
+      "role": "producer",
+      "type": "stream"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/detect_stream_peaks.py"
+        ],
+        "environment": {
+          "MIN_SPIKE_DELTA": "20.0",
+          "SPIKE_MULTIPLIER": "2.4",
+          "WARMUP_POINTS": "5",
+          "WINDOW_SIZE": "8"
+        },
+        "output_message_type": null,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_as": "stream_worker",
+        "upload_path": "stream_worker",
+        "workdir": "/sandbox/job/stream_worker"
+      },
+      "node_id": "peak_detector",
+      "role": "consumer",
+      "type": "stream"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover",
+    "stream_mode": "live"
+  },
+  "requiredContextEngine": false
+}

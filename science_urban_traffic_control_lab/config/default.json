@@ -1,0 +1,131 @@
+{
+  "execution_model": [
+    "load_metadata",
+    "resolve_config",
+    "load_inputs",
+    "start_run_store",
+    "observe_simulation_state",
+    "call_llm_agent",
+    "apply_decision_to_simulation",
+    "emit_events",
+    "write_final_artifact"
+  ],
+  "identity": {
+    "blueprint_id": "science_urban_traffic_control_lab",
+    "name": "Urban Traffic Control Lab"
+  },
+  "inputs": {
+    "adapter": "mock",
+    "description": "Default synthetic inputs bundled with the blueprint.",
+    "payload": {
+      "city": "synthetic metro",
+      "seed": 42,
+      "steps": 5
+    }
+  },
+  "interfaces": {
+    "config_sections": [
+      "metadata",
+      "identity",
+      "inputs",
+      "simulation",
+      "llm",
+      "outputs",
+      "logging",
+      "real_adapters"
+    ],
+    "identity_fields": [
+      "blueprint_id",
+      "name",
+      "run_id"
+    ],
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ],
+    "run_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "result.json",
+      "final_artifact.json"
+    ]
+  },
+  "llm": {
+    "agent_role": "Traffic systems control advisor",
+    "api_base": "http://192.168.4.173:11434",
+    "mock_mode": "fake",
+    "mode": "ollama",
+    "model": "ollama/nemotron3:33b",
+    "responsibilities": [
+      "observe congestion and incidents",
+      "choose signal or routing controls",
+      "summarize mobility impact"
+    ]
+  },
+  "logging": {
+    "events": [
+      "run_started",
+      "inputs_loaded",
+      "simulation_step_started",
+      "llm_decision",
+      "simulation_state_updated",
+      "run_completed"
+    ],
+    "events_jsonl": true,
+    "level": "INFO",
+    "redact_env_secrets": true
+  },
+  "metadata": {
+    "category": "science",
+    "customizable_for": "Signal optimization, incident response, transit priority, event planning.",
+    "problem_solved": "Traffic control decisions are coupled and time-sensitive; dashboards show congestion but do not reason over next-state control options.",
+    "target_users": "City traffic teams, transportation researchers, smart-city operators, and mobility startups."
+  },
+  "mode": "mock",
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifact_contract": "Traffic control plan with corridor ranking and action history.",
+    "run_root": "~/.mn/runs",
+    "write_run_store": true
+  },
+  "real_adapters": {
+    "inline_json": {
+      "adapter": "json",
+      "description": "Load overrides from an inline JSON object.",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "description": "Load JSON overrides from a local file path.",
+      "path": null
+    }
+  },
+  "simulation": {
+    "actions": [
+      "extend_green_corridor",
+      "reroute_incident",
+      "transit_priority"
+    ],
+    "deterministic": true,
+    "enabled": true,
+    "metrics": [
+      "vehicle_count",
+      "avg_speed_mph",
+      "incident_severity",
+      "emissions_index"
+    ],
+    "objective": "maximize",
+    "primary_metric": "avg_speed_mph",
+    "risk_metric": "incident_severity",
+    "seed_field": "seed",
+    "type": "Traffic network and incident-control simulation."
+  },
+  "standard_version": "1.0"
+}

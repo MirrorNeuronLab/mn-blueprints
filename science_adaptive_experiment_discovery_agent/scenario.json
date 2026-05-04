@@ -1,0 +1,107 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Explore a higher-temperature condition.",
+      "effects": {
+        "evidence_confidence": 4.0,
+        "experiment_cost": 2.0,
+        "toxicity_score": 3.0,
+        "yield_pct": 5.0
+      },
+      "name": "explore_high_temp"
+    },
+    {
+      "cost": 0.0,
+      "description": "Refine pH around the best observed condition.",
+      "effects": {
+        "evidence_confidence": 5.0,
+        "toxicity_score": -2.0,
+        "yield_pct": 3.0
+      },
+      "name": "refine_ph"
+    },
+    {
+      "cost": 0.0,
+      "description": "Try a new catalyst family.",
+      "effects": {
+        "evidence_confidence": 2.0,
+        "experiment_cost": 5.0,
+        "toxicity_score": 5.0,
+        "yield_pct": 7.0
+      },
+      "name": "switch_catalyst"
+    }
+  ],
+  "agent_responsibilities": [
+    "observe prior experiment outcomes",
+    "choose the next experiment",
+    "summarize scientific tradeoffs"
+  ],
+  "artifact_type": "experiment optimization plan",
+  "blueprint_id": "science_adaptive_experiment_discovery_agent",
+  "category": "science",
+  "default_inputs": {
+    "compound_family": "synthetic enzyme candidate",
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Select the next lab experiment from prior simulated yield, toxicity, cost, and evidence confidence.",
+  "entity_label": "experiment",
+  "entity_names": [
+    "temperature sweep",
+    "pH refinement",
+    "catalyst screen"
+  ],
+  "features": [
+    "iterative_experiment_simulation",
+    "llm_scientist",
+    "optimization_loop"
+  ],
+  "llm_role": "Experimental design scientist",
+  "metrics": [
+    {
+      "drift": 2.0,
+      "initial": 37,
+      "label": "Experimental yield percent",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "yield_pct",
+      "volatility": 4.0
+    },
+    {
+      "drift": 2.5,
+      "initial": 31,
+      "label": "Toxicity score",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "toxicity_score",
+      "volatility": 4.0
+    },
+    {
+      "drift": 1.2,
+      "initial": 12,
+      "label": "Experiment cost index",
+      "maximum": 60,
+      "minimum": 0,
+      "name": "experiment_cost",
+      "volatility": 1.0
+    },
+    {
+      "drift": 4.0,
+      "initial": 52,
+      "label": "Evidence confidence",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "evidence_confidence",
+      "volatility": 3.0
+    }
+  ],
+  "multi_agent": false,
+  "name": "science_adaptive_experiment_discovery_agent",
+  "objective": "maximize",
+  "primary_metric": "yield_pct",
+  "requires_human_approval": false,
+  "risk_metric": "toxicity_score",
+  "uses_tool": false
+}

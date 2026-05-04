@@ -1,0 +1,4252 @@
+{
+  "description": "Stress the runtime with a broad fan-out of deterministic parallel workers.",
+  "edges": [
+    {
+      "edge_id": "dispatch_prime_worker_0001",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0001"
+    },
+    {
+      "edge_id": "prime_worker_0001_to_aggregator",
+      "from_node": "prime_worker_0001",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0002",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0002"
+    },
+    {
+      "edge_id": "prime_worker_0002_to_aggregator",
+      "from_node": "prime_worker_0002",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0003",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0003"
+    },
+    {
+      "edge_id": "prime_worker_0003_to_aggregator",
+      "from_node": "prime_worker_0003",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0004",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0004"
+    },
+    {
+      "edge_id": "prime_worker_0004_to_aggregator",
+      "from_node": "prime_worker_0004",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0005",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0005"
+    },
+    {
+      "edge_id": "prime_worker_0005_to_aggregator",
+      "from_node": "prime_worker_0005",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0006",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0006"
+    },
+    {
+      "edge_id": "prime_worker_0006_to_aggregator",
+      "from_node": "prime_worker_0006",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0007",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0007"
+    },
+    {
+      "edge_id": "prime_worker_0007_to_aggregator",
+      "from_node": "prime_worker_0007",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0008",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0008"
+    },
+    {
+      "edge_id": "prime_worker_0008_to_aggregator",
+      "from_node": "prime_worker_0008",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0009",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0009"
+    },
+    {
+      "edge_id": "prime_worker_0009_to_aggregator",
+      "from_node": "prime_worker_0009",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0010",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0010"
+    },
+    {
+      "edge_id": "prime_worker_0010_to_aggregator",
+      "from_node": "prime_worker_0010",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0011",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0011"
+    },
+    {
+      "edge_id": "prime_worker_0011_to_aggregator",
+      "from_node": "prime_worker_0011",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0012",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0012"
+    },
+    {
+      "edge_id": "prime_worker_0012_to_aggregator",
+      "from_node": "prime_worker_0012",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0013",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0013"
+    },
+    {
+      "edge_id": "prime_worker_0013_to_aggregator",
+      "from_node": "prime_worker_0013",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0014",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0014"
+    },
+    {
+      "edge_id": "prime_worker_0014_to_aggregator",
+      "from_node": "prime_worker_0014",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0015",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0015"
+    },
+    {
+      "edge_id": "prime_worker_0015_to_aggregator",
+      "from_node": "prime_worker_0015",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0016",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0016"
+    },
+    {
+      "edge_id": "prime_worker_0016_to_aggregator",
+      "from_node": "prime_worker_0016",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0017",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0017"
+    },
+    {
+      "edge_id": "prime_worker_0017_to_aggregator",
+      "from_node": "prime_worker_0017",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0018",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0018"
+    },
+    {
+      "edge_id": "prime_worker_0018_to_aggregator",
+      "from_node": "prime_worker_0018",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0019",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0019"
+    },
+    {
+      "edge_id": "prime_worker_0019_to_aggregator",
+      "from_node": "prime_worker_0019",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0020",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0020"
+    },
+    {
+      "edge_id": "prime_worker_0020_to_aggregator",
+      "from_node": "prime_worker_0020",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0021",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0021"
+    },
+    {
+      "edge_id": "prime_worker_0021_to_aggregator",
+      "from_node": "prime_worker_0021",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0022",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0022"
+    },
+    {
+      "edge_id": "prime_worker_0022_to_aggregator",
+      "from_node": "prime_worker_0022",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0023",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0023"
+    },
+    {
+      "edge_id": "prime_worker_0023_to_aggregator",
+      "from_node": "prime_worker_0023",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0024",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0024"
+    },
+    {
+      "edge_id": "prime_worker_0024_to_aggregator",
+      "from_node": "prime_worker_0024",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0025",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0025"
+    },
+    {
+      "edge_id": "prime_worker_0025_to_aggregator",
+      "from_node": "prime_worker_0025",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0026",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0026"
+    },
+    {
+      "edge_id": "prime_worker_0026_to_aggregator",
+      "from_node": "prime_worker_0026",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0027",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0027"
+    },
+    {
+      "edge_id": "prime_worker_0027_to_aggregator",
+      "from_node": "prime_worker_0027",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0028",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0028"
+    },
+    {
+      "edge_id": "prime_worker_0028_to_aggregator",
+      "from_node": "prime_worker_0028",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0029",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0029"
+    },
+    {
+      "edge_id": "prime_worker_0029_to_aggregator",
+      "from_node": "prime_worker_0029",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0030",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0030"
+    },
+    {
+      "edge_id": "prime_worker_0030_to_aggregator",
+      "from_node": "prime_worker_0030",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0031",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0031"
+    },
+    {
+      "edge_id": "prime_worker_0031_to_aggregator",
+      "from_node": "prime_worker_0031",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0032",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0032"
+    },
+    {
+      "edge_id": "prime_worker_0032_to_aggregator",
+      "from_node": "prime_worker_0032",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0033",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0033"
+    },
+    {
+      "edge_id": "prime_worker_0033_to_aggregator",
+      "from_node": "prime_worker_0033",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0034",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0034"
+    },
+    {
+      "edge_id": "prime_worker_0034_to_aggregator",
+      "from_node": "prime_worker_0034",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0035",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0035"
+    },
+    {
+      "edge_id": "prime_worker_0035_to_aggregator",
+      "from_node": "prime_worker_0035",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0036",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0036"
+    },
+    {
+      "edge_id": "prime_worker_0036_to_aggregator",
+      "from_node": "prime_worker_0036",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0037",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0037"
+    },
+    {
+      "edge_id": "prime_worker_0037_to_aggregator",
+      "from_node": "prime_worker_0037",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0038",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0038"
+    },
+    {
+      "edge_id": "prime_worker_0038_to_aggregator",
+      "from_node": "prime_worker_0038",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0039",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0039"
+    },
+    {
+      "edge_id": "prime_worker_0039_to_aggregator",
+      "from_node": "prime_worker_0039",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0040",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0040"
+    },
+    {
+      "edge_id": "prime_worker_0040_to_aggregator",
+      "from_node": "prime_worker_0040",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0041",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0041"
+    },
+    {
+      "edge_id": "prime_worker_0041_to_aggregator",
+      "from_node": "prime_worker_0041",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0042",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0042"
+    },
+    {
+      "edge_id": "prime_worker_0042_to_aggregator",
+      "from_node": "prime_worker_0042",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0043",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0043"
+    },
+    {
+      "edge_id": "prime_worker_0043_to_aggregator",
+      "from_node": "prime_worker_0043",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0044",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0044"
+    },
+    {
+      "edge_id": "prime_worker_0044_to_aggregator",
+      "from_node": "prime_worker_0044",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0045",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0045"
+    },
+    {
+      "edge_id": "prime_worker_0045_to_aggregator",
+      "from_node": "prime_worker_0045",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0046",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0046"
+    },
+    {
+      "edge_id": "prime_worker_0046_to_aggregator",
+      "from_node": "prime_worker_0046",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0047",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0047"
+    },
+    {
+      "edge_id": "prime_worker_0047_to_aggregator",
+      "from_node": "prime_worker_0047",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0048",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0048"
+    },
+    {
+      "edge_id": "prime_worker_0048_to_aggregator",
+      "from_node": "prime_worker_0048",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0049",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0049"
+    },
+    {
+      "edge_id": "prime_worker_0049_to_aggregator",
+      "from_node": "prime_worker_0049",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0050",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0050"
+    },
+    {
+      "edge_id": "prime_worker_0050_to_aggregator",
+      "from_node": "prime_worker_0050",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0051",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0051"
+    },
+    {
+      "edge_id": "prime_worker_0051_to_aggregator",
+      "from_node": "prime_worker_0051",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0052",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0052"
+    },
+    {
+      "edge_id": "prime_worker_0052_to_aggregator",
+      "from_node": "prime_worker_0052",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0053",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0053"
+    },
+    {
+      "edge_id": "prime_worker_0053_to_aggregator",
+      "from_node": "prime_worker_0053",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0054",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0054"
+    },
+    {
+      "edge_id": "prime_worker_0054_to_aggregator",
+      "from_node": "prime_worker_0054",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0055",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0055"
+    },
+    {
+      "edge_id": "prime_worker_0055_to_aggregator",
+      "from_node": "prime_worker_0055",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0056",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0056"
+    },
+    {
+      "edge_id": "prime_worker_0056_to_aggregator",
+      "from_node": "prime_worker_0056",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0057",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0057"
+    },
+    {
+      "edge_id": "prime_worker_0057_to_aggregator",
+      "from_node": "prime_worker_0057",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0058",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0058"
+    },
+    {
+      "edge_id": "prime_worker_0058_to_aggregator",
+      "from_node": "prime_worker_0058",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0059",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0059"
+    },
+    {
+      "edge_id": "prime_worker_0059_to_aggregator",
+      "from_node": "prime_worker_0059",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0060",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0060"
+    },
+    {
+      "edge_id": "prime_worker_0060_to_aggregator",
+      "from_node": "prime_worker_0060",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0061",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0061"
+    },
+    {
+      "edge_id": "prime_worker_0061_to_aggregator",
+      "from_node": "prime_worker_0061",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0062",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0062"
+    },
+    {
+      "edge_id": "prime_worker_0062_to_aggregator",
+      "from_node": "prime_worker_0062",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0063",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0063"
+    },
+    {
+      "edge_id": "prime_worker_0063_to_aggregator",
+      "from_node": "prime_worker_0063",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0064",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0064"
+    },
+    {
+      "edge_id": "prime_worker_0064_to_aggregator",
+      "from_node": "prime_worker_0064",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0065",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0065"
+    },
+    {
+      "edge_id": "prime_worker_0065_to_aggregator",
+      "from_node": "prime_worker_0065",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0066",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0066"
+    },
+    {
+      "edge_id": "prime_worker_0066_to_aggregator",
+      "from_node": "prime_worker_0066",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0067",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0067"
+    },
+    {
+      "edge_id": "prime_worker_0067_to_aggregator",
+      "from_node": "prime_worker_0067",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0068",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0068"
+    },
+    {
+      "edge_id": "prime_worker_0068_to_aggregator",
+      "from_node": "prime_worker_0068",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0069",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0069"
+    },
+    {
+      "edge_id": "prime_worker_0069_to_aggregator",
+      "from_node": "prime_worker_0069",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0070",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0070"
+    },
+    {
+      "edge_id": "prime_worker_0070_to_aggregator",
+      "from_node": "prime_worker_0070",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0071",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0071"
+    },
+    {
+      "edge_id": "prime_worker_0071_to_aggregator",
+      "from_node": "prime_worker_0071",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0072",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0072"
+    },
+    {
+      "edge_id": "prime_worker_0072_to_aggregator",
+      "from_node": "prime_worker_0072",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0073",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0073"
+    },
+    {
+      "edge_id": "prime_worker_0073_to_aggregator",
+      "from_node": "prime_worker_0073",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0074",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0074"
+    },
+    {
+      "edge_id": "prime_worker_0074_to_aggregator",
+      "from_node": "prime_worker_0074",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0075",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0075"
+    },
+    {
+      "edge_id": "prime_worker_0075_to_aggregator",
+      "from_node": "prime_worker_0075",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0076",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0076"
+    },
+    {
+      "edge_id": "prime_worker_0076_to_aggregator",
+      "from_node": "prime_worker_0076",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0077",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0077"
+    },
+    {
+      "edge_id": "prime_worker_0077_to_aggregator",
+      "from_node": "prime_worker_0077",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0078",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0078"
+    },
+    {
+      "edge_id": "prime_worker_0078_to_aggregator",
+      "from_node": "prime_worker_0078",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0079",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0079"
+    },
+    {
+      "edge_id": "prime_worker_0079_to_aggregator",
+      "from_node": "prime_worker_0079",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0080",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0080"
+    },
+    {
+      "edge_id": "prime_worker_0080_to_aggregator",
+      "from_node": "prime_worker_0080",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0081",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0081"
+    },
+    {
+      "edge_id": "prime_worker_0081_to_aggregator",
+      "from_node": "prime_worker_0081",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0082",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0082"
+    },
+    {
+      "edge_id": "prime_worker_0082_to_aggregator",
+      "from_node": "prime_worker_0082",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0083",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0083"
+    },
+    {
+      "edge_id": "prime_worker_0083_to_aggregator",
+      "from_node": "prime_worker_0083",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0084",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0084"
+    },
+    {
+      "edge_id": "prime_worker_0084_to_aggregator",
+      "from_node": "prime_worker_0084",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0085",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0085"
+    },
+    {
+      "edge_id": "prime_worker_0085_to_aggregator",
+      "from_node": "prime_worker_0085",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0086",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0086"
+    },
+    {
+      "edge_id": "prime_worker_0086_to_aggregator",
+      "from_node": "prime_worker_0086",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0087",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0087"
+    },
+    {
+      "edge_id": "prime_worker_0087_to_aggregator",
+      "from_node": "prime_worker_0087",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0088",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0088"
+    },
+    {
+      "edge_id": "prime_worker_0088_to_aggregator",
+      "from_node": "prime_worker_0088",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0089",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0089"
+    },
+    {
+      "edge_id": "prime_worker_0089_to_aggregator",
+      "from_node": "prime_worker_0089",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0090",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0090"
+    },
+    {
+      "edge_id": "prime_worker_0090_to_aggregator",
+      "from_node": "prime_worker_0090",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0091",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0091"
+    },
+    {
+      "edge_id": "prime_worker_0091_to_aggregator",
+      "from_node": "prime_worker_0091",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0092",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0092"
+    },
+    {
+      "edge_id": "prime_worker_0092_to_aggregator",
+      "from_node": "prime_worker_0092",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0093",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0093"
+    },
+    {
+      "edge_id": "prime_worker_0093_to_aggregator",
+      "from_node": "prime_worker_0093",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0094",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0094"
+    },
+    {
+      "edge_id": "prime_worker_0094_to_aggregator",
+      "from_node": "prime_worker_0094",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0095",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0095"
+    },
+    {
+      "edge_id": "prime_worker_0095_to_aggregator",
+      "from_node": "prime_worker_0095",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0096",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0096"
+    },
+    {
+      "edge_id": "prime_worker_0096_to_aggregator",
+      "from_node": "prime_worker_0096",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0097",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0097"
+    },
+    {
+      "edge_id": "prime_worker_0097_to_aggregator",
+      "from_node": "prime_worker_0097",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0098",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0098"
+    },
+    {
+      "edge_id": "prime_worker_0098_to_aggregator",
+      "from_node": "prime_worker_0098",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0099",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0099"
+    },
+    {
+      "edge_id": "prime_worker_0099_to_aggregator",
+      "from_node": "prime_worker_0099",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "dispatch_prime_worker_0100",
+      "from_node": "dispatcher",
+      "message_type": "prime_chunk_request",
+      "to_node": "prime_worker_0100"
+    },
+    {
+      "edge_id": "prime_worker_0100_to_aggregator",
+      "from_node": "prime_worker_0100",
+      "message_type": "prime_chunk_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "collector_to_summarizer",
+      "from_node": "collector",
+      "message_type": "prime_chunk_collection",
+      "to_node": "summarizer"
+    }
+  ],
+  "entrypoints": [
+    "dispatcher"
+  ],
+  "graph_id": "general_parallel_worker_scale_benchmark_v1",
+  "initial_inputs": {
+    "dispatcher": [
+      {
+        "benchmark": "prime_sweep",
+        "chunk_size": 100,
+        "range_end": 1010002,
+        "range_start": 1000003,
+        "requested_workers": 100,
+        "worker_count": 100
+      }
+    ]
+  },
+  "job_name": "general-parallel-worker-scale-benchmark",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "general_parallel_worker_scale_benchmark",
+    "category": "general",
+    "customizable_for": "Batch analytics, Monte Carlo jobs, large enrichment queues.",
+    "description": "Stress the runtime with a broad fan-out of deterministic parallel workers.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Parallel executor workers plus reducer.",
+    "name": "Parallel Worker Scale Benchmark",
+    "output": "Scale summary and worker completion metrics.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object, event envelope, or bundle path"
+    },
+    "problem_solved": "Agent systems need to prove they can dispatch many bounded tasks and collect results reliably before being trusted with larger workloads.",
+    "quick_test": {
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "parallel fan-out",
+      "executor pools",
+      "aggregation",
+      "quick-test scaling knobs"
+    ],
+    "simulation_type": "Parallel synthetic workload sweep.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Platform teams testing scheduler throughput, worker pools, and aggregation behavior."
+  },
+  "name": "Parallel Worker Scale Benchmark",
+  "nodes": [
+    {
+      "agent_type": "router",
+      "config": {
+        "emit_type": "prime_chunk_request"
+      },
+      "node_id": "dispatcher",
+      "role": "root_coordinator",
+      "type": "map"
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_after": 100,
+        "output_message_type": "prime_chunk_collection"
+      },
+      "node_id": "collector",
+      "type": "reduce"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/summarize_prime_sweep.py"
+        ],
+        "name_prefix": "prime-summary",
+        "output_message_type": null,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_as": "summary_worker",
+        "upload_path": "summary_worker",
+        "workdir": "/sandbox/job/summary_worker"
+      },
+      "node_id": "summarizer",
+      "type": "reduce"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0001",
+          "1000003",
+          "1000102"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0001",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0001",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0002",
+          "1000103",
+          "1000202"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0002",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0002",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0003",
+          "1000203",
+          "1000302"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0003",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0003",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0004",
+          "1000303",
+          "1000402"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0004",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0004",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0005",
+          "1000403",
+          "1000502"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0005",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0005",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0006",
+          "1000503",
+          "1000602"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0006",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0006",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0007",
+          "1000603",
+          "1000702"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0007",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0007",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0008",
+          "1000703",
+          "1000802"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0008",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0008",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0009",
+          "1000803",
+          "1000902"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0009",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0009",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0010",
+          "1000903",
+          "1001002"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0010",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0010",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0011",
+          "1001003",
+          "1001102"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0011",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0011",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0012",
+          "1001103",
+          "1001202"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0012",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0012",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0013",
+          "1001203",
+          "1001302"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0013",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0013",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0014",
+          "1001303",
+          "1001402"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0014",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0014",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0015",
+          "1001403",
+          "1001502"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0015",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0015",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0016",
+          "1001503",
+          "1001602"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0016",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0016",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0017",
+          "1001603",
+          "1001702"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0017",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0017",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0018",
+          "1001703",
+          "1001802"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0018",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0018",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0019",
+          "1001803",
+          "1001902"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0019",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0019",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0020",
+          "1001903",
+          "1002002"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0020",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0020",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0021",
+          "1002003",
+          "1002102"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0021",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0021",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0022",
+          "1002103",
+          "1002202"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0022",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0022",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0023",
+          "1002203",
+          "1002302"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0023",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0023",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0024",
+          "1002303",
+          "1002402"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0024",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0024",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0025",
+          "1002403",
+          "1002502"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0025",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 0,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0025",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0026",
+          "1002503",
+          "1002602"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0026",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0026",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0027",
+          "1002603",
+          "1002702"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0027",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0027",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0028",
+          "1002703",
+          "1002802"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0028",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0028",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0029",
+          "1002803",
+          "1002902"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0029",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0029",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0030",
+          "1002903",
+          "1003002"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0030",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0030",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0031",
+          "1003003",
+          "1003102"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0031",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0031",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0032",
+          "1003103",
+          "1003202"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0032",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0032",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0033",
+          "1003203",
+          "1003302"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0033",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0033",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0034",
+          "1003303",
+          "1003402"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0034",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0034",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0035",
+          "1003403",
+          "1003502"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0035",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0035",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0036",
+          "1003503",
+          "1003602"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0036",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0036",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0037",
+          "1003603",
+          "1003702"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0037",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0037",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0038",
+          "1003703",
+          "1003802"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0038",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0038",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0039",
+          "1003803",
+          "1003902"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0039",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0039",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0040",
+          "1003903",
+          "1004002"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0040",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0040",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0041",
+          "1004003",
+          "1004102"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0041",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0041",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0042",
+          "1004103",
+          "1004202"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0042",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0042",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0043",
+          "1004203",
+          "1004302"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0043",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0043",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0044",
+          "1004303",
+          "1004402"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0044",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0044",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0045",
+          "1004403",
+          "1004502"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0045",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0045",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0046",
+          "1004503",
+          "1004602"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0046",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0046",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0047",
+          "1004603",
+          "1004702"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0047",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0047",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0048",
+          "1004703",
+          "1004802"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0048",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0048",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0049",
+          "1004803",
+          "1004902"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0049",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0049",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0050",
+          "1004903",
+          "1005002"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0050",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 250,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0050",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0051",
+          "1005003",
+          "1005102"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0051",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0051",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0052",
+          "1005103",
+          "1005202"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0052",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0052",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0053",
+          "1005203",
+          "1005302"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0053",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0053",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0054",
+          "1005303",
+          "1005402"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0054",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0054",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0055",
+          "1005403",
+          "1005502"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0055",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0055",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0056",
+          "1005503",
+          "1005602"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0056",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0056",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0057",
+          "1005603",
+          "1005702"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0057",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0057",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0058",
+          "1005703",
+          "1005802"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0058",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0058",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0059",
+          "1005803",
+          "1005902"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0059",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0059",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0060",
+          "1005903",
+          "1006002"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0060",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0060",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0061",
+          "1006003",
+          "1006102"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0061",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0061",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0062",
+          "1006103",
+          "1006202"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0062",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0062",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0063",
+          "1006203",
+          "1006302"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0063",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0063",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0064",
+          "1006303",
+          "1006402"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0064",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0064",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0065",
+          "1006403",
+          "1006502"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0065",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0065",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0066",
+          "1006503",
+          "1006602"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0066",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0066",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0067",
+          "1006603",
+          "1006702"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0067",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0067",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0068",
+          "1006703",
+          "1006802"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0068",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0068",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0069",
+          "1006803",
+          "1006902"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0069",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0069",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0070",
+          "1006903",
+          "1007002"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0070",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0070",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0071",
+          "1007003",
+          "1007102"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0071",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0071",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0072",
+          "1007103",
+          "1007202"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0072",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0072",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0073",
+          "1007203",
+          "1007302"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0073",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0073",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0074",
+          "1007303",
+          "1007402"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0074",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0074",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0075",
+          "1007403",
+          "1007502"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0075",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 500,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0075",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0076",
+          "1007503",
+          "1007602"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0076",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0076",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0077",
+          "1007603",
+          "1007702"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0077",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0077",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0078",
+          "1007703",
+          "1007802"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0078",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0078",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0079",
+          "1007803",
+          "1007902"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0079",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0079",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0080",
+          "1007903",
+          "1008002"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0080",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0080",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0081",
+          "1008003",
+          "1008102"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0081",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0081",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0082",
+          "1008103",
+          "1008202"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0082",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0082",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0083",
+          "1008203",
+          "1008302"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0083",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0083",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0084",
+          "1008303",
+          "1008402"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0084",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0084",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0085",
+          "1008403",
+          "1008502"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0085",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0085",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0086",
+          "1008503",
+          "1008602"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0086",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0086",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0087",
+          "1008603",
+          "1008702"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0087",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0087",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0088",
+          "1008703",
+          "1008802"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0088",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0088",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0089",
+          "1008803",
+          "1008902"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0089",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0089",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0090",
+          "1008903",
+          "1009002"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0090",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0090",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0091",
+          "1009003",
+          "1009102"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0091",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0091",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0092",
+          "1009103",
+          "1009202"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0092",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0092",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0093",
+          "1009203",
+          "1009302"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0093",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0093",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0094",
+          "1009303",
+          "1009402"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0094",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0094",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0095",
+          "1009403",
+          "1009502"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0095",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0095",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0096",
+          "1009503",
+          "1009602"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0096",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0096",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0097",
+          "1009603",
+          "1009702"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0097",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0097",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0098",
+          "1009703",
+          "1009802"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0098",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0098",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0099",
+          "1009803",
+          "1009902"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0099",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0099",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0100",
+          "1009903",
+          "1010002"
+        ],
+        "from": "base",
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0100",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "prime_chunk_result",
+        "pool": "default",
+        "pool_slots": 1,
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "startup_delay_ms": 750,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "upload_path": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
+      },
+      "node_id": "prime_worker_0100",
+      "type": "map"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  },
+  "requiredContextEngine": false
+}

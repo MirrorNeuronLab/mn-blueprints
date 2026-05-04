@@ -1,0 +1,131 @@
+{
+  "execution_model": [
+    "load_metadata",
+    "resolve_config",
+    "load_inputs",
+    "start_run_store",
+    "observe_simulation_state",
+    "call_llm_agent",
+    "apply_decision_to_simulation",
+    "emit_events",
+    "write_final_artifact"
+  ],
+  "identity": {
+    "blueprint_id": "science_climate_resilience_planning_engine",
+    "name": "Climate Resilience Planning Engine"
+  },
+  "inputs": {
+    "adapter": "mock",
+    "description": "Default synthetic inputs bundled with the blueprint.",
+    "payload": {
+      "seed": 42,
+      "steps": 5,
+      "town": "Riverton"
+    }
+  },
+  "interfaces": {
+    "config_sections": [
+      "metadata",
+      "identity",
+      "inputs",
+      "simulation",
+      "llm",
+      "outputs",
+      "logging",
+      "real_adapters"
+    ],
+    "identity_fields": [
+      "blueprint_id",
+      "name",
+      "run_id"
+    ],
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ],
+    "run_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "result.json",
+      "final_artifact.json"
+    ]
+  },
+  "llm": {
+    "agent_role": "Climate resilience planning advisor",
+    "api_base": "http://192.168.4.173:11434",
+    "mock_mode": "fake",
+    "mode": "ollama",
+    "model": "ollama/nemotron3:33b",
+    "responsibilities": [
+      "observe weather and infrastructure risk",
+      "choose mitigations",
+      "produce a local planning brief"
+    ]
+  },
+  "logging": {
+    "events": [
+      "run_started",
+      "inputs_loaded",
+      "simulation_step_started",
+      "llm_decision",
+      "simulation_state_updated",
+      "run_completed"
+    ],
+    "events_jsonl": true,
+    "level": "INFO",
+    "redact_env_secrets": true
+  },
+  "metadata": {
+    "category": "science",
+    "customizable_for": "Cities, utilities, campuses, hospitals, industrial sites.",
+    "problem_solved": "Climate events unfold over time and stress infrastructure unevenly; static risk maps do not recommend operational mitigations during a scenario.",
+    "target_users": "Municipal resilience teams, infrastructure planners, utilities, and climate-risk analysts."
+  },
+  "mode": "mock",
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifact_contract": "Local climate mitigation plan with ranked assets.",
+    "run_root": "~/.mn/runs",
+    "write_run_store": true
+  },
+  "real_adapters": {
+    "inline_json": {
+      "adapter": "json",
+      "description": "Load overrides from an inline JSON object.",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "description": "Load JSON overrides from a local file path.",
+      "path": null
+    }
+  },
+  "simulation": {
+    "actions": [
+      "deploy_pumps",
+      "stage_sandbags",
+      "close_roads"
+    ],
+    "deterministic": true,
+    "enabled": true,
+    "metrics": [
+      "rainfall_inches",
+      "flood_level_ft",
+      "pump_capacity_pct",
+      "vulnerable_assets"
+    ],
+    "objective": "minimize",
+    "primary_metric": "vulnerable_assets",
+    "risk_metric": "flood_level_ft",
+    "seed_field": "seed",
+    "type": "Weather, flooding, and infrastructure vulnerability simulation."
+  },
+  "standard_version": "1.0"
+}

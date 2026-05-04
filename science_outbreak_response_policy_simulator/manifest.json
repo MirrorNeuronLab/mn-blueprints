@@ -1,0 +1,171 @@
+{
+  "daemon": false,
+  "description": "Compare outbreak interventions as infections, mobility, vaccination, and hospital load change.",
+  "edges": [
+    {
+      "edge_id": "simulation_to_report",
+      "from_node": "simulation_loop",
+      "message_type": "blueprint_report",
+      "to_node": "report_sink"
+    }
+  ],
+  "entrypoints": [
+    "simulation_loop"
+  ],
+  "graph_id": "science_outbreak_response_policy_simulator_v1",
+  "initial_inputs": {
+    "simulation_loop": [
+      {
+        "population": 50000,
+        "seed": 42,
+        "steps": 5
+      }
+    ]
+  },
+  "job_name": "science-outbreak-response-policy-simulator",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "science_outbreak_response_policy_simulator",
+    "category": "science",
+    "customizable_for": "Campus health, local agencies, hospital systems, workplace safety.",
+    "description": "Compare outbreak interventions as infections, mobility, vaccination, and hospital load change.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {
+      "default_api_base": "http://192.168.4.173:11434",
+      "default_model": "ollama/nemotron3:33b",
+      "mock_mode": "run payloads/simulation_loop/scripts/run_blueprint.py --mock-llm"
+    },
+    "llm_agent_role": "Public-health intervention advisor.",
+    "name": "Outbreak Response Policy Simulator",
+    "output": "Public-health intervention plan with state trajectory.",
+    "output_contract": {
+      "events": "blueprint_report",
+      "stdout": "JSON object with timeline, state_changes, final_artifact, and llm metadata"
+    },
+    "problem_solved": "Outbreak response depends on time-varying spread and healthcare load; static dashboards cannot test policy consequences before action.",
+    "quick_test": {
+      "command": "python3 payloads/simulation_loop/scripts/run_blueprint.py --mock-llm --steps 2",
+      "enabled": true
+    },
+    "runtime_features": [
+      "disease spread simulation",
+      "policy intervention",
+      "LLM advisor",
+      "scenario planning"
+    ],
+    "simulation": {
+      "actions": [
+        "vaccination_push",
+        "reduce_mobility",
+        "increase_testing"
+      ],
+      "agent_role": "Public-health intervention advisor",
+      "dynamic_metrics": [
+        "infected_people",
+        "vaccination_pct",
+        "mobility_index",
+        "hospital_load_pct"
+      ]
+    },
+    "simulation_type": "Disease spread and intervention simulation.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "target_user": "Public-health planners, epidemiology teams, campus operations, and policy analysts."
+  },
+  "name": "Outbreak Response Policy Simulator",
+  "nodes": [
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/run_blueprint.py"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_MAX_TOKENS": "700",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_NUM_RETRIES": "1",
+          "LITELLM_TIMEOUT_SECONDS": "60",
+          "MN_BLUEPRINT_ID": "science_outbreak_response_policy_simulator",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_MAX_TOKENS": "700",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_NUM_RETRIES": "1",
+          "MN_LLM_TIMEOUT_SECONDS": "60"
+        },
+        "from": "base",
+        "name_prefix": "science_flu_spread_intervention_",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "blueprint_report",
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "simulation_loop",
+        "upload_path": "simulation_loop",
+        "workdir": "/sandbox/job/simulation_loop"
+      },
+      "node_id": "simulation_loop",
+      "role": "root_coordinator",
+      "type": "generic"
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_on_message": true
+      },
+      "node_id": "report_sink",
+      "role": "result_sink",
+      "type": "reduce"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
+  "requiredContextEngine": false
+}

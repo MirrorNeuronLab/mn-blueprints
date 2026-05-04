@@ -1,0 +1,102 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Send high-signal anomalies to a specialist.",
+      "effects": {
+        "anomaly_score": -12.0,
+        "queue_depth": -8.0
+      },
+      "name": "escalate_anomalies"
+    },
+    {
+      "cost": 0.0,
+      "description": "Raise the filter threshold to control noisy bursts.",
+      "effects": {
+        "anomaly_score": 3.0,
+        "false_positive_rate": -4.0,
+        "queue_depth": -6.0
+      },
+      "name": "tighten_filter"
+    },
+    {
+      "cost": 0.0,
+      "description": "Keep stream routing unchanged.",
+      "effects": {
+        "queue_depth": 2.0
+      },
+      "name": "hold_policy"
+    }
+  ],
+  "agent_responsibilities": [
+    "summarize event bursts",
+    "prioritize anomalies",
+    "choose routing actions"
+  ],
+  "artifact_type": "event stream report",
+  "blueprint_id": "general_event_stream_triage_state_machine",
+  "category": "general",
+  "default_inputs": {
+    "seed": 42,
+    "steps": 5,
+    "stream_name": "synthetic_ops_events"
+  },
+  "description": "Triage event streams as anomaly pressure, queue depth, and false positives change over time.",
+  "entity_label": "stream partition",
+  "entity_names": [
+    "payments",
+    "logs",
+    "alerts"
+  ],
+  "features": [
+    "event_stream",
+    "stream_state",
+    "agent_triage"
+  ],
+  "llm_role": "Event stream triage agent",
+  "metrics": [
+    {
+      "drift": 16.0,
+      "initial": 120,
+      "label": "Events per minute",
+      "maximum": 400,
+      "minimum": 10,
+      "name": "event_rate",
+      "volatility": 10.0
+    },
+    {
+      "drift": 7.0,
+      "initial": 35,
+      "label": "Anomaly score",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "anomaly_score",
+      "volatility": 8.0
+    },
+    {
+      "drift": 5.0,
+      "initial": 24,
+      "label": "Processing queue depth",
+      "maximum": 150,
+      "minimum": 0,
+      "name": "queue_depth",
+      "volatility": 4.0
+    },
+    {
+      "drift": 1.2,
+      "initial": 9,
+      "label": "False positive rate",
+      "maximum": 45,
+      "minimum": 0,
+      "name": "false_positive_rate",
+      "volatility": 1.5
+    }
+  ],
+  "multi_agent": false,
+  "name": "general_event_stream_triage_state_machine",
+  "objective": "minimize",
+  "primary_metric": "queue_depth",
+  "requires_human_approval": false,
+  "risk_metric": "anomaly_score",
+  "uses_tool": false
+}

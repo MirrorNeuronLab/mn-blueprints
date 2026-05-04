@@ -1,0 +1,102 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Use forecast output to rebalance resources.",
+      "effects": {
+        "forecast_error": -5.0,
+        "resource_buffer": 7.0,
+        "service_level": 3.0
+      },
+      "name": "use_forecast_rebalance"
+    },
+    {
+      "cost": 0.0,
+      "description": "Add buffer against forecast uncertainty.",
+      "effects": {
+        "resource_buffer": 9.0,
+        "service_level": 1.0
+      },
+      "name": "add_buffer"
+    },
+    {
+      "cost": 0.0,
+      "description": "Observe without changing controls.",
+      "effects": {
+        "forecast_error": 1.0
+      },
+      "name": "hold_policy"
+    }
+  ],
+  "agent_responsibilities": [
+    "call the forecast tool",
+    "compare forecast with current state",
+    "choose an action with rationale"
+  ],
+  "artifact_type": "tool-use trace",
+  "blueprint_id": "general_llm_tool_orchestration_loop",
+  "category": "general",
+  "default_inputs": {
+    "seed": 42,
+    "steps": 5,
+    "tool": "moving_window_forecast"
+  },
+  "description": "Show an LLM agent calling a forecast tool before deciding how to rebalance resources.",
+  "entity_label": "forecast segment",
+  "entity_names": [
+    "baseline forecast",
+    "surge scenario",
+    "constrained supply"
+  ],
+  "features": [
+    "llm_tool_use",
+    "forecast_tool",
+    "decision_loop"
+  ],
+  "llm_role": "Tool-using planning agent",
+  "metrics": [
+    {
+      "drift": 1.5,
+      "initial": 18,
+      "label": "Forecast error",
+      "maximum": 60,
+      "minimum": 0,
+      "name": "forecast_error",
+      "volatility": 3.0
+    },
+    {
+      "drift": 4.0,
+      "initial": 67,
+      "label": "Demand pressure",
+      "maximum": 120,
+      "minimum": 0,
+      "name": "demand_pressure",
+      "volatility": 4.0
+    },
+    {
+      "drift": -2.0,
+      "initial": 41,
+      "label": "Resource buffer",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "resource_buffer",
+      "volatility": 2.5
+    },
+    {
+      "drift": -2.0,
+      "initial": 88,
+      "label": "Service level",
+      "maximum": 100,
+      "minimum": 40,
+      "name": "service_level",
+      "volatility": 1.2
+    }
+  ],
+  "multi_agent": false,
+  "name": "general_llm_tool_orchestration_loop",
+  "objective": "maximize",
+  "primary_metric": "service_level",
+  "requires_human_approval": false,
+  "risk_metric": "forecast_error",
+  "uses_tool": true
+}

@@ -1,0 +1,105 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Tighten the threshold to reduce incidents.",
+      "effects": {
+        "coverage": -4.0,
+        "incident_rate": -5.0,
+        "policy_threshold": 5.0,
+        "reward": 2.0
+      },
+      "name": "tighten_policy"
+    },
+    {
+      "cost": 0.0,
+      "description": "Relax the threshold to increase coverage.",
+      "effects": {
+        "coverage": 6.0,
+        "incident_rate": 2.0,
+        "policy_threshold": -4.0,
+        "reward": 1.0
+      },
+      "name": "relax_policy"
+    },
+    {
+      "cost": 0.0,
+      "description": "Keep the policy unchanged for one more evaluation.",
+      "effects": {
+        "reward": 0.5
+      },
+      "name": "hold_policy"
+    }
+  ],
+  "agent_responsibilities": [
+    "observe reward and incidents",
+    "adjust the policy",
+    "avoid overfitting to one tick"
+  ],
+  "artifact_type": "policy recommendation",
+  "blueprint_id": "general_policy_feedback_optimization_loop",
+  "category": "general",
+  "default_inputs": {
+    "episodes": 5,
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Tune policy thresholds through repeated simulated reward and incident feedback.",
+  "entity_label": "policy candidate",
+  "entity_names": [
+    "strict",
+    "balanced",
+    "growth"
+  ],
+  "features": [
+    "policy_optimization",
+    "feedback_loop",
+    "reward_tracking"
+  ],
+  "llm_role": "Policy optimization agent",
+  "metrics": [
+    {
+      "drift": 1.0,
+      "initial": 48,
+      "label": "Policy reward",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "reward",
+      "volatility": 5.0
+    },
+    {
+      "drift": 1.5,
+      "initial": 14,
+      "label": "Incident rate",
+      "maximum": 60,
+      "minimum": 0,
+      "name": "incident_rate",
+      "volatility": 2.0
+    },
+    {
+      "drift": 0.0,
+      "initial": 52,
+      "label": "Policy threshold",
+      "maximum": 90,
+      "minimum": 10,
+      "name": "policy_threshold",
+      "volatility": 1.0
+    },
+    {
+      "drift": -0.8,
+      "initial": 69,
+      "label": "Policy coverage",
+      "maximum": 100,
+      "minimum": 20,
+      "name": "coverage",
+      "volatility": 2.0
+    }
+  ],
+  "multi_agent": false,
+  "name": "general_policy_feedback_optimization_loop",
+  "objective": "maximize",
+  "primary_metric": "reward",
+  "requires_human_approval": false,
+  "risk_metric": "incident_rate",
+  "uses_tool": false
+}

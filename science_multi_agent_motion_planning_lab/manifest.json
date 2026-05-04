@@ -1,0 +1,207 @@
+{
+  "description": "Visualize shared-world multi-agent motion planning and coordination behavior.",
+  "edges": [
+    {
+      "edge_id": "ingress_to_world",
+      "from_node": "ingress",
+      "message_type": "simulation_start",
+      "to_node": "shared_world"
+    },
+    {
+      "edge_id": "world_to_collector",
+      "from_node": "shared_world",
+      "message_type": "shared_world_result",
+      "to_node": "collector"
+    },
+    {
+      "edge_id": "collector_to_visualizer",
+      "from_node": "collector",
+      "message_type": "shared_world_collection",
+      "to_node": "visualizer"
+    }
+  ],
+  "entrypoints": [
+    "ingress"
+  ],
+  "graph_id": "science_multi_agent_motion_planning_lab_v1",
+  "initial_inputs": {
+    "ingress": [
+      {
+        "adversaries": 75,
+        "description": "Run one shared MPE world with many coexisting agents that collide, chase, flee, and crowd around obstacles.",
+        "good_agents": 25,
+        "max_cycles": 60,
+        "obstacles": 8,
+        "policy_mode": "swarm",
+        "scenario": "pettingzoo_simple_tag_shared_world",
+        "seed": 4200,
+        "total_agents": 100
+      }
+    ]
+  },
+  "job_name": "science-multi-agent-motion-planning-lab",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "science_multi_agent_motion_planning_lab",
+    "category": "science",
+    "customizable_for": "Robotics, warehouse coordination, autonomous planning, teaching labs.",
+    "description": "Visualize shared-world multi-agent motion planning and coordination behavior.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "World simulator and visualization summarizer.",
+    "name": "Multi Agent Motion Planning Lab",
+    "output": "Simulation summary and visual artifacts.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object, event envelope, or bundle path"
+    },
+    "problem_solved": "Multi-agent coordination depends on changing positions, goals, and collisions; users need visual traces, not only scalar metrics.",
+    "quick_test": {
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "multi-agent simulation",
+      "visualization",
+      "shared-world state",
+      "summary generation"
+    ],
+    "simulation_type": "Multi-agent particle environment.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Robotics researchers, simulation developers, and multi-agent systems educators."
+  },
+  "name": "Multi Agent Motion Planning Lab",
+  "nodes": [
+    {
+      "agent_type": "router",
+      "config": {
+        "emit_type": "simulation_start"
+      },
+      "node_id": "ingress",
+      "role": "root_coordinator",
+      "type": "map"
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_after": 1,
+        "output_message_type": "shared_world_collection"
+      },
+      "node_id": "collector",
+      "type": "reduce"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/build_shared_world_visualization.py"
+        ],
+        "name_prefix": "mpe-crowd-visualizer",
+        "output_message_type": null,
+        "pass_env": [
+          "PATH"
+        ],
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "tty": false,
+        "upload_as": "visualizer",
+        "upload_path": "visualizer",
+        "workdir": "/sandbox/job/visualizer"
+      },
+      "node_id": "visualizer",
+      "type": "reduce"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/run_shared_world.py"
+        ],
+        "environment": {
+          "MAX_CYCLES": "60",
+          "NUM_ADVERSARIES": "75",
+          "NUM_GOOD": "25",
+          "NUM_OBSTACLES": "8",
+          "POLICY_MODE": "swarm",
+          "SIMULATION_SEED": "4200"
+        },
+        "name_prefix": "mpe-crowd-world",
+        "output_message_type": "shared_world_result",
+        "pass_env": [
+          "PATH",
+          "MN_RUN_ID",
+          "MN_RUNS_ROOT",
+          "MN_NO_RUN_STORE",
+          "MN_DISABLE_RUN_STORE",
+          "MN_BLUEPRINT_CONFIG_PATH",
+          "MN_BLUEPRINT_CONFIG_JSON"
+        ],
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "tty": false,
+        "upload_as": "world_worker",
+        "upload_path": "world_worker",
+        "workdir": "/sandbox/job/world_worker"
+      },
+      "node_id": "shared_world",
+      "role": "world",
+      "type": "map"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  },
+  "requiredContextEngine": false
+}

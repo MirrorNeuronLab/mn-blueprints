@@ -1,0 +1,103 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Ask the human approver to authorize the mitigation.",
+      "effects": {
+        "approval_latency": 3.0,
+        "budget_used": 4.0,
+        "risk_exposure": -8.0
+      },
+      "name": "request_approval"
+    },
+    {
+      "cost": 0.0,
+      "description": "Prepare a reversible mitigation that can proceed faster.",
+      "effects": {
+        "benefit_score": 3.0,
+        "budget_used": 2.0,
+        "risk_exposure": -4.0
+      },
+      "name": "prepare_low_risk_option"
+    },
+    {
+      "cost": 0.0,
+      "description": "Wait for more evidence.",
+      "effects": {
+        "risk_exposure": 2.0
+      },
+      "name": "hold_policy"
+    }
+  ],
+  "agent_responsibilities": [
+    "prepare a recommendation",
+    "explain action risk",
+    "respect human approval constraints"
+  ],
+  "artifact_type": "approval memo",
+  "blueprint_id": "general_human_approval_decision_gate",
+  "category": "general",
+  "default_inputs": {
+    "human_approval": "approve_high_confidence",
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Insert human approval into an LLM decision loop before high-impact actions are applied.",
+  "entity_label": "decision option",
+  "entity_names": [
+    "urgent mitigation",
+    "reversible pilot",
+    "watchful waiting"
+  ],
+  "features": [
+    "human_in_the_loop",
+    "approval_gate",
+    "agent_recommendation"
+  ],
+  "llm_role": "Decision support agent",
+  "metrics": [
+    {
+      "drift": 5.0,
+      "initial": 61,
+      "label": "Risk exposure",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "risk_exposure",
+      "volatility": 4.0
+    },
+    {
+      "drift": 1.5,
+      "initial": 12,
+      "label": "Approval latency hours",
+      "maximum": 40,
+      "minimum": 0,
+      "name": "approval_latency",
+      "volatility": 1.0
+    },
+    {
+      "drift": 2.0,
+      "initial": 54,
+      "label": "Expected benefit",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "benefit_score",
+      "volatility": 3.0
+    },
+    {
+      "drift": 2.0,
+      "initial": 28,
+      "label": "Budget used",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "budget_used",
+      "volatility": 1.5
+    }
+  ],
+  "multi_agent": false,
+  "name": "general_human_approval_decision_gate",
+  "objective": "minimize",
+  "primary_metric": "risk_exposure",
+  "requires_human_approval": true,
+  "risk_metric": "budget_used",
+  "uses_tool": false
+}

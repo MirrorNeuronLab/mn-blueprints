@@ -1,0 +1,104 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Add overtime agents for the next interval.",
+      "effects": {
+        "queue_wait_minutes": -3.0,
+        "sla_attainment_pct": 5.0,
+        "staffed_agents": 5.0
+      },
+      "name": "add_overtime"
+    },
+    {
+      "cost": 0.0,
+      "description": "Shift staff from lower-priority queues.",
+      "effects": {
+        "queue_wait_minutes": -2.0,
+        "sla_attainment_pct": 4.0,
+        "staffed_agents": 3.0
+      },
+      "name": "shift_staff"
+    },
+    {
+      "cost": 0.0,
+      "description": "Deflect simple intents to self-service.",
+      "effects": {
+        "arrival_rate": -30.0,
+        "queue_wait_minutes": -2.0
+      },
+      "name": "deflect_self_service"
+    }
+  ],
+  "agent_responsibilities": [
+    "observe queue conditions",
+    "choose staffing controls",
+    "report SLA tradeoffs"
+  ],
+  "artifact_type": "staffing forecast",
+  "blueprint_id": "business_service_capacity_command_center",
+  "category": "business",
+  "default_inputs": {
+    "seed": 42,
+    "sla_target_pct": 85,
+    "steps": 5
+  },
+  "description": "Plan staffing and deflection actions as service demand, queue waits, and SLA risk change.",
+  "entity_label": "queue",
+  "entity_names": [
+    "billing",
+    "technical support",
+    "renewals"
+  ],
+  "features": [
+    "queue_simulation",
+    "staffing_decision",
+    "sla_tracking"
+  ],
+  "llm_role": "Workforce management agent",
+  "metrics": [
+    {
+      "drift": 18.0,
+      "initial": 210,
+      "label": "Calls per interval",
+      "maximum": 450,
+      "minimum": 50,
+      "name": "arrival_rate",
+      "volatility": 15.0
+    },
+    {
+      "drift": 1.6,
+      "initial": 8.0,
+      "label": "Average queue wait minutes",
+      "maximum": 45,
+      "minimum": 0,
+      "name": "queue_wait_minutes",
+      "volatility": 1.4
+    },
+    {
+      "drift": -0.5,
+      "initial": 34,
+      "label": "Staffed agents",
+      "maximum": 80,
+      "minimum": 10,
+      "name": "staffed_agents",
+      "volatility": 1.0
+    },
+    {
+      "drift": -3.0,
+      "initial": 82,
+      "label": "SLA attainment percent",
+      "maximum": 100,
+      "minimum": 30,
+      "name": "sla_attainment_pct",
+      "volatility": 2.5
+    }
+  ],
+  "multi_agent": false,
+  "name": "business_service_capacity_command_center",
+  "objective": "maximize",
+  "primary_metric": "sla_attainment_pct",
+  "requires_human_approval": false,
+  "risk_metric": "queue_wait_minutes",
+  "uses_tool": false
+}

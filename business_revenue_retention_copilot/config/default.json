@@ -1,0 +1,131 @@
+{
+  "execution_model": [
+    "load_metadata",
+    "resolve_config",
+    "load_inputs",
+    "start_run_store",
+    "observe_simulation_state",
+    "call_llm_agent",
+    "apply_decision_to_simulation",
+    "emit_events",
+    "write_final_artifact"
+  ],
+  "identity": {
+    "blueprint_id": "business_revenue_retention_copilot",
+    "name": "Revenue Retention Copilot"
+  },
+  "inputs": {
+    "adapter": "mock",
+    "description": "Default synthetic inputs bundled with the blueprint.",
+    "payload": {
+      "seed": 42,
+      "segment": "mid-market SaaS",
+      "steps": 5
+    }
+  },
+  "interfaces": {
+    "config_sections": [
+      "metadata",
+      "identity",
+      "inputs",
+      "simulation",
+      "llm",
+      "outputs",
+      "logging",
+      "real_adapters"
+    ],
+    "identity_fields": [
+      "blueprint_id",
+      "name",
+      "run_id"
+    ],
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ],
+    "run_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "result.json",
+      "final_artifact.json"
+    ]
+  },
+  "llm": {
+    "agent_role": "Customer retention strategist",
+    "api_base": "http://192.168.4.173:11434",
+    "mock_mode": "fake",
+    "mode": "ollama",
+    "model": "ollama/nemotron3:33b",
+    "responsibilities": [
+      "observe churn signals",
+      "select retention actions",
+      "explain expected impact"
+    ]
+  },
+  "logging": {
+    "events": [
+      "run_started",
+      "inputs_loaded",
+      "simulation_step_started",
+      "llm_decision",
+      "simulation_state_updated",
+      "run_completed"
+    ],
+    "events_jsonl": true,
+    "level": "INFO",
+    "redact_env_secrets": true
+  },
+  "metadata": {
+    "category": "business",
+    "customizable_for": "SaaS retention, subscription commerce, financial services, telecom.",
+    "problem_solved": "Churn risk changes with sentiment, product issues, and budget constraints; one-shot LLM suggestions do not show cost or state tradeoffs.",
+    "target_users": "Revenue operations, customer success, and growth teams."
+  },
+  "mode": "mock",
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifact_contract": "Retention intervention plan with expected churn and budget tradeoffs.",
+    "run_root": "~/.mn/runs",
+    "write_run_store": true
+  },
+  "real_adapters": {
+    "inline_json": {
+      "adapter": "json",
+      "description": "Load overrides from an inline JSON object.",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "description": "Load JSON overrides from a local file path.",
+      "path": null
+    }
+  },
+  "simulation": {
+    "actions": [
+      "proactive_success_calls",
+      "targeted_loyalty_offer",
+      "product_fix_campaign"
+    ],
+    "deterministic": true,
+    "enabled": true,
+    "metrics": [
+      "at_risk_customers",
+      "churn_rate_pct",
+      "sentiment_score",
+      "retention_budget_pct"
+    ],
+    "objective": "minimize",
+    "primary_metric": "churn_rate_pct",
+    "risk_metric": "retention_budget_pct",
+    "seed_field": "seed",
+    "type": "Customer health and churn-risk simulation."
+  },
+  "standard_version": "1.0"
+}

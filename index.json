@@ -1,138 +1,964 @@
 [
   {
-    "id": "general_openshell_worker_basic",
-    "path": "general_openshell_worker_basic",
-    "name": "General Openshell Worker Basic",
-    "description": "A blueprint for general openshell worker basic.",
-    "graph_id": "general_openshell_worker_basic_v2",
-    "job_name": "openshell-worker-basic"
+    "description": "Coordinate customer lifecycle outreach with LLM-generated messaging and delivery controls.",
+    "graph_id": "business_customer_lifecycle_email_copilot_v1",
+    "id": "business_customer_lifecycle_email_copilot",
+    "job_name": "business-customer-lifecycle-email-copilot",
+    "name": "Customer Lifecycle Email Copilot",
+    "path": "business_customer_lifecycle_email_copilot",
+    "product": {
+      "agent_role": "Campaign planner, copywriter, policy checker, delivery executor, inbox responder.",
+      "customizable_for": "Retention campaigns, onboarding journeys, renewal nudges, education sequences.",
+      "customize": "Replace the sample customer snapshot with CRM data, add lifecycle events, tune policy gates, and connect approved email or Slack providers.",
+      "example": "Synthetic customer snapshots flow through campaign planning, copy generation, policy checks, email execution, and reply handling.",
+      "investor": "This can become a vertical lifecycle-growth product because it connects agent reasoning to real delivery systems and customer state.",
+      "one_line": "Coordinate customer lifecycle outreach with LLM-generated messaging and delivery controls.",
+      "output": "Prepared emails, sent-event logs, reply handling events, and campaign summaries.",
+      "problem": "Customer outreach changes as replies, segments, policies, and delivery state evolve; static templates miss timing, context, and governance.",
+      "runtime_features": [
+        "LLM messaging",
+        "delivery integration",
+        "policy checks",
+        "long-running campaign loop"
+      ],
+      "simulation_type": "Lifecycle campaign loop with inbox and delivery state.",
+      "target_users": "Growth, lifecycle marketing, and customer success teams."
+    }
   },
   {
-    "id": "general_python_defined_basic",
-    "path": "general_python_defined_basic",
-    "name": "General Python Defined Basic",
-    "description": "A pure Python workflow compiled by mn-python-sdk into a MirrorNeuron bundle.",
-    "graph_id": "general_python_defined_basic_v1",
-    "job_name": "general-python-defined-basic-v1"
+    "description": "Evaluate price changes against competitor moves, inventory pressure, and revenue impact.",
+    "graph_id": "business_dynamic_pricing_profit_optimizer_v1",
+    "id": "business_dynamic_pricing_profit_optimizer",
+    "job_name": "business-dynamic-pricing-profit-optimizer",
+    "name": "Dynamic Pricing Profit Optimizer",
+    "path": "business_dynamic_pricing_profit_optimizer",
+    "product": {
+      "agent_role": "Pricing strategy agent.",
+      "customizable_for": "Retail, travel, marketplaces, subscriptions, manufacturing quotes.",
+      "customize": "Replace synthetic demand with commerce, competitor, inventory, and margin data; tune elasticity, guardrails, and promotion rules.",
+      "example": "A connected thermostat SKU faces competitor moves and inventory pressure, and the agent chooses price increase, discount, or match actions.",
+      "investor": "Dynamic pricing has direct profit impact and is a strong vertical for agentic simulation with human-reviewable recommendations.",
+      "one_line": "Evaluate price changes against competitor moves, inventory pressure, and revenue impact.",
+      "output": "Pricing recommendation with revenue and inventory tradeoffs.",
+      "problem": "Pricing is dynamic and coupled: competitors, demand, inventory, and margin move together faster than static rules can explain.",
+      "runtime_features": [
+        "pricing simulation",
+        "competitor dynamics",
+        "revenue forecast",
+        "LLM recommendation"
+      ],
+      "simulation_type": "Demand, competitor price, inventory, and revenue simulation.",
+      "target_users": "Pricing teams, category managers, and revenue management leaders."
+    }
   },
   {
-    "id": "general_python_defined_advanced_deamon",
-    "path": "general_python_defined_advanced_deamon",
-    "name": "General Python Defined Advanced Deamon",
-    "description": "A pure Python daemon workflow compiled by mn-python-sdk into a live MirrorNeuron bundle.",
-    "graph_id": "general_python_defined_advanced_deamon_v1",
-    "job_name": "general-python-defined-advanced-deamon-v1"
+    "description": "Monitor facility video streams and escalate safety-relevant observations with LLM reasoning.",
+    "graph_id": "business_facility_safety_video_guardian_v1",
+    "id": "business_facility_safety_video_guardian",
+    "job_name": "business-facility-safety-video-guardian",
+    "name": "Facility Safety Video Guardian",
+    "path": "business_facility_safety_video_guardian",
+    "product": {
+      "agent_role": "Safety observation and escalation agent.",
+      "customizable_for": "Door monitoring, restricted-area alerts, retail safety, warehouse operations.",
+      "customize": "Replace the sample video, tune sampling cadence and alert cooldown, add site-specific safety policies, and connect security notification channels.",
+      "example": "A door-camera stream is sampled, an Ollama-backed agent checks whether a person is visible, and alerts are throttled to avoid noise.",
+      "investor": "This illustrates vertical AI for physical operations: agents reason over evolving sensor state and trigger controlled workflows.",
+      "one_line": "Monitor facility video streams and escalate safety-relevant observations with LLM reasoning.",
+      "output": "Detection events, alert decisions, and notification payloads.",
+      "problem": "Video monitoring is continuous, noisy, and operationally sensitive; teams need stateful alerts, cooldowns, and explainable observations rather than raw frames.",
+      "runtime_features": [
+        "video sampling",
+        "Ollama decision path",
+        "cooldown state",
+        "Slack alerting"
+      ],
+      "simulation_type": "Video stream sampling with alert state.",
+      "target_users": "Facilities, security, safety operations, and property management teams."
+    }
   },
   {
-    "id": "general_prime_sweep_scale",
-    "path": "general_prime_sweep_scale",
-    "name": "General Prime Sweep Scale",
-    "description": "A blueprint for general prime sweep scale.",
-    "graph_id": "prime_sweep_1000_workers",
-    "job_name": "prime-sweep-1000-workers"
+    "description": "Compare retention interventions before deploying them to at-risk customers.",
+    "graph_id": "business_revenue_retention_copilot_v1",
+    "id": "business_revenue_retention_copilot",
+    "job_name": "business-revenue-retention-copilot",
+    "name": "Revenue Retention Copilot",
+    "path": "business_revenue_retention_copilot",
+    "product": {
+      "agent_role": "Customer retention strategist.",
+      "customizable_for": "SaaS retention, subscription commerce, financial services, telecom.",
+      "customize": "Replace synthetic health metrics with CRM, product usage, support tickets, billing, and NPS data; tune action costs and segment rules.",
+      "example": "A mid-market SaaS segment deteriorates, and the agent chooses success calls, loyalty offers, or product-fix campaigns.",
+      "investor": "Retention is measurable and budgeted; this blueprint can evolve into a revenue-copilot product tied to CRM workflows.",
+      "one_line": "Compare retention interventions before deploying them to at-risk customers.",
+      "output": "Retention intervention plan with expected churn and budget tradeoffs.",
+      "problem": "Churn risk changes with sentiment, product issues, and budget constraints; one-shot LLM suggestions do not show cost or state tradeoffs.",
+      "runtime_features": [
+        "customer behavior simulation",
+        "intervention planning",
+        "LLM strategy",
+        "feedback loop"
+      ],
+      "simulation_type": "Customer health and churn-risk simulation.",
+      "target_users": "Revenue operations, customer success, and growth teams."
+    }
   },
   {
-    "id": "general_native_live_deamon",
-    "path": "general_native_live_deamon",
-    "name": "Divisibility Monitor Example",
-    "description": "This is a simple long-lived MirrorNeuron workflow that keeps running until you stop it manually. Note: this uses native agents for fast simulation.",
-    "graph_id": "general_divisibility_monitor_daemon_v1",
-    "job_name": "divisibility-monitor"
+    "description": "Plan staffing and deflection actions as service demand, queue waits, and SLA risk change.",
+    "graph_id": "business_service_capacity_command_center_v1",
+    "id": "business_service_capacity_command_center",
+    "job_name": "business-service-capacity-command-center",
+    "name": "Service Capacity Command Center",
+    "path": "business_service_capacity_command_center",
+    "product": {
+      "agent_role": "Workforce management agent.",
+      "customizable_for": "Call centers, field service, support queues, hospital operations.",
+      "customize": "Connect ACD/WFM systems, interval forecasts, schedule data, abandonment curves, and skill-based routing constraints.",
+      "example": "Call arrivals rise, wait time crosses the SLA line, and the agent chooses overtime, staff shifting, or self-service deflection.",
+      "investor": "Service capacity is a concrete buyer problem with clear ROI in SLA, staffing cost, and customer satisfaction.",
+      "one_line": "Plan staffing and deflection actions as service demand, queue waits, and SLA risk change.",
+      "output": "Staffing forecast and capacity action plan.",
+      "problem": "Staffing decisions are expensive and time-sensitive; dashboards show queue waits but do not simulate next-interval choices.",
+      "runtime_features": [
+        "queue simulation",
+        "staffing decision",
+        "SLA tracking",
+        "decision feedback"
+      ],
+      "simulation_type": "Queue, staffing, and SLA simulation.",
+      "target_users": "Contact-center leaders, workforce managers, and customer operations teams."
+    }
   },
   {
-    "id": "finance_slack_monitor_deamon",
-    "path": "finance_slack_monitor_deamon",
-    "name": "Slack Money Monitor Example",
-    "description": "This is a long-lived, continuous MirrorNeuron workflow that monitors a Slack channel and responds to specific messages.",
-    "graph_id": "slack_money_monitor_v1",
-    "job_name": "slack-money-monitor"
+    "description": "Test disruption responses before inventory, supplier delays, and customer service levels break down.",
+    "graph_id": "business_supply_chain_resilience_war_room_v1",
+    "id": "business_supply_chain_resilience_war_room",
+    "job_name": "business-supply-chain-resilience-war-room",
+    "name": "Supply Chain Resilience War Room",
+    "path": "business_supply_chain_resilience_war_room",
+    "product": {
+      "agent_role": "Supply chain disruption response agent.",
+      "customizable_for": "Manufacturing, retail, healthcare supplies, logistics networks.",
+      "customize": "Connect ERP, supplier EDI, demand forecasts, inventory systems, and lane-level costs; tune service-level and delay assumptions.",
+      "example": "Industrial sensor inventory tightens in the Northeast while delays rise, and the agent chooses expedite, supplier switch, or allocation actions.",
+      "investor": "Supply-chain resilience is a large enterprise pain point where simulation plus LLM recommendations can become an operations command center.",
+      "one_line": "Test disruption responses before inventory, supplier delays, and customer service levels break down.",
+      "output": "Disruption response plan with action history and supplier-lane ranking.",
+      "problem": "Demand spikes and supplier delays compound over time; static dashboards show the fire but do not test mitigation paths.",
+      "runtime_features": [
+        "dynamic simulation",
+        "LLM planner",
+        "time-varying inventory",
+        "decision loop"
+      ],
+      "simulation_type": "Inventory, demand, and supplier-delay simulation.",
+      "target_users": "Supply chain operators, procurement leaders, and operations executives."
+    }
   },
   {
-    "id": "financial_market_realtime_advisor_deamon",
-    "path": "financial_market_realtime_advisor_deamon",
-    "name": "Financial Market Realtime Advisor Daemon",
-    "description": "A live financial market advisor daemon that streams simulated market data, generates advice, and can optionally post advice to Slack.",
-    "graph_id": "financial_market_realtime_advisor_deamon_v1",
-    "job_name": "financial_market_realtime_advisor_deamon"
+    "description": "Prioritize insurance claim reviews as fraud signals, queue pressure, and adjuster capacity change.",
+    "graph_id": "finance_claim_risk_triage_copilot_v1",
+    "id": "finance_claim_risk_triage_copilot",
+    "job_name": "finance-claim-risk-triage-copilot",
+    "name": "Claim Risk Triage Copilot",
+    "path": "finance_claim_risk_triage_copilot",
+    "product": {
+      "agent_role": "Insurance claim risk triage agent.",
+      "customizable_for": "Auto, property, health, warranty, and specialty claims.",
+      "customize": "Replace synthetic claims with FNOL, adjuster notes, photos, repair estimates, policy data, and fraud-model outputs.",
+      "example": "Auto claims volume rises, fraud signal spikes, and the agent chooses SIU escalation, fast-track, or evidence requests.",
+      "investor": "Claims triage has measurable ROI in leakage, cycle time, and customer satisfaction, making it a strong vertical agent workflow.",
+      "one_line": "Prioritize insurance claim reviews as fraud signals, queue pressure, and adjuster capacity change.",
+      "output": "Claim triage report with prioritized segments and review actions.",
+      "problem": "Claims queues evolve continuously; teams need to balance fast settlement, fraud risk, loss ratio, and adjuster capacity.",
+      "runtime_features": [
+        "claim stream simulation",
+        "risk triage",
+        "LLM prioritization",
+        "feedback loop"
+      ],
+      "simulation_type": "Claim queue and fraud-signal simulation.",
+      "target_users": "Insurance claims leaders, SIU teams, adjuster operations, and insurtech builders."
+    }
   },
   {
-    "id": "science_ecosystem_simulation",
-    "path": "science_ecosystem_simulation",
-    "name": "Science Ecosystem Simulation",
-    "description": "A blueprint for science ecosystem simulation.",
-    "graph_id": "science_ecosystem_simulation_v1",
-    "job_name": "ecosystem-simulation"
+    "description": "Detect rising borrower default pressure and compare credit policy responses over time.",
+    "graph_id": "finance_credit_default_early_warning_system_v1",
+    "id": "finance_credit_default_early_warning_system",
+    "job_name": "finance-credit-default-early-warning-system",
+    "name": "Credit Default Early Warning System",
+    "path": "finance_credit_default_early_warning_system",
+    "product": {
+      "agent_role": "Credit risk decision agent.",
+      "customizable_for": "Consumer lending, SMB credit, cards, mortgage prequalification.",
+      "customize": "Replace synthetic metrics with bureau attributes, payment history, application data, macro variables, and institution-specific approval policies.",
+      "example": "Default rates rise in a consumer installment portfolio, and the agent weighs tightening credit against risk-based pricing.",
+      "investor": "Credit risk is a regulated, high-ROI vertical where stateful AI can support explainable early-warning workflows.",
+      "one_line": "Detect rising borrower default pressure and compare credit policy responses over time.",
+      "output": "Credit risk decision report with policy action history.",
+      "problem": "Borrower behavior, rates, approvals, and yield interact over time; static scorecards miss policy tradeoffs under changing conditions.",
+      "runtime_features": [
+        "credit risk simulation",
+        "borrower behavior",
+        "policy decisions",
+        "structured report"
+      ],
+      "simulation_type": "Borrower default and credit policy simulation.",
+      "target_users": "Credit-risk teams, lenders, fintech underwriters, and portfolio analysts."
+    }
   },
   {
-    "id": "general_stream_basic_deamon",
-    "path": "general_stream_basic_deamon",
-    "name": "General Stream Basic Daemon",
-    "description": "A live-mode blueprint that continuously sends telemetry chunks between agents using MirrorNeuron stream messages until manually cancelled.",
-    "graph_id": "general_stream_basic_deamon_v1",
-    "job_name": "general_stream_basic_deamon"
+    "description": "Watch simulated market microstructure and produce live liquidity-risk explanations.",
+    "graph_id": "finance_liquidity_microstructure_radar_v1",
+    "id": "finance_liquidity_microstructure_radar",
+    "job_name": "finance-liquidity-microstructure-radar",
+    "name": "Liquidity Microstructure Radar",
+    "path": "finance_liquidity_microstructure_radar",
+    "product": {
+      "agent_role": "Signal analyzer, market explainer, advisor agent.",
+      "customizable_for": "Equities, crypto, FX, liquidity monitoring, trading operations.",
+      "customize": "Replace the fake stock stream with exchange, broker, or market-data feeds; tune symbols, volatility, thresholds, and alert policy.",
+      "example": "A synthetic equity stream generates ticks, technical signals, market-advisor events, and LLM explanations for meaningful moves.",
+      "investor": "The blueprint is a credible wedge for trading-risk copilots because it combines streaming data, simulation, and explainable agent decisions.",
+      "one_line": "Watch simulated market microstructure and produce live liquidity-risk explanations.",
+      "output": "Market signals, risk explanations, advice events, and optional Slack alerts.",
+      "problem": "Markets evolve tick by tick; spreads, depth, momentum, and volatility interact faster than static dashboards or one-shot summaries can capture.",
+      "runtime_features": [
+        "stream simulation",
+        "technical signals",
+        "LLM explanation",
+        "live advisor loop"
+      ],
+      "simulation_type": "Live market stream and exchange-style signal simulation.",
+      "target_users": "Trading teams, market-risk analysts, and fintech product evaluators."
+    }
   },
   {
-    "id": "science_drug_discovery_deamon",
-    "path": "science_drug_discovery_deamon",
-    "name": "Infinite Drug Discovery Loop",
-    "description": "This blueprint runs an infinite multi-agent loop for AI drug discovery, built on top of [BioTarget](https://github.com/homerquan/BioTarget). It demonstrates how to port complex ML pipelines into long-running, self-sustaining agent workflows using the MirrorNeuron runtime.",
-    "graph_id": "science_drug_discovery_daemon_loop",
-    "job_name": "drug-discovery-infinite"
+    "description": "Stress a portfolio against drawdown, rate shocks, and liquidity pressure before recommending rebalancing.",
+    "graph_id": "finance_portfolio_crash_stress_lab_v1",
+    "id": "finance_portfolio_crash_stress_lab",
+    "job_name": "finance-portfolio-crash-stress-lab",
+    "name": "Portfolio Crash Stress Lab",
+    "path": "finance_portfolio_crash_stress_lab",
+    "product": {
+      "agent_role": "Portfolio stress-test analyst.",
+      "customizable_for": "Wealth management, treasury, family offices, robo-advisory risk overlays.",
+      "customize": "Connect holdings, factor exposures, risk models, macro scenarios, tax constraints, and policy limits.",
+      "example": "A stagflation shock raises rates and drawdown while liquidity falls, and the agent chooses hedge, cash, or defensive rebalance actions.",
+      "investor": "Asset-management risk copilots are commercially attractive because decisions are high-value and require explainable scenario reasoning.",
+      "one_line": "Stress a portfolio against drawdown, rate shocks, and liquidity pressure before recommending rebalancing.",
+      "output": "Portfolio risk report and rebalance recommendation.",
+      "problem": "Risk changes path-dependently during shocks; one summary cannot show how hedges, cash, and defensive moves alter the next state.",
+      "runtime_features": [
+        "macro shock simulation",
+        "portfolio risk",
+        "LLM risk report",
+        "decision feedback"
+      ],
+      "simulation_type": "Macro shock and portfolio risk simulation.",
+      "target_users": "Portfolio managers, wealth advisors, risk officers, and fintech evaluators."
+    }
   },
   {
-    "id": "general_openshell_llm_codegen",
-    "path": "general_openshell_llm_codegen",
-    "name": "General Openshell LLM Codegen",
-    "description": "A blueprint for general openshell llm codegen.",
-    "graph_id": "general_openshell_llm_codegen_3_rounds",
-    "job_name": "openshell-llm-codegen-3-rounds"
+    "description": "Rank property acquisition opportunities as ZIP-code demand, cap rate, price, and risk evolve.",
+    "graph_id": "finance_zip_code_property_alpha_engine_v1",
+    "id": "finance_zip_code_property_alpha_engine",
+    "job_name": "finance-zip-code-property-alpha-engine",
+    "name": "Zip Code Property Alpha Engine",
+    "path": "finance_zip_code_property_alpha_engine",
+    "product": {
+      "agent_role": "Real estate investment analyst.",
+      "customizable_for": "Rental acquisitions, flipping pipelines, multifamily sourcing, market expansion.",
+      "customize": "Replace synthetic listings with MLS, county records, broker flow, Redfin/Zillow exports, rent data, and investor constraints like DSCR or cap-rate floors.",
+      "example": "A target ZIP code sees demand tighten and risk widen, and the agent decides whether to bid, negotiate, or watchlist listings.",
+      "investor": "This is a credible vertical AI wedge for real-estate investors because the output is a ranked, actionable acquisition list.",
+      "one_line": "Rank property acquisition opportunities as ZIP-code demand, cap rate, price, and risk evolve.",
+      "output": "Ranked opportunities and bid/watchlist recommendation.",
+      "problem": "Property opportunities change with rates, inventory, rents, neighborhood demand, and liquidity; static comps cannot rank next-best actions.",
+      "runtime_features": [
+        "market simulation",
+        "opportunity ranking",
+        "LLM investment reasoning",
+        "scenario testing"
+      ],
+      "simulation_type": "ZIP-code property market simulation.",
+      "target_users": "Real-estate investors, acquisition analysts, and property-tech teams."
+    }
   },
   {
-    "id": "general_test_message_flow",
-    "path": "general_test_message_flow",
-    "name": "General Test Message Flow",
-    "description": "A blueprint for testing general message routing and builtin actors.",
-    "graph_id": "general_test_message_flow_v1",
-    "job_name": "test-message-flow"
+    "description": "Show the core runtime pattern: an LLM agent observes a changing queue and acts over repeated ticks.",
+    "graph_id": "general_closed_loop_agent_runtime_v1",
+    "id": "general_closed_loop_agent_runtime",
+    "job_name": "general-closed-loop-agent-runtime",
+    "name": "Closed Loop Agent Runtime",
+    "path": "general_closed_loop_agent_runtime",
+    "product": {
+      "agent_role": "Operations loop controller.",
+      "customizable_for": "Support queues, claim processing, review pipelines, fulfillment operations.",
+      "customize": "Replace queue metrics with your workflow KPIs, add actions, change the scoring heuristic, and connect the final artifact to a dashboard.",
+      "example": "A work queue grows, capacity and quality drift, and an operations agent chooses whether to add capacity, protect quality, or hold policy.",
+      "investor": "This is the smallest proof of the platform thesis: agents reason inside systems, not outside them.",
+      "one_line": "Show the core runtime pattern: an LLM agent observes a changing queue and acts over repeated ticks.",
+      "output": "Simulation summary with action history, state deltas, and next steps.",
+      "problem": "Most LLM demos stop after one answer; real operations require repeated observations, decisions, state updates, and traceable outcomes.",
+      "runtime_features": [
+        "closed-loop agent",
+        "dynamic state",
+        "decision feedback",
+        "structured final artifact"
+      ],
+      "simulation_type": "Time-stepped operations queue simulation.",
+      "target_users": "Developers, evaluators, and technical buyers learning the closed-loop agent model."
+    }
   },
   {
-    "id": "finance_market_observer",
-    "path": "finance_market_observer",
-    "name": "Finance Market Observer",
-    "description": "A blueprint for finance market observer.",
-    "graph_id": "finance_financial_market_simulation_v1",
-    "job_name": "financial-market-simulation"
+    "description": "Run role-scoped context packets through a multi-agent audit decision workflow.",
+    "graph_id": "general_context_memory_audit_pipeline_v1",
+    "id": "general_context_memory_audit_pipeline",
+    "job_name": "general-context-memory-audit-pipeline",
+    "name": "Context Memory Audit Pipeline",
+    "path": "general_context_memory_audit_pipeline",
+    "product": {
+      "agent_role": "Policy interpreter, evidence extractor, risk classifier, decision agent, critic.",
+      "customizable_for": "Compliance review, legal intake, regulated operations, internal controls.",
+      "customize": "Replace the synthetic audit transcript, policy text, ACL roles, memory item schemas, and final decision rubric.",
+      "example": "Policy, evidence, risk, decision, and critic agents each receive only the context packet they are allowed to see.",
+      "investor": "Governed memory is a core enterprise requirement for regulated AI workflows; this blueprint makes it concrete.",
+      "one_line": "Run role-scoped context packets through a multi-agent audit decision workflow.",
+      "output": "Traceable audit decision and critic report.",
+      "problem": "Agents should not all see the same raw context; serious workflows need scoped memory, traceability, and final decisions that cite structured evidence.",
+      "runtime_features": [
+        "context engine",
+        "role ACLs",
+        "typed memory",
+        "LLM-facing context packets"
+      ],
+      "simulation_type": "Multi-agent context handoff with scoped memory.",
+      "target_users": "Developers and compliance teams evaluating context-engine governance."
+    }
   },
   {
-    "id": "science_mpe_simple_push_visualization",
-    "path": "science_mpe_simple_push_visualization",
-    "name": "Science Mpe Simple Push Visualization",
-    "description": "A blueprint for science mpe simple push visualization.",
-    "graph_id": "mpe_shared_world_visualization_v2",
-    "job_name": "mpe-shared-world-visualization"
+    "description": "Stress-test compressed working memory across a growing multi-agent LLM workflow.",
+    "graph_id": "general_context_memory_compression_lab_v1",
+    "id": "general_context_memory_compression_lab",
+    "job_name": "general-context-memory-compression-lab",
+    "name": "Context Memory Compression Lab",
+    "path": "general_context_memory_compression_lab",
+    "product": {
+      "agent_role": "Context researcher, expander, challenger, compressor, briefing author.",
+      "customizable_for": "Research copilots, investigation workflows, case management, long-running planning agents.",
+      "customize": "Change token budgets, pinned terms, memory item types, compression policy, and model-compression settings.",
+      "example": "Agents create larger artifacts over several turns while CompileContext keeps each packet bounded and traceable.",
+      "investor": "State management and compression are differentiators for agent platforms moving beyond one-shot prompts.",
+      "one_line": "Stress-test compressed working memory across a growing multi-agent LLM workflow.",
+      "output": "Compressed context handoff and final briefing.",
+      "problem": "Long-running agents accumulate more context than a model can safely consume; compression must preserve pinned facts, constraints, and decision traces.",
+      "runtime_features": [
+        "CompileContext",
+        "context compression",
+        "typed memory",
+        "multi-agent LLM relay"
+      ],
+      "simulation_type": "Growing memory graph with compression pressure.",
+      "target_users": "Developers building long-context agent systems with bounded prompt budgets."
+    }
   },
   {
-    "id": "business_email_campaign_deamon",
-    "path": "business_email_campaign_deamon",
-    "name": "Business Email Campaign",
-    "description": "A long-lived email marketing blueprint utilizing Ollama and Gmail.",
-    "graph_id": "business_email_campaign_v1",
-    "job_name": "business-email-campaign"
+    "description": "Control a changing environment where load, temperature, reserve, and service levels interact.",
+    "graph_id": "general_dynamic_environment_control_loop_v1",
+    "id": "general_dynamic_environment_control_loop",
+    "job_name": "general-dynamic-environment-control-loop",
+    "name": "Dynamic Environment Control Loop",
+    "path": "general_dynamic_environment_control_loop",
+    "product": {
+      "agent_role": "Dynamic environment controller.",
+      "customizable_for": "Energy systems, cloud capacity, industrial operations, logistics control rooms.",
+      "customize": "Replace metrics with energy, infrastructure, compute, or logistics state; add constraints and domain-specific control actions.",
+      "example": "Load rises, reserves fall, and the controller chooses whether to charge, shed load, or hold steady.",
+      "investor": "This demonstrates why runtime state and simulation matter for agentic control applications.",
+      "one_line": "Control a changing environment where load, temperature, reserve, and service levels interact.",
+      "output": "Control summary with metric trajectory and recommended action.",
+      "problem": "Operational systems are coupled and time-varying; one-shot advice cannot show how a control action changes the next state.",
+      "runtime_features": [
+        "dynamic environment",
+        "control action",
+        "state transition",
+        "feedback loop"
+      ],
+      "simulation_type": "Closed-loop control simulation.",
+      "target_users": "Developers and operators testing control-loop blueprints before adding domain data."
+    }
   },
   {
-    "id": "general_stream_live_backpressure_deamon",
-    "path": "general_stream_live_backpressure_deamon",
-    "name": "General Stream Live Backpressure Daemon",
-    "description": "A never-ending live stream daemon that demonstrates bounded queues, propagated backpressure, slow agents, and retry-later external input handling.",
-    "graph_id": "general_stream_live_backpressure_deamon_v1",
-    "job_name": "general_stream_live_backpressure_deamon"
+    "description": "Triage event streams as anomaly pressure, queue depth, and false positives change over time.",
+    "graph_id": "general_event_stream_triage_state_machine_v1",
+    "id": "general_event_stream_triage_state_machine",
+    "job_name": "general-event-stream-triage-state-machine",
+    "name": "Event Stream Triage State Machine",
+    "path": "general_event_stream_triage_state_machine",
+    "product": {
+      "agent_role": "Event stream triage agent.",
+      "customizable_for": "Security operations, payments monitoring, reliability engineering, fraud detection.",
+      "customize": "Replace synthetic events with logs, payments, telemetry, or security alerts; tune anomaly thresholds and routing actions.",
+      "example": "An event stream spikes, anomaly scores rise, and the triage agent tightens filters or escalates high-signal events.",
+      "investor": "This maps directly to commercial observability and security use cases where stateful triage is valuable.",
+      "one_line": "Triage event streams as anomaly pressure, queue depth, and false positives change over time.",
+      "output": "Event stream report with queue state, triage actions, and ranked partitions.",
+      "problem": "Event streams are noisy and bursty; teams need agents that maintain state and route actions as conditions change.",
+      "runtime_features": [
+        "event stream processing",
+        "state machine",
+        "LLM triage",
+        "feedback loop"
+      ],
+      "simulation_type": "Stateful event stream simulation.",
+      "target_users": "Developers building alerting, stream processing, and incident triage agents."
+    }
   },
   {
-    "id": "video_safety_door_monitor_deamon",
-    "path": "video_safety_door_monitor_deamon",
-    "name": "Video Safety Door Monitor Daemon",
-    "description": "A 24/7 door-camera monitor that samples live video, asks Nemotron 3 through Ollama whether a person is visible, and sends Slack alerts with cooldowns.",
-    "graph_id": "video_safety_door_monitor_deamon_v1",
-    "job_name": "video_safety_door_monitor_deamon"
+    "description": "Insert human approval into an LLM decision loop before high-impact actions are applied.",
+    "graph_id": "general_human_approval_decision_gate_v1",
+    "id": "general_human_approval_decision_gate",
+    "job_name": "general-human-approval-decision-gate",
+    "name": "Human Approval Decision Gate",
+    "path": "general_human_approval_decision_gate",
+    "product": {
+      "agent_role": "Decision support agent.",
+      "customizable_for": "Risk approvals, spend controls, compliance decisions, operational escalations.",
+      "customize": "Replace the approval policy, add approver roles, connect ticketing systems, and define which actions require human sign-off.",
+      "example": "Risk exposure rises, the agent recommends mitigation, and a simulated approval gate determines whether the action applies.",
+      "investor": "Human-in-the-loop control is essential for enterprise adoption, especially in regulated or high-cost workflows.",
+      "one_line": "Insert human approval into an LLM decision loop before high-impact actions are applied.",
+      "output": "Approval memo with recommended and applied actions.",
+      "problem": "Enterprise agents often recommend actions that should not execute automatically; approval state must be part of the runtime loop.",
+      "runtime_features": [
+        "human approval gate",
+        "LLM recommendation",
+        "policy enforcement",
+        "audit trail"
+      ],
+      "simulation_type": "Approval-gated decision simulation.",
+      "target_users": "Developers and governance teams designing approval-gated agent workflows."
+    }
+  },
+  {
+    "description": "Move live telemetry chunks through stream workers and summarize the evolving signal.",
+    "graph_id": "general_live_telemetry_stream_pipeline_v1",
+    "id": "general_live_telemetry_stream_pipeline",
+    "job_name": "general-live-telemetry-stream-pipeline",
+    "name": "Live Telemetry Stream Pipeline",
+    "path": "general_live_telemetry_stream_pipeline",
+    "product": {
+      "agent_role": "Stream processor and summarizer.",
+      "customizable_for": "IoT telemetry, application logs, market data, operational sensors.",
+      "customize": "Replace the telemetry generator, add stream partitions, tune event cadence, and extend the summarizer for your metrics.",
+      "example": "Synthetic telemetry events are generated, processed by a stream worker, and summarized into signal peaks and state changes.",
+      "investor": "Stream processing is where static prompts fail; this blueprint shows agents embedded in live data movement.",
+      "one_line": "Move live telemetry chunks through stream workers and summarize the evolving signal.",
+      "output": "Signal summary and stream result artifacts.",
+      "problem": "Streaming systems require backpressure-aware routing, stateful workers, and outputs that remain interpretable as events arrive.",
+      "runtime_features": [
+        "stream agents",
+        "live events",
+        "stateful summarization",
+        "daemon mode"
+      ],
+      "simulation_type": "Live telemetry stream.",
+      "target_users": "Developers building event-stream workflows and runtime observability paths."
+    }
+  },
+  {
+    "description": "Show an LLM agent calling a forecast tool before deciding how to rebalance resources.",
+    "graph_id": "general_llm_tool_orchestration_loop_v1",
+    "id": "general_llm_tool_orchestration_loop",
+    "job_name": "general-llm-tool-orchestration-loop",
+    "name": "Llm Tool Orchestration Loop",
+    "path": "general_llm_tool_orchestration_loop",
+    "product": {
+      "agent_role": "Tool-using planning agent.",
+      "customizable_for": "Demand planning, capacity management, operational forecasting, scheduling.",
+      "customize": "Replace the moving-window forecast with your model, add tools, change action schemas, and log tool traces for evaluation.",
+      "example": "A demand forecast tool predicts pressure, and the agent chooses whether to rebalance or add buffer.",
+      "investor": "Tool orchestration is a bridge from chatbot to workflow engine; this blueprint makes that transition inspectable.",
+      "one_line": "Show an LLM agent calling a forecast tool before deciding how to rebalance resources.",
+      "output": "Tool-use trace and resource recommendation.",
+      "problem": "LLMs are more useful when they can combine reasoning with tools and then observe whether the tool-informed decision worked.",
+      "runtime_features": [
+        "LLM tool use",
+        "forecast tool",
+        "decision loop",
+        "structured trace"
+      ],
+      "simulation_type": "Tool-informed resource simulation.",
+      "target_users": "Developers adding tools, forecasts, or deterministic calculators to agent workflows."
+    }
+  },
+  {
+    "description": "Trace how messages move through router and aggregator agents.",
+    "graph_id": "general_message_routing_trace_v1",
+    "id": "general_message_routing_trace",
+    "job_name": "general-message-routing-trace",
+    "name": "Message Routing Trace",
+    "path": "general_message_routing_trace",
+    "product": {
+      "agent_role": "Router and aggregator agents.",
+      "customizable_for": "Graph prototyping, training, runtime smoke checks.",
+      "customize": "Add message types, branch routes, filters, or reducers to model your graph topology before adding domain logic.",
+      "example": "A synthetic request moves from ingress to router to reducer so users can inspect routing semantics end to end.",
+      "investor": "Clear routing primitives make the platform easier to adopt, debug, and govern.",
+      "one_line": "Trace how messages move through router and aggregator agents.",
+      "output": "Completed route with aggregated payload.",
+      "problem": "Agent graphs are hard to debug unless developers can see message types, edges, and completion behavior clearly.",
+      "runtime_features": [
+        "message routing",
+        "typed edges",
+        "aggregator completion",
+        "manifest validation"
+      ],
+      "simulation_type": "Deterministic message-flow trace.",
+      "target_users": "Developers learning the runtime message model."
+    }
+  },
+  {
+    "description": "Model buyer-supplier negotiation as agents respond to changing demand, price, and capacity.",
+    "graph_id": "general_multi_agent_contract_negotiation_loop_v1",
+    "id": "general_multi_agent_contract_negotiation_loop",
+    "job_name": "general-multi-agent-contract-negotiation-loop",
+    "name": "Multi Agent Contract Negotiation Loop",
+    "path": "general_multi_agent_contract_negotiation_loop",
+    "product": {
+      "agent_role": "Negotiation mediator agent.",
+      "customizable_for": "Procurement, renewals, vendor management, enterprise sales deal desks.",
+      "customize": "Replace synthetic terms with contracts, supplier scorecards, price corridors, delivery constraints, or approval rules.",
+      "example": "Buyer and supplier messages are generated each tick while a mediator chooses offer, volume, or pause actions.",
+      "investor": "The blueprint shows how the runtime can represent multiple stakeholder agents, a core pattern for enterprise decision automation.",
+      "one_line": "Model buyer-supplier negotiation as agents respond to changing demand, price, and capacity.",
+      "output": "Negotiation brief with agreement score, action history, and ranked deal terms.",
+      "problem": "Negotiation is dynamic: positions change as demand, capacity, and costs move, so static summaries cannot capture the next best move.",
+      "runtime_features": [
+        "multi-agent reasoning",
+        "time-varying constraints",
+        "decision loop",
+        "structured negotiation output"
+      ],
+      "simulation_type": "Multi-agent negotiation state simulation.",
+      "target_users": "Developers building multi-agent workflows and procurement teams evaluating negotiation automation."
+    }
+  },
+  {
+    "description": "Observe a fast native-agent live monitor that keeps producing decisions until stopped.",
+    "graph_id": "general_native_live_monitor_daemon_v1",
+    "id": "general_native_live_monitor_daemon",
+    "job_name": "general-native-live-monitor-daemon",
+    "name": "Native Live Monitor Daemon",
+    "path": "general_native_live_monitor_daemon",
+    "product": {
+      "agent_role": "Native BEAM monitoring agents.",
+      "customizable_for": "Operations telemetry, rules engines, high-frequency synthetic simulations.",
+      "customize": "Replace the divisibility rule with your own fast rule engine, alert threshold, or lightweight simulation process.",
+      "example": "A divisibility monitor streams generated values, evaluates conditions, and reports live state through native runtime agents.",
+      "investor": "The runtime is not limited to slow external calls; native agents can run high-frequency loops alongside LLM workflows.",
+      "one_line": "Observe a fast native-agent live monitor that keeps producing decisions until stopped.",
+      "output": "Streaming monitor events and summaries.",
+      "problem": "Some simulations and monitors need low-overhead native agents that can run continuously and emit structured updates.",
+      "runtime_features": [
+        "native agents",
+        "daemon mode",
+        "streaming events",
+        "low-overhead simulation"
+      ],
+      "simulation_type": "Live native signal monitor.",
+      "target_users": "Runtime evaluators comparing native BEAM agents with external worker processes."
+    }
+  },
+  {
+    "description": "Run isolated shell and Python workers as a traceable runtime pipeline.",
+    "graph_id": "general_openshell_sandbox_worker_pipeline_v1",
+    "id": "general_openshell_sandbox_worker_pipeline",
+    "job_name": "general-openshell-sandbox-worker-pipeline",
+    "name": "Openshell Sandbox Worker Pipeline",
+    "path": "general_openshell_sandbox_worker_pipeline",
+    "product": {
+      "agent_role": "Sandboxed worker executor.",
+      "customizable_for": "ETL tasks, compliance checks, code validation, document processing.",
+      "customize": "Replace the word-count scripts with domain workers, add policies for allowed egress, tune pool slots, and extend the output schema for your artifacts.",
+      "example": "A developer sends a text payload to a shell metrics worker, routes the result into a Python report worker, and receives a structured completion event.",
+      "investor": "This shows that the runtime can orchestrate ordinary enterprise tools safely, which is essential for deploying agent workflows inside controlled environments.",
+      "one_line": "Run isolated shell and Python workers as a traceable runtime pipeline.",
+      "output": "Worker metrics and a Python-generated report.",
+      "problem": "Teams need to run untrusted or heterogeneous tasks without losing observability, output contracts, or retry behavior.",
+      "runtime_features": [
+        "OpenShell isolation",
+        "executor routing",
+        "aggregator completion",
+        "policy-controlled execution"
+      ],
+      "simulation_type": "Static worker pipeline with deterministic generated input.",
+      "target_users": "Developers evaluating sandboxed worker execution and artifact handoff patterns."
+    }
+  },
+  {
+    "description": "Stress the runtime with a broad fan-out of deterministic parallel workers.",
+    "graph_id": "general_parallel_worker_scale_benchmark_v1",
+    "id": "general_parallel_worker_scale_benchmark",
+    "job_name": "general-parallel-worker-scale-benchmark",
+    "name": "Parallel Worker Scale Benchmark",
+    "path": "general_parallel_worker_scale_benchmark",
+    "product": {
+      "agent_role": "Parallel executor workers plus reducer.",
+      "customizable_for": "Batch analytics, Monte Carlo jobs, large enrichment queues.",
+      "customize": "Change worker count, payload size, task duration, or reducer logic to match your capacity benchmark.",
+      "example": "The runtime fans out numeric range checks, collects worker outputs, and summarizes completion across many executor jobs.",
+      "investor": "Scale and reliability are commercial proof points; this blueprint makes orchestration capacity visible.",
+      "one_line": "Stress the runtime with a broad fan-out of deterministic parallel workers.",
+      "output": "Scale summary and worker completion metrics.",
+      "problem": "Agent systems need to prove they can dispatch many bounded tasks and collect results reliably before being trusted with larger workloads.",
+      "runtime_features": [
+        "parallel fan-out",
+        "executor pools",
+        "aggregation",
+        "quick-test scaling knobs"
+      ],
+      "simulation_type": "Parallel synthetic workload sweep.",
+      "target_users": "Platform teams testing scheduler throughput, worker pools, and aggregation behavior."
+    }
+  },
+  {
+    "description": "Tune policy thresholds through repeated simulated reward and incident feedback.",
+    "graph_id": "general_policy_feedback_optimization_loop_v1",
+    "id": "general_policy_feedback_optimization_loop",
+    "job_name": "general-policy-feedback-optimization-loop",
+    "name": "Policy Feedback Optimization Loop",
+    "path": "general_policy_feedback_optimization_loop",
+    "product": {
+      "agent_role": "Policy optimization agent.",
+      "customizable_for": "Fraud thresholds, safety policies, routing rules, pricing guardrails.",
+      "customize": "Replace reward functions, add constraints, change policy actions, and compare multiple policy candidates.",
+      "example": "A policy threshold changes as reward, incident rate, and coverage move across simulated episodes.",
+      "investor": "Policy optimization is a high-leverage runtime pattern for safety, fraud, routing, and operations products.",
+      "one_line": "Tune policy thresholds through repeated simulated reward and incident feedback.",
+      "output": "Policy recommendation with reward trajectory and action history.",
+      "problem": "Policies that look good once can fail over time; users need to see reward, coverage, and incidents evolve under each adjustment.",
+      "runtime_features": [
+        "policy optimization",
+        "feedback loop",
+        "reward tracking",
+        "scenario testing"
+      ],
+      "simulation_type": "Policy feedback simulation.",
+      "target_users": "Developers and policy owners testing adaptive decision rules."
+    }
+  },
+  {
+    "description": "Run a Python-defined workflow as a long-lived daemon with repeated stateful turns.",
+    "graph_id": "general_python_sdk_live_research_daemon_v1",
+    "id": "general_python_sdk_live_research_daemon",
+    "job_name": "general-python-sdk-live-research-daemon",
+    "name": "Python Sdk Live Research Daemon",
+    "path": "general_python_sdk_live_research_daemon",
+    "product": {
+      "agent_role": "Python daemon coordinator.",
+      "customizable_for": "Incident monitors, market watchers, research crawlers.",
+      "customize": "Adjust daemon cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop.",
+      "example": "A daemon periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.",
+      "investor": "Long-lived loops are a key difference between agent runtimes and chat interfaces; this blueprint shows that operating model directly.",
+      "one_line": "Run a Python-defined workflow as a long-lived daemon with repeated stateful turns.",
+      "output": "Ongoing events and final cancellation-safe state.",
+      "problem": "Many agent workflows need to keep running, react to new events, and maintain operational state rather than finish after one request.",
+      "runtime_features": [
+        "Python SDK",
+        "daemon execution",
+        "live loop",
+        "runtime events"
+      ],
+      "simulation_type": "Live daemon loop with repeated inputs.",
+      "target_users": "Developers building live monitors, scheduled analysis loops, or long-running research agents."
+    }
+  },
+  {
+    "description": "Define a MirrorNeuron workflow directly in Python and compile it into a runnable bundle.",
+    "graph_id": "general_python_sdk_research_pipeline_v1",
+    "id": "general_python_sdk_research_pipeline",
+    "job_name": "general-python-sdk-research-pipeline",
+    "name": "Python Sdk Research Pipeline",
+    "path": "general_python_sdk_research_pipeline",
+    "product": {
+      "agent_role": "Python-defined research agents.",
+      "customizable_for": "Internal research, report generation, enrichment workflows.",
+      "customize": "Edit `workflow.py`, swap in your own data retrieval function, add more agents, and regenerate the bundle with `python -m mn_blueprint_support.python_workflow_bundle_cli`.",
+      "example": "A research topic flows through ingress, retrieval, and review agents before a final summary artifact is saved.",
+      "investor": "The SDK path lowers adoption friction: teams can start from normal Python and graduate to runtime-managed agent graphs.",
+      "one_line": "Define a MirrorNeuron workflow directly in Python and compile it into a runnable bundle.",
+      "output": "Saved research summary and final workflow result.",
+      "problem": "Developers need a low-friction path from Python functions to distributed runtime agents while keeping retry, timeout, and graph semantics explicit.",
+      "runtime_features": [
+        "Python SDK",
+        "map/reduce agents",
+        "compiled bundle",
+        "retry policies"
+      ],
+      "simulation_type": "Deterministic staged workflow.",
+      "target_users": "Python developers who want agent workflows without hand-writing manifests."
+    }
+  },
+  {
+    "description": "Generate, review, and validate code through a sandboxed multi-step LLM loop.",
+    "graph_id": "general_sandboxed_llm_codegen_review_loop_v1",
+    "id": "general_sandboxed_llm_codegen_review_loop",
+    "job_name": "general-sandboxed-llm-codegen-review-loop",
+    "name": "Sandboxed Llm Codegen Review Loop",
+    "path": "general_sandboxed_llm_codegen_review_loop",
+    "product": {
+      "agent_role": "Codegen agent, review agent, validator.",
+      "customizable_for": "Internal developer tools, data scripts, code repair, controlled automation.",
+      "customize": "Change the coding task, validator tests, review rubric, sandbox policy, model, or allowed toolchain.",
+      "example": "The LLM writes a Python tool, another LLM review step critiques it, and a validator executes tests inside an OpenShell sandbox.",
+      "investor": "This is a credible path to enterprise coding agents because it combines reasoning, iteration, and sandboxed execution controls.",
+      "one_line": "Generate, review, and validate code through a sandboxed multi-step LLM loop.",
+      "output": "Generated code, review history, and validation result.",
+      "problem": "One-shot code generation is risky; production teams need review, validation, isolation, and iterative improvement before executing generated code.",
+      "runtime_features": [
+        "LLM agents",
+        "sandbox validation",
+        "multi-round loop",
+        "tool creation"
+      ],
+      "simulation_type": "Iterative code-review decision loop.",
+      "target_users": "Engineering teams evaluating safe LLM coding workflows."
+    }
+  },
+  {
+    "description": "Track simulation state deltas so every agent decision is explainable after the run.",
+    "graph_id": "general_simulation_state_audit_trail_v1",
+    "id": "general_simulation_state_audit_trail",
+    "job_name": "general-simulation-state-audit-trail",
+    "name": "Simulation State Audit Trail",
+    "path": "general_simulation_state_audit_trail",
+    "product": {
+      "agent_role": "State tracking analyst.",
+      "customizable_for": "Regulated operations, simulations, workflow audits, model evaluations.",
+      "customize": "Add domain state fields, checkpoints, persistence, audit metadata, and evaluation metrics for your environment.",
+      "example": "State drift increases, confidence changes, and the agent chooses checkpoints or stabilization actions while preserving a timeline.",
+      "investor": "Traceability turns agent simulations into enterprise-grade decision records rather than black-box demos.",
+      "one_line": "Track simulation state deltas so every agent decision is explainable after the run.",
+      "output": "State tracking report with deltas and ranked subsystems.",
+      "problem": "Dynamic systems are hard to trust unless users can see what changed, why an action was chosen, and how the next state moved.",
+      "runtime_features": [
+        "state tracking",
+        "history",
+        "state deltas",
+        "audit trail"
+      ],
+      "simulation_type": "State tracking and checkpoint simulation.",
+      "target_users": "Developers and evaluators who need inspectable state transitions."
+    }
+  },
+  {
+    "description": "Show bounded queues, slow workers, and retry-later behavior in a live stream.",
+    "graph_id": "general_stream_backpressure_control_loop_v1",
+    "id": "general_stream_backpressure_control_loop",
+    "job_name": "general-stream-backpressure-control-loop",
+    "name": "Stream Backpressure Control Loop",
+    "path": "general_stream_backpressure_control_loop",
+    "product": {
+      "agent_role": "Live source, slow processor, metrics sink.",
+      "customizable_for": "Customer events, telemetry, alerts, market ticks.",
+      "customize": "Tune queue sizes, worker latency, retry thresholds, and sink metrics to match your stream reliability goals.",
+      "example": "A live source produces events faster than a slow worker can process them, and the runtime emits backpressure and retry signals.",
+      "investor": "Backpressure is production plumbing, not a demo flourish; this blueprint proves the runtime is built for real systems.",
+      "one_line": "Show bounded queues, slow workers, and retry-later behavior in a live stream.",
+      "output": "Backpressure metrics and stream processing report.",
+      "problem": "Real event streams overload workers; agent runtimes need visible backpressure and safe rejection semantics.",
+      "runtime_features": [
+        "backpressure",
+        "bounded queues",
+        "retry-later input",
+        "stream metrics"
+      ],
+      "simulation_type": "Live stream with bounded queues.",
+      "target_users": "Platform teams designing reliable live agent systems."
+    }
+  },
+  {
+    "description": "Select the next lab experiment from prior simulated yield, toxicity, cost, and evidence confidence.",
+    "graph_id": "science_adaptive_experiment_discovery_agent_v1",
+    "id": "science_adaptive_experiment_discovery_agent",
+    "job_name": "science-adaptive-experiment-discovery-agent",
+    "name": "Adaptive Experiment Discovery Agent",
+    "path": "science_adaptive_experiment_discovery_agent",
+    "product": {
+      "agent_role": "Experimental design scientist.",
+      "customizable_for": "Biology, chemistry, materials, formulation, process optimization.",
+      "customize": "Replace synthetic outcomes with LIMS/ELN data, assay results, cost models, safety constraints, and Bayesian or active-learning tools.",
+      "example": "A synthetic enzyme candidate shows mixed yield and toxicity, and the scientist agent chooses pH refinement, temperature sweep, or catalyst switch.",
+      "investor": "Adaptive experimentation is a high-value scientific workflow where closed-loop agents can shorten discovery cycles.",
+      "one_line": "Select the next lab experiment from prior simulated yield, toxicity, cost, and evidence confidence.",
+      "output": "Experiment optimization plan with ranked experiment options.",
+      "problem": "Experiment planning is sequential; each result changes the next best experiment and the cost-risk tradeoff.",
+      "runtime_features": [
+        "iterative experiments",
+        "LLM scientist",
+        "optimization loop",
+        "structured plan"
+      ],
+      "simulation_type": "Iterative experiment outcome simulation.",
+      "target_users": "Lab researchers, R&D teams, computational scientists, and scientific AI builders."
+    }
+  },
+  {
+    "description": "Plan local flood mitigations as rainfall, flood level, pump capacity, and vulnerable assets change.",
+    "graph_id": "science_climate_resilience_planning_engine_v1",
+    "id": "science_climate_resilience_planning_engine",
+    "job_name": "science-climate-resilience-planning-engine",
+    "name": "Climate Resilience Planning Engine",
+    "path": "science_climate_resilience_planning_engine",
+    "product": {
+      "agent_role": "Climate resilience planning advisor.",
+      "customizable_for": "Cities, utilities, campuses, hospitals, industrial sites.",
+      "customize": "Replace synthetic weather with forecasts, flood maps, asset inventories, pump telemetry, road networks, and local cost assumptions.",
+      "example": "Rainfall intensifies in Riverton, flood levels rise, and the advisor chooses pumps, sandbags, or road closures.",
+      "investor": "Climate adaptation budgets are growing, and this blueprint shows a credible planning engine for local infrastructure decisions.",
+      "one_line": "Plan local flood mitigations as rainfall, flood level, pump capacity, and vulnerable assets change.",
+      "output": "Local climate mitigation plan with ranked assets.",
+      "problem": "Climate events unfold over time and stress infrastructure unevenly; static risk maps do not recommend operational mitigations during a scenario.",
+      "runtime_features": [
+        "climate risk simulation",
+        "infrastructure state",
+        "mitigation planning",
+        "scenario testing"
+      ],
+      "simulation_type": "Weather, flooding, and infrastructure vulnerability simulation.",
+      "target_users": "Municipal resilience teams, infrastructure planners, utilities, and climate-risk analysts."
+    }
+  },
+  {
+    "description": "Run a long-lived multi-stage drug-discovery loop that keeps generating and evaluating candidates.",
+    "graph_id": "science_drug_discovery_closed_loop_lab_v1",
+    "id": "science_drug_discovery_closed_loop_lab",
+    "job_name": "science-drug-discovery-closed-loop-lab",
+    "name": "Drug Discovery Closed Loop Lab",
+    "path": "science_drug_discovery_closed_loop_lab",
+    "product": {
+      "agent_role": "Scientific manager and staged worker agents.",
+      "customizable_for": "Drug discovery, material search, assay planning, scientific literature loops.",
+      "customize": "Swap target data, scoring functions, candidate generators, stage policies, and stopping criteria.",
+      "example": "A pipeline based on BioTarget runs staged workers that manage candidate discovery and result extraction in a continuing loop.",
+      "investor": "Scientific discovery is a high-value vertical where closed-loop agent workflows can reduce cycle time if connected to validated models and labs.",
+      "one_line": "Run a long-lived multi-stage drug-discovery loop that keeps generating and evaluating candidates.",
+      "output": "Candidate artifacts, stage logs, and discovery summaries.",
+      "problem": "Discovery workflows are iterative: candidate generation, scoring, extraction, and review need to repeat as new evidence arrives.",
+      "runtime_features": [
+        "long-running loop",
+        "multi-stage pipeline",
+        "scientific workers",
+        "artifact extraction"
+      ],
+      "simulation_type": "Long-running scientific pipeline loop.",
+      "target_users": "Computational biology researchers and scientific AI platform evaluators."
+    }
+  },
+  {
+    "description": "Explore ecosystem interventions across multiple regions with evolving population dynamics.",
+    "graph_id": "science_ecosystem_intervention_sandbox_v1",
+    "id": "science_ecosystem_intervention_sandbox",
+    "job_name": "science-ecosystem-intervention-sandbox",
+    "name": "Ecosystem Intervention Sandbox",
+    "path": "science_ecosystem_intervention_sandbox",
+    "product": {
+      "agent_role": "World coordinator, regional agents, leaderboard summarizer.",
+      "customizable_for": "Conservation planning, invasive species modeling, education, agent-based simulation.",
+      "customize": "Change species traits, resource regeneration, migration rate, region topology, intervention policies, or final scoring.",
+      "example": "A world agent distributes animals across regions, region agents evolve local populations, and a leaderboard summarizes outcomes.",
+      "investor": "This demonstrates the runtime's ability to coordinate many local simulators into a global decision view, a pattern relevant beyond ecology.",
+      "one_line": "Explore ecosystem interventions across multiple regions with evolving population dynamics.",
+      "output": "Regional outcomes, population rankings, and ecosystem summary.",
+      "problem": "Ecological systems change through local interactions, migration, resources, and mutation; interventions need scenario testing before field action.",
+      "runtime_features": [
+        "native agents",
+        "multi-region simulation",
+        "aggregation",
+        "leaderboard reporting"
+      ],
+      "simulation_type": "Multi-region population dynamics.",
+      "target_users": "Ecologists, conservation analysts, simulation researchers, and education teams."
+    }
+  },
+  {
+    "description": "Visualize shared-world multi-agent motion planning and coordination behavior.",
+    "graph_id": "science_multi_agent_motion_planning_lab_v1",
+    "id": "science_multi_agent_motion_planning_lab",
+    "job_name": "science-multi-agent-motion-planning-lab",
+    "name": "Multi Agent Motion Planning Lab",
+    "path": "science_multi_agent_motion_planning_lab",
+    "product": {
+      "agent_role": "World simulator and visualization summarizer.",
+      "customizable_for": "Robotics, warehouse coordination, autonomous planning, teaching labs.",
+      "customize": "Change environment geometry, agent policies, reward structure, visualization output, and planning constraints.",
+      "example": "A shared-world particle environment is generated and summarized to show how agents coordinate around a target task.",
+      "investor": "Multi-agent physical simulation is a foundation for robotics and autonomy workflows where stateful agents must coordinate over time.",
+      "one_line": "Visualize shared-world multi-agent motion planning and coordination behavior.",
+      "output": "Simulation summary and visual artifacts.",
+      "problem": "Multi-agent coordination depends on changing positions, goals, and collisions; users need visual traces, not only scalar metrics.",
+      "runtime_features": [
+        "multi-agent simulation",
+        "visualization",
+        "shared-world state",
+        "summary generation"
+      ],
+      "simulation_type": "Multi-agent particle environment.",
+      "target_users": "Robotics researchers, simulation developers, and multi-agent systems educators."
+    }
+  },
+  {
+    "description": "Compare outbreak interventions as infections, mobility, vaccination, and hospital load change.",
+    "graph_id": "science_outbreak_response_policy_simulator_v1",
+    "id": "science_outbreak_response_policy_simulator",
+    "job_name": "science-outbreak-response-policy-simulator",
+    "name": "Outbreak Response Policy Simulator",
+    "path": "science_outbreak_response_policy_simulator",
+    "product": {
+      "agent_role": "Public-health intervention advisor.",
+      "customizable_for": "Campus health, local agencies, hospital systems, workplace safety.",
+      "customize": "Replace synthetic disease state with surveillance, mobility, vaccination, hospital, or wastewater data; tune transmission and intervention assumptions.",
+      "example": "Infections rise in a 50,000-person population, and the advisor chooses vaccination, mobility reduction, or testing interventions.",
+      "investor": "Public-sector and healthcare planning need explainable scenario tools; this shows an AI advisor inside a dynamic disease model.",
+      "one_line": "Compare outbreak interventions as infections, mobility, vaccination, and hospital load change.",
+      "output": "Public-health intervention plan with state trajectory.",
+      "problem": "Outbreak response depends on time-varying spread and healthcare load; static dashboards cannot test policy consequences before action.",
+      "runtime_features": [
+        "disease spread simulation",
+        "policy intervention",
+        "LLM advisor",
+        "scenario planning"
+      ],
+      "simulation_type": "Disease spread and intervention simulation.",
+      "target_users": "Public-health planners, epidemiology teams, campus operations, and policy analysts."
+    }
+  },
+  {
+    "description": "Test signal and rerouting controls as traffic speed, incidents, volume, and emissions evolve.",
+    "graph_id": "science_urban_traffic_control_lab_v1",
+    "id": "science_urban_traffic_control_lab",
+    "job_name": "science-urban-traffic-control-lab",
+    "name": "Urban Traffic Control Lab",
+    "path": "science_urban_traffic_control_lab",
+    "product": {
+      "agent_role": "Traffic systems control advisor.",
+      "customizable_for": "Signal optimization, incident response, transit priority, event planning.",
+      "customize": "Connect loop detectors, cameras, signal controllers, incident feeds, GTFS transit data, and emissions models.",
+      "example": "Vehicle count rises and an incident worsens, so the agent selects green corridors, rerouting, or transit priority.",
+      "investor": "Urban mobility is a visible vertical where simulation plus AI control recommendations can become a city operations product.",
+      "one_line": "Test signal and rerouting controls as traffic speed, incidents, volume, and emissions evolve.",
+      "output": "Traffic control plan with corridor ranking and action history.",
+      "problem": "Traffic control decisions are coupled and time-sensitive; dashboards show congestion but do not reason over next-state control options.",
+      "runtime_features": [
+        "traffic simulation",
+        "control strategy",
+        "LLM advisor",
+        "time-varying state"
+      ],
+      "simulation_type": "Traffic network and incident-control simulation.",
+      "target_users": "City traffic teams, transportation researchers, smart-city operators, and mobility startups."
+    }
   }
 ]

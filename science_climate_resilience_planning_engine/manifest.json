@@ -1,0 +1,171 @@
+{
+  "daemon": false,
+  "description": "Plan local flood mitigations as rainfall, flood level, pump capacity, and vulnerable assets change.",
+  "edges": [
+    {
+      "edge_id": "simulation_to_report",
+      "from_node": "simulation_loop",
+      "message_type": "blueprint_report",
+      "to_node": "report_sink"
+    }
+  ],
+  "entrypoints": [
+    "simulation_loop"
+  ],
+  "graph_id": "science_climate_resilience_planning_engine_v1",
+  "initial_inputs": {
+    "simulation_loop": [
+      {
+        "seed": 42,
+        "steps": 5,
+        "town": "Riverton"
+      }
+    ]
+  },
+  "job_name": "science-climate-resilience-planning-engine",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "science_climate_resilience_planning_engine",
+    "category": "science",
+    "customizable_for": "Cities, utilities, campuses, hospitals, industrial sites.",
+    "description": "Plan local flood mitigations as rainfall, flood level, pump capacity, and vulnerable assets change.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {
+      "default_api_base": "http://192.168.4.173:11434",
+      "default_model": "ollama/nemotron3:33b",
+      "mock_mode": "run payloads/simulation_loop/scripts/run_blueprint.py --mock-llm"
+    },
+    "llm_agent_role": "Climate resilience planning advisor.",
+    "name": "Climate Resilience Planning Engine",
+    "output": "Local climate mitigation plan with ranked assets.",
+    "output_contract": {
+      "events": "blueprint_report",
+      "stdout": "JSON object with timeline, state_changes, final_artifact, and llm metadata"
+    },
+    "problem_solved": "Climate events unfold over time and stress infrastructure unevenly; static risk maps do not recommend operational mitigations during a scenario.",
+    "quick_test": {
+      "command": "python3 payloads/simulation_loop/scripts/run_blueprint.py --mock-llm --steps 2",
+      "enabled": true
+    },
+    "runtime_features": [
+      "climate risk simulation",
+      "infrastructure state",
+      "mitigation planning",
+      "scenario testing"
+    ],
+    "simulation": {
+      "actions": [
+        "deploy_pumps",
+        "stage_sandbags",
+        "close_roads"
+      ],
+      "agent_role": "Climate resilience planning advisor",
+      "dynamic_metrics": [
+        "rainfall_inches",
+        "flood_level_ft",
+        "pump_capacity_pct",
+        "vulnerable_assets"
+      ]
+    },
+    "simulation_type": "Weather, flooding, and infrastructure vulnerability simulation.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "target_user": "Municipal resilience teams, infrastructure planners, utilities, and climate-risk analysts."
+  },
+  "name": "Climate Resilience Planning Engine",
+  "nodes": [
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/run_blueprint.py"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_MAX_TOKENS": "700",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_NUM_RETRIES": "1",
+          "LITELLM_TIMEOUT_SECONDS": "60",
+          "MN_BLUEPRINT_ID": "science_climate_resilience_planning_engine",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_MAX_TOKENS": "700",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_NUM_RETRIES": "1",
+          "MN_LLM_TIMEOUT_SECONDS": "60"
+        },
+        "from": "base",
+        "name_prefix": "science_climate_risk_local_plann",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "blueprint_report",
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "simulation_loop",
+        "upload_path": "simulation_loop",
+        "workdir": "/sandbox/job/simulation_loop"
+      },
+      "node_id": "simulation_loop",
+      "role": "root_coordinator",
+      "type": "generic"
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_on_message": true
+      },
+      "node_id": "report_sink",
+      "role": "result_sink",
+      "type": "reduce"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
+  "requiredContextEngine": false
+}

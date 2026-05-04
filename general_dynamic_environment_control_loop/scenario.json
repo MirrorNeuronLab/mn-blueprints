@@ -1,0 +1,101 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Charge reserves before the next peak.",
+      "effects": {
+        "battery_reserve": 10.0,
+        "service_level": -1.0
+      },
+      "name": "charge_battery"
+    },
+    {
+      "cost": 0.0,
+      "description": "Shed noncritical load to protect the core system.",
+      "effects": {
+        "load": -10.0,
+        "service_level": 3.0
+      },
+      "name": "shed_noncritical_load"
+    },
+    {
+      "cost": 0.0,
+      "description": "Hold controls steady.",
+      "effects": {
+        "battery_reserve": -1.0
+      },
+      "name": "hold_policy"
+    }
+  ],
+  "agent_responsibilities": [
+    "watch exogenous changes",
+    "choose a control action",
+    "preserve service level"
+  ],
+  "artifact_type": "control summary",
+  "blueprint_id": "general_dynamic_environment_control_loop",
+  "category": "general",
+  "default_inputs": {
+    "seed": 42,
+    "steps": 5,
+    "weather_pattern": "afternoon peak"
+  },
+  "description": "Control a changing environment where load, temperature, reserve, and service levels interact.",
+  "entity_label": "control zone",
+  "entity_names": [
+    "north zone",
+    "east zone",
+    "critical zone"
+  ],
+  "features": [
+    "dynamic_environment",
+    "closed_loop_control",
+    "state_transition"
+  ],
+  "llm_role": "Dynamic environment controller",
+  "metrics": [
+    {
+      "drift": 3.5,
+      "initial": 62,
+      "label": "System load",
+      "maximum": 120,
+      "minimum": 20,
+      "name": "load",
+      "volatility": 3.5
+    },
+    {
+      "drift": 1.0,
+      "initial": 72,
+      "label": "Ambient temperature",
+      "maximum": 105,
+      "minimum": 55,
+      "name": "temperature",
+      "volatility": 1.8
+    },
+    {
+      "drift": -2.2,
+      "initial": 48,
+      "label": "Battery reserve",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "battery_reserve",
+      "volatility": 2.0
+    },
+    {
+      "drift": -1.5,
+      "initial": 91,
+      "label": "Service level",
+      "maximum": 100,
+      "minimum": 40,
+      "name": "service_level",
+      "volatility": 1.5
+    }
+  ],
+  "multi_agent": false,
+  "name": "general_dynamic_environment_control_loop",
+  "objective": "maximize",
+  "primary_metric": "service_level",
+  "requires_human_approval": false,
+  "risk_metric": "load",
+  "uses_tool": false
+}

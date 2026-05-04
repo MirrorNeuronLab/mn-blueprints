@@ -1,0 +1,104 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Escalate high-risk claims to special investigation.",
+      "effects": {
+        "claim_queue": -5.0,
+        "fraud_signal": -10.0,
+        "loss_ratio_pct": -2.0
+      },
+      "name": "escalate_siu"
+    },
+    {
+      "cost": 0.0,
+      "description": "Fast-track low-risk claims to free adjusters.",
+      "effects": {
+        "adjuster_capacity": 5.0,
+        "claim_queue": -18.0,
+        "loss_ratio_pct": 1.0
+      },
+      "name": "fast_track_low_risk"
+    },
+    {
+      "cost": 0.0,
+      "description": "Request additional evidence for uncertain claims.",
+      "effects": {
+        "claim_queue": 3.0,
+        "fraud_signal": -4.0
+      },
+      "name": "request_evidence"
+    }
+  ],
+  "agent_responsibilities": [
+    "observe claim queues and fraud signals",
+    "prioritize reviews",
+    "produce a triage report"
+  ],
+  "artifact_type": "claim triage report",
+  "blueprint_id": "finance_claim_risk_triage_copilot",
+  "category": "finance",
+  "default_inputs": {
+    "line": "personal auto",
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Prioritize insurance claim reviews as fraud signals, queue pressure, and adjuster capacity change.",
+  "entity_label": "claim segment",
+  "entity_names": [
+    "auto glass",
+    "bodily injury",
+    "property water"
+  ],
+  "features": [
+    "claim_stream_simulation",
+    "risk_triage",
+    "llm_prioritization"
+  ],
+  "llm_role": "Insurance claim risk triage agent",
+  "metrics": [
+    {
+      "drift": 12.0,
+      "initial": 95,
+      "label": "Open claim queue",
+      "maximum": 260,
+      "minimum": 0,
+      "name": "claim_queue",
+      "volatility": 9.0
+    },
+    {
+      "drift": 5.0,
+      "initial": 42,
+      "label": "Fraud signal",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "fraud_signal",
+      "volatility": 6.0
+    },
+    {
+      "drift": -2.0,
+      "initial": 70,
+      "label": "Adjuster capacity",
+      "maximum": 120,
+      "minimum": 20,
+      "name": "adjuster_capacity",
+      "volatility": 3.0
+    },
+    {
+      "drift": 1.5,
+      "initial": 64,
+      "label": "Loss ratio percent",
+      "maximum": 130,
+      "minimum": 30,
+      "name": "loss_ratio_pct",
+      "volatility": 2.5
+    }
+  ],
+  "multi_agent": false,
+  "name": "finance_claim_risk_triage_copilot",
+  "objective": "minimize",
+  "primary_metric": "claim_queue",
+  "requires_human_approval": false,
+  "risk_metric": "fraud_signal",
+  "uses_tool": false
+}

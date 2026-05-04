@@ -1,0 +1,105 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Route high-risk accounts to success calls.",
+      "effects": {
+        "at_risk_customers": -38.0,
+        "retention_budget_pct": -5.0,
+        "sentiment_score": 5.0
+      },
+      "name": "proactive_success_calls"
+    },
+    {
+      "cost": 0.0,
+      "description": "Offer targeted incentives to elastic customers.",
+      "effects": {
+        "churn_rate_pct": -1.2,
+        "retention_budget_pct": -8.0,
+        "sentiment_score": 3.0
+      },
+      "name": "targeted_loyalty_offer"
+    },
+    {
+      "cost": 0.0,
+      "description": "Prioritize a product issue campaign.",
+      "effects": {
+        "churn_rate_pct": -0.7,
+        "retention_budget_pct": -4.0,
+        "sentiment_score": 8.0
+      },
+      "name": "product_fix_campaign"
+    }
+  ],
+  "agent_responsibilities": [
+    "observe churn signals",
+    "select retention actions",
+    "explain expected impact"
+  ],
+  "artifact_type": "retention intervention plan",
+  "blueprint_id": "business_revenue_retention_copilot",
+  "category": "business",
+  "default_inputs": {
+    "seed": 42,
+    "segment": "mid-market SaaS",
+    "steps": 5
+  },
+  "description": "Compare retention interventions before deploying them to at-risk customers.",
+  "entity_label": "customer segment",
+  "entity_names": [
+    "new teams",
+    "expansion accounts",
+    "price-sensitive users"
+  ],
+  "features": [
+    "customer_behavior_simulation",
+    "retention_agent",
+    "intervention_plan"
+  ],
+  "llm_role": "Customer retention strategist",
+  "metrics": [
+    {
+      "drift": 24.0,
+      "initial": 340,
+      "label": "At-risk customers",
+      "maximum": 700,
+      "minimum": 0,
+      "name": "at_risk_customers",
+      "volatility": 18.0
+    },
+    {
+      "drift": 0.6,
+      "initial": 7.5,
+      "label": "Projected monthly churn percent",
+      "maximum": 20,
+      "minimum": 0,
+      "name": "churn_rate_pct",
+      "volatility": 0.7
+    },
+    {
+      "drift": -2.5,
+      "initial": 61,
+      "label": "Customer sentiment score",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "sentiment_score",
+      "volatility": 3.0
+    },
+    {
+      "drift": -1.0,
+      "initial": 38,
+      "label": "Retention budget remaining percent",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "retention_budget_pct",
+      "volatility": 1.5
+    }
+  ],
+  "multi_agent": false,
+  "name": "business_revenue_retention_copilot",
+  "objective": "minimize",
+  "primary_metric": "churn_rate_pct",
+  "requires_human_approval": false,
+  "risk_metric": "retention_budget_pct",
+  "uses_tool": false
+}

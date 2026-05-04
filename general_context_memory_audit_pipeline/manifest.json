@@ -1,0 +1,537 @@
+{
+  "description": "Run role-scoped context packets through a multi-agent audit decision workflow.",
+  "edges": [
+    {
+      "from_node": "initializer",
+      "message_type": "init_done",
+      "to_node": "interpreter"
+    },
+    {
+      "from_node": "interpreter",
+      "message_type": "interpreter_done",
+      "to_node": "extractor"
+    },
+    {
+      "from_node": "extractor",
+      "message_type": "extractor_done",
+      "to_node": "classifier"
+    },
+    {
+      "from_node": "classifier",
+      "message_type": "classifier_done",
+      "to_node": "decision"
+    },
+    {
+      "from_node": "decision",
+      "message_type": "decision_done",
+      "to_node": "critic"
+    },
+    {
+      "from_node": "critic",
+      "message_type": "critic_done",
+      "to_node": "sink"
+    }
+  ],
+  "entrypoints": [
+    "initializer"
+  ],
+  "graph_id": "general_context_memory_audit_pipeline_v1",
+  "initial_inputs": {
+    "initializer": [
+      {
+        "focus_id": "audit_task_1",
+        "job_id": "audit_job_777"
+      }
+    ]
+  },
+  "job_name": "general-context-memory-audit-pipeline",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "general_context_memory_audit_pipeline",
+    "category": "general",
+    "customizable_for": "Compliance review, legal intake, regulated operations, internal controls.",
+    "description": "Run role-scoped context packets through a multi-agent audit decision workflow.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Policy interpreter, evidence extractor, risk classifier, decision agent, critic.",
+    "name": "Context Memory Audit Pipeline",
+    "output": "Traceable audit decision and critic report.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object, event envelope, or bundle path"
+    },
+    "problem_solved": "Agents should not all see the same raw context; serious workflows need scoped memory, traceability, and final decisions that cite structured evidence.",
+    "quick_test": {
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "context engine",
+      "role ACLs",
+      "typed memory",
+      "LLM-facing context packets"
+    ],
+    "simulation_type": "Multi-agent context handoff with scoped memory.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Developers and compliance teams evaluating context-engine governance."
+  },
+  "name": "Context Memory Audit Pipeline",
+  "nodes": [
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/init.py"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "init_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "initializer",
+            "target": "initializer"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/initializer"
+      },
+      "node_id": "initializer",
+      "role": "initializer",
+      "type": "generic"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/interpreter.py"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "interpreter_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "interpreter",
+            "target": "interpreter"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/interpreter"
+      },
+      "node_id": "interpreter",
+      "role": "policy_interpreter",
+      "type": "generic"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/extractor.py"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "extractor_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "extractor",
+            "target": "extractor"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/extractor"
+      },
+      "node_id": "extractor",
+      "role": "evidence_extractor",
+      "type": "generic"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/classifier.py"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "classifier_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "classifier",
+            "target": "classifier"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/classifier"
+      },
+      "node_id": "classifier",
+      "role": "risk_classifier",
+      "type": "generic"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/decision.py"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "decision_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "decision",
+            "target": "decision"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/decision"
+      },
+      "node_id": "decision",
+      "role": "decision_agent",
+      "type": "generic"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/critic.py"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "critic_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "pool": "default",
+        "pool_slots": 1,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "tty": false,
+        "upload_paths": [
+          {
+            "source": "critic",
+            "target": "critic"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/critic"
+      },
+      "node_id": "critic",
+      "role": "critic_auditor",
+      "type": "generic"
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_on_message": true,
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        }
+      },
+      "node_id": "sink",
+      "type": "reduce"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
+  "requiredContextEngine": true
+}

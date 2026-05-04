@@ -1,0 +1,233 @@
+{
+  "daemon": true,
+  "description": "Run a Python-defined workflow as a long-lived daemon with repeated stateful turns.",
+  "edges": [
+    {
+      "edge_id": "daemon_ingress_to_daemon_analyzer",
+      "from_node": "daemon_ingress",
+      "message_type": "daemon_ingress_result",
+      "to_node": "daemon_analyzer"
+    },
+    {
+      "edge_id": "daemon_analyzer_to_daemon_memory",
+      "from_node": "daemon_analyzer",
+      "message_type": "daemon_analyzer_result",
+      "to_node": "daemon_memory"
+    }
+  ],
+  "entrypoints": [
+    "daemon_ingress"
+  ],
+  "graph_id": "general_python_sdk_live_research_daemon_v1",
+  "initial_inputs": {
+    "daemon_ingress": [
+      {
+        "args": [
+          "charging-station-health"
+        ],
+        "kwargs": {}
+      }
+    ]
+  },
+  "job_name": "general-python-sdk-live-research-daemon",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "general_python_sdk_live_research_daemon",
+    "category": "general",
+    "compiler_version": "0.2.0",
+    "customizable_for": "Incident monitors, market watchers, research crawlers.",
+    "description": "Run a Python-defined workflow as a long-lived daemon with repeated stateful turns.",
+    "generated_at": "2026-04-30T11:17:52+00:00",
+    "generated_by": "mn-python-sdk",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Python daemon coordinator.",
+    "manifest_schema": "1.0",
+    "name": "Python Sdk Live Research Daemon",
+    "output": "Ongoing events and final cancellation-safe state.",
+    "problem_solved": "Many agent workflows need to keep running, react to new events, and maintain operational state rather than finish after one request.",
+    "python_workflow": {
+      "class": "GeneralPythonDefinedAdvancedDeamon",
+      "description": "Generate the Python SDK-defined live research daemon bundle.",
+      "includes": [
+        "service_health_simulation.py"
+      ],
+      "module": "workflow",
+      "status_message": "generating Python SDK live research daemon bundle"
+    },
+    "python_source_mode": true,
+    "quick_test": {
+      "enabled": true
+    },
+    "runtime_features": [
+      "Python SDK",
+      "daemon execution",
+      "live loop",
+      "runtime events"
+    ],
+    "simulation_type": "Live daemon loop with repeated inputs.",
+    "source_hash": "88528011c2a28c55dbfb3bc2c966feb0371316baf8beac8f415bd6f5caaad198",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "target_user": "Developers building live monitors, scheduled analysis loops, or long-running research agents."
+  },
+  "name": "Python Sdk Live Research Daemon",
+  "nodes": [
+    {
+      "agent_type": "executor",
+      "config": {
+        "backpressure": {
+          "high_watermark": 3,
+          "low_watermark": 1,
+          "max_queue_depth": 6,
+          "retry_after_ms": 500
+        },
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "0",
+          "MN_PY_FINAL": "0",
+          "MN_PY_METHOD": "ingress",
+          "MN_PY_OUTPUT_TYPE": "daemon_ingress_result",
+          "MN_PY_OWNER_CLASS": "DaemonAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-daemon_ingress",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "timeout_seconds": 10,
+        "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
+      },
+      "node_id": "daemon_ingress",
+      "role": "root_coordinator",
+      "type": "stream"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "backpressure": {
+          "high_watermark": 3,
+          "low_watermark": 1,
+          "max_queue_depth": 6,
+          "retry_after_ms": 500
+        },
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "0",
+          "MN_PY_FINAL": "0",
+          "MN_PY_METHOD": "analyzer",
+          "MN_PY_OUTPUT_TYPE": "daemon_analyzer_result",
+          "MN_PY_OWNER_CLASS": "DaemonAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-daemon_analyzer",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "timeout_seconds": 10,
+        "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
+      },
+      "node_id": "daemon_analyzer",
+      "type": "stream"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "backpressure": {
+          "high_watermark": 3,
+          "low_watermark": 1,
+          "max_queue_depth": 6,
+          "retry_after_ms": 500
+        },
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "0",
+          "MN_PY_FINAL": "1",
+          "MN_PY_METHOD": "memory",
+          "MN_PY_OUTPUT_TYPE": "daemon_memory_result",
+          "MN_PY_OWNER_CLASS": "DaemonAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-daemon_memory",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "timeout_seconds": 10,
+        "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
+      },
+      "node_id": "daemon_memory",
+      "type": "stream"
+    }
+  ],
+  "policies": {
+    "backpressure": {
+      "external_input": "retry_later",
+      "propagation": "downstream_to_upstream",
+      "strategy": "bounded_queue"
+    },
+    "recovery_mode": "cluster_recover",
+    "stream_mode": "live"
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "daemon": false,
+  "description": "Compare retention interventions before deploying them to at-risk customers.",
+  "edges": [
+    {
+      "edge_id": "simulation_to_report",
+      "from_node": "simulation_loop",
+      "message_type": "blueprint_report",
+      "to_node": "report_sink"
+    }
+  ],
+  "entrypoints": [
+    "simulation_loop"
+  ],
+  "graph_id": "business_revenue_retention_copilot_v1",
+  "initial_inputs": {
+    "simulation_loop": [
+      {
+        "seed": 42,
+        "segment": "mid-market SaaS",
+        "steps": 5
+      }
+    ]
+  },
+  "job_name": "business-revenue-retention-copilot",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "business_revenue_retention_copilot",
+    "category": "business",
+    "customizable_for": "SaaS retention, subscription commerce, financial services, telecom.",
+    "description": "Compare retention interventions before deploying them to at-risk customers.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {
+      "default_api_base": "http://192.168.4.173:11434",
+      "default_model": "ollama/nemotron3:33b",
+      "mock_mode": "run payloads/simulation_loop/scripts/run_blueprint.py --mock-llm"
+    },
+    "llm_agent_role": "Customer retention strategist.",
+    "name": "Revenue Retention Copilot",
+    "output": "Retention intervention plan with expected churn and budget tradeoffs.",
+    "output_contract": {
+      "events": "blueprint_report",
+      "stdout": "JSON object with timeline, state_changes, final_artifact, and llm metadata"
+    },
+    "problem_solved": "Churn risk changes with sentiment, product issues, and budget constraints; one-shot LLM suggestions do not show cost or state tradeoffs.",
+    "quick_test": {
+      "command": "python3 payloads/simulation_loop/scripts/run_blueprint.py --mock-llm --steps 2",
+      "enabled": true
+    },
+    "runtime_features": [
+      "customer behavior simulation",
+      "intervention planning",
+      "LLM strategy",
+      "feedback loop"
+    ],
+    "simulation": {
+      "actions": [
+        "proactive_success_calls",
+        "targeted_loyalty_offer",
+        "product_fix_campaign"
+      ],
+      "agent_role": "Customer retention strategist",
+      "dynamic_metrics": [
+        "at_risk_customers",
+        "churn_rate_pct",
+        "sentiment_score",
+        "retention_budget_pct"
+      ]
+    },
+    "simulation_type": "Customer health and churn-risk simulation.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "target_user": "Revenue operations, customer success, and growth teams."
+  },
+  "name": "Revenue Retention Copilot",
+  "nodes": [
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/run_blueprint.py"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_MAX_TOKENS": "700",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_NUM_RETRIES": "1",
+          "LITELLM_TIMEOUT_SECONDS": "60",
+          "MN_BLUEPRINT_ID": "business_revenue_retention_copilot",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_MAX_TOKENS": "700",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_NUM_RETRIES": "1",
+          "MN_LLM_TIMEOUT_SECONDS": "60"
+        },
+        "from": "base",
+        "name_prefix": "business_customer_churn_interven",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "blueprint_report",
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "simulation_loop",
+        "upload_path": "simulation_loop",
+        "workdir": "/sandbox/job/simulation_loop"
+      },
+      "node_id": "simulation_loop",
+      "role": "root_coordinator",
+      "type": "generic"
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_on_message": true
+      },
+      "node_id": "report_sink",
+      "role": "result_sink",
+      "type": "reduce"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
+  "requiredContextEngine": false
+}

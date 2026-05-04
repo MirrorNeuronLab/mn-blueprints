@@ -1,0 +1,209 @@
+{
+  "daemon": false,
+  "description": "Define a MirrorNeuron workflow directly in Python and compile it into a runnable bundle.",
+  "edges": [
+    {
+      "edge_id": "ingress_to_retriever",
+      "from_node": "ingress",
+      "message_type": "ingress_result",
+      "to_node": "retriever"
+    },
+    {
+      "edge_id": "retriever_to_reviewer",
+      "from_node": "retriever",
+      "message_type": "retriever_result",
+      "to_node": "reviewer"
+    }
+  ],
+  "entrypoints": [
+    "ingress"
+  ],
+  "graph_id": "general_python_sdk_research_pipeline_v1",
+  "initial_inputs": {
+    "ingress": [
+      {
+        "args": [
+          "electric vehicle charging adoption in New England"
+        ],
+        "kwargs": {}
+      }
+    ]
+  },
+  "job_name": "general-python-sdk-research-pipeline",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "general_python_sdk_research_pipeline",
+    "category": "general",
+    "compiler_version": "0.2.0",
+    "customizable_for": "Internal research, report generation, enrichment workflows.",
+    "description": "Define a MirrorNeuron workflow directly in Python and compile it into a runnable bundle.",
+    "generated_at": "2026-04-30T11:17:52+00:00",
+    "generated_by": "mn-python-sdk",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Python-defined research agents.",
+    "manifest_schema": "1.0",
+    "name": "Python Sdk Research Pipeline",
+    "output": "Saved research summary and final workflow result.",
+    "problem_solved": "Developers need a low-friction path from Python functions to distributed runtime agents while keeping retry, timeout, and graph semantics explicit.",
+    "python_workflow": {
+      "class": "GeneralPythonDefinedBasic",
+      "description": "Generate the Python SDK-defined research pipeline bundle.",
+      "includes": [
+        "existing_research.py"
+      ],
+      "module": "workflow",
+      "status_message": "generating Python SDK research pipeline bundle"
+    },
+    "python_source_mode": true,
+    "quick_test": {
+      "enabled": true
+    },
+    "runtime_features": [
+      "Python SDK",
+      "map/reduce agents",
+      "compiled bundle",
+      "retry policies"
+    ],
+    "simulation_type": "Deterministic staged workflow.",
+    "source_hash": "c993088c8960dd6f902b82ca04978cf0f5a6d2f44208041786ccce1c0ab2e7bc",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "target_user": "Python developers who want agent workflows without hand-writing manifests."
+  },
+  "name": "Python Sdk Research Pipeline",
+  "nodes": [
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "1",
+          "MN_PY_FINAL": "0",
+          "MN_PY_METHOD": "ingress",
+          "MN_PY_OUTPUT_TYPE": "ingress_result",
+          "MN_PY_OWNER_CLASS": "ResearchAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-ingress",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "timeout_seconds": 10,
+        "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
+      },
+      "node_id": "ingress",
+      "role": "root_coordinator",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "1",
+          "MN_PY_FINAL": "0",
+          "MN_PY_METHOD": "retriever",
+          "MN_PY_OUTPUT_TYPE": "retriever_result",
+          "MN_PY_OWNER_CLASS": "ResearchAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-retriever",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "timeout_seconds": 10,
+        "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
+      },
+      "node_id": "retriever",
+      "type": "map"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "1",
+          "MN_PY_FINAL": "1",
+          "MN_PY_METHOD": "reviewer",
+          "MN_PY_OUTPUT_TYPE": "reviewer_result",
+          "MN_PY_OWNER_CLASS": "ResearchAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-reviewer",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "timeout_seconds": 10,
+        "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
+      },
+      "node_id": "reviewer",
+      "type": "reduce"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  }
+}

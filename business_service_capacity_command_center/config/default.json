@@ -1,0 +1,131 @@
+{
+  "execution_model": [
+    "load_metadata",
+    "resolve_config",
+    "load_inputs",
+    "start_run_store",
+    "observe_simulation_state",
+    "call_llm_agent",
+    "apply_decision_to_simulation",
+    "emit_events",
+    "write_final_artifact"
+  ],
+  "identity": {
+    "blueprint_id": "business_service_capacity_command_center",
+    "name": "Service Capacity Command Center"
+  },
+  "inputs": {
+    "adapter": "mock",
+    "description": "Default synthetic inputs bundled with the blueprint.",
+    "payload": {
+      "seed": 42,
+      "sla_target_pct": 85,
+      "steps": 5
+    }
+  },
+  "interfaces": {
+    "config_sections": [
+      "metadata",
+      "identity",
+      "inputs",
+      "simulation",
+      "llm",
+      "outputs",
+      "logging",
+      "real_adapters"
+    ],
+    "identity_fields": [
+      "blueprint_id",
+      "name",
+      "run_id"
+    ],
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ],
+    "run_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "result.json",
+      "final_artifact.json"
+    ]
+  },
+  "llm": {
+    "agent_role": "Workforce management agent",
+    "api_base": "http://192.168.4.173:11434",
+    "mock_mode": "fake",
+    "mode": "ollama",
+    "model": "ollama/nemotron3:33b",
+    "responsibilities": [
+      "observe queue conditions",
+      "choose staffing controls",
+      "report SLA tradeoffs"
+    ]
+  },
+  "logging": {
+    "events": [
+      "run_started",
+      "inputs_loaded",
+      "simulation_step_started",
+      "llm_decision",
+      "simulation_state_updated",
+      "run_completed"
+    ],
+    "events_jsonl": true,
+    "level": "INFO",
+    "redact_env_secrets": true
+  },
+  "metadata": {
+    "category": "business",
+    "customizable_for": "Call centers, field service, support queues, hospital operations.",
+    "problem_solved": "Staffing decisions are expensive and time-sensitive; dashboards show queue waits but do not simulate next-interval choices.",
+    "target_users": "Contact-center leaders, workforce managers, and customer operations teams."
+  },
+  "mode": "mock",
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifact_contract": "Staffing forecast and capacity action plan.",
+    "run_root": "~/.mn/runs",
+    "write_run_store": true
+  },
+  "real_adapters": {
+    "inline_json": {
+      "adapter": "json",
+      "description": "Load overrides from an inline JSON object.",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "description": "Load JSON overrides from a local file path.",
+      "path": null
+    }
+  },
+  "simulation": {
+    "actions": [
+      "add_overtime",
+      "shift_staff",
+      "deflect_self_service"
+    ],
+    "deterministic": true,
+    "enabled": true,
+    "metrics": [
+      "arrival_rate",
+      "queue_wait_minutes",
+      "staffed_agents",
+      "sla_attainment_pct"
+    ],
+    "objective": "maximize",
+    "primary_metric": "sla_attainment_pct",
+    "risk_metric": "queue_wait_minutes",
+    "seed_field": "seed",
+    "type": "Queue, staffing, and SLA simulation."
+  },
+  "standard_version": "1.0"
+}

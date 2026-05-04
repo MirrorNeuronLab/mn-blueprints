@@ -1,0 +1,104 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Increase targeted vaccination outreach.",
+      "effects": {
+        "hospital_load_pct": -2.0,
+        "infected_people": -25.0,
+        "vaccination_pct": 4.0
+      },
+      "name": "vaccination_push"
+    },
+    {
+      "cost": 0.0,
+      "description": "Temporarily reduce high-risk mobility.",
+      "effects": {
+        "hospital_load_pct": -3.0,
+        "infected_people": -35.0,
+        "mobility_index": -12.0
+      },
+      "name": "reduce_mobility"
+    },
+    {
+      "cost": 0.0,
+      "description": "Increase testing and isolation of likely cases.",
+      "effects": {
+        "hospital_load_pct": -1.0,
+        "infected_people": -18.0
+      },
+      "name": "increase_testing"
+    }
+  ],
+  "agent_responsibilities": [
+    "observe infections and hospital load",
+    "choose interventions",
+    "write an intervention plan"
+  ],
+  "artifact_type": "public health intervention plan",
+  "blueprint_id": "science_outbreak_response_policy_simulator",
+  "category": "science",
+  "default_inputs": {
+    "population": 50000,
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Compare outbreak interventions as infections, mobility, vaccination, and hospital load change.",
+  "entity_label": "district",
+  "entity_names": [
+    "campus district",
+    "downtown",
+    "suburban clinics"
+  ],
+  "features": [
+    "disease_spread_simulation",
+    "public_health_agent",
+    "intervention_loop"
+  ],
+  "llm_role": "Public-health intervention advisor",
+  "metrics": [
+    {
+      "drift": 34.0,
+      "initial": 180,
+      "label": "Currently infected people",
+      "maximum": 5000,
+      "minimum": 0,
+      "name": "infected_people",
+      "volatility": 20.0
+    },
+    {
+      "drift": 0.8,
+      "initial": 42,
+      "label": "Vaccination percent",
+      "maximum": 95,
+      "minimum": 0,
+      "name": "vaccination_pct",
+      "volatility": 0.5
+    },
+    {
+      "drift": 1.5,
+      "initial": 78,
+      "label": "Mobility index",
+      "maximum": 120,
+      "minimum": 10,
+      "name": "mobility_index",
+      "volatility": 2.0
+    },
+    {
+      "drift": 5.0,
+      "initial": 61,
+      "label": "Hospital load percent",
+      "maximum": 140,
+      "minimum": 0,
+      "name": "hospital_load_pct",
+      "volatility": 4.0
+    }
+  ],
+  "multi_agent": false,
+  "name": "science_outbreak_response_policy_simulator",
+  "objective": "minimize",
+  "primary_metric": "infected_people",
+  "requires_human_approval": false,
+  "risk_metric": "hospital_load_pct",
+  "uses_tool": false
+}

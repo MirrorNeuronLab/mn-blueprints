@@ -1,0 +1,150 @@
+{
+  "business_call_center_staffing_simulation": [
+    "business_service_capacity_command_center",
+    "Targets service leaders managing SLA and capacity tradeoffs."
+  ],
+  "business_customer_churn_intervention": [
+    "business_revenue_retention_copilot",
+    "Positions churn reduction as revenue retention."
+  ],
+  "business_email_campaign_deamon": [
+    "business_customer_lifecycle_email_copilot",
+    "Frames email automation as lifecycle growth orchestration."
+  ],
+  "business_pricing_strategy_simulation": [
+    "business_dynamic_pricing_profit_optimizer",
+    "Connects pricing simulation to margin and profit outcomes."
+  ],
+  "business_supply_chain_disruption_response": [
+    "business_supply_chain_resilience_war_room",
+    "Names the high-urgency operator workflow for disruption response."
+  ],
+  "finance_credit_risk_simulation": [
+    "finance_credit_default_early_warning_system",
+    "Turns a simulation into an early-warning risk workflow."
+  ],
+  "finance_insurance_claim_risk_triage": [
+    "finance_claim_risk_triage_copilot",
+    "Names the adjuster and SIU prioritization workflow."
+  ],
+  "finance_portfolio_stress_test": [
+    "finance_portfolio_crash_stress_lab",
+    "Makes crash and rate-shock planning explicit."
+  ],
+  "finance_real_estate_opportunity_finder": [
+    "finance_zip_code_property_alpha_engine",
+    "Frames real-estate search as market alpha discovery."
+  ],
+  "financial_market_realtime_advisor_deamon": [
+    "finance_liquidity_microstructure_radar",
+    "Repositions the market daemon around liquidity and microstructure risk."
+  ],
+  "general_agent_loop_demo": [
+    "general_closed_loop_agent_runtime",
+    "Reframes the demo as the core closed-loop runtime pattern."
+  ],
+  "general_context_memory_advanced": [
+    "general_context_memory_compression_lab",
+    "Highlights compression and context packet behavior under pressure."
+  ],
+  "general_context_memory_basic": [
+    "general_context_memory_audit_pipeline",
+    "Positions the context-memory workflow as an audit pipeline."
+  ],
+  "general_dynamic_environment_demo": [
+    "general_dynamic_environment_control_loop",
+    "Emphasizes control over a changing system."
+  ],
+  "general_event_stream_processing": [
+    "general_event_stream_triage_state_machine",
+    "Focuses on stateful event triage, not generic processing."
+  ],
+  "general_human_in_the_loop_decision": [
+    "general_human_approval_decision_gate",
+    "Names the approval-gated decision workflow."
+  ],
+  "general_llm_tool_use_demo": [
+    "general_llm_tool_orchestration_loop",
+    "Makes tool orchestration and feedback loops explicit."
+  ],
+  "general_multi_agent_negotiation": [
+    "general_multi_agent_contract_negotiation_loop",
+    "Makes the multi-agent negotiation outcome concrete."
+  ],
+  "general_native_live_deamon": [
+    "general_native_live_monitor_daemon",
+    "Fixes the daemon typo and names the live native-agent monitoring value."
+  ],
+  "general_openshell_llm_codegen": [
+    "general_sandboxed_llm_codegen_review_loop",
+    "Highlights sandboxed LLM generation, review, and validation."
+  ],
+  "general_openshell_worker_basic": [
+    "general_openshell_sandbox_worker_pipeline",
+    "Repositioned from a basic worker example to a sandboxed execution pipeline."
+  ],
+  "general_policy_optimization_demo": [
+    "general_policy_feedback_optimization_loop",
+    "Clarifies that policies are optimized through feedback."
+  ],
+  "general_prime_sweep_scale": [
+    "general_parallel_worker_scale_benchmark",
+    "Frames the blueprint around parallel runtime scale rather than prime numbers."
+  ],
+  "general_python_defined_advanced_deamon": [
+    "general_python_sdk_live_research_daemon",
+    "Fixes the daemon typo and emphasizes the live Python workflow loop."
+  ],
+  "general_python_defined_basic": [
+    "general_python_sdk_research_pipeline",
+    "Clarifies that this is a Python SDK workflow users can adapt."
+  ],
+  "general_simulation_state_tracking": [
+    "general_simulation_state_audit_trail",
+    "Frames state tracking as an audit trail users can inspect."
+  ],
+  "general_stream_basic_deamon": [
+    "general_live_telemetry_stream_pipeline",
+    "Clarifies that the blueprint demonstrates live telemetry stream handling."
+  ],
+  "general_stream_live_backpressure_deamon": [
+    "general_stream_backpressure_control_loop",
+    "Fixes daemon wording and makes backpressure control the value."
+  ],
+  "general_test_message_flow": [
+    "general_message_routing_trace",
+    "Removes test/demo positioning and focuses on message routing traceability."
+  ],
+  "science_climate_risk_local_planning": [
+    "science_climate_resilience_planning_engine",
+    "Frames climate risk as actionable resilience planning."
+  ],
+  "science_drug_discovery_deamon": [
+    "science_drug_discovery_closed_loop_lab",
+    "Fixes daemon wording and names the closed-loop scientific workflow."
+  ],
+  "science_ecosystem_simulation": [
+    "science_ecosystem_intervention_sandbox",
+    "Makes ecosystem management and intervention testing explicit."
+  ],
+  "science_flu_spread_intervention_simulation": [
+    "science_outbreak_response_policy_simulator",
+    "Names the policy decision this outbreak model supports."
+  ],
+  "science_lab_experiment_optimizer": [
+    "science_adaptive_experiment_discovery_agent",
+    "Highlights adaptive experiment selection over static optimization."
+  ],
+  "science_mpe_simple_push_visualization": [
+    "science_multi_agent_motion_planning_lab",
+    "Removes simple/demo wording and emphasizes multi-agent planning."
+  ],
+  "science_traffic_congestion_control": [
+    "science_urban_traffic_control_lab",
+    "Targets city traffic teams and control-room experimentation."
+  ],
+  "video_safety_door_monitor_deamon": [
+    "business_facility_safety_video_guardian",
+    "Moves the video safety workflow into a business operations category."
+  ]
+}

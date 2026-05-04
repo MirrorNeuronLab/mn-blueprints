@@ -1,0 +1,105 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Extend green times on the congested corridor.",
+      "effects": {
+        "avg_speed_mph": 5.0,
+        "emissions_index": -5.0,
+        "vehicle_count": -220.0
+      },
+      "name": "extend_green_corridor"
+    },
+    {
+      "cost": 0.0,
+      "description": "Reroute traffic around the incident.",
+      "effects": {
+        "avg_speed_mph": 3.0,
+        "incident_severity": -10.0,
+        "vehicle_count": -120.0
+      },
+      "name": "reroute_incident"
+    },
+    {
+      "cost": 0.0,
+      "description": "Prioritize buses to reduce network demand.",
+      "effects": {
+        "avg_speed_mph": 2.0,
+        "emissions_index": -8.0,
+        "vehicle_count": -160.0
+      },
+      "name": "transit_priority"
+    }
+  ],
+  "agent_responsibilities": [
+    "observe congestion and incidents",
+    "choose signal or routing controls",
+    "summarize mobility impact"
+  ],
+  "artifact_type": "traffic control plan",
+  "blueprint_id": "science_urban_traffic_control_lab",
+  "category": "science",
+  "default_inputs": {
+    "city": "synthetic metro",
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Test signal and rerouting controls as traffic speed, incidents, volume, and emissions evolve.",
+  "entity_label": "corridor",
+  "entity_names": [
+    "Main Street",
+    "Harbor Tunnel",
+    "University Ave"
+  ],
+  "features": [
+    "traffic_simulation",
+    "control_strategy",
+    "llm_advisor"
+  ],
+  "llm_role": "Traffic systems control advisor",
+  "metrics": [
+    {
+      "drift": 220.0,
+      "initial": 2600,
+      "label": "Vehicles in network",
+      "maximum": 6000,
+      "minimum": 400,
+      "name": "vehicle_count",
+      "volatility": 130.0
+    },
+    {
+      "drift": -2.0,
+      "initial": 31,
+      "label": "Average speed mph",
+      "maximum": 70,
+      "minimum": 5,
+      "name": "avg_speed_mph",
+      "volatility": 2.5
+    },
+    {
+      "drift": 4.0,
+      "initial": 22,
+      "label": "Incident severity",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "incident_severity",
+      "volatility": 7.0
+    },
+    {
+      "drift": 3.0,
+      "initial": 58,
+      "label": "Emissions index",
+      "maximum": 160,
+      "minimum": 10,
+      "name": "emissions_index",
+      "volatility": 4.0
+    }
+  ],
+  "multi_agent": false,
+  "name": "science_urban_traffic_control_lab",
+  "objective": "maximize",
+  "primary_metric": "avg_speed_mph",
+  "requires_human_approval": false,
+  "risk_metric": "incident_severity",
+  "uses_tool": false
+}

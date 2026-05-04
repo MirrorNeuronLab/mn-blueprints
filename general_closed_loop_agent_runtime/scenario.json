@@ -1,0 +1,103 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Add short-term capacity to reduce backlog.",
+      "effects": {
+        "backlog": -7.0,
+        "capacity": 3.0,
+        "operating_cost": 4.0
+      },
+      "name": "increase_capacity"
+    },
+    {
+      "cost": 0.0,
+      "description": "Slow throughput briefly to restore quality.",
+      "effects": {
+        "backlog": 2.0,
+        "operating_cost": 1.0,
+        "quality_score": 5.0
+      },
+      "name": "focus_quality"
+    },
+    {
+      "cost": 0.0,
+      "description": "Keep the current policy and observe another tick.",
+      "effects": {
+        "operating_cost": -1.0
+      },
+      "name": "hold_policy"
+    }
+  ],
+  "agent_responsibilities": [
+    "observe queue pressure",
+    "choose a bounded action",
+    "explain the expected state impact"
+  ],
+  "artifact_type": "simulation summary",
+  "blueprint_id": "general_closed_loop_agent_runtime",
+  "category": "general",
+  "default_inputs": {
+    "initial_backlog": 18,
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Show the core runtime pattern: an LLM agent observes a changing queue and acts over repeated ticks.",
+  "entity_label": "work stream",
+  "entity_names": [
+    "claims",
+    "orders",
+    "reviews"
+  ],
+  "features": [
+    "agent_loop",
+    "dynamic_state",
+    "observable_timeline"
+  ],
+  "llm_role": "Operations loop controller",
+  "metrics": [
+    {
+      "drift": 4.0,
+      "initial": 18,
+      "label": "Open work backlog",
+      "maximum": 80,
+      "minimum": 0,
+      "name": "backlog",
+      "volatility": 2.5
+    },
+    {
+      "drift": -0.2,
+      "initial": 14,
+      "label": "Available service capacity",
+      "maximum": 30,
+      "minimum": 6,
+      "name": "capacity",
+      "volatility": 0.7
+    },
+    {
+      "drift": -1.1,
+      "initial": 84,
+      "label": "Output quality score",
+      "maximum": 99,
+      "minimum": 50,
+      "name": "quality_score",
+      "volatility": 1.0
+    },
+    {
+      "drift": 0.7,
+      "initial": 22,
+      "label": "Operating cost index",
+      "maximum": 80,
+      "minimum": 10,
+      "name": "operating_cost",
+      "volatility": 0.8
+    }
+  ],
+  "multi_agent": false,
+  "name": "general_closed_loop_agent_runtime",
+  "objective": "minimize",
+  "primary_metric": "backlog",
+  "requires_human_approval": false,
+  "risk_metric": "quality_score",
+  "uses_tool": false
+}

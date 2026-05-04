@@ -1,0 +1,105 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Expedite critical lanes to recover inventory.",
+      "effects": {
+        "inventory_days": 4.0,
+        "service_level": 3.0,
+        "supplier_delay_days": -2.0
+      },
+      "name": "expedite_freight"
+    },
+    {
+      "cost": 0.0,
+      "description": "Shift volume to an alternate supplier.",
+      "effects": {
+        "inventory_days": 2.0,
+        "service_level": 2.0,
+        "supplier_delay_days": -4.0
+      },
+      "name": "switch_supplier"
+    },
+    {
+      "cost": 0.0,
+      "description": "Reserve scarce inventory for highest-value demand.",
+      "effects": {
+        "inventory_days": -1.0,
+        "service_level": 5.0
+      },
+      "name": "allocate_inventory"
+    }
+  ],
+  "agent_responsibilities": [
+    "monitor inventory and demand",
+    "choose mitigation actions",
+    "produce an operations recommendation"
+  ],
+  "artifact_type": "disruption response plan",
+  "blueprint_id": "business_supply_chain_resilience_war_room",
+  "category": "business",
+  "default_inputs": {
+    "product": "industrial sensor",
+    "region": "Northeast",
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Test disruption responses before inventory, supplier delays, and customer service levels break down.",
+  "entity_label": "supplier lane",
+  "entity_names": [
+    "primary ocean lane",
+    "regional supplier",
+    "air expedite lane"
+  ],
+  "features": [
+    "supply_chain_simulation",
+    "llm_planner",
+    "time_varying_inventory"
+  ],
+  "llm_role": "Supply chain disruption response agent",
+  "metrics": [
+    {
+      "drift": -2.0,
+      "initial": 18,
+      "label": "Inventory days on hand",
+      "maximum": 60,
+      "minimum": 0,
+      "name": "inventory_days",
+      "volatility": 2.0
+    },
+    {
+      "drift": 4.0,
+      "initial": 72,
+      "label": "Demand index",
+      "maximum": 140,
+      "minimum": 20,
+      "name": "demand_index",
+      "volatility": 5.0
+    },
+    {
+      "drift": 1.2,
+      "initial": 6,
+      "label": "Supplier delay days",
+      "maximum": 30,
+      "minimum": 0,
+      "name": "supplier_delay_days",
+      "volatility": 1.5
+    },
+    {
+      "drift": -2.5,
+      "initial": 89,
+      "label": "Customer service level",
+      "maximum": 100,
+      "minimum": 30,
+      "name": "service_level",
+      "volatility": 2.0
+    }
+  ],
+  "multi_agent": false,
+  "name": "business_supply_chain_resilience_war_room",
+  "objective": "maximize",
+  "primary_metric": "service_level",
+  "requires_human_approval": false,
+  "risk_metric": "supplier_delay_days",
+  "uses_tool": false
+}

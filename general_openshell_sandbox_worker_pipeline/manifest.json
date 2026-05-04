@@ -1,0 +1,175 @@
+{
+  "description": "Run isolated shell and Python workers as a traceable runtime pipeline.",
+  "edges": [
+    {
+      "edge_id": "shell_to_python",
+      "from_node": "shell_worker",
+      "message_type": "shell_metrics",
+      "to_node": "python_worker"
+    },
+    {
+      "edge_id": "python_to_sink",
+      "from_node": "python_worker",
+      "message_type": "python_report",
+      "to_node": "result_sink"
+    }
+  ],
+  "entrypoints": [
+    "shell_worker"
+  ],
+  "graph_id": "general_openshell_sandbox_worker_pipeline_v1",
+  "initial_inputs": {
+    "shell_worker": [
+      {
+        "label": "quick-signal",
+        "request_id": "demo-quick-001",
+        "text": "BEAM orchestrates workers while OpenShell isolates execution."
+      }
+    ]
+  },
+  "job_name": "general-openshell-sandbox-worker-pipeline",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "general_openshell_sandbox_worker_pipeline",
+    "category": "general",
+    "customizable_for": "ETL tasks, compliance checks, code validation, document processing.",
+    "description": "Run isolated shell and Python workers as a traceable runtime pipeline.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Sandboxed worker executor.",
+    "name": "Openshell Sandbox Worker Pipeline",
+    "output": "Worker metrics and a Python-generated report.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object, event envelope, or bundle path"
+    },
+    "problem_solved": "Teams need to run untrusted or heterogeneous tasks without losing observability, output contracts, or retry behavior.",
+    "quick_test": {
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "OpenShell isolation",
+      "executor routing",
+      "aggregator completion",
+      "policy-controlled execution"
+    ],
+    "simulation_type": "Static worker pipeline with deterministic generated input.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Developers evaluating sandboxed worker execution and artifact handoff patterns."
+  },
+  "name": "Openshell Sandbox Worker Pipeline",
+  "nodes": [
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "bash",
+          "scripts/collect_metrics.sh"
+        ],
+        "from": "base",
+        "name_prefix": "shell-worker",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "shell_metrics",
+        "policy": "policies/api-egress.yaml",
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "word_count",
+        "upload_path": "word_count",
+        "workdir": "/sandbox/job/word_count"
+      },
+      "node_id": "shell_worker",
+      "role": "root_coordinator",
+      "type": "generic"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/build_report.py"
+        ],
+        "from": "base",
+        "name_prefix": "python-worker",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "python_report",
+        "policy": "policies/api-egress.yaml",
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "report",
+        "upload_path": "report",
+        "workdir": "/sandbox/job/report"
+      },
+      "node_id": "python_worker",
+      "type": "generic"
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_on_message": true
+      },
+      "node_id": "result_sink",
+      "type": "reduce"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  },
+  "requiredContextEngine": false
+}

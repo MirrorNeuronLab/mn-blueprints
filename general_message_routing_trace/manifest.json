@@ -1,0 +1,143 @@
+{
+  "description": "Trace how messages move through router and aggregator agents.",
+  "edges": [
+    {
+      "edge_id": "ingress_to_retriever",
+      "from_node": "ingress",
+      "message_type": "test_request",
+      "to_node": "retriever"
+    },
+    {
+      "edge_id": "retriever_to_reviewer",
+      "from_node": "retriever",
+      "message_type": "test_request",
+      "to_node": "reviewer"
+    }
+  ],
+  "entrypoints": [
+    "ingress"
+  ],
+  "graph_id": "general_message_routing_trace_v1",
+  "initial_inputs": {
+    "ingress": [
+      {
+        "text": "Initiate test message flow.",
+        "topic": "test topic"
+      }
+    ]
+  },
+  "job_name": "general-message-routing-trace",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "general_message_routing_trace",
+    "category": "general",
+    "customizable_for": "Graph prototyping, training, runtime smoke checks.",
+    "description": "Trace how messages move through router and aggregator agents.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Router and aggregator agents.",
+    "name": "Message Routing Trace",
+    "output": "Completed route with aggregated payload.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object, event envelope, or bundle path"
+    },
+    "problem_solved": "Agent graphs are hard to debug unless developers can see message types, edges, and completion behavior clearly.",
+    "quick_test": {
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "message routing",
+      "typed edges",
+      "aggregator completion",
+      "manifest validation"
+    ],
+    "simulation_type": "Deterministic message-flow trace.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Developers learning the runtime message model."
+  },
+  "name": "Message Routing Trace",
+  "nodes": [
+    {
+      "agent_type": "router",
+      "config": {
+        "emit_type": "test_request"
+      },
+      "node_id": "ingress",
+      "role": "root_coordinator",
+      "type": "map"
+    },
+    {
+      "agent_type": "router",
+      "node_id": "retriever",
+      "role": "researcher",
+      "type": "map"
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_on_message": true
+      },
+      "node_id": "reviewer",
+      "role": "result_sink",
+      "type": "reduce"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
+  "requiredContextEngine": false
+}

@@ -1,0 +1,104 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Bid on the best risk-adjusted listing.",
+      "effects": {
+        "cap_rate_pct": 0.2,
+        "demand_index": 3.0,
+        "risk_score": 4.0
+      },
+      "name": "submit_bid"
+    },
+    {
+      "cost": 0.0,
+      "description": "Seek a discount where risk has widened.",
+      "effects": {
+        "cap_rate_pct": 0.35,
+        "median_price_index": -2.0,
+        "risk_score": -2.0
+      },
+      "name": "negotiate_discount"
+    },
+    {
+      "cost": 0.0,
+      "description": "Watchlist listings until risk improves.",
+      "effects": {
+        "risk_score": -4.0
+      },
+      "name": "watchlist_only"
+    }
+  ],
+  "agent_responsibilities": [
+    "observe listing dynamics",
+    "rank opportunities",
+    "explain bid or watch decisions"
+  ],
+  "artifact_type": "ranked opportunities",
+  "blueprint_id": "finance_zip_code_property_alpha_engine",
+  "category": "finance",
+  "default_inputs": {
+    "max_price": 900000,
+    "seed": 42,
+    "steps": 5,
+    "target_zip": "02139"
+  },
+  "description": "Rank property acquisition opportunities as ZIP-code demand, cap rate, price, and risk evolve.",
+  "entity_label": "property",
+  "entity_names": [
+    "duplex on Maple",
+    "small multifamily",
+    "renovated townhome"
+  ],
+  "features": [
+    "market_simulation",
+    "opportunity_ranking",
+    "llm_investment_agent"
+  ],
+  "llm_role": "Real estate investment analyst",
+  "metrics": [
+    {
+      "drift": 1.5,
+      "initial": 100,
+      "label": "Median price index",
+      "maximum": 160,
+      "minimum": 70,
+      "name": "median_price_index",
+      "volatility": 2.5
+    },
+    {
+      "drift": 3.0,
+      "initial": 73,
+      "label": "Buyer demand index",
+      "maximum": 140,
+      "minimum": 10,
+      "name": "demand_index",
+      "volatility": 4.0
+    },
+    {
+      "drift": -0.05,
+      "initial": 5.8,
+      "label": "Estimated cap rate percent",
+      "maximum": 10,
+      "minimum": 2,
+      "name": "cap_rate_pct",
+      "volatility": 0.25
+    },
+    {
+      "drift": 3.0,
+      "initial": 38,
+      "label": "Market risk score",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "risk_score",
+      "volatility": 5.0
+    }
+  ],
+  "multi_agent": false,
+  "name": "finance_zip_code_property_alpha_engine",
+  "objective": "maximize",
+  "primary_metric": "cap_rate_pct",
+  "requires_human_approval": false,
+  "risk_metric": "risk_score",
+  "uses_tool": false
+}

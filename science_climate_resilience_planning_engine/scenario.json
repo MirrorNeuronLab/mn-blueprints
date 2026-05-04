@@ -1,0 +1,103 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Deploy temporary pumps to reduce flood level.",
+      "effects": {
+        "flood_level_ft": -0.45,
+        "pump_capacity_pct": 8.0,
+        "vulnerable_assets": -2.0
+      },
+      "name": "deploy_pumps"
+    },
+    {
+      "cost": 0.0,
+      "description": "Stage sandbags near vulnerable assets.",
+      "effects": {
+        "flood_level_ft": -0.15,
+        "vulnerable_assets": -5.0
+      },
+      "name": "stage_sandbags"
+    },
+    {
+      "cost": 0.0,
+      "description": "Close high-risk roads before flooding peaks.",
+      "effects": {
+        "flood_level_ft": -0.1,
+        "vulnerable_assets": -3.0
+      },
+      "name": "close_roads"
+    }
+  ],
+  "agent_responsibilities": [
+    "observe weather and infrastructure risk",
+    "choose mitigations",
+    "produce a local planning brief"
+  ],
+  "artifact_type": "local climate mitigation plan",
+  "blueprint_id": "science_climate_resilience_planning_engine",
+  "category": "science",
+  "default_inputs": {
+    "seed": 42,
+    "steps": 5,
+    "town": "Riverton"
+  },
+  "description": "Plan local flood mitigations as rainfall, flood level, pump capacity, and vulnerable assets change.",
+  "entity_label": "asset group",
+  "entity_names": [
+    "substation",
+    "underpass",
+    "clinic"
+  ],
+  "features": [
+    "climate_risk_simulation",
+    "infrastructure_state",
+    "mitigation_plan"
+  ],
+  "llm_role": "Climate resilience planning advisor",
+  "metrics": [
+    {
+      "drift": 0.55,
+      "initial": 2.4,
+      "label": "Rainfall inches",
+      "maximum": 12,
+      "minimum": 0,
+      "name": "rainfall_inches",
+      "volatility": 0.4
+    },
+    {
+      "drift": 0.35,
+      "initial": 1.2,
+      "label": "Flood level feet",
+      "maximum": 12,
+      "minimum": 0,
+      "name": "flood_level_ft",
+      "volatility": 0.25
+    },
+    {
+      "drift": -2.0,
+      "initial": 72,
+      "label": "Pump capacity percent",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "pump_capacity_pct",
+      "volatility": 2.0
+    },
+    {
+      "drift": 2.0,
+      "initial": 18,
+      "label": "Vulnerable assets",
+      "maximum": 80,
+      "minimum": 0,
+      "name": "vulnerable_assets",
+      "volatility": 2.0
+    }
+  ],
+  "multi_agent": false,
+  "name": "science_climate_resilience_planning_engine",
+  "objective": "minimize",
+  "primary_metric": "vulnerable_assets",
+  "requires_human_approval": false,
+  "risk_metric": "flood_level_ft",
+  "uses_tool": false
+}

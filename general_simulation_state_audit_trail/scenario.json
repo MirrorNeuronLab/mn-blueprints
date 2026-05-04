@@ -1,0 +1,103 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Write a checkpoint and reconcile state deltas.",
+      "effects": {
+        "intervention_count": 1.0,
+        "measurement_confidence": 4.0,
+        "state_drift": -7.0
+      },
+      "name": "checkpoint_state"
+    },
+    {
+      "cost": 0.0,
+      "description": "Apply a stabilizing intervention.",
+      "effects": {
+        "intervention_count": 1.0,
+        "stability_score": 6.0,
+        "state_drift": -3.0
+      },
+      "name": "stabilize_system"
+    },
+    {
+      "cost": 0.0,
+      "description": "Keep observing state evolution.",
+      "effects": {
+        "state_drift": 2.0
+      },
+      "name": "hold_policy"
+    }
+  ],
+  "agent_responsibilities": [
+    "compare current and prior state",
+    "detect material changes",
+    "choose a stabilizing action"
+  ],
+  "artifact_type": "state tracking report",
+  "blueprint_id": "general_simulation_state_audit_trail",
+  "category": "general",
+  "default_inputs": {
+    "checkpoint_every_steps": 2,
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Track simulation state deltas so every agent decision is explainable after the run.",
+  "entity_label": "tracked subsystem",
+  "entity_names": [
+    "ingress",
+    "processor",
+    "sink"
+  ],
+  "features": [
+    "state_tracking",
+    "history",
+    "state_delta_reporting"
+  ],
+  "llm_role": "State tracking analyst",
+  "metrics": [
+    {
+      "drift": 4.0,
+      "initial": 22,
+      "label": "State drift",
+      "maximum": 90,
+      "minimum": 0,
+      "name": "state_drift",
+      "volatility": 3.0
+    },
+    {
+      "drift": -1.8,
+      "initial": 83,
+      "label": "Measurement confidence",
+      "maximum": 99,
+      "minimum": 40,
+      "name": "measurement_confidence",
+      "volatility": 1.0
+    },
+    {
+      "drift": 0.5,
+      "initial": 2,
+      "label": "Intervention count",
+      "maximum": 20,
+      "minimum": 0,
+      "name": "intervention_count",
+      "volatility": 0.6
+    },
+    {
+      "drift": -2.5,
+      "initial": 76,
+      "label": "Stability score",
+      "maximum": 100,
+      "minimum": 20,
+      "name": "stability_score",
+      "volatility": 2.0
+    }
+  ],
+  "multi_agent": false,
+  "name": "general_simulation_state_audit_trail",
+  "objective": "maximize",
+  "primary_metric": "stability_score",
+  "requires_human_approval": false,
+  "risk_metric": "state_drift",
+  "uses_tool": false
+}

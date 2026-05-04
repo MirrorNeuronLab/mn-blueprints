@@ -1,0 +1,139 @@
+{
+  "daemon": true,
+  "description": "Observe a fast native-agent live monitor that keeps producing decisions until stopped.",
+  "edges": [
+    {
+      "edge_id": "generator_to_answer",
+      "from_node": "question_generator",
+      "message_type": "division_question",
+      "to_node": "answer_agent"
+    }
+  ],
+  "entrypoints": [
+    "question_generator"
+  ],
+  "graph_id": "general_native_live_monitor_daemon_v1",
+  "initial_inputs": {
+    "question_generator": [
+      {
+        "tick": 0
+      }
+    ]
+  },
+  "job_name": "general-native-live-monitor-daemon",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "general_native_live_monitor_daemon",
+    "category": "general",
+    "customizable_for": "Operations telemetry, rules engines, high-frequency synthetic simulations.",
+    "description": "Observe a fast native-agent live monitor that keeps producing decisions until stopped.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Native BEAM monitoring agents.",
+    "name": "Native Live Monitor Daemon",
+    "output": "Streaming monitor events and summaries.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object, event envelope, or bundle path"
+    },
+    "problem_solved": "Some simulations and monitors need low-overhead native agents that can run continuously and emit structured updates.",
+    "quick_test": {
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "native agents",
+      "daemon mode",
+      "streaming events",
+      "low-overhead simulation"
+    ],
+    "simulation_type": "Live native signal monitor.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Runtime evaluators comparing native BEAM agents with external worker processes."
+  },
+  "name": "Native Live Monitor Daemon",
+  "nodes": [
+    {
+      "agent_type": "module",
+      "config": {
+        "answer_node": "answer_agent",
+        "interval_ms": 10000,
+        "max_x": 500,
+        "max_y": 25,
+        "min_x": 10,
+        "min_y": 2,
+        "module": "MirrorNeuron.Examples.DivisibilityMonitor.QuestionGenerator",
+        "module_source": "beam_modules/question_generator.ex"
+      },
+      "node_id": "question_generator",
+      "role": "question_source",
+      "type": "stream"
+    },
+    {
+      "agent_type": "module",
+      "config": {
+        "module": "MirrorNeuron.Examples.DivisibilityMonitor.AnswerAgent",
+        "module_source": "beam_modules/answer_agent.ex"
+      },
+      "node_id": "answer_agent",
+      "role": "answer_sink",
+      "type": "stream"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
+  "requiredContextEngine": false
+}

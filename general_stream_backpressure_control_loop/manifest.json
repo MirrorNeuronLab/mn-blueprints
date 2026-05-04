@@ -1,0 +1,220 @@
+{
+  "daemon": true,
+  "description": "Show bounded queues, slow workers, and retry-later behavior in a live stream.",
+  "edges": [
+    {
+      "edge_id": "ingress_to_source",
+      "from_node": "ingress",
+      "message_type": "stream_start",
+      "to_node": "live_source"
+    },
+    {
+      "edge_id": "source_to_slow",
+      "from_node": "live_source",
+      "message_type": "telemetry_event",
+      "to_node": "slow_enricher"
+    },
+    {
+      "edge_id": "slow_to_sink",
+      "from_node": "slow_enricher",
+      "message_type": "enriched_event",
+      "to_node": "metrics_sink"
+    }
+  ],
+  "entrypoints": [
+    "ingress"
+  ],
+  "graph_id": "general_stream_backpressure_control_loop_v1",
+  "initial_inputs": {
+    "ingress": [
+      {
+        "description": "Start a never-ending live telemetry stream into deliberately slow stream consumers.",
+        "scenario": "general_stream_backpressure_control_loop",
+        "stream_id": "bp-live"
+      }
+    ]
+  },
+  "job_name": "general-stream-backpressure-control-loop",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "general_stream_backpressure_control_loop",
+    "category": "general",
+    "customizable_for": "Customer events, telemetry, alerts, market ticks.",
+    "description": "Show bounded queues, slow workers, and retry-later behavior in a live stream.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Live source, slow processor, metrics sink.",
+    "name": "Stream Backpressure Control Loop",
+    "output": "Backpressure metrics and stream processing report.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object or MirrorNeuron event envelope"
+    },
+    "problem_solved": "Real event streams overload workers; agent runtimes need visible backpressure and safe rejection semantics.",
+    "quick_test": {
+      "description": "The daemon uses a local generated telemetry stream and local slow worker; no third-party APIs are called.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "backpressure",
+      "bounded queues",
+      "retry-later input",
+      "stream metrics"
+    ],
+    "simulation_type": "Live stream with bounded queues.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "description": "mn blueprint run writes slow-agent and backpressure events to /tmp/mn_<job_id>/run.log.",
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Platform teams designing reliable live agent systems."
+  },
+  "name": "Stream Backpressure Control Loop",
+  "nodes": [
+    {
+      "agent_type": "router",
+      "config": {
+        "backpressure": {
+          "high_watermark": 8,
+          "low_watermark": 3,
+          "max_queue_depth": 16,
+          "retry_after_ms": 250
+        },
+        "emit_type": "stream_start"
+      },
+      "node_id": "ingress",
+      "role": "root_coordinator",
+      "type": "generic"
+    },
+    {
+      "agent_type": "module",
+      "config": {
+        "backpressure": {
+          "high_watermark": 8,
+          "low_watermark": 3,
+          "max_queue_depth": 16,
+          "retry_after_ms": 250
+        },
+        "interval_ms": 250,
+        "module": "MirrorNeuron.Examples.StreamLiveBackpressure.LiveSource",
+        "module_source": "beam_modules/live_source.ex",
+        "stream_id": "bp-live",
+        "target_node": "slow_enricher"
+      },
+      "node_id": "live_source",
+      "role": "source",
+      "type": "stream"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "backpressure": {
+          "high_watermark": 2,
+          "low_watermark": 1,
+          "max_queue_depth": 4,
+          "retry_after_ms": 750
+        },
+        "command": [
+          "python3",
+          "scripts/slow_enrich.py"
+        ],
+        "environment": {
+          "SLOW_MS": "1200"
+        },
+        "output_message_type": "enriched_event",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_as": "slow",
+        "upload_path": "slow",
+        "workdir": "/sandbox/job/slow"
+      },
+      "node_id": "slow_enricher",
+      "role": "processor",
+      "type": "stream"
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "backpressure": {
+          "high_watermark": 2,
+          "low_watermark": 1,
+          "max_queue_depth": 5,
+          "retry_after_ms": 500
+        },
+        "command": [
+          "python3",
+          "scripts/collect_metrics.py"
+        ],
+        "environment": {
+          "SINK_SLOW_MS": "450"
+        },
+        "output_message_type": null,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "upload_as": "sink",
+        "upload_path": "sink",
+        "workdir": "/sandbox/job/sink"
+      },
+      "node_id": "metrics_sink",
+      "role": "sink",
+      "type": "stream"
+    }
+  ],
+  "policies": {
+    "backpressure": {
+      "external_input": "retry_later",
+      "propagation": "downstream_to_upstream",
+      "strategy": "bounded_queue"
+    },
+    "recovery_mode": "cluster_recover",
+    "stream_mode": "live"
+  },
+  "requiredContextEngine": false
+}

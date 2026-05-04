@@ -1,0 +1,104 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Raise the approval cutoff for high-risk borrowers.",
+      "effects": {
+        "approval_rate_pct": -5.0,
+        "default_rate_pct": -0.7,
+        "portfolio_yield_pct": -0.2
+      },
+      "name": "tighten_credit"
+    },
+    {
+      "cost": 0.0,
+      "description": "Increase pricing for riskier borrower bands.",
+      "effects": {
+        "default_rate_pct": -0.2,
+        "interest_rate_pct": 0.4,
+        "portfolio_yield_pct": 0.6
+      },
+      "name": "risk_based_pricing"
+    },
+    {
+      "cost": 0.0,
+      "description": "Request more evidence before approval.",
+      "effects": {
+        "approval_rate_pct": -2.0,
+        "default_rate_pct": -0.3
+      },
+      "name": "request_more_docs"
+    }
+  ],
+  "agent_responsibilities": [
+    "monitor borrower risk",
+    "choose approval and pricing actions",
+    "write a credit decision report"
+  ],
+  "artifact_type": "credit risk decision report",
+  "blueprint_id": "finance_credit_default_early_warning_system",
+  "category": "finance",
+  "default_inputs": {
+    "portfolio": "consumer installment",
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Detect rising borrower default pressure and compare credit policy responses over time.",
+  "entity_label": "borrower band",
+  "entity_names": [
+    "prime",
+    "near-prime",
+    "thin-file"
+  ],
+  "features": [
+    "credit_risk_simulation",
+    "borrower_behavior",
+    "decision_report"
+  ],
+  "llm_role": "Credit risk decision agent",
+  "metrics": [
+    {
+      "drift": 0.35,
+      "initial": 3.2,
+      "label": "Default rate percent",
+      "maximum": 18,
+      "minimum": 0,
+      "name": "default_rate_pct",
+      "volatility": 0.35
+    },
+    {
+      "drift": 0.18,
+      "initial": 8.5,
+      "label": "Interest rate percent",
+      "maximum": 18,
+      "minimum": 2,
+      "name": "interest_rate_pct",
+      "volatility": 0.2
+    },
+    {
+      "drift": 0.8,
+      "initial": 62,
+      "label": "Approval rate percent",
+      "maximum": 95,
+      "minimum": 20,
+      "name": "approval_rate_pct",
+      "volatility": 1.5
+    },
+    {
+      "drift": 0.12,
+      "initial": 11.0,
+      "label": "Portfolio yield percent",
+      "maximum": 20,
+      "minimum": 4,
+      "name": "portfolio_yield_pct",
+      "volatility": 0.25
+    }
+  ],
+  "multi_agent": false,
+  "name": "finance_credit_default_early_warning_system",
+  "objective": "minimize",
+  "primary_metric": "default_rate_pct",
+  "requires_human_approval": false,
+  "risk_metric": "approval_rate_pct",
+  "uses_tool": false
+}

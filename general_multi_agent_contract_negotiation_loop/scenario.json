@@ -1,0 +1,102 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Buyer raises the offer to close the price gap.",
+      "effects": {
+        "agreement_score": 8.0,
+        "unit_price": 2.0
+      },
+      "name": "raise_offer"
+    },
+    {
+      "cost": 0.0,
+      "description": "Buyer commits volume in exchange for capacity priority.",
+      "effects": {
+        "agreement_score": 10.0,
+        "supplier_capacity": 6.0,
+        "unit_price": -3.0
+      },
+      "name": "bundle_volume_commitment"
+    },
+    {
+      "cost": 0.0,
+      "description": "Pause while the environment produces more signal.",
+      "effects": {
+        "agreement_score": -2.0
+      },
+      "name": "pause_negotiation"
+    }
+  ],
+  "agent_responsibilities": [
+    "compare buyer and supplier constraints",
+    "select the next negotiation move",
+    "track agreement progress"
+  ],
+  "artifact_type": "negotiation brief",
+  "blueprint_id": "general_multi_agent_contract_negotiation_loop",
+  "category": "general",
+  "default_inputs": {
+    "seed": 42,
+    "steps": 5,
+    "target_margin_pct": 18
+  },
+  "description": "Model buyer-supplier negotiation as agents respond to changing demand, price, and capacity.",
+  "entity_label": "deal term",
+  "entity_names": [
+    "price corridor",
+    "volume tier",
+    "delivery window"
+  ],
+  "features": [
+    "multi_agent",
+    "negotiation",
+    "time_varying_constraints"
+  ],
+  "llm_role": "Negotiation mediator agent",
+  "metrics": [
+    {
+      "drift": -0.5,
+      "initial": 44,
+      "label": "Agreement score",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "agreement_score",
+      "volatility": 2.0
+    },
+    {
+      "drift": 1.2,
+      "initial": 105,
+      "label": "Supplier unit price",
+      "maximum": 150,
+      "minimum": 70,
+      "name": "unit_price",
+      "volatility": 2.5
+    },
+    {
+      "drift": 2.2,
+      "initial": 63,
+      "label": "Buyer demand index",
+      "maximum": 100,
+      "minimum": 20,
+      "name": "demand_index",
+      "volatility": 3.0
+    },
+    {
+      "drift": -1.0,
+      "initial": 58,
+      "label": "Supplier capacity index",
+      "maximum": 100,
+      "minimum": 10,
+      "name": "supplier_capacity",
+      "volatility": 2.5
+    }
+  ],
+  "multi_agent": true,
+  "name": "general_multi_agent_contract_negotiation_loop",
+  "objective": "maximize",
+  "primary_metric": "agreement_score",
+  "requires_human_approval": false,
+  "risk_metric": "unit_price",
+  "uses_tool": false
+}

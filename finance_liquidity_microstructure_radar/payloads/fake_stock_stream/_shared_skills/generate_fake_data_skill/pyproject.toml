@@ -2,7 +2,7 @@
 name = "generate-fake-data-skill"
 version = "0.1.0"
 description = "Generate batch or streaming fake data from JSON specs for MirrorNeuron blueprints."
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = ["Faker>=19"]
 
 [build-system]

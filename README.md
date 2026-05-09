@@ -61,7 +61,7 @@ New finance blueprints should use `finance_`, not `financial_`. Historical alias
 
 ## Prerequisites
 
-- Python 3.10 or newer.
+- Python 3.11 or newer.
 - MirrorNeuron CLI installed as `mn`.
 - Runtime dependencies required by the selected blueprint.
 - Optional provider credentials for blueprints that call LLM, Slack, email, web, or other external services.

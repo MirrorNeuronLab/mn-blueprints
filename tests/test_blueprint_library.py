@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import importlib.util
 import json
 import os
@@ -63,6 +64,109 @@ def test_index_entries_point_to_loadable_blueprint_folders() -> None:
         assert manifest["metadata"]["name"] == entry["name"]
         assert manifest["metadata"]["description"] == entry["description"]
         assert manifest["description"] == entry["description"]
+
+
+def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() -> None:
+    blueprint_id = "business_context_memory_compression_code_analsysis"
+    blueprint_dir = ROOT / blueprint_id
+    manifest = json.loads((blueprint_dir / "manifest.json").read_text())
+    fixture = json.loads((blueprint_dir / "payloads" / "repo_fixture" / "django_tree_fixture.json").read_text())
+
+    assert manifest["metadata"]["blueprint_id"] == blueprint_id
+    assert manifest["entrypoints"] == ["initializer"]
+    executable_nodes = [node for node in manifest["nodes"] if node.get("node_id") != "sink"]
+    assert [node["role"] for node in executable_nodes] == [
+        "initializer",
+        "repo_architect",
+        "dependency_mapper",
+        "risk_classifier",
+        "context_compressor",
+        "briefing_author",
+    ]
+    initializer_uploads = {item["source"] for item in manifest["nodes"][0]["config"]["upload_paths"]}
+    assert {"initializer", "_vendor", "repo_fixture"}.issubset(initializer_uploads)
+
+    assert fixture["schema_version"] == "mn.code_analysis_fixture.v1"
+    assert fixture["repo"]["url"] == "https://github.com/django/django"
+    assert fixture["repo"]["commit_sha"] == "4d455ae2d7689ce066dfffef9fc29a6f6d3ed33e"
+    assert fixture["scale"]["available_files"] >= 3000
+    assert len(fixture["files"]) >= 3000
+    assert all("source_url" in entry for entry in fixture["files"][:50])
+    assert all("content" not in entry and "source" not in entry for entry in fixture["files"][:50])
+    assert "token, latency, quality, and privacy telemetry" in manifest["metadata"]["runtime_features"]
+
+    for script in [
+        "initializer/scripts/init.py",
+        "interpreter/scripts/interpreter.py",
+        "extractor/scripts/extractor.py",
+        "classifier/scripts/classifier.py",
+        "decision/scripts/decision.py",
+        "critic/scripts/critic.py",
+    ]:
+        path = blueprint_dir / "payloads" / script
+        ast.parse(path.read_text(), filename=str(path))
+
+    context_helper = (blueprint_dir / "payloads" / "initializer" / "scripts" / "context_memory.py").read_text()
+    critic_script = (blueprint_dir / "payloads" / "critic" / "scripts" / "critic.py").read_text()
+    assert "aggregate_benchmark_events" in context_helper
+    assert "estimated_total_tokens_processed" in context_helper
+    assert "context_memory_benchmark_report" in critic_script
+    assert "quality_score" in critic_script
+    assert "compile_latency_seconds_p95" in critic_script
+
+
+def test_finance_property_alpha_memory_benchmark_contract(tmp_path: Path) -> None:
+    blueprint_id = "finance_zip_code_property_alpha_engine_with_memory"
+    blueprint_dir = ROOT / blueprint_id
+    manifest = json.loads((blueprint_dir / "manifest.json").read_text())
+    config = json.loads((blueprint_dir / "config" / "default.json").read_text())
+    runner_path = blueprint_dir / "payloads" / "simulation_loop" / "scripts" / "run_blueprint.py"
+
+    assert manifest["metadata"]["blueprint_id"] == blueprint_id
+    assert manifest["initial_inputs"]["simulation_loop"][0]["memory_mode"] == "compare"
+    assert "working memory retrieval" in manifest["metadata"]["runtime_features"]
+    assert config["benchmark"]["baseline"] == "all_context"
+    assert config["benchmark"]["schema_version"] == "mn.finance.property_alpha.memory_benchmark.v2"
+    assert config["memory"]["enabled"] is True
+    ast.parse(runner_path.read_text(), filename=str(runner_path))
+
+    spec = importlib.util.spec_from_file_location("finance_memory_runner_contract_test", runner_path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+
+    result = module.run_blueprint(
+        inputs={"steps": 2, "seed": 7, "memory_limit": 36},
+        llm_client=FakeLLMClient(),
+        runs_root=tmp_path,
+    )
+
+    benchmark = result["benchmark"]
+    first_step = result["timeline"][0]
+    source_refs = set(first_step["memory_packet"]["source_refs"])
+
+    assert result["blueprint"] == blueprint_id
+    assert len(result["timeline"]) == 2
+    assert result["llm"]["calls"] == 2
+    assert benchmark["schema_version"] == "mn.finance.property_alpha.memory_benchmark.v2"
+    assert benchmark["memory_metrics"]["max_dropped_facts"] >= 1000
+    assert benchmark["all_context"]["strategy"] == "share_full_agent_history"
+    assert benchmark["optimized_memory"]["strategy"] == "optimized_memory_packet"
+    assert benchmark["optimized_memory"]["mean_quality_score"] >= benchmark["all_context"]["mean_quality_score"]
+    assert benchmark["lift"]["estimated_token_reduction_ratio"] > 0.9
+    assert benchmark["all_context"]["mean_estimated_input_tokens"] > benchmark["optimized_memory"]["mean_estimated_input_tokens"]
+    assert benchmark["all_context"]["budget_violation_rate"] == 1.0
+    assert first_step["memory_comparison"]["optimized_memory"]["parameters"]["memory_used"] is True
+    assert first_step["memory_comparison"]["all_context"]["parameters"]["memory_used"] is False
+    assert first_step["context_packets"]["all_context"]["strategy"] == "share_full_agent_history"
+    assert first_step["context_packets"]["optimized_memory"]["source_refs"]
+    assert {
+        "mem:02139-rent-comp-upside",
+        "mem:02139-dscr-exception",
+        "mem:river-quad-seller-motivation",
+        "mem:ivy-duplex-flood-insurance",
+    }.issubset(source_refs)
 
 
 @pytest.mark.parametrize(

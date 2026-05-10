@@ -156,6 +156,35 @@
     }
   },
   {
+    "description": "Benchmark working memory on large-repo code analysis with bounded context packets.",
+    "graph_id": "business_context_memory_compression_code_analsysis_v1",
+    "id": "business_context_memory_compression_code_analsysis",
+    "job_name": "business-context-memory-compression-code-analsysis",
+    "name": "Business Context Memory Compression Code Analysis",
+    "path": "business_context_memory_compression_code_analsysis",
+    "product": {
+      "agent_role": "Repo architect, dependency mapper, risk classifier, context compressor, briefing author.",
+      "customizable_for": "Architecture review, codebase onboarding, migration planning, technical due diligence, and large-repo code review.",
+      "customize": "Replace the Django tree fixture with another repository, tune fixture_max_files, adjust token budgets, and add organization-specific risk policies or source categories.",
+      "example": "A metadata-only Django tree fixture seeds hundreds of code facts and generated notes; agents compress them into an architecture briefing with source refs intact.",
+      "investor": "Large-repo code analysis is a high-value enterprise workflow where memory quality directly affects latency, cost, confidence, and auditability.",
+      "one_line": "Benchmark working memory on large-repo code analysis with bounded context packets.",
+      "output": "Compressed code-analysis handoff, final architecture briefing, and context-memory benchmark report.",
+      "problem": "Large codebases produce more facts than an LLM can safely carry; working memory must preserve source refs, subsystem boundaries, pinned repo facts, and private review notes under tight context budgets.",
+      "runtime_features": [
+        "large repository fixture",
+        "CompileContext",
+        "role ACLs",
+        "source_refs",
+        "private memory isolation",
+        "multi-agent code analysis relay",
+        "token, latency, quality, and privacy telemetry"
+      ],
+      "simulation_type": "Large-repo code analysis memory-pressure benchmark.",
+      "target_users": "Engineering leaders and platform teams evaluating memory systems for code analysis agents."
+    }
+  },
+  {
     "description": "Prioritize insurance claim reviews as fraud signals, queue pressure, and adjuster capacity change.",
     "graph_id": "finance_claim_risk_triage_copilot_v1",
     "id": "finance_claim_risk_triage_copilot",
@@ -283,6 +312,34 @@
       ],
       "simulation_type": "ZIP-code property market simulation.",
       "target_users": "Real-estate investors, acquisition analysts, and property-tech teams."
+    }
+  },
+  {
+    "description": "Rank property acquisition opportunities with working memory over noisy ZIP-code history, broker flow, financing constraints, and prior decision outcomes.",
+    "graph_id": "finance_zip_code_property_alpha_engine_with_memory_v1",
+    "id": "finance_zip_code_property_alpha_engine_with_memory",
+    "job_name": "finance-zip-code-property-alpha-engine-with-memory",
+    "name": "Zip Code Property Alpha Engine With Memory",
+    "path": "finance_zip_code_property_alpha_engine_with_memory",
+    "product": {
+      "agent_role": "Real estate investment analyst with working memory.",
+      "customizable_for": "Rental acquisitions, flipping pipelines, multifamily sourcing, market expansion, diligence memory, and capital-allocation committees.",
+      "customize": "Replace the synthetic history with MLS exports, county records, broker notes, rent comps, lender constraints, inspection summaries, insurance quotes, and prior decision outcomes.",
+      "example": "A noisy current snapshot favors Ivy Duplex, but working memory recalls flood and roof risk while connecting River Quad rent upside, financing, and seller motivation.",
+      "investor": "This shows memory as measurable decision-quality lift, which is a stronger wedge than a simple chat interface over real-estate data.",
+      "one_line": "Rank property acquisition opportunities with working memory over large noisy deal-flow context.",
+      "output": "Ranked opportunities, source-grounded bid/watchlist recommendation, and memory decision-quality benchmark.",
+      "problem": "Property acquisition decisions often depend on older broker, lender, rent, insurance, and diligence facts that disappear inside large noisy deal flow.",
+      "runtime_features": [
+        "large synthetic finance context",
+        "working memory retrieval",
+        "source refs",
+        "decision quality benchmark",
+        "with/without memory comparison",
+        "LLM investment reasoning"
+      ],
+      "simulation_type": "ZIP-code property market simulation with large historical memory.",
+      "target_users": "Real-estate investors, acquisition analysts, property-tech teams, and diligence operators."
     }
   },
   {

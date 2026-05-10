@@ -1,0 +1,116 @@
+{
+  "execution_model": [
+    "load_metadata",
+    "resolve_config",
+    "load_inputs",
+    "start_run_store",
+    "observe_simulation_state",
+    "call_llm_agent",
+    "apply_decision_to_simulation",
+    "emit_events",
+    "write_final_artifact"
+  ],
+  "identity": {
+    "blueprint_id": "business_context_memory_compression_code_analsysis",
+    "name": "Business Context Memory Compression Code Analysis"
+  },
+  "inputs": {
+    "adapter": "mock",
+    "description": "Default metadata-only Django repository fixture bundled with the blueprint.",
+    "payload": {
+      "fixture_max_files": 260,
+      "notes_per_file": 1
+    }
+  },
+  "interfaces": {
+    "config_sections": [
+      "metadata",
+      "identity",
+      "inputs",
+      "simulation",
+      "llm",
+      "outputs",
+      "logging",
+      "real_adapters"
+    ],
+    "identity_fields": [
+      "blueprint_id",
+      "name",
+      "run_id"
+    ],
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ],
+    "run_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "result.json",
+      "final_artifact.json"
+    ]
+  },
+  "llm": {
+    "agent_role": "Repo architect, dependency mapper, risk classifier, context compressor, briefing author.",
+    "api_base": "http://192.168.4.173:11434",
+    "mock_mode": "fake",
+    "mode": "ollama",
+    "model": "ollama/nemotron3:33b"
+  },
+  "logging": {
+    "events": [
+      "run_started",
+      "inputs_loaded",
+      "simulation_step_started",
+      "llm_decision",
+      "simulation_state_updated",
+      "run_completed"
+    ],
+    "events_jsonl": true,
+    "level": "INFO",
+    "redact_env_secrets": true
+  },
+  "metadata": {
+    "category": "business",
+    "customizable_for": "Architecture review, codebase onboarding, migration planning, technical due diligence, and large-repo code review.",
+    "problem_solved": "Large codebases produce more facts than an LLM can safely carry; working memory must preserve source refs, subsystem boundaries, pinned repo facts, and private review notes under tight context budgets.",
+    "target_users": "Engineering leaders and platform teams evaluating memory systems for code analysis agents."
+  },
+  "mode": "mock",
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifact_contract": "Compressed code-analysis handoff, final architecture briefing, and context-memory benchmark report.",
+    "run_root": "~/.mn/runs",
+    "write_run_store": true
+  },
+  "real_adapters": {
+    "github_tree_fixture": {
+      "adapter": "file",
+      "description": "Replace payloads/repo_fixture/django_tree_fixture.json with a tree fixture generated from another repository.",
+      "path": "payloads/repo_fixture/django_tree_fixture.json"
+    },
+    "inline_json": {
+      "adapter": "json",
+      "description": "Load overrides from an inline JSON object.",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "description": "Load JSON overrides from a local file path.",
+      "path": null
+    }
+  },
+  "simulation": {
+    "deterministic": true,
+    "enabled": true,
+    "seed_field": "seed",
+    "type": "Large-repo code analysis memory-pressure benchmark."
+  },
+  "standard_version": "1.0"
+}

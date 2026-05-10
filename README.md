@@ -21,6 +21,7 @@ New finance blueprints should use `finance_`, not `financial_`. Historical alias
 
 | Blueprint | Category | Summary |
 | --- | --- | --- |
+| [`business_context_memory_compression_code_analsysis`](business_context_memory_compression_code_analsysis/README.md) | Business | Large-repo code analysis memory benchmark with bounded context packets. |
 | [`business_customer_lifecycle_email_copilot`](business_customer_lifecycle_email_copilot/README.md) | Business | Lifecycle email workflow with campaign, delivery, reply, and policy state. |
 | [`business_dynamic_pricing_profit_optimizer`](business_dynamic_pricing_profit_optimizer/README.md) | Business | Pricing workflow with demand, competitor price, inventory, and revenue state. |
 | [`business_facility_safety_video_guardian`](business_facility_safety_video_guardian/README.md) | Business | Video sampling workflow with alert state and escalation decisions. |
@@ -32,6 +33,7 @@ New finance blueprints should use `finance_`, not `financial_`. Historical alias
 | [`finance_liquidity_microstructure_radar`](finance_liquidity_microstructure_radar/README.md) | Finance | Market stream workflow with signals, explanations, advice events, and optional Slack alerts. |
 | [`finance_portfolio_crash_stress_lab`](finance_portfolio_crash_stress_lab/README.md) | Finance | Macro shock and portfolio-risk workflow with rebalance recommendations. |
 | [`finance_zip_code_property_alpha_engine`](finance_zip_code_property_alpha_engine/README.md) | Finance | ZIP-code property-market workflow with ranked opportunities. |
+| [`finance_zip_code_property_alpha_engine_with_memory`](finance_zip_code_property_alpha_engine_with_memory/README.md) | Finance | Large-context property acquisition workflow with working memory and decision-quality benchmarks. |
 | [`general_closed_loop_agent_runtime`](general_closed_loop_agent_runtime/README.md) | General | Time-stepped operations queue workflow. |
 | [`general_context_memory_audit_pipeline`](general_context_memory_audit_pipeline/README.md) | General | Multi-agent context handoff workflow with scoped memory and audit output. |
 | [`general_context_memory_compression_lab`](general_context_memory_compression_lab/README.md) | General | Memory compression workflow for bounded prompt budgets. |

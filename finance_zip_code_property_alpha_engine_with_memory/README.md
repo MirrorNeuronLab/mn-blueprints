@@ -104,6 +104,70 @@ python3 payloads/simulation_loop/scripts/run_blueprint.py --list-runs
 python3 payloads/simulation_loop/scripts/run_blueprint.py --show-run <run_id>
 ```
 
+## How to run the benchmark
+
+The default benchmark compares two handoff modes in the same run:
+
+- `all_context`: memory layer disabled; the next agent receives the full prior agent history.
+- `optimized_memory`: memory layer enabled; the next agent receives the optimized memory packet.
+
+Run the deterministic six-step benchmark:
+
+```bash
+cd finance_zip_code_property_alpha_engine_with_memory
+python3 payloads/simulation_loop/scripts/run_blueprint.py \
+  --mock-llm \
+  --steps 6 \
+  --seed 77 \
+  --runs-root /tmp/mn-finance-memory-benchmark \
+  > /tmp/mn-finance-memory-benchmark-result.json
+```
+
+Print the main benchmark metrics:
+
+```bash
+python3 - <<'PY'
+import json
+from pathlib import Path
+
+result = json.loads(Path("/tmp/mn-finance-memory-benchmark-result.json").read_text())
+benchmark = result["benchmark"]
+print(json.dumps({
+    "schema_version": benchmark["schema_version"],
+    "all_context": benchmark["all_context"],
+    "optimized_memory": benchmark["optimized_memory"],
+    "lift": benchmark["lift"],
+    "quality_gate": benchmark["quality_gate"],
+    "recommended_action": result["final_artifact"]["recommended_action"],
+    "recommended_property_id": result["final_artifact"]["recommended_property_id"],
+}, indent=2, sort_keys=True))
+PY
+```
+
+Run with the memory layer disabled for the applied action while still scoring both benchmark arms:
+
+```bash
+python3 payloads/simulation_loop/scripts/run_blueprint.py \
+  --mock-llm \
+  --steps 6 \
+  --seed 77 \
+  --input-json '{"memory_mode":"off"}' \
+  --runs-root /tmp/mn-finance-memory-benchmark-off
+```
+
+Stress a larger context:
+
+```bash
+python3 payloads/simulation_loop/scripts/run_blueprint.py \
+  --mock-llm \
+  --steps 6 \
+  --seed 77 \
+  --input-json '{"history_months":48,"noise_events_per_month":20,"memory_limit":36}' \
+  --runs-root /tmp/mn-finance-memory-benchmark-large
+```
+
+The most important fields are `benchmark.all_context.mean_estimated_input_tokens`, `benchmark.optimized_memory.mean_estimated_input_tokens`, `benchmark.lift.estimated_token_reduction_ratio`, and `benchmark.lift.quality_score_delta`.
+
 Run the shared repository tests:
 
 ```bash

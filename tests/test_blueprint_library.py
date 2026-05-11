@@ -20,6 +20,32 @@ from mn_blueprint_support.llm import DEFAULT_OLLAMA_BASE, OllamaLLMClient, ollam
 from mn_blueprint_support.standard import OUTPUT_ADAPTERS, STANDARD_VERSION, RunStore
 
 
+def _category_slug(value: str) -> str:
+    return "-".join("".join(char.lower() if char.isalnum() else " " for char in value).split())
+
+
+def test_category_metadata_covers_filterable_index_categories() -> None:
+    index = json.loads((ROOT / "index.json").read_text())
+    category_data = json.loads((ROOT / "category.json").read_text())
+
+    categories = category_data["categories"]
+    slugs_by_name = {entry["name"]: entry["slug"] for entry in categories}
+    category_slugs = set(slugs_by_name.values())
+    index_slugs = {_category_slug(entry["category"]) for entry in index}
+
+    assert index_slugs <= category_slugs
+    assert all(entry.get("category") for entry in index)
+    assert all(_category_slug(name) == slug for name, slug in slugs_by_name.items())
+
+    finance_blueprints = [
+        entry["id"]
+        for entry in index
+        if _category_slug(entry["category"]) == "finance"
+    ]
+    assert finance_blueprints
+    assert all(blueprint_id.startswith("finance_") for blueprint_id in finance_blueprints)
+
+
 def test_index_entries_point_to_loadable_blueprint_folders() -> None:
     index = json.loads((ROOT / "index.json").read_text())
     assert index

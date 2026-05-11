@@ -8,7 +8,7 @@ Each blueprint is a deployable workflow folder with a manifest, configuration, p
 
 Use these prefixes for new blueprints:
 
-| Prefix | Category | Use for |
+| Prefix | Naming family | Use for |
 | --- | --- | --- |
 | `general_` | General | Runtime patterns, reusable workflow capabilities, and developer examples. |
 | `business_` | Business | Operations, revenue, service, supply chain, safety, and workflow decisions. |
@@ -17,19 +17,37 @@ Use these prefixes for new blueprints:
 
 New finance blueprints should use `finance_`, not `financial_`. Historical aliases remain only for migration.
 
+Category filtering uses the `category` value in `index.json`; `category.json` lists the canonical display names and slugs exposed to clients.
+
+Current filter categories:
+
+| Name | Slug |
+| --- | --- |
+| Finance | `finance` |
+| Business | `business` |
+| Science | `science` |
+| Security | `security` |
+| Engineering | `engineering` |
+
+Example local catalog filter:
+
+```bash
+jq -r '.[] | select((.category | ascii_downcase) == "finance") | .id' index.json
+```
+
 ## Blueprint Catalog
 
 | Blueprint | Category | Summary |
 | --- | --- | --- |
-| [`business_context_memory_compression_code_analsysis`](business_context_memory_compression_code_analsysis/README.md) | Business | Large-repo code analysis memory benchmark with bounded context packets. |
+| [`business_context_memory_compression_code_analsysis`](business_context_memory_compression_code_analsysis/README.md) | Engineering | Large-repo code analysis memory benchmark with bounded context packets. |
 | [`business_customer_lifecycle_email_copilot`](business_customer_lifecycle_email_copilot/README.md) | Business | Lifecycle email workflow with campaign, delivery, reply, and policy state. |
 | [`business_dynamic_pricing_profit_optimizer`](business_dynamic_pricing_profit_optimizer/README.md) | Business | Pricing workflow with demand, competitor price, inventory, and revenue state. |
-| [`business_facility_safety_video_guardian`](business_facility_safety_video_guardian/README.md) | Business | Video sampling workflow with alert state and escalation decisions. |
+| [`business_facility_safety_video_guardian`](business_facility_safety_video_guardian/README.md) | Security | Video sampling workflow with alert state and escalation decisions. |
 | [`business_revenue_retention_copilot`](business_revenue_retention_copilot/README.md) | Business | Customer health and churn-risk workflow with intervention planning. |
 | [`business_service_capacity_command_center`](business_service_capacity_command_center/README.md) | Business | Queue, staffing, and SLA workflow for service-capacity decisions. |
 | [`business_supply_chain_resilience_war_room`](business_supply_chain_resilience_war_room/README.md) | Business | Inventory, demand, and supplier-delay workflow with mitigation planning. |
 | [`business_ai_strategy_workbench`](business_ai_strategy_workbench/README.md) | Business | Enterprise discovery workflow that produces board-ready recommendation artifacts. |
-| [`business_ai_control_room`](business_ai_control_room/README.md) | Business | AI, cyber, and control readiness workflow with evidence mapping and remediation planning. |
+| [`business_ai_control_room`](business_ai_control_room/README.md) | Security | AI, cyber, and control readiness workflow with evidence mapping and remediation planning. |
 | [`business_vendor_decision_agent`](business_vendor_decision_agent/README.md) | Business | Vendor comparison, RFP, scoring, roadmap, and negotiation workflow. |
 | [`finance_claim_risk_triage_copilot`](finance_claim_risk_triage_copilot/README.md) | Finance | Claim queue and fraud-signal workflow with triage recommendations. |
 | [`finance_credit_default_early_warning_system`](finance_credit_default_early_warning_system/README.md) | Finance | Borrower default and credit-policy workflow. |
@@ -37,25 +55,25 @@ New finance blueprints should use `finance_`, not `financial_`. Historical alias
 | [`finance_portfolio_crash_stress_lab`](finance_portfolio_crash_stress_lab/README.md) | Finance | Macro shock and portfolio-risk workflow with rebalance recommendations. |
 | [`finance_zip_code_property_alpha_engine`](finance_zip_code_property_alpha_engine/README.md) | Finance | ZIP-code property-market workflow with ranked opportunities. |
 | [`finance_zip_code_property_alpha_engine_with_memory`](finance_zip_code_property_alpha_engine_with_memory/README.md) | Finance | Large-context property acquisition workflow with working memory and decision-quality benchmarks. |
-| [`general_closed_loop_agent_runtime`](general_closed_loop_agent_runtime/README.md) | General | Time-stepped operations queue workflow. |
-| [`general_context_memory_audit_pipeline`](general_context_memory_audit_pipeline/README.md) | General | Multi-agent context handoff workflow with scoped memory and audit output. |
-| [`general_context_memory_compression_lab`](general_context_memory_compression_lab/README.md) | General | Memory compression workflow for bounded prompt budgets. |
-| [`general_dynamic_environment_control_loop`](general_dynamic_environment_control_loop/README.md) | General | Control-loop workflow over changing metrics and actions. |
-| [`general_event_stream_triage_state_machine`](general_event_stream_triage_state_machine/README.md) | General | Stateful event stream triage workflow. |
-| [`general_human_approval_decision_gate`](general_human_approval_decision_gate/README.md) | General | Approval-gated decision workflow. |
-| [`general_live_telemetry_stream_pipeline`](general_live_telemetry_stream_pipeline/README.md) | General | Live telemetry stream workflow. |
-| [`general_llm_tool_orchestration_loop`](general_llm_tool_orchestration_loop/README.md) | General | Tool-informed planning workflow. |
-| [`general_message_routing_trace`](general_message_routing_trace/README.md) | General | Deterministic message-flow trace for the runtime message model. |
-| [`general_multi_agent_contract_negotiation_loop`](general_multi_agent_contract_negotiation_loop/README.md) | General | Multi-agent negotiation state workflow. |
-| [`general_native_live_monitor_daemon`](general_native_live_monitor_daemon/README.md) | General | Native BEAM live monitor workflow. |
-| [`general_openshell_sandbox_worker_pipeline`](general_openshell_sandbox_worker_pipeline/README.md) | General | Sandboxed worker execution and artifact handoff workflow. |
-| [`general_parallel_worker_scale_benchmark`](general_parallel_worker_scale_benchmark/README.md) | General | Parallel synthetic workload benchmark. |
-| [`general_policy_feedback_optimization_loop`](general_policy_feedback_optimization_loop/README.md) | General | Policy adjustment workflow with feedback over time. |
-| [`general_python_sdk_live_research_daemon`](general_python_sdk_live_research_daemon/README.md) | General | Long-running Python SDK research workflow. |
-| [`general_python_sdk_research_pipeline`](general_python_sdk_research_pipeline/README.md) | General | Python-defined staged research workflow. |
-| [`general_sandboxed_llm_codegen_review_loop`](general_sandboxed_llm_codegen_review_loop/README.md) | General | Sandboxed code generation, review, and validation workflow. |
-| [`general_simulation_state_audit_trail`](general_simulation_state_audit_trail/README.md) | General | State tracking workflow with inspectable transitions. |
-| [`general_stream_backpressure_control_loop`](general_stream_backpressure_control_loop/README.md) | General | Live stream workflow with bounded queues and backpressure behavior. |
+| [`general_closed_loop_agent_runtime`](general_closed_loop_agent_runtime/README.md) | Engineering | Time-stepped operations queue workflow. |
+| [`general_context_memory_audit_pipeline`](general_context_memory_audit_pipeline/README.md) | Engineering | Multi-agent context handoff workflow with scoped memory and audit output. |
+| [`general_context_memory_compression_lab`](general_context_memory_compression_lab/README.md) | Engineering | Memory compression workflow for bounded prompt budgets. |
+| [`general_dynamic_environment_control_loop`](general_dynamic_environment_control_loop/README.md) | Engineering | Control-loop workflow over changing metrics and actions. |
+| [`general_event_stream_triage_state_machine`](general_event_stream_triage_state_machine/README.md) | Engineering | Stateful event stream triage workflow. |
+| [`general_human_approval_decision_gate`](general_human_approval_decision_gate/README.md) | Security | Approval-gated decision workflow. |
+| [`general_live_telemetry_stream_pipeline`](general_live_telemetry_stream_pipeline/README.md) | Engineering | Live telemetry stream workflow. |
+| [`general_llm_tool_orchestration_loop`](general_llm_tool_orchestration_loop/README.md) | Engineering | Tool-informed planning workflow. |
+| [`general_message_routing_trace`](general_message_routing_trace/README.md) | Engineering | Deterministic message-flow trace for the runtime message model. |
+| [`general_multi_agent_contract_negotiation_loop`](general_multi_agent_contract_negotiation_loop/README.md) | Engineering | Multi-agent negotiation state workflow. |
+| [`general_native_live_monitor_daemon`](general_native_live_monitor_daemon/README.md) | Engineering | Native BEAM live monitor workflow. |
+| [`general_openshell_sandbox_worker_pipeline`](general_openshell_sandbox_worker_pipeline/README.md) | Engineering | Sandboxed worker execution and artifact handoff workflow. |
+| [`general_parallel_worker_scale_benchmark`](general_parallel_worker_scale_benchmark/README.md) | Engineering | Parallel synthetic workload benchmark. |
+| [`general_policy_feedback_optimization_loop`](general_policy_feedback_optimization_loop/README.md) | Engineering | Policy adjustment workflow with feedback over time. |
+| [`general_python_sdk_live_research_daemon`](general_python_sdk_live_research_daemon/README.md) | Engineering | Long-running Python SDK research workflow. |
+| [`general_python_sdk_research_pipeline`](general_python_sdk_research_pipeline/README.md) | Engineering | Python-defined staged research workflow. |
+| [`general_sandboxed_llm_codegen_review_loop`](general_sandboxed_llm_codegen_review_loop/README.md) | Security | Sandboxed code generation, review, and validation workflow. |
+| [`general_simulation_state_audit_trail`](general_simulation_state_audit_trail/README.md) | Engineering | State tracking workflow with inspectable transitions. |
+| [`general_stream_backpressure_control_loop`](general_stream_backpressure_control_loop/README.md) | Engineering | Live stream workflow with bounded queues and backpressure behavior. |
 | [`science_adaptive_experiment_discovery_agent`](science_adaptive_experiment_discovery_agent/README.md) | Science | Iterative experiment selection workflow. |
 | [`science_climate_resilience_planning_engine`](science_climate_resilience_planning_engine/README.md) | Science | Weather, flooding, and infrastructure-risk workflow. |
 | [`science_drug_discovery_closed_loop_lab`](science_drug_discovery_closed_loop_lab/README.md) | Science | Long-running staged discovery workflow. |

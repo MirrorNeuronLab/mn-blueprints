@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mirrorneuron.local/schemas/security-user-activity-evidence-report.schema.json",
+  "title": "Security User Activity Evidence Report",
+  "type": "object",
+  "required": [
+    "artifact_type",
+    "generated_at",
+    "user_id",
+    "session_id",
+    "risk_level",
+    "risk_score",
+    "suspicious_activity",
+    "decision",
+    "response_taken",
+    "evidence",
+    "candidate_control_mappings",
+    "human_review_required",
+    "summary",
+    "compliance_caveat"
+  ],
+  "properties": {
+    "artifact_type": {
+      "const": "security_user_activity_evidence_report"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "risk_level": {
+      "type": "string"
+    },
+    "risk_score": {
+      "type": "number"
+    },
+    "suspicious_activity": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "decision": {
+      "type": "string"
+    },
+    "response_taken": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "candidate_control_mappings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "human_review_required": {
+      "type": "boolean"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "compliance_caveat": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}
+

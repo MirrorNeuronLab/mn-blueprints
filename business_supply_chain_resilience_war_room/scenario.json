@@ -39,12 +39,15 @@
   "blueprint_id": "business_supply_chain_resilience_war_room",
   "category": "business",
   "default_inputs": {
+    "daily_demand_units": 650,
+    "optimization_budget_usd": 65000,
     "product": "industrial sensor",
     "region": "Northeast",
     "seed": 42,
+    "target_inventory_days": 22,
     "steps": 5
   },
-  "description": "Test disruption responses before inventory, supplier delays, and customer service levels break down.",
+  "description": "Optimize disruption responses before inventory, supplier delays, and customer service levels break down.",
   "entity_label": "supplier lane",
   "entity_names": [
     "primary ocean lane",
@@ -54,7 +57,8 @@
   "features": [
     "supply_chain_simulation",
     "llm_planner",
-    "time_varying_inventory"
+    "time_varying_inventory",
+    "pyomo_optimization_model"
   ],
   "llm_role": "Supply chain disruption response agent",
   "metrics": [
@@ -98,6 +102,43 @@
   "multi_agent": false,
   "name": "business_supply_chain_resilience_war_room",
   "objective": "maximize",
+  "optimization_model": {
+    "actions": {
+      "allocate_inventory": {
+        "effectiveness": 0.58,
+        "inventory_drawdown_days_per_1000_units": 0.9,
+        "max_units": 1200,
+        "service_gain_per_1000_units": 2.4,
+        "unit_cost_usd": 4.5
+      },
+      "expedite_freight": {
+        "delay_reduction_days_per_1000_units": 1.6,
+        "effectiveness": 0.96,
+        "max_units": 1800,
+        "service_gain_per_1000_units": 3.4,
+        "unit_cost_usd": 19.0
+      },
+      "switch_supplier": {
+        "delay_reduction_days_per_1000_units": 2.4,
+        "effectiveness": 0.86,
+        "max_units": 2600,
+        "service_gain_per_1000_units": 2.8,
+        "unit_cost_usd": 12.5
+      }
+    },
+    "budget_usd": 65000,
+    "daily_demand_units": 650,
+    "delay_buffer_weight": 0.55,
+    "enabled": true,
+    "language": "Pyomo",
+    "model_type": "linear_program",
+    "name": "supply_chain_resilience_lp",
+    "planning_horizon_days": 14,
+    "solver": "appsi_highs",
+    "target_inventory_days": 22,
+    "target_supplier_delay_days": 3,
+    "unmet_penalty_usd": 75
+  },
   "primary_metric": "service_level",
   "requires_human_approval": false,
   "risk_metric": "supplier_delay_days",

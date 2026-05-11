@@ -130,7 +130,7 @@
     }
   },
   {
-    "description": "Test disruption responses before inventory, supplier delays, and customer service levels break down.",
+    "description": "Optimize disruption responses before inventory, supplier delays, and customer service levels break down.",
     "graph_id": "business_supply_chain_resilience_war_room_v1",
     "id": "business_supply_chain_resilience_war_room",
     "job_name": "business-supply-chain-resilience-war-room",
@@ -139,19 +139,20 @@
     "product": {
       "agent_role": "Supply chain disruption response agent.",
       "customizable_for": "Manufacturing, retail, healthcare supplies, logistics networks.",
-      "customize": "Connect ERP, supplier EDI, demand forecasts, inventory systems, and lane-level costs; tune service-level and delay assumptions.",
-      "example": "Industrial sensor inventory tightens in the Northeast while delays rise, and the agent chooses expedite, supplier switch, or allocation actions.",
-      "investor": "Supply-chain resilience is a large enterprise pain point where simulation plus LLM recommendations can become an operations command center.",
-      "one_line": "Test disruption responses before inventory, supplier delays, and customer service levels break down.",
-      "output": "Disruption response plan with action history and supplier-lane ranking.",
-      "problem": "Demand spikes and supplier delays compound over time; static dashboards show the fire but do not test mitigation paths.",
+      "customize": "Connect ERP, supplier EDI, demand forecasts, inventory systems, and lane-level costs; tune the Pyomo objective, budget, lane capacities, service penalties, and delay assumptions.",
+      "example": "Industrial sensor inventory tightens in the Northeast while delays rise, and a Pyomo model allocates budget across expedite freight, supplier switching, and inventory allocation before the agent explains the plan.",
+      "investor": "Supply-chain resilience is a large enterprise pain point where optimization plus LLM recommendations can become an operations command center.",
+      "one_line": "Optimize disruption responses before inventory, supplier delays, and customer service levels break down.",
+      "output": "Disruption response plan with optimized mitigation quantities, action history, and supplier-lane ranking.",
+      "problem": "Demand spikes and supplier delays compound over time; static dashboards show the fire but do not optimize budget-constrained mitigation paths.",
       "runtime_features": [
         "dynamic simulation",
+        "Pyomo optimization model",
         "LLM planner",
         "time-varying inventory",
         "decision loop"
       ],
-      "simulation_type": "Inventory, demand, and supplier-delay simulation.",
+      "simulation_type": "Inventory, demand, supplier-delay, and Pyomo optimization simulation.",
       "target_users": "Supply chain operators, procurement leaders, and operations executives."
     }
   },

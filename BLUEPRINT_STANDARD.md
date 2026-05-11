@@ -20,6 +20,7 @@ Each blueprint is separated into seven concerns:
 | Config | `config/default.json` plus `mn_blueprint_support.config.load_config` | Controls how the blueprint runs without changing code. |
 | Inputs | `inputs` config section, payload fixtures, and `mn_blueprint_support.input_adapters.resolve_input_overrides` | Defines where data comes from. Defaults to mock data and supports real adapters. |
 | Simulation / logic | Worker payloads, blueprint-owned `scenario.json`, or specialized code | Evolves domain state over time. |
+| Optimization | Optional blueprint-owned `scenario.json` model declarations, such as Pyomo linear programs | Solves constrained action plans before agent explanation or execution. |
 | LLM agents | `llm` config section and worker prompts | Observes state, reasons about decisions, and returns structured actions or reports. |
 | Outputs | `outputs` config section and `mn_blueprint_support.run_store.RunStore` | Writes results, final artifacts, and machine-readable execution records. |
 | Logging | `logging` config section, `events.jsonl`, and `mn_blueprint_support.log_status` | Captures what happened during execution for debugging, audit, and analytics. |
@@ -105,7 +106,7 @@ The standard observe-decide-act execution model is:
 9. Emit structured events for each meaningful transition.
 10. Write `result.json` and `final_artifact.json`.
 
-Data-driven simulation blueprints use the full shared loop in `mn_blueprint_support.solution_runner`. Specialized blueprints that run sandbox payloads use `mn_blueprint_support.worker_contract` to keep the same run IDs, config snapshots, input records, events, result artifacts, and final artifacts even when their internal simulation code is custom.
+Data-driven simulation blueprints use the full shared loop in `mn_blueprint_support.solution_runner`. A scenario can optionally declare an optimization model, such as a Pyomo linear program, and the shared loop will attach the optimized variables, objective, constraints, and expected outcome to the observation and final artifact. Specialized blueprints that run sandbox payloads use `mn_blueprint_support.worker_contract` to keep the same run IDs, config snapshots, input records, events, result artifacts, and final artifacts even when their internal simulation code is custom.
 
 ## Global Run Store
 

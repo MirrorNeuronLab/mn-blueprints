@@ -1,0 +1,141 @@
+{
+  "actions": [
+    "step_up_authentication_required"
+  ],
+  "artifact_type": "security_user_activity_evidence_report",
+  "candidate_control_mappings": [
+    "Access Control",
+    "Identification and Authentication",
+    "Audit and Accountability",
+    "Incident Response",
+    "System and Communications Protection",
+    "Security Assessment and Authorization",
+    "Continuous Monitoring",
+    "Risk Assessment"
+  ],
+  "compliance_caveat": "Candidate evidence mappings are provided for compliance review only; this blueprint does not prove or grant RMF, ATO, cATO, FedRAMP, CMMC, or other compliance status.",
+  "decision": "step_up_authentication_required",
+  "evidence": [
+    {
+      "device_id": "device_known",
+      "event_id": "evt_001",
+      "event_type": "login_success",
+      "geo": {
+        "city": "New York",
+        "country": "US",
+        "region": "NY"
+      },
+      "source_ip": "198.51.100.10",
+      "timestamp": "2026-05-11T14:00:00Z"
+    },
+    {
+      "device_id": "device_unknown",
+      "event_id": "evt_002",
+      "event_type": "new_location_login",
+      "geo": {
+        "city": "Berlin",
+        "country": "DE",
+        "region": "BE"
+      },
+      "source_ip": "203.0.113.55",
+      "timestamp": "2026-05-11T14:08:00Z"
+    },
+    {
+      "device_id": "device_unknown",
+      "event_id": "evt_003",
+      "event_type": "api_key_created",
+      "geo": {
+        "city": "Berlin",
+        "country": "DE",
+        "region": "BE"
+      },
+      "source_ip": "203.0.113.55",
+      "timestamp": "2026-05-11T14:10:00Z"
+    },
+    {
+      "device_id": "device_unknown",
+      "event_id": "evt_004",
+      "event_type": "large_data_download",
+      "geo": {
+        "city": "Berlin",
+        "country": "DE",
+        "region": "BE"
+      },
+      "source_ip": "203.0.113.55",
+      "timestamp": "2026-05-11T14:12:00Z"
+    }
+  ],
+  "generated_at": "2026-05-11T14:08:19Z",
+  "human_review_required": false,
+  "recommended_follow_up": "Review API key usage and confirm whether the credential creation was legitimate.",
+  "response_instruction": {
+    "action": "step_up_authentication_required",
+    "actions": [
+      "step_up_authentication_required"
+    ],
+    "dry_run": true,
+    "execute_external_action": false,
+    "message": "We noticed unusual activity. Please log in again to continue.",
+    "reason": "High-risk activity pattern detected",
+    "requires_mfa": true,
+    "session_id": "sess_002",
+    "user_id": "user_123"
+  },
+  "response_taken": "dry_run_recommendation_only",
+  "risk_level": "HIGH",
+  "risk_score": 65,
+  "score_details": [
+    {
+      "event_id": "evt_001",
+      "event_type": "login_success",
+      "points": -10,
+      "signal": "mfa_success",
+      "timestamp": "2026-05-11T14:00:00Z"
+    },
+    {
+      "event_id": "evt_001",
+      "event_type": "login_success",
+      "points": -10,
+      "signal": "known_safe_device",
+      "timestamp": "2026-05-11T14:00:00Z"
+    },
+    {
+      "event_id": "evt_002",
+      "event_type": "new_location_login",
+      "points": 15,
+      "signal": "new_device_login",
+      "timestamp": "2026-05-11T14:08:00Z"
+    },
+    {
+      "event_id": "evt_002",
+      "event_type": "new_location_login",
+      "points": 15,
+      "signal": "new_location_login",
+      "timestamp": "2026-05-11T14:08:00Z"
+    },
+    {
+      "event_id": "evt_003",
+      "event_type": "api_key_created",
+      "points": 25,
+      "signal": "api_key_created_after_risky_login",
+      "timestamp": "2026-05-11T14:10:00Z"
+    },
+    {
+      "event_id": "evt_004",
+      "event_type": "large_data_download",
+      "points": 30,
+      "signal": "large_data_download",
+      "timestamp": "2026-05-11T14:12:00Z"
+    }
+  ],
+  "session_id": "sess_002",
+  "summary": "High-risk user activity detected. Step-up authentication was required or recommended.",
+  "suspicious_activity": [
+    "new_device_login",
+    "new_location_login",
+    "api_key_created_after_risky_login",
+    "large_data_download"
+  ],
+  "user_email": "alice@example.com",
+  "user_id": "user_123"
+}

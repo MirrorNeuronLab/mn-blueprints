@@ -1,0 +1,54 @@
+{
+  "actions": [
+    "step_up_authentication_required"
+  ],
+  "decision": "step_up_authentication_required",
+  "evidence_event_ids": [
+    "evt_001",
+    "evt_002",
+    "evt_003",
+    "evt_004"
+  ],
+  "human_review_required": false,
+  "mode": "dry_run",
+  "response_instruction": {
+    "action": "step_up_authentication_required",
+    "actions": [
+      "step_up_authentication_required"
+    ],
+    "dry_run": true,
+    "execute_external_action": false,
+    "message": "We noticed unusual activity. Please log in again to continue.",
+    "reason": "High-risk activity pattern detected",
+    "requires_mfa": true,
+    "session_id": "sess_002",
+    "user_id": "user_123"
+  },
+  "risk_level": "HIGH",
+  "risk_score": 65,
+  "session_id": "sess_002",
+  "signals": [
+    "new_device_login",
+    "new_location_login",
+    "api_key_created_after_risky_login",
+    "large_data_download"
+  ],
+  "triage_state": {
+    "current_risk_level": "HIGH",
+    "current_risk_score": 65,
+    "last_action": "step_up_authentication_required",
+    "last_updated": "2026-05-11T14:12:00Z",
+    "open_signals": [
+      "new_device_login",
+      "new_location_login",
+      "api_key_created_after_risky_login",
+      "large_data_download"
+    ],
+    "session_id": "sess_002",
+    "state": "High Risk",
+    "user_email": "alice@example.com",
+    "user_id": "user_123"
+  },
+  "user_email": "alice@example.com",
+  "user_id": "user_123"
+}

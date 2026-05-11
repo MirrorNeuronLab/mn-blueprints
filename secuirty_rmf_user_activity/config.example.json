@@ -1,0 +1,50 @@
+{
+  "mode": "dry_run",
+  "risk_thresholds": {
+    "low": 0,
+    "medium": 25,
+    "high": 50,
+    "critical": 80
+  },
+  "signal_weights": {
+    "new_device_login": 15,
+    "new_location_login": 15,
+    "impossible_travel": 40,
+    "repeated_failed_logins": 20,
+    "mfa_disabled": 40,
+    "api_key_created_after_risky_login": 25,
+    "large_data_download": 30,
+    "privilege_change": 35,
+    "sensitive_file_access_after_risky_login": 25,
+    "known_safe_device": -10,
+    "mfa_success": -10
+  },
+  "response_policy": {
+    "low": [
+      "log_only"
+    ],
+    "medium": [
+      "notify_admin"
+    ],
+    "high": [
+      "step_up_authentication_required"
+    ],
+    "critical": [
+      "require_mfa_challenge",
+      "notify_admin",
+      "create_incident_ticket"
+    ]
+  },
+  "require_human_approval_for": [
+    "account_lock",
+    "global_session_revocation",
+    "permission_removal",
+    "api_key_revocation"
+  ],
+  "reporting": {
+    "write_json": true,
+    "write_markdown": true,
+    "include_candidate_control_mappings": true
+  }
+}
+

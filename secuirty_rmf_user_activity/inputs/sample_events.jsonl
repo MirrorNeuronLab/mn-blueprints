@@ -1,0 +1,4 @@
+{"event_id":"evt_001","timestamp":"2026-05-11T14:00:00Z","event_type":"login_success","user_id":"user_123","user_email":"alice@example.com","session_id":"sess_001","source_ip":"198.51.100.10","geo":{"country":"US","region":"NY","city":"New York"},"device_id":"device_known","metadata":{"mfa_used":true}}
+{"event_id":"evt_002","timestamp":"2026-05-11T14:15:00Z","event_type":"session_refresh","user_id":"user_123","user_email":"alice@example.com","session_id":"sess_001","source_ip":"198.51.100.10","geo":{"country":"US","region":"NY","city":"New York"},"device_id":"device_known","metadata":{"mfa_used":true}}
+{"event_id":"evt_003","timestamp":"2026-05-11T14:30:00Z","event_type":"logout","user_id":"user_123","user_email":"alice@example.com","session_id":"sess_001","source_ip":"198.51.100.10","geo":{"country":"US","region":"NY","city":"New York"},"device_id":"device_known","metadata":{}}
+

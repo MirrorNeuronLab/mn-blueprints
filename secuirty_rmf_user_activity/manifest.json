@@ -1,0 +1,56 @@
+{
+  "manifest_version": "1.0",
+  "blueprint_id": "secuirty_rmf_user_activity",
+  "canonical_spec_name": "security_user_activity_response_worker",
+  "name": "Security RMF User Activity Response Worker",
+  "version": "0.1.0",
+  "description": "Detects suspicious user activity, recommends safe step-up authentication, and generates RMF/ATO/cATO-ready evidence artifacts.",
+  "base_blueprint": "general_event_stream_triage_state_machine",
+  "entrypoint": "src/main.py",
+  "initial_inputs": {
+    "events": "inputs/sample_events_high_risk.jsonl",
+    "config": "config.example.json",
+    "mode": "dry_run"
+  },
+  "inputs": {
+    "events": "inputs/sample_events_high_risk.jsonl",
+    "config": "config.example.json"
+  },
+  "outputs": {
+    "security_decision": "outputs/security_decision.json",
+    "evidence_report": "outputs/evidence_report.json",
+    "incident_summary": "outputs/incident_summary.md"
+  },
+  "metadata": {
+    "blueprint_id": "secuirty_rmf_user_activity",
+    "name": "Security RMF User Activity Response Worker",
+    "category": "general",
+    "description": "Detects suspicious user activity, recommends safe step-up authentication, and generates RMF/ATO/cATO-ready evidence artifacts.",
+    "target_user": "Security-conscious SaaS, GovTech, defense-tech, compliance, and platform teams.",
+    "problem_solved": "User activity streams need stateful triage, safe response instructions, and audit-ready evidence tied to source events.",
+    "customizable_for": "Identity provider events, SaaS audit logs, GitHub audit logs, CloudTrail, and internal application activity streams.",
+    "runtime_features": [
+      "event stream normalization",
+      "state machine",
+      "deterministic risk scoring",
+      "dry-run response policy",
+      "candidate compliance evidence artifacts"
+    ],
+    "safety": {
+      "default_mode": "dry_run",
+      "destructive_actions": "reserved for future human-approved connectors",
+      "compliance_claim": "candidate evidence only; no formal authorization claim"
+    }
+  },
+  "tags": [
+    "security",
+    "user-activity-monitoring",
+    "continuous-monitoring",
+    "rmf",
+    "ato",
+    "cato",
+    "incident-response",
+    "dry-run"
+  ]
+}
+

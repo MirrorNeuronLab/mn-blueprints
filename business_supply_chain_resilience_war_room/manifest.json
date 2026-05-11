@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Test disruption responses before inventory, supplier delays, and customer service levels break down.",
+  "description": "Optimize disruption responses before inventory, supplier delays, and customer service levels break down.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -16,9 +16,12 @@
   "initial_inputs": {
     "simulation_loop": [
       {
+        "daily_demand_units": 650,
+        "optimization_budget_usd": 65000,
         "product": "industrial sensor",
         "region": "Northeast",
         "seed": 42,
+        "target_inventory_days": 22,
         "steps": 5
       }
     ]
@@ -29,7 +32,7 @@
     "blueprint_id": "business_supply_chain_resilience_war_room",
     "category": "business",
     "customizable_for": "Manufacturing, retail, healthcare supplies, logistics networks.",
-    "description": "Test disruption responses before inventory, supplier delays, and customer service levels break down.",
+    "description": "Optimize disruption responses before inventory, supplier delays, and customer service levels break down.",
     "interfaces": {
       "config": [
         "metadata",
@@ -71,18 +74,26 @@
     },
     "llm_agent_role": "Supply chain disruption response agent.",
     "name": "Supply Chain Resilience War Room",
-    "output": "Disruption response plan with action history and supplier-lane ranking.",
+    "optimization": {
+      "fallback": "deterministic fractional LP allocator when Pyomo or a solver is not installed",
+      "language": "Pyomo",
+      "model_type": "linear_program",
+      "objective": "minimize mitigation cost plus unmet resilience-gap penalty subject to budget and lane capacity",
+      "solver": "appsi_highs"
+    },
+    "output": "Disruption response plan with optimized mitigation quantities, action history, and supplier-lane ranking.",
     "output_contract": {
       "events": "blueprint_report",
       "stdout": "JSON object with timeline, state_changes, final_artifact, and llm metadata"
     },
-    "problem_solved": "Demand spikes and supplier delays compound over time; static dashboards show the fire but do not test mitigation paths.",
+    "problem_solved": "Demand spikes and supplier delays compound over time; static dashboards show the fire but do not optimize budget-constrained mitigation paths.",
     "quick_test": {
       "command": "python3 payloads/simulation_loop/scripts/run_blueprint.py --mock-llm --steps 2",
       "enabled": true
     },
     "runtime_features": [
       "dynamic simulation",
+      "Pyomo optimization model",
       "LLM planner",
       "time-varying inventory",
       "decision loop"
@@ -99,9 +110,10 @@
         "demand_index",
         "supplier_delay_days",
         "service_level"
-      ]
+      ],
+      "optimization_model": "Pyomo linear program for budget-constrained disruption mitigation"
     },
-    "simulation_type": "Inventory, demand, and supplier-delay simulation.",
+    "simulation_type": "Inventory, demand, supplier-delay, and Pyomo optimization simulation.",
     "standard": {
       "config_path": "config/default.json",
       "default_input_adapter": "mock",

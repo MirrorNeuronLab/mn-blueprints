@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mirrorneuron.local/schemas/security-user-activity-decision.schema.json",
+  "title": "Security User Activity Decision",
+  "type": "object",
+  "required": [
+    "user_id",
+    "session_id",
+    "risk_score",
+    "risk_level",
+    "signals",
+    "decision",
+    "response_instruction",
+    "human_review_required",
+    "mode"
+  ],
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "risk_score": {
+      "type": "number"
+    },
+    "risk_level": {
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "CRITICAL"
+      ]
+    },
+    "signals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "decision": {
+      "type": "string"
+    },
+    "response_instruction": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "human_review_required": {
+      "type": "boolean"
+    },
+    "mode": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}
+

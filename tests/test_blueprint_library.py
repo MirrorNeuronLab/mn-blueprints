@@ -525,6 +525,35 @@ def test_run_store_writes_global_execution_artifacts(tmp_path: Path) -> None:
     assert event_types[-1] == "run_completed"
 
 
+def test_supply_chain_blueprint_reports_pyomo_optimization_plan(tmp_path: Path) -> None:
+    result = run_blueprint(
+        "business_supply_chain_resilience_war_room",
+        inputs={
+            "steps": 2,
+            "seed": 17,
+            "initial_inventory_days": 9,
+            "initial_demand_index": 126,
+            "initial_supplier_delay_days": 10,
+            "optimization_budget_usd": 65000,
+        },
+        llm_client=FakeLLMClient(),
+        runs_root=tmp_path,
+    )
+
+    first_plan = result["timeline"][0]["optimization_plan"]
+    final_plan = result["final_artifact"]["optimization_plan"]
+
+    assert result["uses_optimization"] is True
+    assert first_plan["language"] == "Pyomo"
+    assert first_plan["model_type"] == "linear_program"
+    assert first_plan["business_context"]["resilience_gap_units"] > 0
+    assert first_plan["decision_variables"]
+    assert first_plan["recommended_action"] in {"expedite_freight", "switch_supplier", "allocate_inventory"}
+    assert any(variable["value"] > 0 for variable in first_plan["decision_variables"])
+    assert final_plan["expected_outcome"]["gap_fill_rate"] > 0
+    assert final_plan["objective"]["components"]["mitigation_cost_usd"] > 0
+
+
 def test_file_input_adapter_can_replace_mock_payload(tmp_path: Path) -> None:
     input_path = tmp_path / "inputs.json"
     input_path.write_text(json.dumps({"steps": 3, "seed": 321, "initial_backlog": 41}) + "\n")

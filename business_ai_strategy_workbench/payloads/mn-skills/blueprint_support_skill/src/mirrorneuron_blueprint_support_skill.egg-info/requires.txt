@@ -1,0 +1,7 @@
+
+[optimization]
+pyomo>=6.8
+highspy>=1.7
+
+[webui]
+gradio>=4.0

@@ -1,0 +1,186 @@
+{
+  "daemon": false,
+  "description": "Turn requirements and vendor responses into a scored recommendation and implementation roadmap.",
+  "edges": [
+    {
+      "edge_id": "vendor_to_sink",
+      "from_node": "vendor_workflow",
+      "message_type": "vendor_decision_pack",
+      "to_node": "result_sink"
+    }
+  ],
+  "entrypoints": [
+    "vendor_workflow"
+  ],
+  "graph_id": "business_vendor_decision_agent_v1",
+  "initial_inputs": {
+    "vendor_workflow": [
+      {
+        "initiative": "Select an AI-enabled field service platform"
+      }
+    ]
+  },
+  "job_name": "business-vendor-decision-agent",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "business_vendor_decision_agent",
+    "category": "business",
+    "customizable_for": "ERP, CRM, cloud, cybersecurity, AI platform, robotics, outsourcing, and implementation partner selection.",
+    "description": "Turn requirements and vendor responses into a scored recommendation and implementation roadmap.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {
+      "default_api_base": "http://192.168.4.173:11434",
+      "default_model": "ollama/nemotron3:33b",
+      "mock_mode": "run payloads/vendor_workflow/scripts/run_blueprint.py"
+    },
+    "llm_agent_role": "Vendor selection and implementation roadmap agent.",
+    "name": "Vendor Decision Agent",
+    "output": "Vendor comparison matrix, recommendation memo, implementation roadmap, cost/risk model, process map, and negotiation questions.",
+    "output_contract": {
+      "events": "vendor_decision_pack",
+      "stdout": "JSON result with final_artifact and run-store metadata"
+    },
+    "problem_solved": "Companies need a repeatable way to turn requirements, RFP responses, pricing, security evidence, and stakeholder input into an executive vendor decision.",
+    "quick_test": {
+      "command": "python3 payloads/vendor_workflow/scripts/run_blueprint.py --runs-root /tmp/mirror-neuron-runs",
+      "enabled": true
+    },
+    "runtime_features": [
+      "RFP package generation",
+      "vendor response normalization",
+      "weighted scoring",
+      "spreadsheet cost profiling",
+      "implementation roadmap",
+      "process map generation"
+    ],
+    "simulation_type": "Vendor selection and implementation roadmap workflow.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "target_user": "CIO offices, procurement, transformation offices, private-equity operating teams, and enterprise architecture teams."
+  },
+  "name": "Vendor Decision Agent",
+  "nodes": [
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/run_blueprint.py"
+        ],
+        "from": "base",
+        "name_prefix": "business-vendor-decision-agent",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "vendor_decision_pack",
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "vendor_workflow",
+        "upload_path": "vendor_workflow",
+        "upload_paths": [
+          {
+            "source": "vendor_workflow",
+            "target": "vendor_workflow"
+          },
+          {
+            "source": "config",
+            "target": "config"
+          },
+          {
+            "source": "mn-skills/blueprint_support_skill",
+            "target": "mn-skills/blueprint_support_skill"
+          },
+          {
+            "source": "mn-skills/vendor_comparison_skill",
+            "target": "mn-skills/vendor_comparison_skill"
+          },
+          {
+            "source": "mn-skills/spreadsheet_analysis_skill",
+            "target": "mn-skills/spreadsheet_analysis_skill"
+          },
+          {
+            "source": "mn-skills/implementation_plan_skill",
+            "target": "mn-skills/implementation_plan_skill"
+          },
+          {
+            "source": "mn-skills/process_map_skill",
+            "target": "mn-skills/process_map_skill"
+          },
+          {
+            "source": "mn-skills/code_generation_skill",
+            "target": "mn-skills/code_generation_skill"
+          },
+          {
+            "source": "mn-skills/first_draft_slides_skill",
+            "target": "mn-skills/first_draft_slides_skill"
+          },
+          {
+            "source": "mn-skills/client_report_skill",
+            "target": "mn-skills/client_report_skill"
+          }
+        ],
+        "workdir": "/sandbox/job/vendor_workflow"
+      },
+      "node_id": "vendor_workflow",
+      "role": "root_coordinator",
+      "type": "generic"
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_on_message": true
+      },
+      "node_id": "result_sink",
+      "role": "result_sink",
+      "type": "reduce"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
+  "requiredContextEngine": false
+}

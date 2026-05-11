@@ -28,6 +28,9 @@ New finance blueprints should use `finance_`, not `financial_`. Historical alias
 | [`business_revenue_retention_copilot`](business_revenue_retention_copilot/README.md) | Business | Customer health and churn-risk workflow with intervention planning. |
 | [`business_service_capacity_command_center`](business_service_capacity_command_center/README.md) | Business | Queue, staffing, and SLA workflow for service-capacity decisions. |
 | [`business_supply_chain_resilience_war_room`](business_supply_chain_resilience_war_room/README.md) | Business | Inventory, demand, and supplier-delay workflow with mitigation planning. |
+| [`business_ai_strategy_workbench`](business_ai_strategy_workbench/README.md) | Business | Enterprise discovery workflow that produces board-ready recommendation artifacts. |
+| [`business_ai_control_room`](business_ai_control_room/README.md) | Business | AI, cyber, and control readiness workflow with evidence mapping and remediation planning. |
+| [`business_vendor_decision_agent`](business_vendor_decision_agent/README.md) | Business | Vendor comparison, RFP, scoring, roadmap, and negotiation workflow. |
 | [`finance_claim_risk_triage_copilot`](finance_claim_risk_triage_copilot/README.md) | Finance | Claim queue and fraud-signal workflow with triage recommendations. |
 | [`finance_credit_default_early_warning_system`](finance_credit_default_early_warning_system/README.md) | Finance | Borrower default and credit-policy workflow. |
 | [`finance_liquidity_microstructure_radar`](finance_liquidity_microstructure_radar/README.md) | Finance | Market stream workflow with signals, explanations, advice events, and optional Slack alerts. |

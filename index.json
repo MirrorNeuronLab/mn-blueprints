@@ -1,6 +1,7 @@
 [
   {
     "description": "Coordinate customer lifecycle outreach with LLM-generated messaging and delivery controls.",
+    "category": "Business",
     "graph_id": "business_customer_lifecycle_email_copilot_v1",
     "id": "business_customer_lifecycle_email_copilot",
     "job_name": "business-customer-lifecycle-email-copilot",
@@ -27,6 +28,7 @@
   },
   {
     "description": "Evaluate price changes against competitor moves, inventory pressure, and revenue impact.",
+    "category": "Business",
     "graph_id": "business_dynamic_pricing_profit_optimizer_v1",
     "id": "business_dynamic_pricing_profit_optimizer",
     "job_name": "business-dynamic-pricing-profit-optimizer",
@@ -53,6 +55,7 @@
   },
   {
     "description": "Monitor facility video streams and escalate safety-relevant observations with LLM reasoning.",
+    "category": "Security",
     "graph_id": "business_facility_safety_video_guardian_v1",
     "id": "business_facility_safety_video_guardian",
     "job_name": "business-facility-safety-video-guardian",
@@ -79,6 +82,7 @@
   },
   {
     "description": "Compare retention interventions before deploying them to at-risk customers.",
+    "category": "Business",
     "graph_id": "business_revenue_retention_copilot_v1",
     "id": "business_revenue_retention_copilot",
     "job_name": "business-revenue-retention-copilot",
@@ -105,6 +109,7 @@
   },
   {
     "description": "Plan staffing and deflection actions as service demand, queue waits, and SLA risk change.",
+    "category": "Business",
     "graph_id": "business_service_capacity_command_center_v1",
     "id": "business_service_capacity_command_center",
     "job_name": "business-service-capacity-command-center",
@@ -131,6 +136,7 @@
   },
   {
     "description": "Optimize disruption responses before inventory, supplier delays, and customer service levels break down.",
+    "category": "Business",
     "graph_id": "business_supply_chain_resilience_war_room_v1",
     "id": "business_supply_chain_resilience_war_room",
     "job_name": "business-supply-chain-resilience-war-room",
@@ -157,7 +163,95 @@
     }
   },
   {
+    "description": "Compress enterprise discovery into a board-ready strategy recommendation pack.",
+    "category": "Business",
+    "graph_id": "business_ai_strategy_workbench_v1",
+    "id": "business_ai_strategy_workbench",
+    "job_name": "business-ai-strategy-workbench",
+    "name": "AI Strategy Workbench",
+    "path": "business_ai_strategy_workbench",
+    "product": {
+      "agent_role": "Strategy discovery and board recommendation agent.",
+      "customizable_for": "Enterprise strategy, private-equity value creation, CFO transformation, corporate development, and transformation-office discovery.",
+      "customize": "Replace the mock packet with client documents, transcripts, financial tables, process maps, policy repositories, and market research notes; tune theme clustering, roadmap workstreams, and report language.",
+      "example": "A synthetic industrial client packet flows through document reading, meeting summarization, benchmark synthesis, spreadsheet profiling, opportunity mapping, slide outlining, and roadmap generation.",
+      "investor": "This compresses the strategy-discovery layer below senior expert judgment and can become a consulting discovery workbench for enterprise and PE transformation teams.",
+      "one_line": "Compress enterprise discovery into a board-ready strategy recommendation pack.",
+      "output": "Board-ready recommendation packet with summary, issue tree, opportunity map, roadmap, slide outline, and evidence appendix.",
+      "problem": "Companies spend weeks collecting documents, interviewing teams, summarizing findings, and building first-draft strategy recommendations.",
+      "runtime_features": [
+        "document ingestion",
+        "meeting summarization",
+        "market research synthesis",
+        "spreadsheet profiling",
+        "first-draft slide outline",
+        "implementation roadmap"
+      ],
+      "simulation_type": "Document-to-board-recommendation consulting workflow.",
+      "target_users": "Large enterprise strategy, CFO, corporate development, private-equity operating, and transformation-office teams."
+    }
+  },
+  {
+    "description": "Map AI and cyber requirements to evidence and produce an audit-ready control readiness pack.",
+    "category": "Security",
+    "graph_id": "business_ai_control_room_v1",
+    "id": "business_ai_control_room",
+    "job_name": "business-ai-control-room",
+    "name": "AI Control Room",
+    "path": "business_ai_control_room",
+    "product": {
+      "agent_role": "AI, cyber, and control readiness agent.",
+      "customizable_for": "AI governance, cyber readiness, cloud change assurance, ERP controls, RMF/ATO preparation, and operational control advisory.",
+      "customize": "Replace the mock controls with AI governance, cyber, cloud, ERP, NIST, ISO, SOC, HIPAA, RMF, or internal framework controls and connect evidence from GRC, IAM, audit, ticketing, and vendor systems.",
+      "example": "A synthetic GenAI claims assistant readiness packet maps policy requirements to evidence, identifies missing controls, scores readiness, and generates an audit evidence package.",
+      "investor": "This is a durable TrustOps workflow for regulated AI and cyber adoption because evidence collection, risk scoring, remediation, and audit trails recur continuously.",
+      "one_line": "Map AI and cyber requirements to evidence and produce an audit-ready control readiness pack.",
+      "output": "Compliance gap report with control matrix, risk register, remediation plan, audit evidence package, and executive risk summary.",
+      "problem": "Regulated companies need to prove that AI, cyber, cloud, ERP, or operational changes are safe, compliant, auditable, and controlled.",
+      "runtime_features": [
+        "policy ingestion",
+        "control mapping",
+        "evidence strength scoring",
+        "risk register generation",
+        "remediation planning",
+        "audit package assembly"
+      ],
+      "simulation_type": "Risk, compliance, and control readiness workflow.",
+      "target_users": "Financial services, healthcare, aerospace, defense, public sector contractors, enterprise AI, and cybersecurity teams."
+    }
+  },
+  {
+    "description": "Turn requirements and vendor responses into a scored recommendation and implementation roadmap.",
+    "category": "Business",
+    "graph_id": "business_vendor_decision_agent_v1",
+    "id": "business_vendor_decision_agent",
+    "job_name": "business-vendor-decision-agent",
+    "name": "Vendor Decision Agent",
+    "path": "business_vendor_decision_agent",
+    "product": {
+      "agent_role": "Vendor selection and implementation roadmap agent.",
+      "customizable_for": "ERP, CRM, cloud, cybersecurity, AI platform, robotics, outsourcing, and implementation partner selection.",
+      "customize": "Replace mock vendors with RFP exports, security questionnaires, pricing sheets, architecture constraints, stakeholder notes, and procurement policies; adjust criteria, weights, risk rules, and roadmap phases.",
+      "example": "A CIO team selects an AI-enabled field service platform by generating an RFP package, scoring vendors, profiling pricing, surfacing missing answers, and building an implementation roadmap.",
+      "investor": "Vendor selection is a repeatable high-value transformation workflow that can expand from RFP copilot into implementation readiness and procurement decision operations.",
+      "one_line": "Turn requirements and vendor responses into a scored recommendation and implementation roadmap.",
+      "output": "Vendor comparison matrix, recommendation memo, implementation roadmap, cost/risk model, process map, and negotiation questions.",
+      "problem": "Companies need a repeatable way to turn requirements, RFP responses, pricing, security evidence, and stakeholder input into an executive vendor decision.",
+      "runtime_features": [
+        "RFP package generation",
+        "vendor response normalization",
+        "weighted scoring",
+        "spreadsheet cost profiling",
+        "implementation roadmap",
+        "process map generation"
+      ],
+      "simulation_type": "Vendor selection and implementation roadmap workflow.",
+      "target_users": "CIO offices, procurement, transformation offices, private-equity operating teams, and enterprise architecture teams."
+    }
+  },
+  {
     "description": "Benchmark working memory on large-repo code analysis with bounded context packets.",
+    "category": "Engineering",
     "graph_id": "business_context_memory_compression_code_analsysis_v1",
     "id": "business_context_memory_compression_code_analsysis",
     "job_name": "business-context-memory-compression-code-analsysis",
@@ -187,6 +281,7 @@
   },
   {
     "description": "Prioritize insurance claim reviews as fraud signals, queue pressure, and adjuster capacity change.",
+    "category": "Finance",
     "graph_id": "finance_claim_risk_triage_copilot_v1",
     "id": "finance_claim_risk_triage_copilot",
     "job_name": "finance-claim-risk-triage-copilot",
@@ -213,6 +308,7 @@
   },
   {
     "description": "Detect rising borrower default pressure and compare credit policy responses over time.",
+    "category": "Finance",
     "graph_id": "finance_credit_default_early_warning_system_v1",
     "id": "finance_credit_default_early_warning_system",
     "job_name": "finance-credit-default-early-warning-system",
@@ -239,6 +335,7 @@
   },
   {
     "description": "Watch simulated market microstructure and produce live liquidity-risk explanations.",
+    "category": "Finance",
     "graph_id": "finance_liquidity_microstructure_radar_v1",
     "id": "finance_liquidity_microstructure_radar",
     "job_name": "finance-liquidity-microstructure-radar",
@@ -265,6 +362,7 @@
   },
   {
     "description": "Stress a portfolio against drawdown, rate shocks, and liquidity pressure before recommending rebalancing.",
+    "category": "Finance",
     "graph_id": "finance_portfolio_crash_stress_lab_v1",
     "id": "finance_portfolio_crash_stress_lab",
     "job_name": "finance-portfolio-crash-stress-lab",
@@ -291,6 +389,7 @@
   },
   {
     "description": "Rank property acquisition opportunities as ZIP-code demand, cap rate, price, and risk evolve.",
+    "category": "Finance",
     "graph_id": "finance_zip_code_property_alpha_engine_v1",
     "id": "finance_zip_code_property_alpha_engine",
     "job_name": "finance-zip-code-property-alpha-engine",
@@ -317,6 +416,7 @@
   },
   {
     "description": "Rank property acquisition opportunities with working memory over noisy ZIP-code history, broker flow, financing constraints, and prior decision outcomes.",
+    "category": "Finance",
     "graph_id": "finance_zip_code_property_alpha_engine_with_memory_v1",
     "id": "finance_zip_code_property_alpha_engine_with_memory",
     "job_name": "finance-zip-code-property-alpha-engine-with-memory",
@@ -345,6 +445,7 @@
   },
   {
     "description": "Show the core runtime pattern: an LLM agent observes a changing queue and acts over repeated ticks.",
+    "category": "Engineering",
     "graph_id": "general_closed_loop_agent_runtime_v1",
     "id": "general_closed_loop_agent_runtime",
     "job_name": "general-closed-loop-agent-runtime",
@@ -371,6 +472,7 @@
   },
   {
     "description": "Run role-scoped context packets through a multi-agent audit decision workflow.",
+    "category": "Engineering",
     "graph_id": "general_context_memory_audit_pipeline_v1",
     "id": "general_context_memory_audit_pipeline",
     "job_name": "general-context-memory-audit-pipeline",
@@ -397,6 +499,7 @@
   },
   {
     "description": "Stress-test compressed working memory across a growing multi-agent LLM workflow.",
+    "category": "Engineering",
     "graph_id": "general_context_memory_compression_lab_v1",
     "id": "general_context_memory_compression_lab",
     "job_name": "general-context-memory-compression-lab",
@@ -423,6 +526,7 @@
   },
   {
     "description": "Control a changing environment where load, temperature, reserve, and service levels interact.",
+    "category": "Engineering",
     "graph_id": "general_dynamic_environment_control_loop_v1",
     "id": "general_dynamic_environment_control_loop",
     "job_name": "general-dynamic-environment-control-loop",
@@ -449,6 +553,7 @@
   },
   {
     "description": "Triage event streams as anomaly pressure, queue depth, and false positives change over time.",
+    "category": "Engineering",
     "graph_id": "general_event_stream_triage_state_machine_v1",
     "id": "general_event_stream_triage_state_machine",
     "job_name": "general-event-stream-triage-state-machine",
@@ -475,6 +580,7 @@
   },
   {
     "description": "Insert human approval into an LLM decision loop before high-impact actions are applied.",
+    "category": "Security",
     "graph_id": "general_human_approval_decision_gate_v1",
     "id": "general_human_approval_decision_gate",
     "job_name": "general-human-approval-decision-gate",
@@ -501,6 +607,7 @@
   },
   {
     "description": "Move live telemetry chunks through stream workers and summarize the evolving signal.",
+    "category": "Engineering",
     "graph_id": "general_live_telemetry_stream_pipeline_v1",
     "id": "general_live_telemetry_stream_pipeline",
     "job_name": "general-live-telemetry-stream-pipeline",
@@ -527,6 +634,7 @@
   },
   {
     "description": "Show an LLM agent calling a forecast tool before deciding how to rebalance resources.",
+    "category": "Engineering",
     "graph_id": "general_llm_tool_orchestration_loop_v1",
     "id": "general_llm_tool_orchestration_loop",
     "job_name": "general-llm-tool-orchestration-loop",
@@ -553,6 +661,7 @@
   },
   {
     "description": "Trace how messages move through router and aggregator agents.",
+    "category": "Engineering",
     "graph_id": "general_message_routing_trace_v1",
     "id": "general_message_routing_trace",
     "job_name": "general-message-routing-trace",
@@ -579,6 +688,7 @@
   },
   {
     "description": "Model buyer-supplier negotiation as agents respond to changing demand, price, and capacity.",
+    "category": "Engineering",
     "graph_id": "general_multi_agent_contract_negotiation_loop_v1",
     "id": "general_multi_agent_contract_negotiation_loop",
     "job_name": "general-multi-agent-contract-negotiation-loop",
@@ -605,6 +715,7 @@
   },
   {
     "description": "Observe a fast native-agent live monitor that keeps producing decisions until stopped.",
+    "category": "Engineering",
     "graph_id": "general_native_live_monitor_daemon_v1",
     "id": "general_native_live_monitor_daemon",
     "job_name": "general-native-live-monitor-daemon",
@@ -631,6 +742,7 @@
   },
   {
     "description": "Run isolated shell and Python workers as a traceable runtime pipeline.",
+    "category": "Engineering",
     "graph_id": "general_openshell_sandbox_worker_pipeline_v1",
     "id": "general_openshell_sandbox_worker_pipeline",
     "job_name": "general-openshell-sandbox-worker-pipeline",
@@ -657,6 +769,7 @@
   },
   {
     "description": "Stress the runtime with a broad fan-out of deterministic parallel workers.",
+    "category": "Engineering",
     "graph_id": "general_parallel_worker_scale_benchmark_v1",
     "id": "general_parallel_worker_scale_benchmark",
     "job_name": "general-parallel-worker-scale-benchmark",
@@ -683,6 +796,7 @@
   },
   {
     "description": "Tune policy thresholds through repeated simulated reward and incident feedback.",
+    "category": "Engineering",
     "graph_id": "general_policy_feedback_optimization_loop_v1",
     "id": "general_policy_feedback_optimization_loop",
     "job_name": "general-policy-feedback-optimization-loop",
@@ -709,6 +823,7 @@
   },
   {
     "description": "Run a Python-defined workflow as a long-lived daemon with repeated stateful turns.",
+    "category": "Engineering",
     "graph_id": "general_python_sdk_live_research_daemon_v1",
     "id": "general_python_sdk_live_research_daemon",
     "job_name": "general-python-sdk-live-research-daemon",
@@ -735,6 +850,7 @@
   },
   {
     "description": "Define a MirrorNeuron workflow directly in Python and compile it into a runnable bundle.",
+    "category": "Engineering",
     "graph_id": "general_python_sdk_research_pipeline_v1",
     "id": "general_python_sdk_research_pipeline",
     "job_name": "general-python-sdk-research-pipeline",
@@ -761,6 +877,7 @@
   },
   {
     "description": "Generate, review, and validate code through a sandboxed multi-step LLM loop.",
+    "category": "Security",
     "graph_id": "general_sandboxed_llm_codegen_review_loop_v1",
     "id": "general_sandboxed_llm_codegen_review_loop",
     "job_name": "general-sandboxed-llm-codegen-review-loop",
@@ -787,6 +904,7 @@
   },
   {
     "description": "Track simulation state deltas so every agent decision is explainable after the run.",
+    "category": "Engineering",
     "graph_id": "general_simulation_state_audit_trail_v1",
     "id": "general_simulation_state_audit_trail",
     "job_name": "general-simulation-state-audit-trail",
@@ -813,6 +931,7 @@
   },
   {
     "description": "Show bounded queues, slow workers, and retry-later behavior in a live stream.",
+    "category": "Engineering",
     "graph_id": "general_stream_backpressure_control_loop_v1",
     "id": "general_stream_backpressure_control_loop",
     "job_name": "general-stream-backpressure-control-loop",
@@ -839,6 +958,7 @@
   },
   {
     "description": "Select the next lab experiment from prior simulated yield, toxicity, cost, and evidence confidence.",
+    "category": "Science",
     "graph_id": "science_adaptive_experiment_discovery_agent_v1",
     "id": "science_adaptive_experiment_discovery_agent",
     "job_name": "science-adaptive-experiment-discovery-agent",
@@ -865,6 +985,7 @@
   },
   {
     "description": "Plan local flood mitigations as rainfall, flood level, pump capacity, and vulnerable assets change.",
+    "category": "Science",
     "graph_id": "science_climate_resilience_planning_engine_v1",
     "id": "science_climate_resilience_planning_engine",
     "job_name": "science-climate-resilience-planning-engine",
@@ -891,6 +1012,7 @@
   },
   {
     "description": "Run a long-lived multi-stage drug-discovery loop that keeps generating and evaluating candidates.",
+    "category": "Science",
     "graph_id": "science_drug_discovery_closed_loop_lab_v1",
     "id": "science_drug_discovery_closed_loop_lab",
     "job_name": "science-drug-discovery-closed-loop-lab",
@@ -917,6 +1039,7 @@
   },
   {
     "description": "Explore ecosystem interventions across multiple regions with evolving population dynamics.",
+    "category": "Science",
     "graph_id": "science_ecosystem_intervention_sandbox_v1",
     "id": "science_ecosystem_intervention_sandbox",
     "job_name": "science-ecosystem-intervention-sandbox",
@@ -943,6 +1066,7 @@
   },
   {
     "description": "Visualize shared-world multi-agent motion planning and coordination behavior.",
+    "category": "Science",
     "graph_id": "science_multi_agent_motion_planning_lab_v1",
     "id": "science_multi_agent_motion_planning_lab",
     "job_name": "science-multi-agent-motion-planning-lab",
@@ -969,6 +1093,7 @@
   },
   {
     "description": "Compare outbreak interventions as infections, mobility, vaccination, and hospital load change.",
+    "category": "Science",
     "graph_id": "science_outbreak_response_policy_simulator_v1",
     "id": "science_outbreak_response_policy_simulator",
     "job_name": "science-outbreak-response-policy-simulator",
@@ -995,6 +1120,7 @@
   },
   {
     "description": "Test signal and rerouting controls as traffic speed, incidents, volume, and emissions evolve.",
+    "category": "Science",
     "graph_id": "science_urban_traffic_control_lab_v1",
     "id": "science_urban_traffic_control_lab",
     "job_name": "science-urban-traffic-control-lab",

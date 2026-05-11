@@ -1,0 +1,199 @@
+{
+  "execution_model": [
+    "load_metadata",
+    "resolve_config",
+    "load_inputs",
+    "start_run_store",
+    "observe_simulation_state",
+    "call_llm_agent",
+    "apply_decision_to_simulation",
+    "emit_events",
+    "write_final_artifact"
+  ],
+  "identity": {
+    "blueprint_id": "business_ai_control_room",
+    "name": "AI Control Room"
+  },
+  "inputs": {
+    "adapter": "mock",
+    "description": "Synthetic AI/cyber/control readiness packet with policies, frameworks, evidence, and audit findings.",
+    "payload": {
+      "program": "Enterprise GenAI Claims Assistant",
+      "policies": [
+        {
+          "name": "AI Governance Policy",
+          "text": "# AI Governance Policy\nHigh-risk AI systems require model inventory, owner approval, human review, monitoring, incident response, and retained evidence."
+        },
+        {
+          "name": "Cloud Security Standard",
+          "text": "# Cloud Security Standard\nProduction workloads require privileged access review, encryption, logging, vendor due diligence, and change approval."
+        }
+      ],
+      "control_framework": [
+        {
+          "id": "AI-01",
+          "requirement": "Maintain approved AI system inventory",
+          "domain": "governance"
+        },
+        {
+          "id": "AI-02",
+          "requirement": "Document human review and escalation controls",
+          "domain": "model risk"
+        },
+        {
+          "id": "CY-01",
+          "requirement": "Review privileged access at least quarterly",
+          "domain": "cyber"
+        },
+        {
+          "id": "TP-01",
+          "requirement": "Retain vendor security and privacy evidence",
+          "domain": "third party"
+        }
+      ],
+      "evidence_items": [
+        {
+          "control_id": "AI-01",
+          "name": "Draft inventory export",
+          "strength": "medium"
+        },
+        {
+          "control_id": "CY-01",
+          "name": "Last access review",
+          "strength": "weak"
+        }
+      ],
+      "audit_findings": [
+        "No retained evidence for human escalation testing.",
+        "Vendor security package is incomplete.",
+        "Privileged access review is older than the quarterly target."
+      ],
+      "system_architecture": "User request -> claims assistant -> retrieval service -> policy engine -> human adjuster queue -> audit log.",
+      "target_readiness_score": 85
+    }
+  },
+  "interfaces": {
+    "config_sections": [
+      "metadata",
+      "identity",
+      "inputs",
+      "simulation",
+      "llm",
+      "outputs",
+      "logging",
+      "real_adapters"
+    ],
+    "identity_fields": [
+      "blueprint_id",
+      "name",
+      "run_id"
+    ],
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ],
+    "run_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "result.json",
+      "final_artifact.json"
+    ],
+    "web_ui_adapters": [
+      "disabled",
+      "gradio",
+      "static_report"
+    ]
+  },
+  "llm": {
+    "agent_role": "AI, cyber, and control readiness agent",
+    "api_base": "http://192.168.4.173:11434",
+    "mock_mode": "fake",
+    "mode": "ollama",
+    "model": "ollama/nemotron3:33b",
+    "responsibilities": [
+      "map requirements to evidence",
+      "identify missing controls and weak evidence",
+      "produce audit-ready remediation artifacts"
+    ]
+  },
+  "logging": {
+    "events": [
+      "run_started",
+      "inputs_loaded",
+      "requirements_mapped",
+      "risks_scored",
+      "readiness_pack_generated",
+      "run_completed"
+    ],
+    "events_jsonl": true,
+    "level": "INFO",
+    "redact_env_secrets": true
+  },
+  "metadata": {
+    "category": "business",
+    "customizable_for": "AI governance, cyber readiness, cloud change assurance, ERP controls, RMF/ATO preparation, and operational control advisory.",
+    "problem_solved": "Regulated companies need to prove that AI, cyber, cloud, ERP, or operational changes are safe, compliant, auditable, and controlled.",
+    "target_users": "Financial services, healthcare, aerospace, defense, public sector contractors, enterprise AI, and cybersecurity teams."
+  },
+  "mode": "mock",
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifact_contract": "Compliance gap report with control matrix, risk register, remediation plan, audit evidence package, and executive risk summary.",
+    "run_root": "~/.mn/runs",
+    "write_run_store": true
+  },
+  "real_adapters": {
+    "env_json": {
+      "adapter": "env_json",
+      "description": "Load readiness packets from MN_BLUEPRINT_INPUT_JSON.",
+      "env": "MN_BLUEPRINT_INPUT_JSON"
+    },
+    "inline_json": {
+      "adapter": "json",
+      "description": "Load overrides from an inline JSON object.",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "description": "Load JSON overrides from a local file path.",
+      "path": null
+    }
+  },
+  "simulation": {
+    "actions": [
+      "map_requirements",
+      "score_control_gaps",
+      "generate_remediation_pack"
+    ],
+    "deterministic": true,
+    "enabled": true,
+    "metrics": [
+      "requirements_count",
+      "mapped_controls",
+      "missing_controls",
+      "readiness_score"
+    ],
+    "objective": "maximize audit readiness",
+    "primary_metric": "readiness_score",
+    "risk_metric": "high_risk_gap_count",
+    "seed_field": "seed",
+    "type": "Risk, compliance, and control readiness workflow."
+  },
+  "standard_version": "1.0",
+  "web_ui": {
+    "enabled": false,
+    "input": {
+      "adapter": "disabled"
+    },
+    "output": {
+      "adapter": "static_report"
+    }
+  }
+}

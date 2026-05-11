@@ -1,0 +1,191 @@
+{
+  "daemon": false,
+  "description": "Compress enterprise discovery into a board-ready strategy recommendation pack.",
+  "edges": [
+    {
+      "edge_id": "advisory_to_sink",
+      "from_node": "advisory_workflow",
+      "message_type": "strategy_recommendation_pack",
+      "to_node": "result_sink"
+    }
+  ],
+  "entrypoints": [
+    "advisory_workflow"
+  ],
+  "graph_id": "business_ai_strategy_workbench_v1",
+  "initial_inputs": {
+    "advisory_workflow": [
+      {
+        "company": "Northstar Industrial",
+        "engagement_goal": "Find board-ready cost, growth, risk, and technology opportunities for the next 12 months."
+      }
+    ]
+  },
+  "job_name": "business-ai-strategy-workbench",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "business_ai_strategy_workbench",
+    "category": "business",
+    "customizable_for": "Enterprise strategy, private-equity value creation, CFO transformation, corporate development, and transformation-office discovery.",
+    "description": "Compress enterprise discovery into a board-ready strategy recommendation pack.",
+    "interfaces": {
+      "config": [
+        "metadata",
+        "identity",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "real_adapters"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "llm": {
+      "default_api_base": "http://192.168.4.173:11434",
+      "default_model": "ollama/nemotron3:33b",
+      "mock_mode": "run payloads/advisory_workflow/scripts/run_blueprint.py"
+    },
+    "llm_agent_role": "Strategy discovery and board recommendation agent.",
+    "name": "AI Strategy Workbench",
+    "output": "Board-ready recommendation packet with summary, issue tree, opportunity map, roadmap, slide outline, and evidence appendix.",
+    "output_contract": {
+      "events": "strategy_recommendation_pack",
+      "stdout": "JSON result with final_artifact and run-store metadata"
+    },
+    "problem_solved": "Companies spend weeks collecting documents, interviewing teams, summarizing findings, and building first-draft strategy recommendations.",
+    "quick_test": {
+      "command": "python3 payloads/advisory_workflow/scripts/run_blueprint.py --runs-root /tmp/mirror-neuron-runs",
+      "enabled": true
+    },
+    "runtime_features": [
+      "document ingestion",
+      "meeting summarization",
+      "market research synthesis",
+      "spreadsheet profiling",
+      "first-draft slide outline",
+      "implementation roadmap"
+    ],
+    "simulation_type": "Document-to-board-recommendation consulting workflow.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "target_user": "Large enterprise strategy, CFO, corporate development, private-equity operating, and transformation-office teams."
+  },
+  "name": "AI Strategy Workbench",
+  "nodes": [
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/run_blueprint.py"
+        ],
+        "from": "base",
+        "name_prefix": "business-ai-strategy-workbench",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "output_message_type": "strategy_recommendation_pack",
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "advisory_workflow",
+        "upload_path": "advisory_workflow",
+        "upload_paths": [
+          {
+            "source": "advisory_workflow",
+            "target": "advisory_workflow"
+          },
+          {
+            "source": "config",
+            "target": "config"
+          },
+          {
+            "source": "mn-skills/blueprint_support_skill",
+            "target": "mn-skills/blueprint_support_skill"
+          },
+          {
+            "source": "mn-skills/document_reading_skill",
+            "target": "mn-skills/document_reading_skill"
+          },
+          {
+            "source": "mn-skills/meeting_summary_skill",
+            "target": "mn-skills/meeting_summary_skill"
+          },
+          {
+            "source": "mn-skills/first_draft_slides_skill",
+            "target": "mn-skills/first_draft_slides_skill"
+          },
+          {
+            "source": "mn-skills/market_research_skill",
+            "target": "mn-skills/market_research_skill"
+          },
+          {
+            "source": "mn-skills/spreadsheet_analysis_skill",
+            "target": "mn-skills/spreadsheet_analysis_skill"
+          },
+          {
+            "source": "mn-skills/implementation_plan_skill",
+            "target": "mn-skills/implementation_plan_skill"
+          },
+          {
+            "source": "mn-skills/process_map_skill",
+            "target": "mn-skills/process_map_skill"
+          },
+          {
+            "source": "mn-skills/client_report_skill",
+            "target": "mn-skills/client_report_skill"
+          }
+        ],
+        "workdir": "/sandbox/job/advisory_workflow"
+      },
+      "node_id": "advisory_workflow",
+      "role": "root_coordinator",
+      "type": "generic"
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_on_message": true
+      },
+      "node_id": "result_sink",
+      "role": "result_sink",
+      "type": "reduce"
+    }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
+  "requiredContextEngine": false
+}

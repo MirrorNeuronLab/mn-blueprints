@@ -1,0 +1,212 @@
+{
+  "execution_model": [
+    "load_metadata",
+    "resolve_config",
+    "load_inputs",
+    "start_run_store",
+    "observe_simulation_state",
+    "call_llm_agent",
+    "apply_decision_to_simulation",
+    "emit_events",
+    "write_final_artifact"
+  ],
+  "identity": {
+    "blueprint_id": "business_vendor_decision_agent",
+    "name": "Vendor Decision Agent"
+  },
+  "inputs": {
+    "adapter": "mock",
+    "description": "Synthetic RFP packet with requirements, criteria, vendor responses, pricing, and stakeholder notes.",
+    "payload": {
+      "initiative": "Select an AI-enabled field service platform",
+      "requirements": [
+        "Integrate with ERP and CRM",
+        "Support role-based access control",
+        "Provide offline mobile workflows",
+        "Expose audit logs and security evidence",
+        "Deploy pilot within 90 days"
+      ],
+      "weighted_criteria": [
+        {
+          "name": "functional_fit",
+          "weight": 3
+        },
+        {
+          "name": "security",
+          "weight": 2
+        },
+        {
+          "name": "implementation_speed",
+          "weight": 2
+        },
+        {
+          "name": "cost",
+          "weight": 1,
+          "higher_is_better": false
+        }
+      ],
+      "vendors": [
+        {
+          "name": "AtlasFlow",
+          "scores": {
+            "functional_fit": 5,
+            "security": 4,
+            "implementation_speed": 3,
+            "cost": 4
+          },
+          "pricing_usd": 740000,
+          "notes": "Strong workflow depth, vague ERP migration estimate."
+        },
+        {
+          "name": "BrightOps",
+          "scores": {
+            "functional_fit": 4,
+            "security": 5,
+            "implementation_speed": 4,
+            "cost": 3
+          },
+          "pricing_usd": 820000,
+          "notes": "Best security evidence, higher platform cost."
+        },
+        {
+          "name": "CoreRoute",
+          "scores": {
+            "functional_fit": 3,
+            "security": 3,
+            "implementation_speed": 5,
+            "cost": 2
+          },
+          "pricing_usd": 610000,
+          "notes": "Fastest pilot, incomplete audit-log response."
+        }
+      ],
+      "pricing_csv": "vendor,year_one_cost_usd,implementation_cost_usd,risk_reserve_usd\nAtlasFlow,740000,220000,90000\nBrightOps,820000,260000,70000\nCoreRoute,610000,180000,130000\n",
+      "stakeholder_notes": "Operations wants offline mobile. Security requires evidence before award. Procurement wants negotiation leverage on implementation services.",
+      "timeline_weeks": 14
+    }
+  },
+  "interfaces": {
+    "config_sections": [
+      "metadata",
+      "identity",
+      "inputs",
+      "simulation",
+      "llm",
+      "outputs",
+      "logging",
+      "real_adapters"
+    ],
+    "identity_fields": [
+      "blueprint_id",
+      "name",
+      "run_id"
+    ],
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ],
+    "run_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "result.json",
+      "final_artifact.json"
+    ],
+    "web_ui_adapters": [
+      "disabled",
+      "gradio",
+      "static_report"
+    ]
+  },
+  "llm": {
+    "agent_role": "Vendor selection and implementation roadmap agent",
+    "api_base": "http://192.168.4.173:11434",
+    "mock_mode": "fake",
+    "mode": "ollama",
+    "model": "ollama/nemotron3:33b",
+    "responsibilities": [
+      "normalize vendor responses",
+      "score options against weighted criteria",
+      "draft roadmap and negotiation questions"
+    ]
+  },
+  "logging": {
+    "events": [
+      "run_started",
+      "inputs_loaded",
+      "vendors_scored",
+      "roadmap_generated",
+      "recommendation_generated",
+      "run_completed"
+    ],
+    "events_jsonl": true,
+    "level": "INFO",
+    "redact_env_secrets": true
+  },
+  "metadata": {
+    "category": "business",
+    "customizable_for": "ERP, CRM, cloud, cybersecurity, AI platform, robotics, outsourcing, and implementation partner selection.",
+    "problem_solved": "Companies need a repeatable way to turn requirements, RFP responses, pricing, security evidence, and stakeholder input into an executive vendor decision.",
+    "target_users": "CIO offices, procurement, transformation offices, private-equity operating teams, and enterprise architecture teams."
+  },
+  "mode": "mock",
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifact_contract": "Vendor comparison matrix, recommendation memo, implementation roadmap, cost/risk model, process map, and negotiation questions.",
+    "run_root": "~/.mn/runs",
+    "write_run_store": true
+  },
+  "real_adapters": {
+    "env_json": {
+      "adapter": "env_json",
+      "description": "Load RFP packets from MN_BLUEPRINT_INPUT_JSON.",
+      "env": "MN_BLUEPRINT_INPUT_JSON"
+    },
+    "inline_json": {
+      "adapter": "json",
+      "description": "Load overrides from an inline JSON object.",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "description": "Load JSON overrides from a local file path.",
+      "path": null
+    }
+  },
+  "simulation": {
+    "actions": [
+      "generate_rfp",
+      "score_vendors",
+      "build_implementation_roadmap"
+    ],
+    "deterministic": true,
+    "enabled": true,
+    "metrics": [
+      "vendor_count",
+      "criteria_count",
+      "missing_answer_count",
+      "roadmap_phase_count"
+    ],
+    "objective": "maximize decision confidence",
+    "primary_metric": "weighted_vendor_score",
+    "risk_metric": "missing_answer_count",
+    "seed_field": "seed",
+    "type": "Vendor selection and implementation roadmap workflow."
+  },
+  "standard_version": "1.0",
+  "web_ui": {
+    "enabled": false,
+    "input": {
+      "adapter": "disabled"
+    },
+    "output": {
+      "adapter": "static_report"
+    }
+  }
+}

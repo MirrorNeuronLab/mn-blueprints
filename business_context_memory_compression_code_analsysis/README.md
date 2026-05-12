@@ -2,17 +2,18 @@
 
 `Blueprint ID:` `business_context_memory_compression_code_analsysis`  
 `Category:` business - Business Runtime Pattern  
-`Default LLM:` Ollama `nemotron3:33b` with deterministic fake LLM support for tests
+`Default LLM:` Ollama `nemotron3:33b` with deterministic fake LLM support for tests  
+`Memory layer:` Membrane Python SDK from `/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src`
 
 ## One-line value proposition
 
-Benchmark working memory on large-repo code analysis with bounded context packets.
+Benchmark Membrane SDK working memory on large-repo code analysis with bounded context packets.
 
 ## What it is
 
-This blueprint is an end-to-end memory-layer benchmark for a realistic code-analysis workload. It seeds a metadata-only fixture from the real `django/django` GitHub repository, expands it into hundreds of typed memory items, and asks a multi-agent workflow to produce a concise architecture briefing without losing source refs, commit identity, or private-memory boundaries.
+This blueprint is an end-to-end Membrane memory-layer benchmark for a realistic code-analysis workload. It seeds a metadata-only fixture from the real `django/django` GitHub repository, expands it into hundreds of typed memory items, and asks a multi-agent workflow to produce a concise architecture briefing without losing source refs, commit identity, or private-memory boundaries.
 
-It ships with mock inputs so it runs immediately once the context engine is available, and it defines a path for replacing the Django fixture with another repository while keeping the same blueprint identity, configuration model, and output contract.
+It ships with mock inputs so it runs immediately against already-running Membrane containers, and it defines a path for replacing the Django fixture with another repository while keeping the same blueprint identity, configuration model, and output contract.
 
 ## Who this is for
 
@@ -24,7 +25,7 @@ Large codebases produce more evidence than an LLM can safely carry in a single p
 
 ## Why this runtime is useful here
 
-MirrorNeuron is useful here because it runs a sequence of agents over shared typed memory instead of handing one giant blob to a model. Each agent calls `CompileContext`, sees only role-allowed memory, creates a new artifact, and leaves traceable evidence for the next agent. The result is a benchmark for whether memory quality improves speed, cost, and reviewability compared with unbounded context stuffing.
+MirrorNeuron is useful here because it runs a sequence of agents over shared typed Membrane memory instead of handing one giant blob to a model. Each agent imports the updated `mn_context_engine_sdk`, calls `CompileContext` through the running Membrane context engine, sees only role-allowed memory, creates a new artifact, and leaves traceable evidence for the next agent. The result is a benchmark for whether memory quality improves speed, cost, and reviewability compared with unbounded context stuffing.
 
 ## How it works
 
@@ -45,7 +46,7 @@ A metadata-only Django fixture has more than 3,600 available code and documentat
 | `manifest.json` initial inputs | Job, focus, fixture scale, and generated-note volume. | `fixture_max_files: 260` | Yes |
 | `payloads/repo_fixture/django_tree_fixture.json` | Metadata-only real GitHub repository fixture. | `repo.commit_sha` | Yes |
 | `config/default.json` | Standard identity, mock input, LLM, output, logging, and adapter settings. | `outputs.run_root` | Yes |
-| Environment variables | Runtime, context engine, LLM, and benchmark scaling. | `MN_CONTEXT_ADDR`, `MN_CODE_ANALYSIS_FIXTURE_MAX_FILES` | Yes |
+| Environment variables | Runtime, Membrane SDK, context engine, Qdrant, LLM, and benchmark scaling. | `MN_MEMBRANE_SDK_PATH`, `MN_CONTEXT_ADDR`, `MN_QDRANT_URL`, `MN_CODE_ANALYSIS_FIXTURE_MAX_FILES` | Yes |
 
 ## Outputs
 
@@ -72,12 +73,16 @@ Key benchmark fields:
 
 ## How to run
 
+This blueprint assumes your Membrane Docker containers are already running. It does not start Docker. Workers use the updated Python SDK from `/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src` by default; override `MN_MEMBRANE_SDK_PATH` if you want a different checkout or an installed wheel.
+
 Run through a registered MirrorNeuron blueprint checkout:
 
 ```bash
 cd /Users/homer/Projects/mirror-neuron-set
 mn blueprint update
+MN_MEMBRANE_SDK_PATH=/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src \
 MN_CONTEXT_ADDR=localhost:50052 \
+MN_QDRANT_URL=http://localhost:6333 \
 MN_BLUEPRINT_QUICK_TEST=1 \
 mn blueprint run business_context_memory_compression_code_analsysis
 ```
@@ -86,7 +91,9 @@ Run directly from the local folder before refreshing the cached catalog:
 
 ```bash
 cd /Users/homer/Projects/mirror-neuron-set
+MN_MEMBRANE_SDK_PATH=/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src \
 MN_CONTEXT_ADDR=localhost:50052 \
+MN_QDRANT_URL=http://localhost:6333 \
 MN_BLUEPRINT_QUICK_TEST=1 \
 mn blueprint run ./mn-blueprints/business_context_memory_compression_code_analsysis
 ```
@@ -95,7 +102,9 @@ Run a larger benchmark by increasing the fixture scale:
 
 ```bash
 cd /Users/homer/Projects/mirror-neuron-set
+MN_MEMBRANE_SDK_PATH=/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src \
 MN_CONTEXT_ADDR=localhost:50052 \
+MN_QDRANT_URL=http://localhost:6333 \
 MN_CODE_ANALYSIS_FIXTURE_MAX_FILES=900 \
 MN_CODE_ANALYSIS_NOTES_PER_FILE=2 \
 mn blueprint run business_context_memory_compression_code_analsysis
@@ -108,7 +117,9 @@ mn blueprint list
 mn blueprint monitor
 ```
 
-The blueprint runner submits to the MirrorNeuron core runtime through `MN_GRPC_TARGET` and each worker talks to the context engine through `MN_CONTEXT_ADDR`. Both services must be reachable for a full end-to-end run.
+The blueprint runner submits to the MirrorNeuron core runtime through `MN_GRPC_TARGET`. Each worker imports `mn_context_engine_sdk` from `MN_MEMBRANE_SDK_PATH` and talks to the already-running Membrane context engine through `MN_CONTEXT_ADDR`. If your Membrane stack exposes Qdrant, the SDK external-memory helpers use `MN_QDRANT_URL`, `MN_QDRANT_COLLECTION`, and `MN_QDRANT_NAMESPACE`.
+
+The SDK distribution name is `mirrorneuron-membrane-python-sdk`; the import package is `mn_context_engine_sdk`.
 
 Run the shared repository tests:
 
@@ -159,7 +170,7 @@ The shared test suite verifies manifest loading, standard config sections, catal
 
 - The bundled fixture stores derived GitHub tree metadata, not source code text.
 - Outputs are code-review decision-support artifacts, not production advice.
-- The full graph requires the MirrorNeuron runtime and a running context engine.
+- The full graph requires the MirrorNeuron runtime and already-running Membrane context-engine containers.
 - Live LLM behavior may vary; use `MN_BLUEPRINT_QUICK_TEST=1` for deterministic smoke runs.
 
 ## Next steps

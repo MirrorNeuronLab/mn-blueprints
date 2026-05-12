@@ -250,7 +250,7 @@
     }
   },
   {
-    "description": "Benchmark working memory on large-repo code analysis with bounded context packets.",
+    "description": "Benchmark Membrane SDK working memory on large-repo code analysis with bounded context packets.",
     "category": "Engineering",
     "graph_id": "business_context_memory_compression_code_analsysis_v1",
     "id": "business_context_memory_compression_code_analsysis",
@@ -263,10 +263,11 @@
       "customize": "Replace the Django tree fixture with another repository, tune fixture_max_files, adjust token budgets, and add organization-specific risk policies or source categories.",
       "example": "A metadata-only Django tree fixture seeds hundreds of code facts and generated notes; agents compress them into an architecture briefing with source refs intact.",
       "investor": "Large-repo code analysis is a high-value enterprise workflow where memory quality directly affects latency, cost, confidence, and auditability.",
-      "one_line": "Benchmark working memory on large-repo code analysis with bounded context packets.",
+      "one_line": "Benchmark Membrane SDK working memory on large-repo code analysis with bounded context packets.",
       "output": "Compressed code-analysis handoff, final architecture briefing, and context-memory benchmark report.",
-      "problem": "Large codebases produce more facts than an LLM can safely carry; working memory must preserve source refs, subsystem boundaries, pinned repo facts, and private review notes under tight context budgets.",
+      "problem": "Large codebases produce more facts than an LLM can safely carry; Membrane working memory must preserve source refs, subsystem boundaries, pinned repo facts, and private review notes under tight context budgets.",
       "runtime_features": [
+        "Membrane Python SDK integration",
         "large repository fixture",
         "CompileContext",
         "role ACLs",

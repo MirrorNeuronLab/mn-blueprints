@@ -15,8 +15,18 @@ import context_pb2_grpc
 
 try:
     from mn_context_engine_sdk import MNMemoryItem
+    from mn_context_engine_sdk.memory import (
+        EXTERNAL_MEMORY_QUERY_SCHEMA_V1,
+        EXTERNAL_MEMORY_UPDATE_SCHEMA_V1,
+        query_external_memory_items,
+        update_external_memory_request,
+    )
 except Exception:
     MNMemoryItem = None
+    EXTERNAL_MEMORY_QUERY_SCHEMA_V1 = "mn.external_memory.query.v1"
+    EXTERNAL_MEMORY_UPDATE_SCHEMA_V1 = "mn.external_memory.update.v1"
+    query_external_memory_items = None
+    update_external_memory_request = None
 
 
 ALL_ROLES = [
@@ -296,6 +306,55 @@ def add_item(
     if hasattr(response, "success") and not response.success:
         raise RuntimeError(f"AddItem failed for {item_id}")
     return item_id
+
+
+def mirror_external_memory_item(item_id, content, source, kind="fact", visibility="shared"):
+    if update_external_memory_request is None:
+        return {"status": "sdk_unavailable", "upserted_ids": []}
+    payload = content.get("payload", {}) if isinstance(content, dict) else {}
+    text = json.dumps(payload or content, sort_keys=True, default=str)
+    return update_external_memory_request(
+        {
+            "schema_version": EXTERNAL_MEMORY_UPDATE_SCHEMA_V1,
+            "operation": "upsert",
+            "items": [
+                {
+                    "id": item_id,
+                    "text": text,
+                    "kind": kind,
+                    "source_refs": content.get("source_refs", []) if isinstance(content, dict) else [],
+                    "visibility": visibility,
+                    "source": source,
+                }
+            ],
+        }
+    )
+
+
+def query_external_memory(query, agent_role, focus_id, top_k=20):
+    if query_external_memory_items is None:
+        return {"items": [], "warnings": ["sdk_unavailable"], "schema_version": EXTERNAL_MEMORY_QUERY_SCHEMA_V1}
+    result = query_external_memory_items(
+        {
+            "schema_version": EXTERNAL_MEMORY_QUERY_SCHEMA_V1,
+            "query": {
+                "current_task": query,
+                "focus_id": focus_id,
+                "agent_role": agent_role,
+            },
+            "top_k": top_k,
+        }
+    )
+    return {
+        "items": result.items,
+        "warnings": result.warnings,
+        "hit_count": result.hit_count,
+        "candidate_item_ids": result.candidate_item_ids,
+        "visibility_dropped_count": result.visibility_dropped_count,
+        "collection": result.collection,
+        "namespace": result.namespace,
+        "schema_version": EXTERNAL_MEMORY_QUERY_SCHEMA_V1,
+    }
 
 
 def get_item(stub, job_id, item_id):
@@ -627,7 +686,7 @@ def call_llm(system_prompt, user_prompt, mock_response):
 
     try:
         if model.startswith("ollama/"):
-            api_base = (api_base or "http://192.168.4.173:11434").rstrip("/")
+            api_base = (api_base or "http://localhost:11434").rstrip("/")
             payload = {
                 "model": model.removeprefix("ollama/"),
                 "messages": [

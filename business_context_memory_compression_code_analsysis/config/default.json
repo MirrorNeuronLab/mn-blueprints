@@ -31,7 +31,8 @@
       "llm",
       "outputs",
       "logging",
-      "real_adapters"
+      "real_adapters",
+      "memory_layer"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -79,7 +80,7 @@
   "metadata": {
     "category": "business",
     "customizable_for": "Architecture review, codebase onboarding, migration planning, technical due diligence, and large-repo code review.",
-    "problem_solved": "Large codebases produce more facts than an LLM can safely carry; working memory must preserve source refs, subsystem boundaries, pinned repo facts, and private review notes under tight context budgets.",
+    "problem_solved": "Large codebases produce more facts than an LLM can safely carry; Membrane working memory must preserve source refs, subsystem boundaries, pinned repo facts, and private review notes under tight context budgets.",
     "target_users": "Engineering leaders and platform teams evaluating memory systems for code analysis agents."
   },
   "mode": "mock",
@@ -112,5 +113,18 @@
     "seed_field": "seed",
     "type": "Large-repo code analysis memory-pressure benchmark."
   },
-  "standard_version": "1.0"
+  "standard_version": "1.0",
+  "memory_layer": {
+    "project_path": "/Users/homer/Projects/Membrane",
+    "python_sdk_path": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+    "sdk_distribution": "mirrorneuron-membrane-python-sdk",
+    "sdk_import_package": "mn_context_engine_sdk",
+    "context_addr_env": "MN_CONTEXT_ADDR",
+    "default_context_addr": "localhost:50052",
+    "qdrant_url_env": "MN_QDRANT_URL",
+    "default_qdrant_url": "http://localhost:6333",
+    "collection": "mn_memory",
+    "namespace": "business_code_analysis_memory",
+    "containers": "expected_running"
+  }
 }

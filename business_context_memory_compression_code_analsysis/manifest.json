@@ -1,5 +1,5 @@
 {
-  "description": "Benchmark working memory on large-repo code analysis with bounded context packets.",
+  "description": "Benchmark Membrane SDK working memory on large-repo code analysis with bounded context packets.",
   "edges": [
     {
       "from_node": "initializer",
@@ -52,7 +52,7 @@
     "blueprint_id": "business_context_memory_compression_code_analsysis",
     "category": "business",
     "customizable_for": "Architecture review, codebase onboarding, migration planning, technical due diligence, and large-repo code review.",
-    "description": "Benchmark working memory on large-repo code analysis with bounded context packets.",
+    "description": "Benchmark Membrane SDK working memory on large-repo code analysis with bounded context packets.",
     "interfaces": {
       "config": [
         "metadata",
@@ -62,7 +62,8 @@
         "llm",
         "outputs",
         "logging",
-        "real_adapters"
+        "real_adapters",
+        "memory_layer"
       ],
       "identity": [
         "blueprint_id",
@@ -96,13 +97,14 @@
       "status": "JSON lines on stderr",
       "stdout": "single JSON object, event envelope, or bundle path"
     },
-    "problem_solved": "Large codebases produce more facts than an LLM can safely carry; working memory must preserve source refs, subsystem boundaries, pinned repo facts, and private review notes under tight context budgets.",
+    "problem_solved": "Large codebases produce more facts than an LLM can safely carry; Membrane working memory must preserve source refs, subsystem boundaries, pinned repo facts, and private review notes under tight context budgets.",
     "quick_test": {
-      "description": "Set MN_BLUEPRINT_QUICK_TEST=1 to use deterministic mock LLM JSON and a smaller fixture while still exercising context memory and CompileContext calls.",
+      "description": "Set MN_BLUEPRINT_QUICK_TEST=1 to use deterministic mock LLM JSON and a smaller fixture while still exercising Membrane SDK-backed context memory and CompileContext calls.",
       "enabled": false,
       "env": "MN_BLUEPRINT_QUICK_TEST=1"
     },
     "runtime_features": [
+      "Membrane Python SDK integration",
       "large repository fixture",
       "CompileContext",
       "role ACLs",
@@ -115,7 +117,7 @@
     "standard": {
       "config_path": "config/default.json",
       "default_input_adapter": "mock",
-      "execution_model": "load metadata -> seed large repo memory fixture -> compile context per agent -> emit final code-analysis briefing",
+      "execution_model": "load metadata -> seed large repo memory fixture through Membrane -> compile context per agent -> emit final code-analysis briefing",
       "output_adapter": "local_run_store",
       "real_input_adapters": [
         "file",
@@ -130,7 +132,20 @@
       "format": "jsonl",
       "stream": "stderr"
     },
-    "target_user": "Engineering leaders and platform teams evaluating memory systems for code analysis agents."
+    "target_user": "Engineering leaders and platform teams evaluating memory systems for code analysis agents.",
+    "memory_layer": {
+      "project_path": "/Users/homer/Projects/Membrane",
+      "python_sdk_path": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+      "sdk_distribution": "mirrorneuron-membrane-python-sdk",
+      "sdk_import_package": "mn_context_engine_sdk",
+      "runtime": "Use the already-running Membrane Docker containers; workers connect through MN_CONTEXT_ADDR and import the Python SDK for memory item validation and helpers.",
+      "default_context_addr": "localhost:50052",
+      "external_memory": {
+        "qdrant_url_env": "MN_QDRANT_URL",
+        "collection_env": "MN_QDRANT_COLLECTION",
+        "namespace_env": "MN_QDRANT_NAMESPACE"
+      }
+    }
   },
   "name": "Business Context Memory Compression Code Analysis",
   "nodes": [
@@ -140,25 +155,29 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/init.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/init.py"
         ],
         "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "CONTEXT_ENGINE_ADDR": "localhost:50052",
+          "LITELLM_API_BASE": "http://localhost:11434",
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
           "MN_CONTEXT_USE_MODEL_COMPRESSION": "false",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_BASE": "http://localhost:11434",
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
           "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true"
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_QDRANT_URL": "http://localhost:6333",
+          "MN_QDRANT_COLLECTION": "mn_memory",
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -191,7 +210,15 @@
           "MN_LLM_TIMEOUT_SECONDS",
           "MN_CODE_ANALYSIS_FIXTURE_PATH",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE"
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE",
+          "MN_MEMBRANE_SDK_PATH",
+          "PYTHONPATH",
+          "MN_QDRANT_URL",
+          "MN_QDRANT_API_KEY",
+          "MN_QDRANT_COLLECTION",
+          "MN_QDRANT_NAMESPACE",
+          "MN_QDRANT_EMBEDDING_MODEL",
+          "MN_QDRANT_BATCH_SIZE"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -223,25 +250,29 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/interpreter.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/interpreter.py"
         ],
         "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "CONTEXT_ENGINE_ADDR": "localhost:50052",
+          "LITELLM_API_BASE": "http://localhost:11434",
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
           "MN_CONTEXT_USE_MODEL_COMPRESSION": "false",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_BASE": "http://localhost:11434",
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
           "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true"
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_QDRANT_URL": "http://localhost:6333",
+          "MN_QDRANT_COLLECTION": "mn_memory",
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -274,7 +305,15 @@
           "MN_LLM_TIMEOUT_SECONDS",
           "MN_CODE_ANALYSIS_FIXTURE_PATH",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE"
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE",
+          "MN_MEMBRANE_SDK_PATH",
+          "PYTHONPATH",
+          "MN_QDRANT_URL",
+          "MN_QDRANT_API_KEY",
+          "MN_QDRANT_COLLECTION",
+          "MN_QDRANT_NAMESPACE",
+          "MN_QDRANT_EMBEDDING_MODEL",
+          "MN_QDRANT_BATCH_SIZE"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -302,25 +341,29 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/extractor.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/extractor.py"
         ],
         "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "CONTEXT_ENGINE_ADDR": "localhost:50052",
+          "LITELLM_API_BASE": "http://localhost:11434",
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
           "MN_CONTEXT_USE_MODEL_COMPRESSION": "false",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_BASE": "http://localhost:11434",
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
           "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true"
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_QDRANT_URL": "http://localhost:6333",
+          "MN_QDRANT_COLLECTION": "mn_memory",
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -353,7 +396,15 @@
           "MN_LLM_TIMEOUT_SECONDS",
           "MN_CODE_ANALYSIS_FIXTURE_PATH",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE"
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE",
+          "MN_MEMBRANE_SDK_PATH",
+          "PYTHONPATH",
+          "MN_QDRANT_URL",
+          "MN_QDRANT_API_KEY",
+          "MN_QDRANT_COLLECTION",
+          "MN_QDRANT_NAMESPACE",
+          "MN_QDRANT_EMBEDDING_MODEL",
+          "MN_QDRANT_BATCH_SIZE"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -381,25 +432,29 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/classifier.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/classifier.py"
         ],
         "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "CONTEXT_ENGINE_ADDR": "localhost:50052",
+          "LITELLM_API_BASE": "http://localhost:11434",
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
           "MN_CONTEXT_USE_MODEL_COMPRESSION": "false",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_BASE": "http://localhost:11434",
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
           "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true"
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_QDRANT_URL": "http://localhost:6333",
+          "MN_QDRANT_COLLECTION": "mn_memory",
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -432,7 +487,15 @@
           "MN_LLM_TIMEOUT_SECONDS",
           "MN_CODE_ANALYSIS_FIXTURE_PATH",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE"
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE",
+          "MN_MEMBRANE_SDK_PATH",
+          "PYTHONPATH",
+          "MN_QDRANT_URL",
+          "MN_QDRANT_API_KEY",
+          "MN_QDRANT_COLLECTION",
+          "MN_QDRANT_NAMESPACE",
+          "MN_QDRANT_EMBEDDING_MODEL",
+          "MN_QDRANT_BATCH_SIZE"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -460,25 +523,29 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/decision.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/decision.py"
         ],
         "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "CONTEXT_ENGINE_ADDR": "localhost:50052",
+          "LITELLM_API_BASE": "http://localhost:11434",
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
           "MN_CONTEXT_USE_MODEL_COMPRESSION": "false",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_BASE": "http://localhost:11434",
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
           "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true"
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_QDRANT_URL": "http://localhost:6333",
+          "MN_QDRANT_COLLECTION": "mn_memory",
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -511,7 +578,15 @@
           "MN_LLM_TIMEOUT_SECONDS",
           "MN_CODE_ANALYSIS_FIXTURE_PATH",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE"
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE",
+          "MN_MEMBRANE_SDK_PATH",
+          "PYTHONPATH",
+          "MN_QDRANT_URL",
+          "MN_QDRANT_API_KEY",
+          "MN_QDRANT_COLLECTION",
+          "MN_QDRANT_NAMESPACE",
+          "MN_QDRANT_EMBEDDING_MODEL",
+          "MN_QDRANT_BATCH_SIZE"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -539,25 +614,29 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/critic.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/critic.py"
         ],
         "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "CONTEXT_ENGINE_ADDR": "localhost:50052",
+          "LITELLM_API_BASE": "http://localhost:11434",
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
           "MN_CONTEXT_USE_MODEL_COMPRESSION": "false",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_BASE": "http://localhost:11434",
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
           "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true"
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_QDRANT_URL": "http://localhost:6333",
+          "MN_QDRANT_COLLECTION": "mn_memory",
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -590,7 +669,15 @@
           "MN_LLM_TIMEOUT_SECONDS",
           "MN_CODE_ANALYSIS_FIXTURE_PATH",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE"
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE",
+          "MN_MEMBRANE_SDK_PATH",
+          "PYTHONPATH",
+          "MN_QDRANT_URL",
+          "MN_QDRANT_API_KEY",
+          "MN_QDRANT_COLLECTION",
+          "MN_QDRANT_NAMESPACE",
+          "MN_QDRANT_EMBEDDING_MODEL",
+          "MN_QDRANT_BATCH_SIZE"
         ],
         "pool": "default",
         "pool_slots": 1,
@@ -617,24 +704,36 @@
       "config": {
         "complete_on_message": true,
         "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_BASE": "http://localhost:11434",
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
           "MN_CONTEXT_USE_MODEL_COMPRESSION": "false",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_BASE": "http://localhost:11434",
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1"
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
+          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_QDRANT_URL": "http://localhost:6333",
+          "MN_QDRANT_COLLECTION": "mn_memory",
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
         },
         "pass_env": [
           "MN_CODE_ANALYSIS_FIXTURE_PATH",
           "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE"
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE",
+          "MN_MEMBRANE_SDK_PATH",
+          "PYTHONPATH",
+          "MN_QDRANT_URL",
+          "MN_QDRANT_API_KEY",
+          "MN_QDRANT_COLLECTION",
+          "MN_QDRANT_NAMESPACE",
+          "MN_QDRANT_EMBEDDING_MODEL",
+          "MN_QDRANT_BATCH_SIZE"
         ]
       },
       "node_id": "sink",

@@ -28,7 +28,11 @@
       "llm",
       "outputs",
       "logging",
-      "real_adapters"
+      "real_adapters",
+      "market_stream",
+      "market_llm",
+      "alerts",
+      "manifest_config_bindings"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -56,9 +60,14 @@
   "llm": {
     "agent_role": "Signal analyzer, market explainer, advisor agent.",
     "api_base": "http://192.168.4.173:11434",
+    "api_key": "",
     "mock_mode": "fake",
     "mode": "ollama",
-    "model": "ollama/nemotron3:33b"
+    "model": "ollama/nemotron3:33b",
+    "timeout_seconds": 60.0,
+    "max_tokens": 800,
+    "num_retries": 2,
+    "retry_backoff_seconds": 1.0
   },
   "logging": {
     "events": [
@@ -104,5 +113,265 @@
     "seed_field": "seed",
     "type": "Live market stream and exchange-style signal simulation."
   },
-  "standard_version": "1.0"
+  "standard_version": "1.0",
+  "market_stream": {
+    "duration_seconds": 86400,
+    "tick_seconds": 1,
+    "initial_price": 100.0,
+    "tick_delay_ms": 1000,
+    "seed": 729905862,
+    "start_date": "2026-04-30",
+    "symbols": "AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA",
+    "trading_days": 252,
+    "daily_volatility": 0.018,
+    "daily_drift": 0.001,
+    "max_daily_move": 0.06,
+    "stock_interval_min_ms": 1000,
+    "stock_interval_max_ms": 1000
+  },
+  "market_llm": {
+    "market_data_every_ticks": 30,
+    "order_sample_rate": 20,
+    "signal_every_events": 30,
+    "signal_min_confidence": 0.72,
+    "explanation_interval_events": 0,
+    "explanation_interval_seconds": 300.0,
+    "explanation_max_pending": 25,
+    "explanation_retry_delay_seconds": 5.0
+  },
+  "alerts": {
+    "advice_interval_ticks": 5,
+    "important_move_pct": 1.5,
+    "slack_enabled": true,
+    "slack_channel": "#claw",
+    "slack_policy_mode": "important_only",
+    "slack_min_confidence": 0.65,
+    "slack_cooldown_ticks_per_symbol": 20,
+    "slack_digest_every_ticks": 100
+  },
+  "manifest_config_bindings": [
+    {
+      "config_path": "market_stream.tick_seconds",
+      "manifest_path": "initial_inputs.ingress.0.tick_seconds"
+    },
+    {
+      "config_path": "market_stream.seed",
+      "manifest_path": "initial_inputs.ingress.0.seed"
+    },
+    {
+      "config_path": "market_stream.duration_seconds",
+      "manifest_path": "nodes.exchange.config.duration_seconds"
+    },
+    {
+      "config_path": "market_stream.tick_seconds",
+      "manifest_path": "nodes.exchange.config.tick_seconds"
+    },
+    {
+      "config_path": "market_stream.initial_price",
+      "manifest_path": "nodes.exchange.config.initial_price"
+    },
+    {
+      "config_path": "market_stream.tick_delay_ms",
+      "manifest_path": "nodes.exchange.config.tick_delay_ms"
+    },
+    {
+      "config_path": "market_llm.market_data_every_ticks",
+      "manifest_path": "nodes.exchange.config.llm_market_data_every_ticks"
+    },
+    {
+      "config_path": "market_stream.duration_seconds",
+      "manifest_path": "nodes.trader_*.config.duration_seconds"
+    },
+    {
+      "config_path": "market_stream.tick_seconds",
+      "manifest_path": "nodes.trader_*.config.tick_seconds"
+    },
+    {
+      "config_path": "market_stream.initial_price",
+      "manifest_path": "nodes.trader_*.config.initial_price"
+    },
+    {
+      "config_path": "market_stream.tick_delay_ms",
+      "manifest_path": "nodes.trader_*.config.tick_delay_ms"
+    },
+    {
+      "config_path": "market_llm.order_sample_rate",
+      "manifest_path": "nodes.trader_*.config.llm_order_sample_rate"
+    },
+    {
+      "config_path": "market_stream.seed",
+      "manifest_path": "nodes.fake_stock_stream.config.seed"
+    },
+    {
+      "config_path": "market_stream.start_date",
+      "manifest_path": "nodes.fake_stock_stream.config.start_date"
+    },
+    {
+      "config_path": "market_stream.trading_days",
+      "manifest_path": "nodes.fake_stock_stream.config.trading_days"
+    },
+    {
+      "config_path": "market_stream.daily_volatility",
+      "manifest_path": "nodes.fake_stock_stream.config.daily_volatility"
+    },
+    {
+      "config_path": "market_stream.daily_drift",
+      "manifest_path": "nodes.fake_stock_stream.config.daily_drift"
+    },
+    {
+      "config_path": "market_stream.max_daily_move",
+      "manifest_path": "nodes.fake_stock_stream.config.max_daily_move"
+    },
+    {
+      "config_path": "market_stream.stock_interval_min_ms",
+      "manifest_path": "nodes.fake_stock_stream.config.interval_min_ms"
+    },
+    {
+      "config_path": "market_stream.stock_interval_max_ms",
+      "manifest_path": "nodes.fake_stock_stream.config.interval_max_ms"
+    },
+    {
+      "config_path": "market_stream.seed",
+      "manifest_path": "nodes.fake_stock_stream.config.environment.STOCK_STREAM_SEED",
+      "stringify": true
+    },
+    {
+      "config_path": "market_stream.start_date",
+      "manifest_path": "nodes.fake_stock_stream.config.environment.STOCK_STREAM_START_DATE",
+      "stringify": true
+    },
+    {
+      "config_path": "market_stream.symbols",
+      "manifest_path": "nodes.fake_stock_stream.config.environment.STOCK_STREAM_SYMBOLS",
+      "stringify": true
+    },
+    {
+      "config_path": "market_stream.trading_days",
+      "manifest_path": "nodes.fake_stock_stream.config.environment.STOCK_STREAM_TRADING_DAYS",
+      "stringify": true
+    },
+    {
+      "config_path": "market_stream.daily_volatility",
+      "manifest_path": "nodes.fake_stock_stream.config.environment.STOCK_STREAM_DAILY_VOLATILITY",
+      "stringify": true
+    },
+    {
+      "config_path": "market_stream.daily_drift",
+      "manifest_path": "nodes.fake_stock_stream.config.environment.STOCK_STREAM_DAILY_DRIFT",
+      "stringify": true
+    },
+    {
+      "config_path": "market_stream.max_daily_move",
+      "manifest_path": "nodes.fake_stock_stream.config.environment.STOCK_STREAM_MAX_DAILY_MOVE",
+      "stringify": true
+    },
+    {
+      "config_path": "market_stream.stock_interval_min_ms",
+      "manifest_path": "nodes.fake_stock_stream.config.environment.STOCK_STREAM_INTERVAL_MIN_MS",
+      "stringify": true
+    },
+    {
+      "config_path": "market_stream.stock_interval_max_ms",
+      "manifest_path": "nodes.fake_stock_stream.config.environment.STOCK_STREAM_INTERVAL_MAX_MS",
+      "stringify": true
+    },
+    {
+      "config_path": "market_llm.signal_every_events",
+      "manifest_path": "nodes.stock_signal_analyzer.config.environment.LLM_SIGNAL_EVERY_EVENTS",
+      "stringify": true
+    },
+    {
+      "config_path": "market_llm.signal_min_confidence",
+      "manifest_path": "nodes.stock_signal_analyzer.config.environment.LLM_SIGNAL_MIN_CONFIDENCE",
+      "stringify": true
+    },
+    {
+      "config_path": "llm.model",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LITELLM_MODEL",
+      "stringify": true
+    },
+    {
+      "config_path": "llm.api_base",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LITELLM_API_BASE",
+      "stringify": true
+    },
+    {
+      "config_path": "llm.api_key",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LITELLM_API_KEY",
+      "stringify": true,
+      "allow_null": true
+    },
+    {
+      "config_path": "llm.timeout_seconds",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LITELLM_TIMEOUT_SECONDS",
+      "stringify": true
+    },
+    {
+      "config_path": "llm.max_tokens",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LITELLM_MAX_TOKENS",
+      "stringify": true
+    },
+    {
+      "config_path": "llm.num_retries",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LITELLM_NUM_RETRIES",
+      "stringify": true
+    },
+    {
+      "config_path": "llm.retry_backoff_seconds",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LITELLM_RETRY_BACKOFF_SECONDS",
+      "stringify": true
+    },
+    {
+      "config_path": "market_llm.explanation_interval_events",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LLM_EXPLANATION_INTERVAL_EVENTS",
+      "stringify": true
+    },
+    {
+      "config_path": "market_llm.explanation_interval_seconds",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LLM_EXPLANATION_INTERVAL_SECONDS",
+      "stringify": true
+    },
+    {
+      "config_path": "market_llm.explanation_max_pending",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LLM_EXPLANATION_MAX_PENDING",
+      "stringify": true
+    },
+    {
+      "config_path": "market_llm.explanation_retry_delay_seconds",
+      "manifest_path": "nodes.llm_market_explainer.config.environment.LLM_EXPLANATION_RETRY_DELAY_SECONDS",
+      "stringify": true
+    },
+    {
+      "config_path": "alerts.advice_interval_ticks",
+      "manifest_path": "nodes.market_advisor.config.advice_interval_ticks"
+    },
+    {
+      "config_path": "alerts.important_move_pct",
+      "manifest_path": "nodes.market_advisor.config.important_move_pct"
+    },
+    {
+      "config_path": "alerts.slack_enabled",
+      "manifest_path": "nodes.market_advisor.config.slack_enabled"
+    },
+    {
+      "config_path": "alerts.slack_channel",
+      "manifest_path": "nodes.market_advisor.config.slack_channel"
+    },
+    {
+      "config_path": "alerts.slack_policy_mode",
+      "manifest_path": "nodes.market_advisor.config.slack_policy.mode"
+    },
+    {
+      "config_path": "alerts.slack_min_confidence",
+      "manifest_path": "nodes.market_advisor.config.slack_policy.min_confidence"
+    },
+    {
+      "config_path": "alerts.slack_cooldown_ticks_per_symbol",
+      "manifest_path": "nodes.market_advisor.config.slack_policy.cooldown_ticks_per_symbol"
+    },
+    {
+      "config_path": "alerts.slack_digest_every_ticks",
+      "manifest_path": "nodes.market_advisor.config.slack_policy.digest_every_ticks"
+    }
+  ]
 }

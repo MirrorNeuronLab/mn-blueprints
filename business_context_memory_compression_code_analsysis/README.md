@@ -46,6 +46,7 @@ A metadata-only Django fixture has more than 3,600 available code and documentat
 | `manifest.json` initial inputs | Job, focus, fixture scale, and generated-note volume. | `fixture_max_files: 260` | Yes |
 | `payloads/repo_fixture/django_tree_fixture.json` | Metadata-only real GitHub repository fixture. | `repo.commit_sha` | Yes |
 | `config/default.json` | Standard identity, mock input, LLM, output, logging, and adapter settings. | `outputs.run_root` | Yes |
+| `config/overwrite.json` | Local overwrite values layered on top of defaults before launch. | `llm.model`, `outputs.run_root` | Yes |
 | Environment variables | Runtime, Membrane SDK, context engine, Qdrant, LLM, and benchmark scaling. | `MN_MEMBRANE_SDK_PATH`, `MN_CONTEXT_ADDR`, `MN_QDRANT_URL`, `MN_CODE_ANALYSIS_FIXTURE_MAX_FILES` | Yes |
 
 ## Outputs

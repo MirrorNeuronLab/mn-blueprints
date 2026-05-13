@@ -42,6 +42,7 @@ A daemon periodically collects signals, decides whether more work is needed, and
 |---|---|---|---|
 | `manifest.json` initial inputs | Sample payloads routed into daemon_ingress. | `initial_inputs` | Yes |
 | `config/default.json` | Standard identity, mock input, LLM, output, logging, and adapter settings. | `outputs.run_root` | Yes |
+| `config/overwrite.json` | Local overwrite values layered on top of defaults before launch. | `llm.model`, `outputs.run_root` | Yes |
 | Payload fixtures | Bundled synthetic data, policies, scripts, templates, or media used by workers. | `payloads/` or `input/` | Yes |
 | Environment variables | Runtime and provider settings for local services or optional integrations. | `MN_LLM_MODEL`, `MN_BLUEPRINT_QUICK_TEST` | Yes |
 

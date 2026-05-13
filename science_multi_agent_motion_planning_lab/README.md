@@ -42,6 +42,7 @@ A shared-world particle environment is generated and summarized to show how agen
 |---|---|---|---|
 | `manifest.json` initial inputs | Sample payloads routed into ingress. | `initial_inputs` | Yes |
 | `config/default.json` | Standard identity, mock input, LLM, output, logging, and adapter settings. | `outputs.run_root` | Yes |
+| `config/overwrite.json` | Local overwrite values layered on top of defaults before launch. | `vl_model.model`, `outputs.run_root` | Yes |
 | Payload fixtures | Bundled synthetic data, policies, scripts, templates, or media used by workers. | `payloads/` or `input/` | Yes |
 | Environment variables | Runtime and provider settings for local services or optional integrations. | `MN_LLM_MODEL`, `MN_BLUEPRINT_QUICK_TEST` | Yes |
 | Worker run identity | Optional run-store overrides consumed by the world worker. | `MN_RUN_ID`, `MN_RUNS_ROOT` | Yes |
@@ -53,19 +54,19 @@ A shared-world particle environment is generated and summarized to show how agen
 | Runtime events | Typed messages and worker events emitted through the manifest graph. | `blueprint_report`, worker-specific events |
 | Final artifact | The user-facing simulation summary and visual artifacts. | `result.json`, report, alert, or generated artifact |
 | Operational logs | Status lines and worker logs for debugging and audit. | `events.jsonl`, runtime logs, worker stderr |
-| Generated bundle or payload output | Files produced by bundle generation or specialized workers. | `bundle_summary.json`, `payloads/`, visual artifacts |
+| Payload output | Files produced by specialized workers. | `payloads/`, reports, visual artifacts |
 | Shared run record | Config snapshot, effective inputs, event stream, full result, and final artifact for the world worker. | `~/.mn/runs/<run_id>/` |
 
 ## How to run
 
-Generate a quick deterministic bundle for local review:
+Run the committed blueprint bundle directly:
 
 ```bash
 cd science_multi_agent_motion_planning_lab
-python3 generate_bundle.py --quick-test --output-dir /tmp/mirror-neuron-bundles
+mn blueprint run .
 ```
 
-Then run the generated bundle with your MirrorNeuron runtime entrypoint. Use `config/default.json` and `manifest.json` as the stable contract while replacing bundled fixtures with real data.
+Use `config/default.json` as the stable default contract and `config/overwrite.json` for local customer-specific values. When a blueprint declares `init_config_review`, the CLI can review those fields before launch and apply the answers as runtime config overrides.
 
 Run the world worker directly with a local run store for debugging:
 

@@ -6,7 +6,7 @@ The standard exists to make the library more than a set of demos: every blueprin
 
 The reusable implementation lives in focused modules under `mn-skills/blueprint_support_skill/src/mn_blueprint_support/`. `standard.py` remains a compatibility facade that re-exports the public contract, while implementation lives in modules such as `config.py`, `input_adapters.py`, `run_store.py`, `runtime.py`, `worker_contract.py`, `observability.py`, `web_ui.py`, `cli_runtime.py`, `llm.py`, `scenarios.py`, `product_catalog.py`, `catalog_loader.py`, `solution_runner.py`, and `scaffold.py`.
 
-The shared skill owns the reusable framework pieces: blueprint metadata loading, stable identity, config merging, input adapters, output adapter resolution, run-store artifacts, logging helpers, runtime context, common CLI execution, first-run setup, local user config persistence, and run observability. The root `index.json` owns portfolio/product catalog data, while blueprint folders own concrete scenario and runtime data through `scenario.json`, `manifest.json`, and `config/default.json`.
+The shared skill owns the reusable framework pieces: blueprint metadata loading, stable identity, config merging, input adapters, output adapter resolution, run-store artifacts, logging helpers, runtime context, common CLI execution, first-run setup, local user config persistence, and run observability. The root `index.json` owns portfolio/product catalog data, while blueprint folders own concrete scenario and runtime data through `scenario.json`, `manifest.json`, `config/default.json`, and optional `config/overwrite.json`.
 
 All local user state defaults to `~/.mn`: runs live in `~/.mn/runs`, local config lives in `~/.mn/config.json`, and support logs live in `~/.mn/logs`. Older legacy-home references should be treated as migrated to `~/.mn`.
 
@@ -17,7 +17,7 @@ Each blueprint is separated into seven concerns:
 | Concern | Source | Purpose |
 |---|---|---|
 | Metadata | Root `index.json`, `manifest.json`, `config/default.json`, and blueprint `README.md` | Describes the product use case, target users, graph topology, runtime features, and output contract. |
-| Config | `config/default.json` plus `mn_blueprint_support.config.load_config` | Controls how the blueprint runs without changing code. |
+| Config | `config/default.json`, optional `config/overwrite.json`, and `mn_blueprint_support.config.load_config` | Controls how the blueprint runs without changing code. |
 | Inputs | `inputs` config section, payload fixtures, and `mn_blueprint_support.input_adapters.resolve_input_overrides` | Defines where data comes from. Defaults to mock data and supports real adapters. |
 | Simulation / logic | Worker payloads, blueprint-owned `scenario.json`, or specialized code | Evolves domain state over time. |
 | Optimization | Optional blueprint-owned `scenario.json` model declarations, such as Pyomo linear programs | Solves constrained action plans before agent explanation or execution. |
@@ -75,6 +75,12 @@ Every blueprint includes `config/default.json` with these sections:
 | `real_adapters` | Built-in extension points for replacing mocked data. |
 | `interfaces` | Declared identity fields, config sections, input adapters, and run artifacts. |
 | `execution_model` | Ordered lifecycle stages from metadata load to final artifact write. |
+
+Blueprints may include `config/overwrite.json` for local customer-specific values. The runtime merges configuration in this order: built-in shared defaults, `config/default.json`, `config/overwrite.json`, caller config files, inline config JSON, and final run-time flags.
+
+Manifest-backed blueprints can declare `manifest_config_bindings` in `config/default.json` to copy resolved config values into `manifest.json` just before submission. Use this instead of one-off `generate_bundle.py` scripts for customer-tunable node config, initial inputs, and worker environment values.
+
+Blueprints can also declare top-level `init_config_review` in `manifest.json` to identify fields the CLI or UI should ask the user to review before launch.
 
 Callers can override configuration with `--config`, `--config-json`, `--run-id`, `--runs-root`, `--input-file`, `--input-json`, or equivalent Python arguments.
 
@@ -219,6 +225,7 @@ python3 -m pytest tests/test_blueprint_library.py -m ollama -q
 The shared tests verify that every blueprint:
 
 - Has a loadable manifest and `config/default.json`.
+- Includes `config/overwrite.json`, even if the default overwrite is empty.
 - Declares standard identity, config, input, output, and execution interfaces.
 - Runs end to end with a fake LLM where the shared simulation runner applies.
 - Accepts required inputs and real-input adapter overrides.

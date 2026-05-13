@@ -1,0 +1,10 @@
+{
+  "motion": {
+    "good_agents": 25,
+    "adversaries": 75,
+    "obstacles": 8,
+    "max_cycles": 60,
+    "seed": 4200,
+    "policy_mode": "swarm"
+  }
+}

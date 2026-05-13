@@ -282,10 +282,14 @@ def test_every_blueprint_declares_standard_config_and_interfaces() -> None:
 
     for blueprint_id in blueprint_ids:
         config_path = ROOT / blueprint_id / "config" / "default.json"
+        overwrite_path = ROOT / blueprint_id / "config" / "overwrite.json"
         manifest_path = ROOT / blueprint_id / "manifest.json"
         assert config_path.exists(), f"{blueprint_id} missing config/default.json"
+        assert overwrite_path.exists(), f"{blueprint_id} missing config/overwrite.json"
 
         config = json.loads(config_path.read_text())
+        overwrite = json.loads(overwrite_path.read_text())
+        assert isinstance(overwrite, dict), f"{blueprint_id} config/overwrite.json must be an object"
         assert required_sections.issubset(config), blueprint_id
         assert config["standard_version"] == STANDARD_VERSION
         assert config["identity"]["blueprint_id"] == blueprint_id
@@ -384,6 +388,7 @@ def test_blueprint_standard_imports_shared_mn_skill_implementation() -> None:
 def test_blueprint_repo_does_not_carry_support_code() -> None:
     assert not (ROOT / "blueprints.py").exists()
     assert not (ROOT / "blueprint_runtime").exists()
+    assert not list(ROOT.glob("*/generate_bundle.py"))
 
 
 def test_renamed_blueprint_aliases_resolve_to_new_scenarios() -> None:

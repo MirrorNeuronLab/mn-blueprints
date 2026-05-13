@@ -1,0 +1,6 @@
+{
+  "benchmark": {
+    "max_attempts": 4,
+    "retry_backoff_ms": 500
+  }
+}

@@ -729,5 +729,41 @@
   "policies": {
     "recovery_mode": "cluster_recover"
   },
-  "requiredContextEngine": false
+  "requiredContextEngine": false,
+  "init_config_review": {
+    "required": false,
+    "instruction": "Review ecosystem simulation settings before launching the sandbox.",
+    "fields": [
+      {
+        "path": "ecosystem.total_animals",
+        "label": "Total animals",
+        "default": 2000,
+        "description": "Starting population across the fixed region topology."
+      },
+      {
+        "path": "ecosystem.duration_seconds",
+        "label": "Duration seconds",
+        "default": 300,
+        "description": "Simulation duration."
+      },
+      {
+        "path": "ecosystem.seed",
+        "label": "Simulation seed",
+        "default": 517498978,
+        "description": "Deterministic seed for repeatable runs."
+      },
+      {
+        "path": "ecosystem.migration_rate",
+        "label": "Migration rate",
+        "default": 0.035,
+        "description": "Per-tick migration pressure."
+      },
+      {
+        "path": "ecosystem.mutation_rate",
+        "label": "Mutation rate",
+        "default": 0.05,
+        "description": "Trait mutation rate."
+      }
+    ]
+  }
 }

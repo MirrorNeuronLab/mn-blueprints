@@ -1,0 +1,13 @@
+{
+  "video_source": {
+    "uri": "samples/door-demo.mp4"
+  },
+  "vl_model": {
+    "base_url": "http://192.168.4.173:11434",
+    "model": "nemotron3:33b"
+  },
+  "safety_alerts": {
+    "slack_enabled": "true",
+    "slack_channel": "#safety"
+  }
+}

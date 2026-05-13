@@ -28,7 +28,9 @@
       "llm",
       "outputs",
       "logging",
-      "real_adapters"
+      "real_adapters",
+      "motion",
+      "manifest_config_bindings"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -105,5 +107,83 @@
     "seed_field": "seed",
     "type": "Multi-agent particle environment."
   },
-  "standard_version": "1.0"
+  "standard_version": "1.0",
+  "motion": {
+    "good_agents": 25,
+    "adversaries": 75,
+    "total_agents": 100,
+    "obstacles": 8,
+    "max_cycles": 60,
+    "seed": 4200,
+    "policy_mode": "swarm",
+    "python_bin": "python3"
+  },
+  "manifest_config_bindings": [
+    {
+      "config_path": "motion.good_agents",
+      "manifest_path": "initial_inputs.ingress.0.good_agents"
+    },
+    {
+      "config_path": "motion.adversaries",
+      "manifest_path": "initial_inputs.ingress.0.adversaries"
+    },
+    {
+      "config_path": "motion.total_agents",
+      "manifest_path": "initial_inputs.ingress.0.total_agents"
+    },
+    {
+      "config_path": "motion.obstacles",
+      "manifest_path": "initial_inputs.ingress.0.obstacles"
+    },
+    {
+      "config_path": "motion.max_cycles",
+      "manifest_path": "initial_inputs.ingress.0.max_cycles"
+    },
+    {
+      "config_path": "motion.seed",
+      "manifest_path": "initial_inputs.ingress.0.seed"
+    },
+    {
+      "config_path": "motion.policy_mode",
+      "manifest_path": "initial_inputs.ingress.0.policy_mode"
+    },
+    {
+      "config_path": "motion.python_bin",
+      "manifest_path": "nodes.visualizer.config.command.0"
+    },
+    {
+      "config_path": "motion.python_bin",
+      "manifest_path": "nodes.shared_world.config.command.0"
+    },
+    {
+      "config_path": "motion.seed",
+      "manifest_path": "nodes.shared_world.config.environment.SIMULATION_SEED",
+      "stringify": true
+    },
+    {
+      "config_path": "motion.max_cycles",
+      "manifest_path": "nodes.shared_world.config.environment.MAX_CYCLES",
+      "stringify": true
+    },
+    {
+      "config_path": "motion.good_agents",
+      "manifest_path": "nodes.shared_world.config.environment.NUM_GOOD",
+      "stringify": true
+    },
+    {
+      "config_path": "motion.adversaries",
+      "manifest_path": "nodes.shared_world.config.environment.NUM_ADVERSARIES",
+      "stringify": true
+    },
+    {
+      "config_path": "motion.obstacles",
+      "manifest_path": "nodes.shared_world.config.environment.NUM_OBSTACLES",
+      "stringify": true
+    },
+    {
+      "config_path": "motion.policy_mode",
+      "manifest_path": "nodes.shared_world.config.environment.POLICY_MODE",
+      "stringify": true
+    }
+  ]
 }

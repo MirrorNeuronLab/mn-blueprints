@@ -28,7 +28,9 @@
       "llm",
       "outputs",
       "logging",
-      "real_adapters"
+      "real_adapters",
+      "benchmark",
+      "manifest_config_bindings"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -104,5 +106,19 @@
     "seed_field": "seed",
     "type": "Parallel synthetic workload sweep."
   },
-  "standard_version": "1.0"
+  "standard_version": "1.0",
+  "benchmark": {
+    "max_attempts": 4,
+    "retry_backoff_ms": 500
+  },
+  "manifest_config_bindings": [
+    {
+      "config_path": "benchmark.max_attempts",
+      "manifest_path": "nodes.prime_worker_*.config.max_attempts"
+    },
+    {
+      "config_path": "benchmark.retry_backoff_ms",
+      "manifest_path": "nodes.prime_worker_*.config.retry_backoff_ms"
+    }
+  ]
 }

@@ -28,7 +28,11 @@
       "llm",
       "outputs",
       "logging",
-      "real_adapters"
+      "real_adapters",
+      "video_source",
+      "vl_model",
+      "safety_alerts",
+      "manifest_config_bindings"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -104,5 +108,101 @@
     "seed_field": "seed",
     "type": "Video stream sampling with alert state."
   },
-  "standard_version": "1.0"
+  "standard_version": "1.0",
+  "video_source": {
+    "uri": "samples/door-demo.mp4",
+    "camera_id": "front-door",
+    "interval_ms": 5000,
+    "frame_sample_seconds": 5.0,
+    "frame_jpeg_max_width": 896
+  },
+  "vl_model": {
+    "base_url": "http://192.168.4.173:11434",
+    "model": "nemotron3:33b"
+  },
+  "safety_alerts": {
+    "confidence_threshold": 0.65,
+    "alert_cooldown_seconds": 60,
+    "slack_enabled": "true",
+    "slack_channel": "#safety",
+    "slack_message_prefix": "Door camera safety alert"
+  },
+  "manifest_config_bindings": [
+    {
+      "config_path": "video_source.camera_id",
+      "manifest_path": "nodes.door_camera_tick_source.config.camera_id"
+    },
+    {
+      "config_path": "video_source.interval_ms",
+      "manifest_path": "nodes.door_camera_tick_source.config.interval_ms"
+    },
+    {
+      "config_path": "video_source.uri",
+      "manifest_path": "nodes.person_detector.config.environment.VIDEO_SOURCE_URI",
+      "stringify": true
+    },
+    {
+      "config_path": "video_source.frame_sample_seconds",
+      "manifest_path": "nodes.person_detector.config.environment.FRAME_SAMPLE_SECONDS",
+      "stringify": true
+    },
+    {
+      "config_path": "video_source.frame_jpeg_max_width",
+      "manifest_path": "nodes.person_detector.config.environment.FRAME_JPEG_MAX_WIDTH",
+      "stringify": true
+    },
+    {
+      "config_path": "vl_model.base_url",
+      "manifest_path": "initial_inputs.ingress.0.ollama_base_url"
+    },
+    {
+      "config_path": "vl_model.base_url",
+      "manifest_path": "nodes.person_detector.config.environment.OLLAMA_BASE_URL",
+      "stringify": true
+    },
+    {
+      "config_path": "vl_model.base_url",
+      "manifest_path": "nodes.person_detector.config.environment.VL_MODEL_BASE_URL",
+      "stringify": true
+    },
+    {
+      "config_path": "vl_model.model",
+      "manifest_path": "initial_inputs.ingress.0.ollama_model"
+    },
+    {
+      "config_path": "vl_model.model",
+      "manifest_path": "nodes.person_detector.config.environment.OLLAMA_MODEL",
+      "stringify": true
+    },
+    {
+      "config_path": "vl_model.model",
+      "manifest_path": "nodes.person_detector.config.environment.VL_MODEL_NAME",
+      "stringify": true
+    },
+    {
+      "config_path": "safety_alerts.confidence_threshold",
+      "manifest_path": "nodes.person_detector.config.environment.PERSON_DETECTION_CONFIDENCE_THRESHOLD",
+      "stringify": true
+    },
+    {
+      "config_path": "safety_alerts.alert_cooldown_seconds",
+      "manifest_path": "nodes.person_detector.config.environment.PERSON_ALERT_COOLDOWN_SECONDS",
+      "stringify": true
+    },
+    {
+      "config_path": "safety_alerts.slack_enabled",
+      "manifest_path": "nodes.person_detector.config.environment.SLACK_ALERT_ENABLED",
+      "stringify": true
+    },
+    {
+      "config_path": "safety_alerts.slack_channel",
+      "manifest_path": "nodes.person_detector.config.environment.SLACK_DEFAULT_CHANNEL",
+      "stringify": true
+    },
+    {
+      "config_path": "safety_alerts.slack_message_prefix",
+      "manifest_path": "nodes.person_detector.config.environment.SLACK_MESSAGE_PREFIX",
+      "stringify": true
+    }
+  ]
 }

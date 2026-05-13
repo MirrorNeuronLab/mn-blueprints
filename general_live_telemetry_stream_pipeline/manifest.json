@@ -168,5 +168,41 @@
     "recovery_mode": "cluster_recover",
     "stream_mode": "live"
   },
-  "requiredContextEngine": false
+  "requiredContextEngine": false,
+  "init_config_review": {
+    "required": false,
+    "instruction": "Review telemetry source and peak detection settings before launching the stream pipeline.",
+    "fields": [
+      {
+        "path": "telemetry.device_id",
+        "label": "Device ID",
+        "default": "sensor-alpha",
+        "description": "Telemetry source identifier."
+      },
+      {
+        "path": "telemetry.interval_ms",
+        "label": "Interval ms",
+        "default": 1000,
+        "description": "Milliseconds between telemetry chunks."
+      },
+      {
+        "path": "telemetry.content_encoding",
+        "label": "Content encoding",
+        "default": "gzip",
+        "description": "Telemetry chunk encoding: gzip or identity."
+      },
+      {
+        "path": "peak_detection.spike_multiplier",
+        "label": "Spike multiplier",
+        "default": 2.4,
+        "description": "Sensitivity multiplier for peak detection."
+      },
+      {
+        "path": "peak_detection.min_spike_delta",
+        "label": "Min spike delta",
+        "default": 20.0,
+        "description": "Minimum absolute signal jump to count as a spike."
+      }
+    ]
+  }
 }

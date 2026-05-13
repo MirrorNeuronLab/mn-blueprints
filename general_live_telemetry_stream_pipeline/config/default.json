@@ -28,7 +28,10 @@
       "llm",
       "outputs",
       "logging",
-      "real_adapters"
+      "real_adapters",
+      "telemetry",
+      "peak_detection",
+      "manifest_config_bindings"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -104,5 +107,75 @@
     "seed_field": "seed",
     "type": "Live telemetry stream."
   },
-  "standard_version": "1.0"
+  "standard_version": "1.0",
+  "telemetry": {
+    "chunk_size": 6,
+    "interval_ms": 1000,
+    "baseline": 24,
+    "jitter": 4,
+    "peak_height": 55,
+    "peak_every": 20,
+    "device_id": "sensor-alpha",
+    "content_encoding": "gzip"
+  },
+  "peak_detection": {
+    "warmup_points": 5,
+    "window_size": 8,
+    "spike_multiplier": 2.4,
+    "min_spike_delta": 20.0
+  },
+  "manifest_config_bindings": [
+    {
+      "config_path": "telemetry.chunk_size",
+      "manifest_path": "nodes.telemetry_source.config.chunk_size"
+    },
+    {
+      "config_path": "telemetry.interval_ms",
+      "manifest_path": "nodes.telemetry_source.config.interval_ms"
+    },
+    {
+      "config_path": "telemetry.baseline",
+      "manifest_path": "nodes.telemetry_source.config.baseline"
+    },
+    {
+      "config_path": "telemetry.jitter",
+      "manifest_path": "nodes.telemetry_source.config.jitter"
+    },
+    {
+      "config_path": "telemetry.peak_height",
+      "manifest_path": "nodes.telemetry_source.config.peak_height"
+    },
+    {
+      "config_path": "telemetry.peak_every",
+      "manifest_path": "nodes.telemetry_source.config.peak_every"
+    },
+    {
+      "config_path": "telemetry.device_id",
+      "manifest_path": "nodes.telemetry_source.config.device_id"
+    },
+    {
+      "config_path": "telemetry.content_encoding",
+      "manifest_path": "nodes.telemetry_source.config.content_encoding"
+    },
+    {
+      "config_path": "peak_detection.warmup_points",
+      "manifest_path": "nodes.peak_detector.config.environment.WARMUP_POINTS",
+      "stringify": true
+    },
+    {
+      "config_path": "peak_detection.window_size",
+      "manifest_path": "nodes.peak_detector.config.environment.WINDOW_SIZE",
+      "stringify": true
+    },
+    {
+      "config_path": "peak_detection.spike_multiplier",
+      "manifest_path": "nodes.peak_detector.config.environment.SPIKE_MULTIPLIER",
+      "stringify": true
+    },
+    {
+      "config_path": "peak_detection.min_spike_delta",
+      "manifest_path": "nodes.peak_detector.config.environment.MIN_SPIKE_DELTA",
+      "stringify": true
+    }
+  ]
 }

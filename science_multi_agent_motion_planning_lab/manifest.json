@@ -203,5 +203,47 @@
   "policies": {
     "recovery_mode": "cluster_recover"
   },
-  "requiredContextEngine": false
+  "requiredContextEngine": false,
+  "init_config_review": {
+    "required": false,
+    "instruction": "Review shared-world simulation settings before launching the motion planning lab.",
+    "fields": [
+      {
+        "path": "motion.good_agents",
+        "label": "Good agents",
+        "default": 25,
+        "description": "Number of cooperative agents."
+      },
+      {
+        "path": "motion.adversaries",
+        "label": "Adversaries",
+        "default": 75,
+        "description": "Number of adversarial agents."
+      },
+      {
+        "path": "motion.obstacles",
+        "label": "Obstacles",
+        "default": 8,
+        "description": "Number of obstacles in the world."
+      },
+      {
+        "path": "motion.max_cycles",
+        "label": "Max cycles",
+        "default": 60,
+        "description": "Simulation cycle count."
+      },
+      {
+        "path": "motion.seed",
+        "label": "Simulation seed",
+        "default": 4200,
+        "description": "Deterministic seed for repeatable runs."
+      },
+      {
+        "path": "motion.policy_mode",
+        "label": "Policy mode",
+        "default": "swarm",
+        "description": "Agent policy: swarm or random."
+      }
+    ]
+  }
 }

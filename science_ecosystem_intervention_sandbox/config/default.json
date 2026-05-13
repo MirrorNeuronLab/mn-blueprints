@@ -28,7 +28,9 @@
       "llm",
       "outputs",
       "logging",
-      "real_adapters"
+      "real_adapters",
+      "ecosystem",
+      "manifest_config_bindings"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -104,5 +106,137 @@
     "seed_field": "seed",
     "type": "Multi-region population dynamics."
   },
-  "standard_version": "1.0"
+  "standard_version": "1.0",
+  "ecosystem": {
+    "total_animals": 2000,
+    "region_count": 16,
+    "duration_seconds": 300,
+    "tick_seconds": 5,
+    "max_food": 420.0,
+    "food_regen_per_tick": 72.0,
+    "max_region_population": 220,
+    "migration_rate": 0.035,
+    "mutation_rate": 0.05,
+    "tick_delay_ms": 1000,
+    "seed": 517498978,
+    "local_top_k": 20
+  },
+  "manifest_config_bindings": [
+    {
+      "config_path": "ecosystem.total_animals",
+      "manifest_path": "initial_inputs.ingress.0.animals"
+    },
+    {
+      "config_path": "ecosystem.duration_seconds",
+      "manifest_path": "initial_inputs.ingress.0.duration_seconds"
+    },
+    {
+      "config_path": "ecosystem.tick_seconds",
+      "manifest_path": "initial_inputs.ingress.0.tick_seconds"
+    },
+    {
+      "config_path": "ecosystem.max_region_population",
+      "manifest_path": "initial_inputs.ingress.0.max_region_population"
+    },
+    {
+      "config_path": "ecosystem.seed",
+      "manifest_path": "initial_inputs.ingress.0.seed"
+    },
+    {
+      "config_path": "ecosystem.total_animals",
+      "manifest_path": "nodes.world.config.total_animals"
+    },
+    {
+      "config_path": "ecosystem.region_count",
+      "manifest_path": "nodes.world.config.region_count"
+    },
+    {
+      "config_path": "ecosystem.duration_seconds",
+      "manifest_path": "nodes.world.config.duration_seconds"
+    },
+    {
+      "config_path": "ecosystem.tick_seconds",
+      "manifest_path": "nodes.world.config.tick_seconds"
+    },
+    {
+      "config_path": "ecosystem.max_food",
+      "manifest_path": "nodes.world.config.max_food"
+    },
+    {
+      "config_path": "ecosystem.food_regen_per_tick",
+      "manifest_path": "nodes.world.config.food_regen_per_tick"
+    },
+    {
+      "config_path": "ecosystem.max_region_population",
+      "manifest_path": "nodes.world.config.max_region_population"
+    },
+    {
+      "config_path": "ecosystem.migration_rate",
+      "manifest_path": "nodes.world.config.migration_rate"
+    },
+    {
+      "config_path": "ecosystem.mutation_rate",
+      "manifest_path": "nodes.world.config.mutation_rate"
+    },
+    {
+      "config_path": "ecosystem.tick_delay_ms",
+      "manifest_path": "nodes.world.config.tick_delay_ms"
+    },
+    {
+      "config_path": "ecosystem.seed",
+      "manifest_path": "nodes.world.config.seed"
+    },
+    {
+      "config_path": "ecosystem.local_top_k",
+      "manifest_path": "nodes.world.config.local_top_k"
+    },
+    {
+      "config_path": "ecosystem.total_animals",
+      "manifest_path": "nodes.region_*.config.total_animals"
+    },
+    {
+      "config_path": "ecosystem.region_count",
+      "manifest_path": "nodes.region_*.config.region_count"
+    },
+    {
+      "config_path": "ecosystem.duration_seconds",
+      "manifest_path": "nodes.region_*.config.duration_seconds"
+    },
+    {
+      "config_path": "ecosystem.tick_seconds",
+      "manifest_path": "nodes.region_*.config.tick_seconds"
+    },
+    {
+      "config_path": "ecosystem.max_food",
+      "manifest_path": "nodes.region_*.config.max_food"
+    },
+    {
+      "config_path": "ecosystem.food_regen_per_tick",
+      "manifest_path": "nodes.region_*.config.food_regen_per_tick"
+    },
+    {
+      "config_path": "ecosystem.max_region_population",
+      "manifest_path": "nodes.region_*.config.max_region_population"
+    },
+    {
+      "config_path": "ecosystem.migration_rate",
+      "manifest_path": "nodes.region_*.config.migration_rate"
+    },
+    {
+      "config_path": "ecosystem.mutation_rate",
+      "manifest_path": "nodes.region_*.config.mutation_rate"
+    },
+    {
+      "config_path": "ecosystem.tick_delay_ms",
+      "manifest_path": "nodes.region_*.config.tick_delay_ms"
+    },
+    {
+      "config_path": "ecosystem.seed",
+      "manifest_path": "nodes.region_*.config.seed"
+    },
+    {
+      "config_path": "ecosystem.local_top_k",
+      "manifest_path": "nodes.region_*.config.local_top_k"
+    }
+  ]
 }

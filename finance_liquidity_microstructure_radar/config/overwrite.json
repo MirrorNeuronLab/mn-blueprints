@@ -1,0 +1,14 @@
+{
+  "market_stream": {
+    "symbols": "AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA",
+    "seed": 729905862
+  },
+  "llm": {
+    "model": "ollama/nemotron3:33b",
+    "api_base": "http://192.168.4.173:11434"
+  },
+  "alerts": {
+    "slack_enabled": true,
+    "slack_channel": "#claw"
+  }
+}

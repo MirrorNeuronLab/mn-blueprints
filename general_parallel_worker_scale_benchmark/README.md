@@ -42,6 +42,7 @@ The runtime fans out numeric range checks, collects worker outputs, and summariz
 |---|---|---|---|
 | `manifest.json` initial inputs | Sample payloads routed into dispatcher. | `initial_inputs` | Yes |
 | `config/default.json` | Standard identity, mock input, LLM, output, logging, and adapter settings. | `outputs.run_root` | Yes |
+| `config/overwrite.json` | Local overwrite values layered on top of defaults before launch. | `vl_model.model`, `outputs.run_root` | Yes |
 | Payload fixtures | Bundled synthetic data, policies, scripts, templates, or media used by workers. | `payloads/` or `input/` | Yes |
 | Environment variables | Runtime and provider settings for local services or optional integrations. | `MN_LLM_MODEL`, `MN_BLUEPRINT_QUICK_TEST` | Yes |
 
@@ -52,18 +53,18 @@ The runtime fans out numeric range checks, collects worker outputs, and summariz
 | Runtime events | Typed messages and worker events emitted through the manifest graph. | `blueprint_report`, worker-specific events |
 | Final artifact | The user-facing scale summary and worker completion metrics. | `result.json`, report, alert, or generated artifact |
 | Operational logs | Status lines and worker logs for debugging and audit. | `events.jsonl`, runtime logs, worker stderr |
-| Generated bundle or payload output | Files produced by bundle generation or specialized workers. | `bundle_summary.json`, `payloads/`, visual artifacts |
+| Payload output | Files produced by specialized workers. | `payloads/`, reports, visual artifacts |
 
 ## How to run
 
-Generate a quick deterministic bundle for local review:
+Run the committed blueprint bundle directly:
 
 ```bash
 cd general_parallel_worker_scale_benchmark
-python3 generate_bundle.py --quick-test --output-dir /tmp/mirror-neuron-bundles
+mn blueprint run .
 ```
 
-Then run the generated bundle with your MirrorNeuron runtime entrypoint. Use `config/default.json` and `manifest.json` as the stable contract while replacing bundled fixtures with real data.
+Use `config/default.json` as the stable default contract and `config/overwrite.json` for local customer-specific values. When a blueprint declares `init_config_review`, the CLI can review those fields before launch and apply the answers as runtime config overrides.
 
 Run the shared repository tests:
 

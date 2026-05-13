@@ -4248,5 +4248,23 @@
   "policies": {
     "recovery_mode": "cluster_recover"
   },
-  "requiredContextEngine": false
+  "requiredContextEngine": false,
+  "init_config_review": {
+    "required": false,
+    "instruction": "Review retry settings before launching the fixed-topology parallel worker benchmark.",
+    "fields": [
+      {
+        "path": "benchmark.max_attempts",
+        "label": "Max attempts",
+        "default": 4,
+        "description": "Retry attempts per prime worker."
+      },
+      {
+        "path": "benchmark.retry_backoff_ms",
+        "label": "Retry backoff ms",
+        "default": 500,
+        "description": "Base retry backoff for transient sandbox failures."
+      }
+    ]
+  }
 }

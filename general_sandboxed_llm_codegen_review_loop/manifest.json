@@ -440,5 +440,35 @@
   ],
   "policies": {
     "recovery_mode": "cluster_recover"
+  },
+  "init_config_review": {
+    "required": false,
+    "instruction": "Review model, sandbox retry, and task settings before launching the codegen loop.",
+    "fields": [
+      {
+        "path": "llm.model",
+        "label": "LLM model",
+        "default": "ollama/nemotron3:33b",
+        "description": "Model used by codegen and review workers."
+      },
+      {
+        "path": "llm.api_base",
+        "label": "LLM API base",
+        "default": "http://192.168.4.173:11434",
+        "description": "LiteLLM/Ollama-compatible API base URL."
+      },
+      {
+        "path": "sandbox.max_attempts",
+        "label": "Max attempts",
+        "default": 2,
+        "description": "Retry attempts per sandboxed worker."
+      },
+      {
+        "path": "task.title",
+        "label": "Task title",
+        "default": "Inventory report CLI",
+        "description": "Human-readable coding task title."
+      }
+    ]
   }
 }

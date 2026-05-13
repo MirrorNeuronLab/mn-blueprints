@@ -1031,5 +1031,47 @@
     "recovery_mode": "cluster_recover",
     "stream_mode": "live"
   },
-  "requiredContextEngine": false
+  "requiredContextEngine": false,
+  "init_config_review": {
+    "required": false,
+    "instruction": "Review market stream, LLM, and alert settings before launching the liquidity radar.",
+    "fields": [
+      {
+        "path": "market_stream.symbols",
+        "label": "Symbols",
+        "default": "AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA",
+        "description": "Comma-separated symbols for the synthetic market stream."
+      },
+      {
+        "path": "market_stream.seed",
+        "label": "Market seed",
+        "default": 729905862,
+        "description": "Deterministic seed for repeatable market data."
+      },
+      {
+        "path": "llm.model",
+        "label": "LLM model",
+        "default": "ollama/nemotron3:33b",
+        "description": "Model used for market explanations."
+      },
+      {
+        "path": "llm.api_base",
+        "label": "LLM API base",
+        "default": "http://192.168.4.173:11434",
+        "description": "LiteLLM/Ollama-compatible API base URL."
+      },
+      {
+        "path": "alerts.slack_enabled",
+        "label": "Slack alerts enabled",
+        "default": true,
+        "description": "Enable advisor Slack-style alerts."
+      },
+      {
+        "path": "alerts.slack_channel",
+        "label": "Slack channel",
+        "default": "#claw",
+        "description": "Destination channel for market alerts."
+      }
+    ]
+  }
 }

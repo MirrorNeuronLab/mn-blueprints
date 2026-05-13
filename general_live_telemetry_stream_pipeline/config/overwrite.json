@@ -1,0 +1,11 @@
+{
+  "telemetry": {
+    "device_id": "sensor-alpha",
+    "interval_ms": 1000,
+    "content_encoding": "gzip"
+  },
+  "peak_detection": {
+    "spike_multiplier": 2.4,
+    "min_spike_delta": 20.0
+  }
+}

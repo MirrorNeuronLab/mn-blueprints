@@ -28,7 +28,10 @@
       "llm",
       "outputs",
       "logging",
-      "real_adapters"
+      "real_adapters",
+      "task",
+      "sandbox",
+      "manifest_config_bindings"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -56,6 +59,7 @@
   "llm": {
     "agent_role": "Codegen agent, review agent, validator.",
     "api_base": "http://192.168.4.173:11434",
+    "api_key": "",
     "mock_mode": "fake",
     "mode": "ollama",
     "model": "ollama/nemotron3:33b"
@@ -104,5 +108,110 @@
     "seed_field": "seed",
     "type": "Iterative code-review decision loop."
   },
-  "standard_version": "1.0"
+  "standard_version": "1.0",
+  "task": {
+    "task_id": "inventory-report-cli",
+    "title": "Inventory report CLI",
+    "description": "Create a Python 3 script named inventory_report.py. The script must read a JSON array of inventory records from a file passed with --input or from stdin when --input is omitted. Each record has sku, category, quantity, and price. The CLI must support --format text|json and --low-stock-threshold (default 5).",
+    "requirements": [
+      "Use only the Python standard library.",
+      "Include a pure function build_report(records, low_stock_threshold=5).",
+      "The JSON output must include total_quantity, total_value, category_totals, and low_stock_skus.",
+      "Category totals must be sorted alphabetically by category name.",
+      "low_stock_skus must be sorted alphabetically.",
+      "Round total_value to two decimal places.",
+      "Expose a main() entrypoint and guard it with if __name__ == '__main__'."
+    ],
+    "sample_records": [
+      {
+        "sku": "A-100",
+        "category": "books",
+        "quantity": 3,
+        "price": 12.5
+      },
+      {
+        "sku": "B-200",
+        "category": "books",
+        "quantity": 7,
+        "price": 8.0
+      },
+      {
+        "sku": "C-300",
+        "category": "games",
+        "quantity": 2,
+        "price": 59.99
+      }
+    ],
+    "validation": {
+      "low_stock_threshold": 4,
+      "expected": {
+        "total_quantity": 12,
+        "total_value": 213.48,
+        "category_totals": [
+          {
+            "category": "books",
+            "quantity": 10
+          },
+          {
+            "category": "games",
+            "quantity": 2
+          }
+        ],
+        "low_stock_skus": [
+          "A-100",
+          "C-300"
+        ]
+      }
+    }
+  },
+  "sandbox": {
+    "max_attempts": 2,
+    "retry_backoff_ms": 500
+  },
+  "manifest_config_bindings": [
+    {
+      "config_path": "task",
+      "manifest_path": "initial_inputs.codegen_round_1.0"
+    },
+    {
+      "config_path": "llm.model",
+      "manifest_path": "nodes.*.config.environment.LITELLM_MODEL",
+      "stringify": true
+    },
+    {
+      "config_path": "llm.model",
+      "manifest_path": "nodes.*.config.environment.MN_LLM_MODEL",
+      "stringify": true
+    },
+    {
+      "config_path": "llm.api_base",
+      "manifest_path": "nodes.*.config.environment.LITELLM_API_BASE",
+      "stringify": true
+    },
+    {
+      "config_path": "llm.api_base",
+      "manifest_path": "nodes.*.config.environment.MN_LLM_API_BASE",
+      "stringify": true
+    },
+    {
+      "config_path": "llm.api_key",
+      "manifest_path": "nodes.*.config.environment.LITELLM_API_KEY",
+      "stringify": true,
+      "allow_null": true
+    },
+    {
+      "config_path": "llm.api_key",
+      "manifest_path": "nodes.*.config.environment.MN_LLM_API_KEY",
+      "stringify": true,
+      "allow_null": true
+    },
+    {
+      "config_path": "sandbox.max_attempts",
+      "manifest_path": "nodes.*.config.max_attempts"
+    },
+    {
+      "config_path": "sandbox.retry_backoff_ms",
+      "manifest_path": "nodes.*.config.retry_backoff_ms"
+    }
+  ]
 }

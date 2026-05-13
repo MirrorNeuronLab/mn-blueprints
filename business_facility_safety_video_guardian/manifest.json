@@ -173,5 +173,41 @@
     "recovery_mode": "cluster_recover",
     "stream_mode": "live"
   },
-  "requiredContextEngine": false
+  "requiredContextEngine": false,
+  "init_config_review": {
+    "required": false,
+    "instruction": "Review camera, model, and alert settings before launching the video safety monitor.",
+    "fields": [
+      {
+        "path": "video_source.uri",
+        "label": "Video source",
+        "default": "samples/door-demo.mp4",
+        "description": "Camera stream URI or bundled demo video path."
+      },
+      {
+        "path": "vl_model.base_url",
+        "label": "VL model URL",
+        "default": "http://192.168.4.173:11434",
+        "description": "Ollama-compatible vision-language model server."
+      },
+      {
+        "path": "vl_model.model",
+        "label": "VL model name",
+        "default": "nemotron3:33b",
+        "description": "Vision-language model used to inspect sampled frames."
+      },
+      {
+        "path": "safety_alerts.slack_enabled",
+        "label": "Slack alerts enabled",
+        "default": "true",
+        "description": "Set false to suppress Slack-style notifications."
+      },
+      {
+        "path": "safety_alerts.slack_channel",
+        "label": "Slack channel",
+        "default": "#safety",
+        "description": "Destination channel for safety alerts."
+      }
+    ]
+  }
 }

@@ -36,6 +36,36 @@
     "codegen_round_1"
   ],
   "graph_id": "general_sandboxed_llm_codegen_review_loop_v1",
+  "init_config_review": {
+    "fields": [
+      {
+        "default": "ollama/nemotron3:33b",
+        "description": "Model used by codegen and review workers.",
+        "label": "LLM model",
+        "path": "llm.model"
+      },
+      {
+        "default": "http://192.168.4.173:11434",
+        "description": "LiteLLM/Ollama-compatible API base URL.",
+        "label": "LLM API base",
+        "path": "llm.api_base"
+      },
+      {
+        "default": 2,
+        "description": "Retry attempts per sandboxed worker.",
+        "label": "Max attempts",
+        "path": "sandbox.max_attempts"
+      },
+      {
+        "default": "Inventory report CLI",
+        "description": "Human-readable coding task title.",
+        "label": "Task title",
+        "path": "task.title"
+      }
+    ],
+    "instruction": "Review model, sandbox retry, and task settings before launching the codegen loop.",
+    "required": false
+  },
   "initial_inputs": {
     "codegen_round_1": [
       {
@@ -100,18 +130,143 @@
   "metadata": {
     "blueprint_id": "general_sandboxed_llm_codegen_review_loop",
     "category": "general",
+    "configuration_contract": {
+      "optional_files": [
+        "scenario.json",
+        "config/overwrite.json"
+      ],
+      "required_files": [
+        "manifest.json",
+        "README.md",
+        "SPEC.md",
+        "config/default.json",
+        "payloads/"
+      ]
+    },
     "customizable_for": "Internal developer tools, data scripts, code repair, controlled automation.",
     "description": "Generate, review, and validate code through a sandboxed multi-step LLM loop.",
-    "interfaces": {
-      "config": [
-        "metadata",
+    "init_config_review": {
+      "checks": [
         "identity",
+        "mode",
+        "inputs",
+        "streams",
+        "input_skills",
+        "outputs",
+        "privacy",
+        "budgets"
+      ],
+      "required": true
+    },
+    "interfaces": {
+      "channels": {
+        "artifacts": {
+          "artifacts": [
+            "run.json",
+            "config.json",
+            "inputs.json",
+            "events.jsonl",
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Stable run-store files and domain-specific outputs.",
+          "optional_artifacts": [
+            "job.json",
+            "web_ui.json",
+            "ui.json",
+            "web/index.html",
+            "logs.jsonl"
+          ]
+        },
+        "events": {
+          "artifact": "events.jsonl",
+          "description": "Append-only workflow events."
+        },
+        "input_skills": {
+          "description": "Connector-backed or reusable skill-backed input sources."
+        },
+        "inputs": {
+          "artifact": "inputs.json",
+          "description": "Resolved runtime inputs and adapter provenance."
+        },
+        "logs": {
+          "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "stream": "stdout/stderr"
+        },
+        "output_skills": {
+          "description": "Optional fan-out destinations after local run-store writes."
+        },
+        "outputs": {
+          "artifacts": [
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Primary result and final user-facing artifact."
+        },
+        "streams": {
+          "default": [
+            "events"
+          ],
+          "description": "Named data or event streams exposed by the blueprint.",
+          "kinds": [
+            "audio",
+            "video",
+            "data",
+            "multimodal"
+          ],
+          "transports": [
+            "file",
+            "http",
+            "https",
+            "rtsp",
+            "rtmp",
+            "webrtc",
+            "websocket",
+            "socketio",
+            "tcp",
+            "udp",
+            "sse",
+            "kafka",
+            "mqtt",
+            "custom"
+          ]
+        },
+        "web_ui": {
+          "artifacts": [
+            "web_ui.json",
+            "ui.json",
+            "web/index.html"
+          ],
+          "description": "Optional web input/output handles."
+        }
+      },
+      "config": [
+        "standard_version",
+        "identity",
+        "mode",
+        "metadata",
         "inputs",
         "simulation",
         "llm",
         "outputs",
         "logging",
-        "real_adapters"
+        "real_adapters",
+        "streams",
+        "input_skills",
+        "output_skills",
+        "error_handling",
+        "state",
+        "capabilities",
+        "privacy",
+        "triggers",
+        "backpressure",
+        "determinism",
+        "schemas",
+        "budgets",
+        "agent_handoffs",
+        "web_ui",
+        "interfaces",
+        "execution_model"
       ],
       "identity": [
         "blueprint_id",
@@ -124,6 +279,13 @@
         "file",
         "env_json"
       ],
+      "optional_outputs": [
+        "job.json",
+        "web_ui.json",
+        "ui.json",
+        "web/index.html",
+        "logs.jsonl"
+      ],
       "output_adapters": [
         "local_run_store"
       ],
@@ -134,6 +296,35 @@
         "events.jsonl",
         "result.json",
         "final_artifact.json"
+      ],
+      "response_schema": "mn.blueprint.response.v1",
+      "stream_kinds": [
+        "audio",
+        "video",
+        "data",
+        "multimodal"
+      ],
+      "stream_transports": [
+        "file",
+        "http",
+        "https",
+        "rtsp",
+        "rtmp",
+        "webrtc",
+        "websocket",
+        "socketio",
+        "tcp",
+        "udp",
+        "sse",
+        "kafka",
+        "mqtt",
+        "custom"
+      ],
+      "web_ui_adapters": [
+        "none",
+        "static_html",
+        "gradio",
+        "custom"
       ]
     },
     "llm": {},
@@ -142,6 +333,12 @@
     "output": "Generated code, review history, and validation result.",
     "output_contract": {
       "events": "typed event objects with payload",
+      "events_jsonl": "events.jsonl",
+      "final_artifact_json": "final_artifact.json",
+      "local_run_store": "~/.mn/runs/<run_id>/",
+      "logs_jsonl": "logs.jsonl",
+      "response_schema": "mn.blueprint.response.v1",
+      "result_json": "result.json",
       "status": "sent to stderr as JSON lines",
       "stdout": "single JSON object or bundle path"
     },
@@ -161,7 +358,22 @@
     "standard": {
       "config_path": "config/default.json",
       "default_input_adapter": "mock",
-      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "execution_model": "load_metadata -> resolve_config -> load_inputs -> start_run_store -> observe_simulation_state -> call_llm_agent -> evaluate_workflow_state -> route_by_context -> request_human_input -> apply_decision_to_simulation -> emit_events -> write_final_artifact -> fan_out_output_skills",
+      "execution_steps": [
+        "load_metadata",
+        "resolve_config",
+        "load_inputs",
+        "start_run_store",
+        "observe_simulation_state",
+        "call_llm_agent",
+        "evaluate_workflow_state",
+        "route_by_context",
+        "request_human_input",
+        "apply_decision_to_simulation",
+        "emit_events",
+        "write_final_artifact",
+        "fan_out_output_skills"
+      ],
       "output_adapter": "local_run_store",
       "real_input_adapters": [
         "file",
@@ -440,35 +652,5 @@
   ],
   "policies": {
     "recovery_mode": "cluster_recover"
-  },
-  "init_config_review": {
-    "required": false,
-    "instruction": "Review model, sandbox retry, and task settings before launching the codegen loop.",
-    "fields": [
-      {
-        "path": "llm.model",
-        "label": "LLM model",
-        "default": "ollama/nemotron3:33b",
-        "description": "Model used by codegen and review workers."
-      },
-      {
-        "path": "llm.api_base",
-        "label": "LLM API base",
-        "default": "http://192.168.4.173:11434",
-        "description": "LiteLLM/Ollama-compatible API base URL."
-      },
-      {
-        "path": "sandbox.max_attempts",
-        "label": "Max attempts",
-        "default": 2,
-        "description": "Retry attempts per sandboxed worker."
-      },
-      {
-        "path": "task.title",
-        "label": "Task title",
-        "default": "Inventory report CLI",
-        "description": "Human-readable coding task title."
-      }
-    ]
   }
 }

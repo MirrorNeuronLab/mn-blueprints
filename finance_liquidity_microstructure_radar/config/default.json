@@ -1,4 +1,70 @@
 {
+  "agent_handoffs": {},
+  "alerts": {
+    "advice_interval_ticks": 5,
+    "important_move_pct": 1.5,
+    "slack_channel": "#claw",
+    "slack_cooldown_ticks_per_symbol": 20,
+    "slack_digest_every_ticks": 100,
+    "slack_enabled": true,
+    "slack_min_confidence": 0.65,
+    "slack_policy_mode": "important_only"
+  },
+  "backpressure": {
+    "drop_policy": "skip_with_error",
+    "llm": {
+      "max_calls_per_minute": 30,
+      "max_concurrent_calls": 2
+    },
+    "max_concurrency": 4,
+    "max_events_per_second": 10,
+    "queue_size": 1000
+  },
+  "budgets": {
+    "max_connector_reads": 500,
+    "max_connector_writes": 20,
+    "max_disk_mb": 250,
+    "max_llm_calls": 20,
+    "max_llm_tokens": 20000,
+    "max_runtime_seconds": 600,
+    "max_stream_duration_seconds": 3600
+  },
+  "capabilities": {
+    "optional": [
+      "llm.call",
+      "network.egress",
+      "stream.subscribe"
+    ],
+    "required": [
+      "filesystem.write"
+    ]
+  },
+  "determinism": {
+    "enabled": true,
+    "frozen_clock": null,
+    "replay": {
+      "from_events": "events.jsonl",
+      "from_inputs": "inputs.json",
+      "llm_mode": "mock"
+    },
+    "seed_field": "seed"
+  },
+  "error_handling": {
+    "default_mode": "stop",
+    "policies": {
+      "llm_call": {
+        "backoff_seconds": 2,
+        "max_attempts": 3,
+        "mode": "retry"
+      },
+      "optional_output": {
+        "mode": "skip"
+      },
+      "required_output": {
+        "mode": "stop"
+      }
+    }
+  },
   "execution_model": [
     "load_metadata",
     "resolve_config",
@@ -6,33 +72,133 @@
     "start_run_store",
     "observe_simulation_state",
     "call_llm_agent",
+    "evaluate_workflow_state",
+    "route_by_context",
+    "request_human_input",
     "apply_decision_to_simulation",
     "emit_events",
-    "write_final_artifact"
+    "write_final_artifact",
+    "fan_out_output_skills"
   ],
   "identity": {
     "blueprint_id": "finance_liquidity_microstructure_radar",
     "name": "Liquidity Microstructure Radar"
   },
+  "input_skills": {},
   "inputs": {
     "adapter": "mock",
     "description": "Default synthetic inputs bundled with the blueprint.",
     "payload": {}
   },
   "interfaces": {
+    "channels": {
+      "artifacts": {
+        "artifacts": [
+          "run.json",
+          "config.json",
+          "inputs.json",
+          "events.jsonl",
+          "result.json",
+          "final_artifact.json"
+        ],
+        "description": "Stable run-store files and domain-specific outputs.",
+        "optional_artifacts": [
+          "job.json",
+          "web_ui.json",
+          "ui.json",
+          "web/index.html",
+          "logs.jsonl"
+        ]
+      },
+      "events": {
+        "artifact": "events.jsonl",
+        "description": "Append-only workflow events."
+      },
+      "input_skills": {
+        "description": "Connector-backed or reusable skill-backed input sources."
+      },
+      "inputs": {
+        "artifact": "inputs.json",
+        "description": "Resolved runtime inputs and adapter provenance."
+      },
+      "logs": {
+        "description": "Runtime stdout/stderr and explicit log artifacts.",
+        "stream": "stdout/stderr"
+      },
+      "output_skills": {
+        "description": "Optional fan-out destinations after local run-store writes."
+      },
+      "outputs": {
+        "artifacts": [
+          "result.json",
+          "final_artifact.json"
+        ],
+        "description": "Primary result and final user-facing artifact."
+      },
+      "streams": {
+        "default": [
+          "events"
+        ],
+        "description": "Named data or event streams exposed by the blueprint.",
+        "kinds": [
+          "audio",
+          "video",
+          "data",
+          "multimodal"
+        ],
+        "transports": [
+          "file",
+          "http",
+          "https",
+          "rtsp",
+          "rtmp",
+          "webrtc",
+          "websocket",
+          "socketio",
+          "tcp",
+          "udp",
+          "sse",
+          "kafka",
+          "mqtt",
+          "custom"
+        ]
+      },
+      "web_ui": {
+        "artifacts": [
+          "web_ui.json",
+          "ui.json",
+          "web/index.html"
+        ],
+        "description": "Optional web input/output handles."
+      }
+    },
     "config_sections": [
-      "metadata",
+      "standard_version",
       "identity",
+      "mode",
+      "metadata",
       "inputs",
       "simulation",
       "llm",
       "outputs",
       "logging",
       "real_adapters",
-      "market_stream",
-      "market_llm",
-      "alerts",
-      "manifest_config_bindings"
+      "streams",
+      "input_skills",
+      "output_skills",
+      "error_handling",
+      "state",
+      "capabilities",
+      "privacy",
+      "triggers",
+      "backpressure",
+      "determinism",
+      "schemas",
+      "budgets",
+      "agent_handoffs",
+      "web_ui",
+      "interfaces",
+      "execution_model"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -45,9 +211,17 @@
       "file",
       "env_json"
     ],
+    "optional_run_artifacts": [
+      "job.json",
+      "web_ui.json",
+      "ui.json",
+      "web/index.html",
+      "logs.jsonl"
+    ],
     "output_adapters": [
       "local_run_store"
     ],
+    "response_schema": "mn.blueprint.response.v1",
     "run_artifacts": [
       "run.json",
       "config.json",
@@ -55,19 +229,68 @@
       "events.jsonl",
       "result.json",
       "final_artifact.json"
+    ],
+    "stream_kinds": [
+      "audio",
+      "video",
+      "data",
+      "multimodal"
+    ],
+    "stream_transports": [
+      "file",
+      "http",
+      "https",
+      "rtsp",
+      "rtmp",
+      "webrtc",
+      "websocket",
+      "socketio",
+      "tcp",
+      "udp",
+      "sse",
+      "kafka",
+      "mqtt",
+      "custom"
+    ],
+    "web_ui_adapters": [
+      "none",
+      "static_html",
+      "gradio",
+      "custom"
     ]
   },
   "llm": {
     "agent_role": "Signal analyzer, market explainer, advisor agent.",
+    "agents": {
+      "default": {
+        "llm_config": "primary",
+        "responsibilities": [],
+        "role": "Signal analyzer, market explainer, advisor agent."
+      }
+    },
     "api_base": "http://192.168.4.173:11434",
     "api_key": "",
+    "configs": {
+      "primary": {
+        "api_base": "http://192.168.4.173:11434",
+        "max_tokens": 700,
+        "mock_mode": "fake",
+        "mode": "ollama",
+        "model": "ollama/nemotron3:33b",
+        "num_retries": 1,
+        "provider": "ollama",
+        "timeout_seconds": 60
+      }
+    },
+    "default_config": "primary",
+    "enabled": true,
+    "max_tokens": 800,
     "mock_mode": "fake",
     "mode": "ollama",
     "model": "ollama/nemotron3:33b",
-    "timeout_seconds": 60.0,
-    "max_tokens": 800,
     "num_retries": 2,
-    "retry_backoff_seconds": 1.0
+    "retry_backoff_seconds": 1.0,
+    "timeout_seconds": 60.0
   },
   "logging": {
     "events": [
@@ -80,74 +303,17 @@
     ],
     "events_jsonl": true,
     "level": "INFO",
-    "redact_env_secrets": true
-  },
-  "metadata": {
-    "category": "finance",
-    "customizable_for": "Equities, crypto, FX, liquidity monitoring, trading operations.",
-    "problem_solved": "Markets evolve tick by tick; spreads, depth, momentum, and volatility interact faster than static dashboards or one-shot summaries can capture.",
-    "target_users": "Trading teams, market-risk analysts, and fintech product evaluators."
-  },
-  "mode": "mock",
-  "outputs": {
-    "adapter": "local_run_store",
-    "artifact_contract": "Market signals, risk explanations, advice events, and optional Slack alerts.",
-    "run_root": "~/.mn/runs",
-    "write_run_store": true
-  },
-  "real_adapters": {
-    "inline_json": {
-      "adapter": "json",
-      "description": "Load overrides from an inline JSON object.",
-      "payload": {}
-    },
-    "input_file": {
-      "adapter": "file",
-      "description": "Load JSON overrides from a local file path.",
-      "path": null
-    }
-  },
-  "simulation": {
-    "deterministic": true,
-    "enabled": true,
-    "seed_field": "seed",
-    "type": "Live market stream and exchange-style signal simulation."
-  },
-  "standard_version": "1.0",
-  "market_stream": {
-    "duration_seconds": 86400,
-    "tick_seconds": 1,
-    "initial_price": 100.0,
-    "tick_delay_ms": 1000,
-    "seed": 729905862,
-    "start_date": "2026-04-30",
-    "symbols": "AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA",
-    "trading_days": 252,
-    "daily_volatility": 0.018,
-    "daily_drift": 0.001,
-    "max_daily_move": 0.06,
-    "stock_interval_min_ms": 1000,
-    "stock_interval_max_ms": 1000
-  },
-  "market_llm": {
-    "market_data_every_ticks": 30,
-    "order_sample_rate": 20,
-    "signal_every_events": 30,
-    "signal_min_confidence": 0.72,
-    "explanation_interval_events": 0,
-    "explanation_interval_seconds": 300.0,
-    "explanation_max_pending": 25,
-    "explanation_retry_delay_seconds": 5.0
-  },
-  "alerts": {
-    "advice_interval_ticks": 5,
-    "important_move_pct": 1.5,
-    "slack_enabled": true,
-    "slack_channel": "#claw",
-    "slack_policy_mode": "important_only",
-    "slack_min_confidence": 0.65,
-    "slack_cooldown_ticks_per_symbol": 20,
-    "slack_digest_every_ticks": 100
+    "logs_jsonl": true,
+    "redact_env_secrets": true,
+    "redact_fields": [
+      "api_key",
+      "token",
+      "authorization",
+      "cookie",
+      "password",
+      "private_key"
+    ],
+    "stderr_jsonl": true
   },
   "manifest_config_bindings": [
     {
@@ -296,10 +462,10 @@
       "stringify": true
     },
     {
+      "allow_null": true,
       "config_path": "llm.api_key",
       "manifest_path": "nodes.llm_market_explainer.config.environment.LITELLM_API_KEY",
-      "stringify": true,
-      "allow_null": true
+      "stringify": true
     },
     {
       "config_path": "llm.timeout_seconds",
@@ -373,5 +539,142 @@
       "config_path": "alerts.slack_digest_every_ticks",
       "manifest_path": "nodes.market_advisor.config.slack_policy.digest_every_ticks"
     }
-  ]
+  ],
+  "market_llm": {
+    "explanation_interval_events": 0,
+    "explanation_interval_seconds": 300.0,
+    "explanation_max_pending": 25,
+    "explanation_retry_delay_seconds": 5.0,
+    "market_data_every_ticks": 30,
+    "order_sample_rate": 20,
+    "signal_every_events": 30,
+    "signal_min_confidence": 0.72
+  },
+  "market_stream": {
+    "daily_drift": 0.001,
+    "daily_volatility": 0.018,
+    "duration_seconds": 86400,
+    "initial_price": 100.0,
+    "max_daily_move": 0.06,
+    "seed": 729905862,
+    "start_date": "2026-04-30",
+    "stock_interval_max_ms": 1000,
+    "stock_interval_min_ms": 1000,
+    "symbols": "AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA",
+    "tick_delay_ms": 1000,
+    "tick_seconds": 1,
+    "trading_days": 252
+  },
+  "metadata": {
+    "blueprint_revision": "v1",
+    "category": "finance",
+    "customizable_for": "Equities, crypto, FX, liquidity monitoring, trading operations.",
+    "problem_solved": "Markets evolve tick by tick; spreads, depth, momentum, and volatility interact faster than static dashboards or one-shot summaries can capture.",
+    "standard_version": "1.0",
+    "target_users": "Trading teams, market-risk analysts, and fintech product evaluators."
+  },
+  "mode": "mock",
+  "output_skills": {},
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifact_contract": "Market signals, risk explanations, advice events, and optional Slack alerts.",
+    "run_root": "~/.mn/runs",
+    "skills": {},
+    "tcp": {
+      "enabled": false,
+      "ports": []
+    },
+    "write_run_store": true
+  },
+  "privacy": {
+    "default_classification": "internal",
+    "rules": {
+      "confidential": {
+        "log": "redacted",
+        "send_to_llm": "allowed_configs_only",
+        "send_to_output_skills": "approved_destinations_only"
+      },
+      "internal": {
+        "log": "metadata_only",
+        "send_to_llm": true,
+        "send_to_output_skills": true
+      },
+      "public": {
+        "log": true,
+        "send_to_llm": true,
+        "send_to_output_skills": true
+      },
+      "regulated": {
+        "log": "redacted",
+        "send_to_llm": false,
+        "send_to_output_skills": "approved_destinations_only"
+      }
+    }
+  },
+  "real_adapters": {
+    "inline_json": {
+      "adapter": "json",
+      "description": "Load overrides from an inline JSON object.",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "description": "Load JSON overrides from a local file path.",
+      "path": null
+    }
+  },
+  "schemas": {
+    "config": "mn.blueprint.config.v1",
+    "events": "mn.blueprint.events.v1",
+    "final_artifact": "mn.blueprint.final_artifact.v1",
+    "input_skills": "mn.blueprint.input_skills.v1",
+    "inputs": "mn.blueprint.inputs.v1",
+    "output_skills": "mn.blueprint.output_skills.v1"
+  },
+  "simulation": {
+    "deterministic": true,
+    "enabled": true,
+    "seed_field": "seed",
+    "type": "Live market stream and exchange-style signal simulation."
+  },
+  "standard_version": "1.0",
+  "state": {
+    "checkpoint_interval": {
+      "events": 100,
+      "seconds": 60
+    },
+    "enabled": false,
+    "idempotency_key_fields": [
+      "source_ref",
+      "event_id"
+    ],
+    "resume_mode": "none"
+  },
+  "streams": {},
+  "triggers": {
+    "daemon": false,
+    "schedule": null,
+    "sources": [],
+    "type": "manual"
+  },
+  "web_ui": {
+    "enabled": true,
+    "input": {
+      "adapter": "none",
+      "custom_url": null,
+      "fields": [],
+      "host": "127.0.0.1",
+      "instructions": null,
+      "port": null,
+      "share": false,
+      "title": null
+    },
+    "output": {
+      "adapter": "gradio",
+      "auto_generate": true,
+      "custom_url": null,
+      "refresh_seconds": 2.0,
+      "title": null
+    }
+  }
 }

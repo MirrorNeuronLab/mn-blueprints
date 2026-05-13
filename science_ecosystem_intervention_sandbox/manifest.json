@@ -210,6 +210,42 @@
     "ingress"
   ],
   "graph_id": "science_ecosystem_intervention_sandbox_v1",
+  "init_config_review": {
+    "fields": [
+      {
+        "default": 2000,
+        "description": "Starting population across the fixed region topology.",
+        "label": "Total animals",
+        "path": "ecosystem.total_animals"
+      },
+      {
+        "default": 300,
+        "description": "Simulation duration.",
+        "label": "Duration seconds",
+        "path": "ecosystem.duration_seconds"
+      },
+      {
+        "default": 517498978,
+        "description": "Deterministic seed for repeatable runs.",
+        "label": "Simulation seed",
+        "path": "ecosystem.seed"
+      },
+      {
+        "default": 0.035,
+        "description": "Per-tick migration pressure.",
+        "label": "Migration rate",
+        "path": "ecosystem.migration_rate"
+      },
+      {
+        "default": 0.05,
+        "description": "Trait mutation rate.",
+        "label": "Mutation rate",
+        "path": "ecosystem.mutation_rate"
+      }
+    ],
+    "instruction": "Review ecosystem simulation settings before launching the sandbox.",
+    "required": false
+  },
   "initial_inputs": {
     "ingress": [
       {
@@ -228,18 +264,143 @@
   "metadata": {
     "blueprint_id": "science_ecosystem_intervention_sandbox",
     "category": "science",
+    "configuration_contract": {
+      "optional_files": [
+        "scenario.json",
+        "config/overwrite.json"
+      ],
+      "required_files": [
+        "manifest.json",
+        "README.md",
+        "SPEC.md",
+        "config/default.json",
+        "payloads/"
+      ]
+    },
     "customizable_for": "Conservation planning, invasive species modeling, education, agent-based simulation.",
     "description": "Explore ecosystem interventions across multiple regions with evolving population dynamics.",
-    "interfaces": {
-      "config": [
-        "metadata",
+    "init_config_review": {
+      "checks": [
         "identity",
+        "mode",
+        "inputs",
+        "streams",
+        "input_skills",
+        "outputs",
+        "privacy",
+        "budgets"
+      ],
+      "required": true
+    },
+    "interfaces": {
+      "channels": {
+        "artifacts": {
+          "artifacts": [
+            "run.json",
+            "config.json",
+            "inputs.json",
+            "events.jsonl",
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Stable run-store files and domain-specific outputs.",
+          "optional_artifacts": [
+            "job.json",
+            "web_ui.json",
+            "ui.json",
+            "web/index.html",
+            "logs.jsonl"
+          ]
+        },
+        "events": {
+          "artifact": "events.jsonl",
+          "description": "Append-only workflow events."
+        },
+        "input_skills": {
+          "description": "Connector-backed or reusable skill-backed input sources."
+        },
+        "inputs": {
+          "artifact": "inputs.json",
+          "description": "Resolved runtime inputs and adapter provenance."
+        },
+        "logs": {
+          "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "stream": "stdout/stderr"
+        },
+        "output_skills": {
+          "description": "Optional fan-out destinations after local run-store writes."
+        },
+        "outputs": {
+          "artifacts": [
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Primary result and final user-facing artifact."
+        },
+        "streams": {
+          "default": [
+            "events"
+          ],
+          "description": "Named data or event streams exposed by the blueprint.",
+          "kinds": [
+            "audio",
+            "video",
+            "data",
+            "multimodal"
+          ],
+          "transports": [
+            "file",
+            "http",
+            "https",
+            "rtsp",
+            "rtmp",
+            "webrtc",
+            "websocket",
+            "socketio",
+            "tcp",
+            "udp",
+            "sse",
+            "kafka",
+            "mqtt",
+            "custom"
+          ]
+        },
+        "web_ui": {
+          "artifacts": [
+            "web_ui.json",
+            "ui.json",
+            "web/index.html"
+          ],
+          "description": "Optional web input/output handles."
+        }
+      },
+      "config": [
+        "standard_version",
+        "identity",
+        "mode",
+        "metadata",
         "inputs",
         "simulation",
         "llm",
         "outputs",
         "logging",
-        "real_adapters"
+        "real_adapters",
+        "streams",
+        "input_skills",
+        "output_skills",
+        "error_handling",
+        "state",
+        "capabilities",
+        "privacy",
+        "triggers",
+        "backpressure",
+        "determinism",
+        "schemas",
+        "budgets",
+        "agent_handoffs",
+        "web_ui",
+        "interfaces",
+        "execution_model"
       ],
       "identity": [
         "blueprint_id",
@@ -252,6 +413,13 @@
         "file",
         "env_json"
       ],
+      "optional_outputs": [
+        "job.json",
+        "web_ui.json",
+        "ui.json",
+        "web/index.html",
+        "logs.jsonl"
+      ],
       "output_adapters": [
         "local_run_store"
       ],
@@ -262,6 +430,35 @@
         "events.jsonl",
         "result.json",
         "final_artifact.json"
+      ],
+      "response_schema": "mn.blueprint.response.v1",
+      "stream_kinds": [
+        "audio",
+        "video",
+        "data",
+        "multimodal"
+      ],
+      "stream_transports": [
+        "file",
+        "http",
+        "https",
+        "rtsp",
+        "rtmp",
+        "webrtc",
+        "websocket",
+        "socketio",
+        "tcp",
+        "udp",
+        "sse",
+        "kafka",
+        "mqtt",
+        "custom"
+      ],
+      "web_ui_adapters": [
+        "none",
+        "static_html",
+        "gradio",
+        "custom"
       ]
     },
     "llm": {},
@@ -270,6 +467,12 @@
     "output": "Regional outcomes, population rankings, and ecosystem summary.",
     "output_contract": {
       "events": "typed event objects with payload",
+      "events_jsonl": "events.jsonl",
+      "final_artifact_json": "final_artifact.json",
+      "local_run_store": "~/.mn/runs/<run_id>/",
+      "logs_jsonl": "logs.jsonl",
+      "response_schema": "mn.blueprint.response.v1",
+      "result_json": "result.json",
       "status": "JSON lines on stderr",
       "stdout": "single JSON object, event envelope, or bundle path"
     },
@@ -289,7 +492,22 @@
     "standard": {
       "config_path": "config/default.json",
       "default_input_adapter": "mock",
-      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "execution_model": "load_metadata -> resolve_config -> load_inputs -> start_run_store -> observe_simulation_state -> call_llm_agent -> evaluate_workflow_state -> route_by_context -> request_human_input -> apply_decision_to_simulation -> emit_events -> write_final_artifact -> fan_out_output_skills",
+      "execution_steps": [
+        "load_metadata",
+        "resolve_config",
+        "load_inputs",
+        "start_run_store",
+        "observe_simulation_state",
+        "call_llm_agent",
+        "evaluate_workflow_state",
+        "route_by_context",
+        "request_human_input",
+        "apply_decision_to_simulation",
+        "emit_events",
+        "write_final_artifact",
+        "fan_out_output_skills"
+      ],
       "output_adapter": "local_run_store",
       "real_input_adapters": [
         "file",
@@ -729,41 +947,5 @@
   "policies": {
     "recovery_mode": "cluster_recover"
   },
-  "requiredContextEngine": false,
-  "init_config_review": {
-    "required": false,
-    "instruction": "Review ecosystem simulation settings before launching the sandbox.",
-    "fields": [
-      {
-        "path": "ecosystem.total_animals",
-        "label": "Total animals",
-        "default": 2000,
-        "description": "Starting population across the fixed region topology."
-      },
-      {
-        "path": "ecosystem.duration_seconds",
-        "label": "Duration seconds",
-        "default": 300,
-        "description": "Simulation duration."
-      },
-      {
-        "path": "ecosystem.seed",
-        "label": "Simulation seed",
-        "default": 517498978,
-        "description": "Deterministic seed for repeatable runs."
-      },
-      {
-        "path": "ecosystem.migration_rate",
-        "label": "Migration rate",
-        "default": 0.035,
-        "description": "Per-tick migration pressure."
-      },
-      {
-        "path": "ecosystem.mutation_rate",
-        "label": "Mutation rate",
-        "default": 0.05,
-        "description": "Trait mutation rate."
-      }
-    ]
-  }
+  "requiredContextEngine": false
 }

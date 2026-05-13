@@ -3,33 +3,33 @@
   "edges": [
     {
       "from_node": "initializer",
-      "to_node": "interpreter",
-      "message_type": "repo_fixture_seeded"
+      "message_type": "repo_fixture_seeded",
+      "to_node": "interpreter"
     },
     {
       "from_node": "interpreter",
-      "to_node": "extractor",
-      "message_type": "architecture_digest_done"
+      "message_type": "architecture_digest_done",
+      "to_node": "extractor"
     },
     {
       "from_node": "extractor",
-      "to_node": "classifier",
-      "message_type": "dependency_map_done"
+      "message_type": "dependency_map_done",
+      "to_node": "classifier"
     },
     {
       "from_node": "classifier",
-      "to_node": "decision",
-      "message_type": "risk_register_done"
+      "message_type": "risk_register_done",
+      "to_node": "decision"
     },
     {
       "from_node": "decision",
-      "to_node": "critic",
-      "message_type": "code_handoff_done"
+      "message_type": "code_handoff_done",
+      "to_node": "critic"
     },
     {
       "from_node": "critic",
-      "to_node": "sink",
-      "message_type": "code_analysis_briefing_done"
+      "message_type": "code_analysis_briefing_done",
+      "to_node": "sink"
     }
   ],
   "entrypoints": [
@@ -39,9 +39,9 @@
   "initial_inputs": {
     "initializer": [
       {
-        "job_id": "business_code_analysis_memory_job_001",
-        "focus_id": "repo_code_analysis_task",
         "fixture_max_files": 260,
+        "focus_id": "repo_code_analysis_task",
+        "job_id": "business_code_analysis_memory_job_001",
         "notes_per_file": 1
       }
     ]
@@ -51,19 +51,143 @@
   "metadata": {
     "blueprint_id": "business_context_memory_compression_code_analsysis",
     "category": "business",
+    "configuration_contract": {
+      "optional_files": [
+        "scenario.json",
+        "config/overwrite.json"
+      ],
+      "required_files": [
+        "manifest.json",
+        "README.md",
+        "SPEC.md",
+        "config/default.json",
+        "payloads/"
+      ]
+    },
     "customizable_for": "Architecture review, codebase onboarding, migration planning, technical due diligence, and large-repo code review.",
     "description": "Benchmark Membrane SDK working memory on large-repo code analysis with bounded context packets.",
-    "interfaces": {
-      "config": [
-        "metadata",
+    "init_config_review": {
+      "checks": [
         "identity",
+        "mode",
+        "inputs",
+        "streams",
+        "input_skills",
+        "outputs",
+        "privacy",
+        "budgets"
+      ],
+      "required": true
+    },
+    "interfaces": {
+      "channels": {
+        "artifacts": {
+          "artifacts": [
+            "run.json",
+            "config.json",
+            "inputs.json",
+            "events.jsonl",
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Stable run-store files and domain-specific outputs.",
+          "optional_artifacts": [
+            "job.json",
+            "web_ui.json",
+            "ui.json",
+            "web/index.html",
+            "logs.jsonl"
+          ]
+        },
+        "events": {
+          "artifact": "events.jsonl",
+          "description": "Append-only workflow events."
+        },
+        "input_skills": {
+          "description": "Connector-backed or reusable skill-backed input sources."
+        },
+        "inputs": {
+          "artifact": "inputs.json",
+          "description": "Resolved runtime inputs and adapter provenance."
+        },
+        "logs": {
+          "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "stream": "stdout/stderr"
+        },
+        "output_skills": {
+          "description": "Optional fan-out destinations after local run-store writes."
+        },
+        "outputs": {
+          "artifacts": [
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Primary result and final user-facing artifact."
+        },
+        "streams": {
+          "default": [
+            "events"
+          ],
+          "description": "Named data or event streams exposed by the blueprint.",
+          "kinds": [
+            "audio",
+            "video",
+            "data",
+            "multimodal"
+          ],
+          "transports": [
+            "file",
+            "http",
+            "https",
+            "rtsp",
+            "rtmp",
+            "webrtc",
+            "websocket",
+            "socketio",
+            "tcp",
+            "udp",
+            "sse",
+            "kafka",
+            "mqtt",
+            "custom"
+          ]
+        },
+        "web_ui": {
+          "artifacts": [
+            "web_ui.json",
+            "ui.json",
+            "web/index.html"
+          ],
+          "description": "Optional web input/output handles."
+        }
+      },
+      "config": [
+        "standard_version",
+        "identity",
+        "mode",
+        "metadata",
         "inputs",
         "simulation",
         "llm",
         "outputs",
         "logging",
         "real_adapters",
-        "memory_layer"
+        "streams",
+        "input_skills",
+        "output_skills",
+        "error_handling",
+        "state",
+        "capabilities",
+        "privacy",
+        "triggers",
+        "backpressure",
+        "determinism",
+        "schemas",
+        "budgets",
+        "agent_handoffs",
+        "web_ui",
+        "interfaces",
+        "execution_model"
       ],
       "identity": [
         "blueprint_id",
@@ -76,6 +200,13 @@
         "file",
         "env_json"
       ],
+      "optional_outputs": [
+        "job.json",
+        "web_ui.json",
+        "ui.json",
+        "web/index.html",
+        "logs.jsonl"
+      ],
       "output_adapters": [
         "local_run_store"
       ],
@@ -86,14 +217,62 @@
         "events.jsonl",
         "result.json",
         "final_artifact.json"
+      ],
+      "response_schema": "mn.blueprint.response.v1",
+      "stream_kinds": [
+        "audio",
+        "video",
+        "data",
+        "multimodal"
+      ],
+      "stream_transports": [
+        "file",
+        "http",
+        "https",
+        "rtsp",
+        "rtmp",
+        "webrtc",
+        "websocket",
+        "socketio",
+        "tcp",
+        "udp",
+        "sse",
+        "kafka",
+        "mqtt",
+        "custom"
+      ],
+      "web_ui_adapters": [
+        "none",
+        "static_html",
+        "gradio",
+        "custom"
       ]
     },
     "llm": {},
     "llm_agent_role": "Repo architect, dependency mapper, risk classifier, context compressor, briefing author.",
+    "memory_layer": {
+      "default_context_addr": "localhost:50052",
+      "external_memory": {
+        "collection_env": "MN_QDRANT_COLLECTION",
+        "namespace_env": "MN_QDRANT_NAMESPACE",
+        "qdrant_url_env": "MN_QDRANT_URL"
+      },
+      "project_path": "/Users/homer/Projects/Membrane",
+      "python_sdk_path": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+      "runtime": "Use the already-running Membrane Docker containers; workers connect through MN_CONTEXT_ADDR and import the Python SDK for memory item validation and helpers.",
+      "sdk_distribution": "mirrorneuron-membrane-python-sdk",
+      "sdk_import_package": "mn_context_engine_sdk"
+    },
     "name": "Business Context Memory Compression Code Analysis",
     "output": "Compressed code-analysis handoff, final architecture briefing, and context-memory benchmark report.",
     "output_contract": {
       "events": "typed event objects with payload",
+      "events_jsonl": "events.jsonl",
+      "final_artifact_json": "final_artifact.json",
+      "local_run_store": "~/.mn/runs/<run_id>/",
+      "logs_jsonl": "logs.jsonl",
+      "response_schema": "mn.blueprint.response.v1",
+      "result_json": "result.json",
       "status": "JSON lines on stderr",
       "stdout": "single JSON object, event envelope, or bundle path"
     },
@@ -117,7 +296,22 @@
     "standard": {
       "config_path": "config/default.json",
       "default_input_adapter": "mock",
-      "execution_model": "load metadata -> seed large repo memory fixture through Membrane -> compile context per agent -> emit final code-analysis briefing",
+      "execution_model": "load_metadata -> resolve_config -> load_inputs -> start_run_store -> observe_simulation_state -> call_llm_agent -> evaluate_workflow_state -> route_by_context -> request_human_input -> apply_decision_to_simulation -> emit_events -> write_final_artifact -> fan_out_output_skills",
+      "execution_steps": [
+        "load_metadata",
+        "resolve_config",
+        "load_inputs",
+        "start_run_store",
+        "observe_simulation_state",
+        "call_llm_agent",
+        "evaluate_workflow_state",
+        "route_by_context",
+        "request_human_input",
+        "apply_decision_to_simulation",
+        "emit_events",
+        "write_final_artifact",
+        "fan_out_output_skills"
+      ],
       "output_adapter": "local_run_store",
       "real_input_adapters": [
         "file",
@@ -132,20 +326,7 @@
       "format": "jsonl",
       "stream": "stderr"
     },
-    "target_user": "Engineering leaders and platform teams evaluating memory systems for code analysis agents.",
-    "memory_layer": {
-      "project_path": "/Users/homer/Projects/Membrane",
-      "python_sdk_path": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
-      "sdk_distribution": "mirrorneuron-membrane-python-sdk",
-      "sdk_import_package": "mn_context_engine_sdk",
-      "runtime": "Use the already-running Membrane Docker containers; workers connect through MN_CONTEXT_ADDR and import the Python SDK for memory item validation and helpers.",
-      "default_context_addr": "localhost:50052",
-      "external_memory": {
-        "qdrant_url_env": "MN_QDRANT_URL",
-        "collection_env": "MN_QDRANT_COLLECTION",
-        "namespace_env": "MN_QDRANT_NAMESPACE"
-      }
-    }
+    "target_user": "Engineering leaders and platform teams evaluating memory systems for code analysis agents."
   },
   "name": "Business Context Memory Compression Code Analysis",
   "nodes": [
@@ -163,6 +344,9 @@
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
           "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
@@ -171,13 +355,10 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true",
           "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
-          "MN_QDRANT_URL": "http://localhost:6333",
           "MN_QDRANT_COLLECTION": "mn_memory",
-          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
+          "MN_QDRANT_URL": "http://localhost:6333"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -258,6 +439,9 @@
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
           "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
@@ -266,13 +450,10 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true",
           "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
-          "MN_QDRANT_URL": "http://localhost:6333",
           "MN_QDRANT_COLLECTION": "mn_memory",
-          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
+          "MN_QDRANT_URL": "http://localhost:6333"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -349,6 +530,9 @@
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
           "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
@@ -357,13 +541,10 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true",
           "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
-          "MN_QDRANT_URL": "http://localhost:6333",
           "MN_QDRANT_COLLECTION": "mn_memory",
-          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
+          "MN_QDRANT_URL": "http://localhost:6333"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -440,6 +621,9 @@
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
           "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
@@ -448,13 +632,10 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true",
           "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
-          "MN_QDRANT_URL": "http://localhost:6333",
           "MN_QDRANT_COLLECTION": "mn_memory",
-          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
+          "MN_QDRANT_URL": "http://localhost:6333"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -531,6 +712,9 @@
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
           "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
@@ -539,13 +723,10 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true",
           "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
-          "MN_QDRANT_URL": "http://localhost:6333",
           "MN_QDRANT_COLLECTION": "mn_memory",
-          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
+          "MN_QDRANT_URL": "http://localhost:6333"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -622,6 +803,9 @@
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_BLUEPRINT_QUICK_TEST": "true",
+          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
           "MN_CONTEXT_ADDR": "localhost:50052",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
@@ -630,13 +814,10 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
-          "MN_BLUEPRINT_QUICK_TEST": "true",
           "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
-          "MN_QDRANT_URL": "http://localhost:6333",
           "MN_QDRANT_COLLECTION": "mn_memory",
-          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
+          "MN_QDRANT_URL": "http://localhost:6333"
         },
         "from": "base",
         "no_auto_providers": true,
@@ -708,6 +889,8 @@
           "LITELLM_API_KEY": "",
           "LITELLM_MODEL": "ollama/nemotron3:33b",
           "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
+          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
           "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
           "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
           "MN_CONTEXT_USE_MODEL_COMPRESSION": "false",
@@ -715,12 +898,10 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_CODE_ANALYSIS_FIXTURE_MAX_FILES": "260",
-          "MN_CODE_ANALYSIS_NOTES_PER_FILE": "1",
           "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
-          "MN_QDRANT_URL": "http://localhost:6333",
           "MN_QDRANT_COLLECTION": "mn_memory",
-          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory"
+          "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
+          "MN_QDRANT_URL": "http://localhost:6333"
         },
         "pass_env": [
           "MN_CODE_ANALYSIS_FIXTURE_PATH",

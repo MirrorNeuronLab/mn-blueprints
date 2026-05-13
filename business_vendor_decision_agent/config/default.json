@@ -1,4 +1,60 @@
 {
+  "agent_handoffs": {},
+  "backpressure": {
+    "drop_policy": "skip_with_error",
+    "llm": {
+      "max_calls_per_minute": 30,
+      "max_concurrent_calls": 2
+    },
+    "max_concurrency": 4,
+    "max_events_per_second": 10,
+    "queue_size": 1000
+  },
+  "budgets": {
+    "max_connector_reads": 500,
+    "max_connector_writes": 20,
+    "max_disk_mb": 250,
+    "max_llm_calls": 20,
+    "max_llm_tokens": 20000,
+    "max_runtime_seconds": 600,
+    "max_stream_duration_seconds": 3600
+  },
+  "capabilities": {
+    "optional": [
+      "llm.call",
+      "network.egress",
+      "stream.subscribe"
+    ],
+    "required": [
+      "filesystem.write"
+    ]
+  },
+  "determinism": {
+    "enabled": true,
+    "frozen_clock": null,
+    "replay": {
+      "from_events": "events.jsonl",
+      "from_inputs": "inputs.json",
+      "llm_mode": "mock"
+    },
+    "seed_field": "seed"
+  },
+  "error_handling": {
+    "default_mode": "stop",
+    "policies": {
+      "llm_call": {
+        "backoff_seconds": 2,
+        "max_attempts": 3,
+        "mode": "retry"
+      },
+      "optional_output": {
+        "mode": "skip"
+      },
+      "required_output": {
+        "mode": "stop"
+      }
+    }
+  },
   "execution_model": [
     "load_metadata",
     "resolve_config",
@@ -6,25 +62,68 @@
     "start_run_store",
     "observe_simulation_state",
     "call_llm_agent",
+    "evaluate_workflow_state",
+    "route_by_context",
+    "request_human_input",
     "apply_decision_to_simulation",
     "emit_events",
-    "write_final_artifact"
+    "write_final_artifact",
+    "fan_out_output_skills"
   ],
   "identity": {
     "blueprint_id": "business_vendor_decision_agent",
     "name": "Vendor Decision Agent"
   },
+  "input_skills": {},
   "inputs": {
     "adapter": "mock",
     "description": "Synthetic RFP packet with requirements, criteria, vendor responses, pricing, and stakeholder notes.",
     "payload": {
       "initiative": "Select an AI-enabled field service platform",
+      "pricing_csv": "vendor,year_one_cost_usd,implementation_cost_usd,risk_reserve_usd\nAtlasFlow,740000,220000,90000\nBrightOps,820000,260000,70000\nCoreRoute,610000,180000,130000\n",
       "requirements": [
         "Integrate with ERP and CRM",
         "Support role-based access control",
         "Provide offline mobile workflows",
         "Expose audit logs and security evidence",
         "Deploy pilot within 90 days"
+      ],
+      "stakeholder_notes": "Operations wants offline mobile. Security requires evidence before award. Procurement wants negotiation leverage on implementation services.",
+      "timeline_weeks": 14,
+      "vendors": [
+        {
+          "name": "AtlasFlow",
+          "notes": "Strong workflow depth, vague ERP migration estimate.",
+          "pricing_usd": 740000,
+          "scores": {
+            "cost": 4,
+            "functional_fit": 5,
+            "implementation_speed": 3,
+            "security": 4
+          }
+        },
+        {
+          "name": "BrightOps",
+          "notes": "Best security evidence, higher platform cost.",
+          "pricing_usd": 820000,
+          "scores": {
+            "cost": 3,
+            "functional_fit": 4,
+            "implementation_speed": 4,
+            "security": 5
+          }
+        },
+        {
+          "name": "CoreRoute",
+          "notes": "Fastest pilot, incomplete audit-log response.",
+          "pricing_usd": 610000,
+          "scores": {
+            "cost": 2,
+            "functional_fit": 3,
+            "implementation_speed": 5,
+            "security": 3
+          }
+        }
       ],
       "weighted_criteria": [
         {
@@ -40,61 +139,122 @@
           "weight": 2
         },
         {
+          "higher_is_better": false,
           "name": "cost",
-          "weight": 1,
-          "higher_is_better": false
+          "weight": 1
         }
-      ],
-      "vendors": [
-        {
-          "name": "AtlasFlow",
-          "scores": {
-            "functional_fit": 5,
-            "security": 4,
-            "implementation_speed": 3,
-            "cost": 4
-          },
-          "pricing_usd": 740000,
-          "notes": "Strong workflow depth, vague ERP migration estimate."
-        },
-        {
-          "name": "BrightOps",
-          "scores": {
-            "functional_fit": 4,
-            "security": 5,
-            "implementation_speed": 4,
-            "cost": 3
-          },
-          "pricing_usd": 820000,
-          "notes": "Best security evidence, higher platform cost."
-        },
-        {
-          "name": "CoreRoute",
-          "scores": {
-            "functional_fit": 3,
-            "security": 3,
-            "implementation_speed": 5,
-            "cost": 2
-          },
-          "pricing_usd": 610000,
-          "notes": "Fastest pilot, incomplete audit-log response."
-        }
-      ],
-      "pricing_csv": "vendor,year_one_cost_usd,implementation_cost_usd,risk_reserve_usd\nAtlasFlow,740000,220000,90000\nBrightOps,820000,260000,70000\nCoreRoute,610000,180000,130000\n",
-      "stakeholder_notes": "Operations wants offline mobile. Security requires evidence before award. Procurement wants negotiation leverage on implementation services.",
-      "timeline_weeks": 14
+      ]
     }
   },
   "interfaces": {
+    "channels": {
+      "artifacts": {
+        "artifacts": [
+          "run.json",
+          "config.json",
+          "inputs.json",
+          "events.jsonl",
+          "result.json",
+          "final_artifact.json"
+        ],
+        "description": "Stable run-store files and domain-specific outputs.",
+        "optional_artifacts": [
+          "job.json",
+          "web_ui.json",
+          "ui.json",
+          "web/index.html",
+          "logs.jsonl"
+        ]
+      },
+      "events": {
+        "artifact": "events.jsonl",
+        "description": "Append-only workflow events."
+      },
+      "input_skills": {
+        "description": "Connector-backed or reusable skill-backed input sources."
+      },
+      "inputs": {
+        "artifact": "inputs.json",
+        "description": "Resolved runtime inputs and adapter provenance."
+      },
+      "logs": {
+        "description": "Runtime stdout/stderr and explicit log artifacts.",
+        "stream": "stdout/stderr"
+      },
+      "output_skills": {
+        "description": "Optional fan-out destinations after local run-store writes."
+      },
+      "outputs": {
+        "artifacts": [
+          "result.json",
+          "final_artifact.json"
+        ],
+        "description": "Primary result and final user-facing artifact."
+      },
+      "streams": {
+        "default": [
+          "events"
+        ],
+        "description": "Named data or event streams exposed by the blueprint.",
+        "kinds": [
+          "audio",
+          "video",
+          "data",
+          "multimodal"
+        ],
+        "transports": [
+          "file",
+          "http",
+          "https",
+          "rtsp",
+          "rtmp",
+          "webrtc",
+          "websocket",
+          "socketio",
+          "tcp",
+          "udp",
+          "sse",
+          "kafka",
+          "mqtt",
+          "custom"
+        ]
+      },
+      "web_ui": {
+        "artifacts": [
+          "web_ui.json",
+          "ui.json",
+          "web/index.html"
+        ],
+        "description": "Optional web input/output handles."
+      }
+    },
     "config_sections": [
-      "metadata",
+      "standard_version",
       "identity",
+      "mode",
+      "metadata",
       "inputs",
       "simulation",
       "llm",
       "outputs",
       "logging",
-      "real_adapters"
+      "real_adapters",
+      "streams",
+      "input_skills",
+      "output_skills",
+      "error_handling",
+      "state",
+      "capabilities",
+      "privacy",
+      "triggers",
+      "backpressure",
+      "determinism",
+      "schemas",
+      "budgets",
+      "agent_handoffs",
+      "web_ui",
+      "interfaces",
+      "execution_model"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -107,9 +267,17 @@
       "file",
       "env_json"
     ],
+    "optional_run_artifacts": [
+      "job.json",
+      "web_ui.json",
+      "ui.json",
+      "web/index.html",
+      "logs.jsonl"
+    ],
     "output_adapters": [
       "local_run_store"
     ],
+    "response_schema": "mn.blueprint.response.v1",
     "run_artifacts": [
       "run.json",
       "config.json",
@@ -118,15 +286,63 @@
       "result.json",
       "final_artifact.json"
     ],
+    "stream_kinds": [
+      "audio",
+      "video",
+      "data",
+      "multimodal"
+    ],
+    "stream_transports": [
+      "file",
+      "http",
+      "https",
+      "rtsp",
+      "rtmp",
+      "webrtc",
+      "websocket",
+      "socketio",
+      "tcp",
+      "udp",
+      "sse",
+      "kafka",
+      "mqtt",
+      "custom"
+    ],
     "web_ui_adapters": [
-      "disabled",
+      "none",
+      "static_html",
       "gradio",
-      "static_report"
+      "custom"
     ]
   },
   "llm": {
     "agent_role": "Vendor selection and implementation roadmap agent",
+    "agents": {
+      "default": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "normalize vendor responses",
+          "score options against weighted criteria",
+          "draft roadmap and negotiation questions"
+        ],
+        "role": "Vendor selection and implementation roadmap agent"
+      }
+    },
     "api_base": "http://192.168.4.173:11434",
+    "configs": {
+      "primary": {
+        "api_base": "http://192.168.4.173:11434",
+        "max_tokens": 700,
+        "mock_mode": "fake",
+        "mode": "ollama",
+        "model": "ollama/nemotron3:33b",
+        "num_retries": 1,
+        "provider": "ollama",
+        "timeout_seconds": 60
+      }
+    },
+    "default_config": "primary",
+    "enabled": true,
     "mock_mode": "fake",
     "mode": "ollama",
     "model": "ollama/nemotron3:33b",
@@ -147,20 +363,63 @@
     ],
     "events_jsonl": true,
     "level": "INFO",
-    "redact_env_secrets": true
+    "logs_jsonl": true,
+    "redact_env_secrets": true,
+    "redact_fields": [
+      "api_key",
+      "token",
+      "authorization",
+      "cookie",
+      "password",
+      "private_key"
+    ],
+    "stderr_jsonl": true
   },
   "metadata": {
+    "blueprint_revision": "v1",
     "category": "business",
     "customizable_for": "ERP, CRM, cloud, cybersecurity, AI platform, robotics, outsourcing, and implementation partner selection.",
     "problem_solved": "Companies need a repeatable way to turn requirements, RFP responses, pricing, security evidence, and stakeholder input into an executive vendor decision.",
+    "standard_version": "1.0",
     "target_users": "CIO offices, procurement, transformation offices, private-equity operating teams, and enterprise architecture teams."
   },
   "mode": "mock",
+  "output_skills": {},
   "outputs": {
     "adapter": "local_run_store",
     "artifact_contract": "Vendor comparison matrix, recommendation memo, implementation roadmap, cost/risk model, process map, and negotiation questions.",
     "run_root": "~/.mn/runs",
+    "skills": {},
+    "tcp": {
+      "enabled": false,
+      "ports": []
+    },
     "write_run_store": true
+  },
+  "privacy": {
+    "default_classification": "internal",
+    "rules": {
+      "confidential": {
+        "log": "redacted",
+        "send_to_llm": "allowed_configs_only",
+        "send_to_output_skills": "approved_destinations_only"
+      },
+      "internal": {
+        "log": "metadata_only",
+        "send_to_llm": true,
+        "send_to_output_skills": true
+      },
+      "public": {
+        "log": true,
+        "send_to_llm": true,
+        "send_to_output_skills": true
+      },
+      "regulated": {
+        "log": "redacted",
+        "send_to_llm": false,
+        "send_to_output_skills": "approved_destinations_only"
+      }
+    }
   },
   "real_adapters": {
     "env_json": {
@@ -178,6 +437,14 @@
       "description": "Load JSON overrides from a local file path.",
       "path": null
     }
+  },
+  "schemas": {
+    "config": "mn.blueprint.config.v1",
+    "events": "mn.blueprint.events.v1",
+    "final_artifact": "mn.blueprint.final_artifact.v1",
+    "input_skills": "mn.blueprint.input_skills.v1",
+    "inputs": "mn.blueprint.inputs.v1",
+    "output_skills": "mn.blueprint.output_skills.v1"
   },
   "simulation": {
     "actions": [
@@ -200,13 +467,43 @@
     "type": "Vendor selection and implementation roadmap workflow."
   },
   "standard_version": "1.0",
+  "state": {
+    "checkpoint_interval": {
+      "events": 100,
+      "seconds": 60
+    },
+    "enabled": false,
+    "idempotency_key_fields": [
+      "source_ref",
+      "event_id"
+    ],
+    "resume_mode": "none"
+  },
+  "streams": {},
+  "triggers": {
+    "daemon": false,
+    "schedule": null,
+    "sources": [],
+    "type": "manual"
+  },
   "web_ui": {
     "enabled": false,
     "input": {
-      "adapter": "disabled"
+      "adapter": "none",
+      "custom_url": null,
+      "fields": [],
+      "host": "127.0.0.1",
+      "instructions": null,
+      "port": null,
+      "share": false,
+      "title": null
     },
     "output": {
-      "adapter": "static_report"
+      "adapter": "none",
+      "auto_generate": true,
+      "custom_url": null,
+      "refresh_seconds": 2.0,
+      "title": null
     }
   }
 }

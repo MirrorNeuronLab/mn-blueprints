@@ -51,7 +51,9 @@
   "features": [
     "event_stream",
     "stream_state",
-    "agent_triage"
+    "agent_triage",
+    "state_driven_workflow",
+    "context_aware_routing"
   ],
   "llm_role": "Event stream triage agent",
   "metrics": [
@@ -98,5 +100,43 @@
   "primary_metric": "queue_depth",
   "requires_human_approval": false,
   "risk_metric": "anomaly_score",
-  "uses_tool": false
+  "uses_tool": false,
+  "workflow": {
+    "name": "event_triage_context_router",
+    "routing_mode": "first_match",
+    "transitions": [
+      {
+        "conditions": {
+          "expr": "${state.anomaly_score} >= 70"
+        },
+        "confidence": 0.9,
+        "name": "escalate_high_anomaly",
+        "reason": "High anomaly pressure needs specialist review.",
+        "target": "specialist_escalation"
+      },
+      {
+        "conditions": {
+          "any": [
+            {
+              "expr": "${state.false_positive_rate} >= 18"
+            },
+            {
+              "expr": "${state.queue_depth} >= 80"
+            }
+          ]
+        },
+        "confidence": 0.82,
+        "name": "tighten_noisy_filter",
+        "reason": "False positives or queue depth are increasing.",
+        "target": "filter_tuning"
+      },
+      {
+        "conditions": {},
+        "confidence": 0.7,
+        "name": "continue_monitoring",
+        "reason": "No route threshold crossed.",
+        "target": "monitoring_loop"
+      }
+    ]
+  }
 }

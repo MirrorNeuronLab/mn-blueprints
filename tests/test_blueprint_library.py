@@ -17,7 +17,15 @@ if SKILL_SRC.exists() and str(SKILL_SRC) not in sys.path:
 
 from mn_blueprint_support import FakeLLMClient, LEGACY_ALIASES, PRODUCT_PROFILES, REQUIRED_BLUEPRINT_IDS, SCENARIOS, get_scenario, run_blueprint
 from mn_blueprint_support.llm import DEFAULT_OLLAMA_BASE, OllamaLLMClient, ollama_model_available
-from mn_blueprint_support.standard import OUTPUT_ADAPTERS, STANDARD_VERSION, RunStore
+from mn_blueprint_support.standard import (
+    CONFIG_SECTIONS,
+    OPTIONAL_RUN_ARTIFACTS,
+    OUTPUT_ADAPTERS,
+    RESPONSE_SCHEMA,
+    STANDARD_VERSION,
+    STREAM_TRANSPORTS,
+    RunStore,
+)
 
 
 def _category_slug(value: str) -> str:
@@ -54,9 +62,12 @@ def test_index_entries_point_to_loadable_blueprint_folders() -> None:
     assert not list(ROOT.glob("*/product.json"))
     required_product_fields = {
         "agent_role",
+        "benefit",
         "customizable_for",
         "customize",
         "example",
+        "how_it_works",
+        "input",
         "investor",
         "one_line",
         "output",
@@ -257,14 +268,30 @@ def test_python_sdk_source_blueprints_run_directly_and_generate_bundle(
 
 def test_every_blueprint_declares_standard_config_and_interfaces() -> None:
     required_sections = {
-        "metadata",
+        "standard_version",
         "identity",
+        "mode",
+        "metadata",
         "inputs",
         "simulation",
         "llm",
         "outputs",
         "logging",
         "real_adapters",
+        "streams",
+        "input_skills",
+        "output_skills",
+        "error_handling",
+        "state",
+        "capabilities",
+        "privacy",
+        "triggers",
+        "backpressure",
+        "determinism",
+        "schemas",
+        "budgets",
+        "agent_handoffs",
+        "web_ui",
         "interfaces",
         "execution_model",
     }
@@ -298,12 +325,31 @@ def test_every_blueprint_declares_standard_config_and_interfaces() -> None:
         assert config["outputs"]["adapter"] == "local_run_store"
         assert config["outputs"]["run_root"] == "~/.mn/runs"
         assert config["outputs"]["write_run_store"] is True
+        assert isinstance(config["outputs"]["skills"], dict)
+        assert config["outputs"]["tcp"]["enabled"] is False
         assert config["llm"]["model"] == "ollama/nemotron3:33b"
         assert config["llm"]["api_base"] == "http://192.168.4.173:11434"
+        assert config["llm"]["default_config"] == "primary"
+        assert config["llm"]["configs"]["primary"]["model"] == "ollama/nemotron3:33b"
+        assert config["logging"]["events_jsonl"] is True
+        assert config["logging"]["logs_jsonl"] is True
+        assert config["logging"]["stderr_jsonl"] is True
+        assert "retry" in {policy["mode"] for policy in config["error_handling"]["policies"].values()}
+        assert config["privacy"]["default_classification"] in {"public", "internal", "confidential", "regulated"}
+        assert config["schemas"]["events"] == "mn.blueprint.events.v1"
+        assert config["budgets"]["max_runtime_seconds"] > 0
         assert set(config["interfaces"]["run_artifacts"]) == required_run_artifacts
+        assert set(config["interfaces"]["optional_run_artifacts"]) == set(OPTIONAL_RUN_ARTIFACTS)
         assert config["interfaces"]["input_adapters"] == ["mock", "json", "file", "env_json"]
         assert tuple(config["interfaces"]["output_adapters"]) == OUTPUT_ADAPTERS
+        assert config["interfaces"]["response_schema"] == RESPONSE_SCHEMA
+        assert "websocket" in config["interfaces"]["stream_transports"]
+        assert {"inputs", "outputs", "events", "logs", "streams", "input_skills", "output_skills", "web_ui", "artifacts"}.issubset(
+            config["interfaces"]["channels"]
+        )
         assert "call_llm_agent" in config["execution_model"]
+        assert "route_by_context" in config["execution_model"]
+        assert "request_human_input" in config["execution_model"]
         assert "apply_decision_to_simulation" in config["execution_model"]
 
         manifest = json.loads(manifest_path.read_text())
@@ -313,8 +359,14 @@ def test_every_blueprint_declares_standard_config_and_interfaces() -> None:
         assert standard["run_store"] == "~/.mn/runs/<run_id>/"
         assert standard["default_input_adapter"] == "mock"
         assert manifest["metadata"]["interfaces"]["identity"] == ["blueprint_id", "name", "run_id"]
+        assert set(manifest["metadata"]["interfaces"]["config"]) == set(CONFIG_SECTIONS)
         assert set(manifest["metadata"]["interfaces"]["outputs"]) == required_run_artifacts
+        assert set(manifest["metadata"]["interfaces"]["optional_outputs"]) == set(OPTIONAL_RUN_ARTIFACTS)
         assert tuple(manifest["metadata"]["interfaces"]["output_adapters"]) == OUTPUT_ADAPTERS
+        assert set(STREAM_TRANSPORTS).issubset(set(manifest["metadata"]["interfaces"]["stream_transports"]))
+        assert manifest["metadata"]["interfaces"]["response_schema"] == RESPONSE_SCHEMA
+        assert "events" in manifest["metadata"]["interfaces"]["channels"]
+        assert manifest["metadata"]["output_contract"]["logs_jsonl"] == "logs.jsonl"
 
     for blueprint_id in REQUIRED_BLUEPRINT_IDS:
         scenario_path = ROOT / blueprint_id / "scenario.json"
@@ -358,7 +410,7 @@ def test_every_blueprint_has_product_quality_readme_sections() -> None:
 def test_portfolio_standard_document_explains_execution_contract() -> None:
     text = (ROOT / "BLUEPRINT_STANDARD.md").read_text()
     for phrase in [
-        "metadata",
+        "Required Files",
         "config/default.json",
         "mock",
         "file",
@@ -366,10 +418,12 @@ def test_portfolio_standard_document_explains_execution_contract() -> None:
         "~/.mn/runs/<run_id>/",
         "run.json",
         "events.jsonl",
-        "interactive_first_run_setup",
-        "list_runs",
-        "observe",
-        "Call the LLM agent",
+        "websocket",
+        "input_skills",
+        "output_skills",
+        "local_run_store",
+        "State And Checkpoint Contract",
+        "backpressure",
         "final_artifact.json",
     ]:
         assert phrase in text
@@ -377,9 +431,10 @@ def test_portfolio_standard_document_explains_execution_contract() -> None:
 
 def test_blueprint_standard_imports_shared_mn_skill_implementation() -> None:
     assert RunStore.__module__ == "mn_blueprint_support.run_store"
-    text = (ROOT / "BLUEPRINT_STANDARD.md").read_text()
-    assert "mn-skills/blueprint_support_skill/src/mn_blueprint_support/" in text
-    assert "mn_blueprint_support.solution_runner" in text
+    support_files = {path.name for path in (SKILL_SRC / "mn_blueprint_support").glob("*.py")}
+    assert {"interfaces.py", "events.py", "state_workflow.py", "human_loop.py", "streams.py", "io_skills.py"}.issubset(
+        support_files
+    )
     scenarios_text = (SKILL_SRC / "mn_blueprint_support" / "scenarios.py").read_text()
     assert "load_blueprint_json_files(\"scenario.json\")" in scenarios_text
     assert "general_closed_loop_agent_runtime" not in scenarios_text
@@ -456,6 +511,9 @@ def test_blueprint_runs_end_to_end_with_fake_llm(blueprint_id: str, tmp_path: Pa
     assert first_step["decision"]["action"]
     assert first_step["state_after"]
     assert result["architecture"]["interfaces"]["identity_fields"] == ["blueprint_id", "name", "run_id"]
+    assert result["response_schema"] == RESPONSE_SCHEMA
+    assert result["standard_response"]["schema"] == RESPONSE_SCHEMA
+    assert "events" in result["standard_response"]
     assert "call_llm_agent" in result["architecture"]["execution_model"]
 
 
@@ -499,6 +557,16 @@ def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> 
         runs_root=tmp_path,
     )
     assert all(step["human_gate"]["required"] for step in human_result["timeline"])
+    assert all(step["human_gate"]["request"]["request_id"] for step in human_result["timeline"])
+
+    human_loop_result = run_blueprint(
+        "general_human_in_the_loop_workflow",
+        inputs={"steps": 2, "human_response": {"decision": "revise", "approved": False, "action": "hold_policy"}},
+        llm_client=FakeLLMClient(),
+        runs_root=tmp_path,
+    )
+    assert all(step["human_gate"]["response"]["decision"] == "revise" for step in human_loop_result["timeline"])
+    assert all(step["route_decisions"] for step in human_loop_result["timeline"])
 
     tool_result = run_blueprint(
         "general_llm_tool_orchestration_loop",
@@ -548,6 +616,8 @@ def test_run_store_writes_global_execution_artifacts(tmp_path: Path) -> None:
     assert run_summary["status"] == "completed"
     assert run_summary["run_id"] == run_id
     assert saved_result["identity"]["run_id"] == run_id
+    assert saved_result["response_schema"] == RESPONSE_SCHEMA
+    assert saved_result["standard_response"]["outputs"]["result"] == "result.json"
     assert saved_artifact == result["final_artifact"]
     assert event_types[:2] == ["run_started", "inputs_loaded"]
     assert event_types.count("simulation_step_started") == 2

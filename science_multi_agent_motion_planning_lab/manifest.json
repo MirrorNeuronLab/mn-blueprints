@@ -24,6 +24,48 @@
     "ingress"
   ],
   "graph_id": "science_multi_agent_motion_planning_lab_v1",
+  "init_config_review": {
+    "fields": [
+      {
+        "default": 25,
+        "description": "Number of cooperative agents.",
+        "label": "Good agents",
+        "path": "motion.good_agents"
+      },
+      {
+        "default": 75,
+        "description": "Number of adversarial agents.",
+        "label": "Adversaries",
+        "path": "motion.adversaries"
+      },
+      {
+        "default": 8,
+        "description": "Number of obstacles in the world.",
+        "label": "Obstacles",
+        "path": "motion.obstacles"
+      },
+      {
+        "default": 60,
+        "description": "Simulation cycle count.",
+        "label": "Max cycles",
+        "path": "motion.max_cycles"
+      },
+      {
+        "default": 4200,
+        "description": "Deterministic seed for repeatable runs.",
+        "label": "Simulation seed",
+        "path": "motion.seed"
+      },
+      {
+        "default": "swarm",
+        "description": "Agent policy: swarm or random.",
+        "label": "Policy mode",
+        "path": "motion.policy_mode"
+      }
+    ],
+    "instruction": "Review shared-world simulation settings before launching the motion planning lab.",
+    "required": false
+  },
   "initial_inputs": {
     "ingress": [
       {
@@ -44,18 +86,143 @@
   "metadata": {
     "blueprint_id": "science_multi_agent_motion_planning_lab",
     "category": "science",
+    "configuration_contract": {
+      "optional_files": [
+        "scenario.json",
+        "config/overwrite.json"
+      ],
+      "required_files": [
+        "manifest.json",
+        "README.md",
+        "SPEC.md",
+        "config/default.json",
+        "payloads/"
+      ]
+    },
     "customizable_for": "Robotics, warehouse coordination, autonomous planning, teaching labs.",
     "description": "Visualize shared-world multi-agent motion planning and coordination behavior.",
-    "interfaces": {
-      "config": [
-        "metadata",
+    "init_config_review": {
+      "checks": [
         "identity",
+        "mode",
+        "inputs",
+        "streams",
+        "input_skills",
+        "outputs",
+        "privacy",
+        "budgets"
+      ],
+      "required": true
+    },
+    "interfaces": {
+      "channels": {
+        "artifacts": {
+          "artifacts": [
+            "run.json",
+            "config.json",
+            "inputs.json",
+            "events.jsonl",
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Stable run-store files and domain-specific outputs.",
+          "optional_artifacts": [
+            "job.json",
+            "web_ui.json",
+            "ui.json",
+            "web/index.html",
+            "logs.jsonl"
+          ]
+        },
+        "events": {
+          "artifact": "events.jsonl",
+          "description": "Append-only workflow events."
+        },
+        "input_skills": {
+          "description": "Connector-backed or reusable skill-backed input sources."
+        },
+        "inputs": {
+          "artifact": "inputs.json",
+          "description": "Resolved runtime inputs and adapter provenance."
+        },
+        "logs": {
+          "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "stream": "stdout/stderr"
+        },
+        "output_skills": {
+          "description": "Optional fan-out destinations after local run-store writes."
+        },
+        "outputs": {
+          "artifacts": [
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Primary result and final user-facing artifact."
+        },
+        "streams": {
+          "default": [
+            "events"
+          ],
+          "description": "Named data or event streams exposed by the blueprint.",
+          "kinds": [
+            "audio",
+            "video",
+            "data",
+            "multimodal"
+          ],
+          "transports": [
+            "file",
+            "http",
+            "https",
+            "rtsp",
+            "rtmp",
+            "webrtc",
+            "websocket",
+            "socketio",
+            "tcp",
+            "udp",
+            "sse",
+            "kafka",
+            "mqtt",
+            "custom"
+          ]
+        },
+        "web_ui": {
+          "artifacts": [
+            "web_ui.json",
+            "ui.json",
+            "web/index.html"
+          ],
+          "description": "Optional web input/output handles."
+        }
+      },
+      "config": [
+        "standard_version",
+        "identity",
+        "mode",
+        "metadata",
         "inputs",
         "simulation",
         "llm",
         "outputs",
         "logging",
-        "real_adapters"
+        "real_adapters",
+        "streams",
+        "input_skills",
+        "output_skills",
+        "error_handling",
+        "state",
+        "capabilities",
+        "privacy",
+        "triggers",
+        "backpressure",
+        "determinism",
+        "schemas",
+        "budgets",
+        "agent_handoffs",
+        "web_ui",
+        "interfaces",
+        "execution_model"
       ],
       "identity": [
         "blueprint_id",
@@ -68,6 +235,13 @@
         "file",
         "env_json"
       ],
+      "optional_outputs": [
+        "job.json",
+        "web_ui.json",
+        "ui.json",
+        "web/index.html",
+        "logs.jsonl"
+      ],
       "output_adapters": [
         "local_run_store"
       ],
@@ -78,6 +252,35 @@
         "events.jsonl",
         "result.json",
         "final_artifact.json"
+      ],
+      "response_schema": "mn.blueprint.response.v1",
+      "stream_kinds": [
+        "audio",
+        "video",
+        "data",
+        "multimodal"
+      ],
+      "stream_transports": [
+        "file",
+        "http",
+        "https",
+        "rtsp",
+        "rtmp",
+        "webrtc",
+        "websocket",
+        "socketio",
+        "tcp",
+        "udp",
+        "sse",
+        "kafka",
+        "mqtt",
+        "custom"
+      ],
+      "web_ui_adapters": [
+        "none",
+        "static_html",
+        "gradio",
+        "custom"
       ]
     },
     "llm": {},
@@ -86,6 +289,12 @@
     "output": "Simulation summary and visual artifacts.",
     "output_contract": {
       "events": "typed event objects with payload",
+      "events_jsonl": "events.jsonl",
+      "final_artifact_json": "final_artifact.json",
+      "local_run_store": "~/.mn/runs/<run_id>/",
+      "logs_jsonl": "logs.jsonl",
+      "response_schema": "mn.blueprint.response.v1",
+      "result_json": "result.json",
       "status": "JSON lines on stderr",
       "stdout": "single JSON object, event envelope, or bundle path"
     },
@@ -105,7 +314,22 @@
     "standard": {
       "config_path": "config/default.json",
       "default_input_adapter": "mock",
-      "execution_model": "load metadata -> resolve config -> load inputs -> simulate/decide loop -> emit events -> write final artifact",
+      "execution_model": "load_metadata -> resolve_config -> load_inputs -> start_run_store -> observe_simulation_state -> call_llm_agent -> evaluate_workflow_state -> route_by_context -> request_human_input -> apply_decision_to_simulation -> emit_events -> write_final_artifact -> fan_out_output_skills",
+      "execution_steps": [
+        "load_metadata",
+        "resolve_config",
+        "load_inputs",
+        "start_run_store",
+        "observe_simulation_state",
+        "call_llm_agent",
+        "evaluate_workflow_state",
+        "route_by_context",
+        "request_human_input",
+        "apply_decision_to_simulation",
+        "emit_events",
+        "write_final_artifact",
+        "fan_out_output_skills"
+      ],
       "output_adapter": "local_run_store",
       "real_input_adapters": [
         "file",
@@ -203,47 +427,5 @@
   "policies": {
     "recovery_mode": "cluster_recover"
   },
-  "requiredContextEngine": false,
-  "init_config_review": {
-    "required": false,
-    "instruction": "Review shared-world simulation settings before launching the motion planning lab.",
-    "fields": [
-      {
-        "path": "motion.good_agents",
-        "label": "Good agents",
-        "default": 25,
-        "description": "Number of cooperative agents."
-      },
-      {
-        "path": "motion.adversaries",
-        "label": "Adversaries",
-        "default": 75,
-        "description": "Number of adversarial agents."
-      },
-      {
-        "path": "motion.obstacles",
-        "label": "Obstacles",
-        "default": 8,
-        "description": "Number of obstacles in the world."
-      },
-      {
-        "path": "motion.max_cycles",
-        "label": "Max cycles",
-        "default": 60,
-        "description": "Simulation cycle count."
-      },
-      {
-        "path": "motion.seed",
-        "label": "Simulation seed",
-        "default": 4200,
-        "description": "Deterministic seed for repeatable runs."
-      },
-      {
-        "path": "motion.policy_mode",
-        "label": "Policy mode",
-        "default": "swarm",
-        "description": "Agent policy: swarm or random."
-      }
-    ]
-  }
+  "requiredContextEngine": false
 }

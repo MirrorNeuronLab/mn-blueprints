@@ -1,0 +1,137 @@
+{
+  "actions": [
+    {
+      "cost": 0.0,
+      "description": "Create a human review request before applying the recommendation.",
+      "effects": {
+        "approval_latency": 4.0,
+        "budget_used": 3.0,
+        "risk_exposure": -7.0
+      },
+      "name": "request_human_review"
+    },
+    {
+      "cost": 0.0,
+      "description": "Apply a narrower reviewer-approved revision.",
+      "effects": {
+        "approval_latency": 1.5,
+        "benefit_score": 2.0,
+        "budget_used": 1.5,
+        "risk_exposure": -4.0
+      },
+      "name": "apply_reviewer_revision"
+    },
+    {
+      "cost": 0.0,
+      "description": "Pause execution until more evidence or approval is available.",
+      "effects": {
+        "approval_latency": 2.0,
+        "risk_exposure": 2.0
+      },
+      "name": "hold_policy"
+    }
+  ],
+  "agent_responsibilities": [
+    "prepare a reviewable recommendation",
+    "request human input with context",
+    "apply approval, revision, rejection, or timeout defaults",
+    "preserve an audit trail of human decisions"
+  ],
+  "artifact_type": "human review workflow memo",
+  "blueprint_id": "general_human_in_the_loop_workflow",
+  "category": "general",
+  "default_inputs": {
+    "human_approval": "approve_high_confidence",
+    "human_response": {
+      "approved": true,
+      "decision": "approve",
+      "notes": "Approved for controlled execution.",
+      "reviewer": "demo_reviewer"
+    },
+    "seed": 42,
+    "steps": 5
+  },
+  "description": "Run a full human-in-the-loop decision workflow with review requests, responses, revisions, and auditable applied actions.",
+  "entity_label": "decision option",
+  "entity_names": [
+    "urgent mitigation",
+    "reversible pilot",
+    "watchful waiting"
+  ],
+  "features": [
+    "human_in_the_loop",
+    "state_driven_workflow",
+    "approval_gate",
+    "pause_resume_ready",
+    "audit_trail"
+  ],
+  "llm_role": "Human-in-the-loop workflow coordinator",
+  "metrics": [
+    {
+      "drift": 5.0,
+      "initial": 61,
+      "label": "Risk exposure",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "risk_exposure",
+      "volatility": 4.0
+    },
+    {
+      "drift": 1.5,
+      "initial": 12,
+      "label": "Approval latency hours",
+      "maximum": 40,
+      "minimum": 0,
+      "name": "approval_latency",
+      "volatility": 1.0
+    },
+    {
+      "drift": 2.0,
+      "initial": 54,
+      "label": "Expected benefit",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "benefit_score",
+      "volatility": 3.0
+    },
+    {
+      "drift": 2.0,
+      "initial": 28,
+      "label": "Budget used",
+      "maximum": 100,
+      "minimum": 0,
+      "name": "budget_used",
+      "volatility": 1.5
+    }
+  ],
+  "multi_agent": false,
+  "name": "general_human_in_the_loop_workflow",
+  "objective": "minimize",
+  "primary_metric": "risk_exposure",
+  "requires_human_approval": true,
+  "risk_metric": "budget_used",
+  "uses_tool": false,
+  "workflow": {
+    "name": "human_review_state_machine",
+    "routing_mode": "first_match",
+    "transitions": [
+      {
+        "conditions": {
+          "expr": "${decision.confidence} >= 0.7"
+        },
+        "human_required": true,
+        "name": "needs_human_review",
+        "reason": "High-impact actions require review.",
+        "target": "human_review"
+      },
+      {
+        "conditions": {
+          "expr": "${decision.confidence} < 0.7"
+        },
+        "name": "low_confidence_hold",
+        "reason": "Low confidence defaults to hold.",
+        "target": "hold_policy"
+      }
+    ]
+  }
+}

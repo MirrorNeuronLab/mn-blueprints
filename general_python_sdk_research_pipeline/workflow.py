@@ -1,6 +1,12 @@
 import json
 
-from mn_sdk import RetryPolicy, RunnerConfig, agent, workflow
+try:
+    from mn_sdk import RetryPolicy, RunnerConfig, agent, workflow
+except ModuleNotFoundError as error:
+    if error.name not in {"grpc", "mn_sdk"}:
+        raise
+    from mn_blueprint_support.python_sdk_compat import RetryPolicy, RunnerConfig, agent, workflow
+
 from existing_research import collect_research_summary, save_summary
 
 

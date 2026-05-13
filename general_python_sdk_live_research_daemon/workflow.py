@@ -1,6 +1,12 @@
 import json
 
-from mn_sdk import BackpressurePolicy, RetryPolicy, RunnerConfig, agent, workflow
+try:
+    from mn_sdk import BackpressurePolicy, RetryPolicy, RunnerConfig, agent, workflow
+except ModuleNotFoundError as error:
+    if error.name not in {"grpc", "mn_sdk"}:
+        raise
+    from mn_blueprint_support.python_sdk_compat import BackpressurePolicy, RetryPolicy, RunnerConfig, agent, workflow
+
 from service_health_simulation import build_probe, evaluate_probe, remember_decision
 
 

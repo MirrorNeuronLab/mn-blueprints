@@ -159,6 +159,9 @@
           "VIDEO_SOURCE_URI": "samples/door-demo.mp4"
         },
         "output_message_type": null,
+        "python_environment": {
+          "requirements": "person_detector/requirements.txt"
+        },
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "upload_as": "person_detector",
         "upload_path": "person_detector",

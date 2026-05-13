@@ -24,7 +24,7 @@ Each blueprint is separated into seven concerns:
 | LLM agents | `llm` config section and worker prompts | Observes state, reasons about decisions, and returns structured actions or reports. |
 | Outputs | `outputs` config section and `mn_blueprint_support.run_store.RunStore` | Writes results, final artifacts, and machine-readable execution records. |
 | Logging | `logging` config section, `events.jsonl`, and `mn_blueprint_support.log_status` | Captures what happened during execution for debugging, audit, and analytics. |
-| Web UI | `web_ui` config section and `mn_blueprint_support.web_ui` | Registers live input GUIs, customer dashboards, or static HTML output reports. |
+| Web UI | `web_ui` config section and `mn_blueprint_support.web_ui` | Registers local Gradio input GUIs, live dashboards, customer dashboards, or legacy static output reports. |
 
 ## Shared Skill APIs
 
@@ -37,7 +37,7 @@ Each blueprint is separated into seven concerns:
 | First-run setup | `interactive_first_run_setup()` |
 | Local user config | `UserConfigStore`, `load_user_config()`, `save_user_config()` |
 | Run observability | `list_runs()`, `load_run()`, `read_run_events()`, `summarize_run()` |
-| Web UI input/output | `WebInputField`, `launch_gradio_input_app()`, `collect_gradio_input()`, `write_static_run_report()`, `register_web_ui()` |
+| Web UI input/output | `WebInputField`, `launch_gradio_input_app()`, `collect_gradio_input()`, `launch_gradio_output_app()`, `register_web_ui()` |
 | Blueprint creation | `scaffold_blueprint()` |
 | Config UX | `config_summary()`, `validate_config()`, `validate_blueprint_directory()` |
 

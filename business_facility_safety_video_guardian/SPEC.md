@@ -2,58 +2,58 @@
 
 ## What We Want To Achieve
 
-Build a reviewable security and governance workflow that helps Facilities, security, safety operations, and property management teams move from raw signals to an explainable recommendation. Monitor facility video streams and escalate safety-relevant observations with LLM reasoning. The target customer should understand what changed, why the system recommended an action, and what evidence a human should review before acting.
+Build a reviewable safety-monitoring workflow that reduces manual video watching while still giving operations teams enough evidence to trust each escalation. The target customer should be able to see what was observed, why an alert was or was not sent, and how to tune the workflow for their facility.
 
 ## Customer Problem
 
-Video monitoring is continuous, noisy, and operationally sensitive; teams need stateful alerts, cooldowns, and explainable observations rather than raw frames. In a real customer environment, the pain is not only producing an answer; it is preserving context across changing inputs, exposing tradeoffs, and creating an audit trail that business, technical, or governance stakeholders can trust.
+Facilities, security, safety operations, and property management teams need to watch continuous video streams without turning every frame into manual review. The real gap is not just detecting a visible face once; it is deciding when an observation is safety-relevant, avoiding duplicate alerts, and leaving enough evidence for a human team to trust what happened.
 
 ## Design Details
 
-The blueprint is organized as a MirrorNeuron workflow with stable identity, configurable inputs, structured events, and a final artifact. The main agent role is Safety observation and escalation agent. The workflow uses video stream sampling with alert state and demonstrates video sampling, Ollama decision path, cooldown state, and Slack alerting.
+The blueprint is organized as a streaming safety loop. `ingress` starts the monitor, `door_camera_tick_source` emits frame ticks, and `person_detector` samples the configured video source, runs human face detection with observable facial appearance description, applies confidence and cooldown policy, and emits structured events.
 
-The design is intentionally adapter-friendly. The prototype can run with bundled, mock, or synthetic data even when the current code has not implemented every production integration. The customer-facing contract stays centered on the same concepts: load inputs, observe current state, choose or score an action, emit traceable events, and write an artifact a reviewer can inspect.
-
-A representative scenario is: A door-camera stream is sampled, an Ollama-backed agent checks whether a person is visible, and alerts are throttled to avoid noise.
+The prototype supports live VL model detection through an Ollama-compatible endpoint and deterministic mock detection for tests. When a face is visible, the model is asked to describe only non-identifying visible details such as face position, expression, hair/facial hair if visible, glasses, mask/hat, lighting, occlusion, and notable visible facial features. It must not identify the person or infer sensitive/private traits. Alert delivery is optional, with Slack-style payloads used as the reference integration. The design goal is to preserve the same input and output shape when replacing the sample video with real camera streams.
 
 ## Input
 
-The prototype accepts configuration for scenario identity, run controls, and domain inputs. Current adapters include `mock`, `json`, `file`, and `env_json`, so evaluators can start locally and later replace sample data with production data while preserving the same blueprint identity and output shape.
+The prototype accepts a configurable camera or video source. By default, it expects a local RTSP stream carrying H.264 video at `rtsp://127.0.0.1:8554/local-camera`; demo runs can override this with the bundled sample video or any image-compatible source. The key runtime controls are the source URI, transport, codec, frame sampling interval, maximum frame width, face detection confidence threshold, alert cooldown window, and site-specific safety or escalation policy.
 
-Important state inputs include the configured state metrics. Where the blueprint uses an action loop, the current action space includes the configured domain actions. For production use, the same contract should be fed by customer system-of-record data, business rules, approval policies, thresholds, and any regulated or safety-critical constraints needed for the operating environment.
+Notification inputs include Slack enablement, destination channel, message prefix, and any downstream alert routing that a deployment wants to replace Slack with later. Model inputs include the VL model base URL, VL model name, prompt behavior, temperature, timeout, and mock or quick-test mode for deterministic local evaluation. The default VL model location is `http://192.168.4.173:11434` with model `nemotron3:33b`, and deployments can override it through config, generator flags, or `VL_MODEL_BASE_URL` / `VL_MODEL_NAME`.
+
+Third-party apps may edit or replace `config/overwrite.json` before launch to override only the video source and VL model sections. Runtime should resolve `config/default.json` first, then deep-merge `config/overwrite.json` when present, leaving `default.json` as the canonical full baseline config.
+
+For production use, the same contract should be fed by real camera streams, facility metadata, restricted-area definitions, operating hours, incident categories, and customer-specific escalation rules.
 
 ## Output: Expected Customer Outcome
 
-The expected customer outcome is detection events, alert decisions, and notification payloads. A useful run should show the starting context, the observations made during the workflow, the action or recommendation rationale, and the final artifact that a domain owner can review.
+The expected customer outcome is reduced manual monitoring burden while meaningful safety observations are escalated with enough context to review. A useful run produces explainable face detection events, observable facial appearance descriptions, alert or no-alert decisions, cooldown-aware notification payloads, and operational evidence showing why the system did or did not escalate.
 
-The customer should be able to answer: what happened, which inputs mattered, what the system recommended, what changed over time, what risks or exceptions remain, and what a human team should do next.
+The result should help a safety team answer: what was seen, what visible facial appearance details were observed, when it was seen, how confident the system was, whether an alert was sent, whether an alert was suppressed by policy or cooldown, and what a reviewer should inspect next.
 
 ## Evaluation Criteria
 
-- Decision quality: confirm the recommendation is plausible for the observed state, customer constraints, and available actions.
-- Scenario sensitivity: verify that outputs change appropriately when inputs, thresholds, seed values, or operating assumptions change.
-- State trajectory: inspect whether the configured state metrics move coherently across the workflow rather than appearing as disconnected summaries.
-- Traceability: confirm every recommendation can be tied back to inputs, events, intermediate decisions, and final artifact fields.
-- Human review fit: check whether the artifact matches the language, evidence, and next-step format the target team already uses.
-- Operational readiness: validate latency, reliability, adapter behavior, permissions, privacy, and approval gates before using real customer data.
-- Outcome measurement: compare recommendations against historical cases, expert review, known policies, or measured business outcomes.
+- Detection quality: measure face-detection precision, recall, false-alert rate, and missed-face rate against labeled clips or sampled frames.
+- Alert usefulness: verify that alerts contain enough context for a human to decide whether action is needed.
+- Alert latency: measure time from sampled frame to emitted notification and compare with customer response expectations.
+- Cooldown correctness: confirm repeated detections do not create alert noise during the configured cooldown window.
+- Policy fit: check whether alerts match site rules such as restricted-area presence, after-hours activity, or doorway monitoring.
+- Auditability: confirm every alert can be traced to detection metadata, sampled frame timing, model result, and notification payload.
+- Production readiness: evaluate real-camera reliability, model fallback behavior, privacy handling, and integration with the customer's incident workflow.
 
 ## Result Artifacts To Inspect
 
-Inspect the event stream for observations, decisions, errors, and handoffs. Inspect the result payload and final artifact for the recommended action, ranked options or findings, supporting rationale, state changes, and next steps.
+Inspect runtime events and worker logs for frame sampling, detection decisions, errors, and notification attempts. Review the final artifact or result payload for detection events, alert decisions, cooldown state, and notification details.
 
-When using the local run store, inspect `run.json`, `config.json`, `inputs.json`, `events.jsonl`, `result.json`, and `final_artifact.json`. These artifacts are the review surface for debugging the workflow, comparing scenarios, and deciding whether the blueprint is ready for a real adapter.
+When run through the standard local run store, inspect `run.json`, `config.json`, `inputs.json`, `events.jsonl`, `result.json`, and `final_artifact.json`. For bundle-style review, also inspect the generated bundle summary and any specialized payload outputs.
 
 ## Prototype Limits
 
-The current blueprint is a product-facing template and may include mock data, deterministic simulation, simplified policies, placeholder integrations, or partial worker coverage. It is designed to show the customer problem, target workflow, and expected artifact even where production implementation still needs hardening.
+The current blueprint is an early prototype with bundled or synthetic inputs, simplified alert policy, and optional mock detection for repeatable local runs. It is decision support for evaluation, not a certified safety system.
 
-Outputs are decision-support artifacts. They should not be treated as final financial advice, medical guidance, safety certification, compliance approval, or executable operating instruction without customer validation and human approval.
+Real deployment still needs camera adapter hardening, privacy review, retention policy, customer-specific thresholds, incident-response integration, and validation against representative facility footage.
 
 ## Upgrade Path To Real Customer Use
 
-Replace the sample video, tune sampling cadence and alert cooldown, add site-specific safety policies, and connect security notification channels. Add customer-specific policies, review gates, exception handling, retention rules, and monitoring dashboards. Calibrate the workflow against historical data and expert judgment, then track acceptance rate, correction rate, latency, incident reduction, cost impact, and other outcome metrics that prove whether the workflow is helping.
+Replace the sample video source with a customer camera adapter while preserving the same input shape. Calibrate thresholds and cooldowns using labeled customer clips. Add customer policy rules for site layout, operating hours, restricted zones, and incident severity.
 
-## Product Narrative
-
-This illustrates vertical AI for physical operations: agents reason over evolving sensor state and trigger controlled workflows.
+Connect alerts to the customer's existing security, ticketing, or incident-response system. Track detection quality, alert noise, latency, reviewer acceptance, and missed-event analysis over time so the system improves against real operating outcomes.

@@ -25,14 +25,13 @@
       "identity",
       "inputs",
       "simulation",
+      "video_source",
+      "vl_model",
       "llm",
       "outputs",
       "logging",
       "real_adapters",
-      "video_source",
-      "vl_model",
-      "safety_alerts",
-      "manifest_config_bindings"
+      "web_ui"
     ],
     "identity_fields": [
       "blueprint_id",
@@ -54,15 +53,35 @@
       "inputs.json",
       "events.jsonl",
       "result.json",
-      "final_artifact.json"
+      "final_artifact.json",
+      "ui.json",
+      "web_ui.json"
     ]
   },
   "llm": {
-    "agent_role": "Safety observation and escalation agent.",
+    "agent_role": "Safety observation and face-description escalation agent.",
     "api_base": "http://192.168.4.173:11434",
     "mock_mode": "fake",
     "mode": "ollama",
     "model": "ollama/nemotron3:33b"
+  },
+  "video_source": {
+    "uri": "rtsp://127.0.0.1:8554/local-camera",
+    "transport": "rtsp",
+    "codec": "h264",
+    "camera_id": "front-door",
+    "frame_sample_seconds": 5.0,
+    "frame_jpeg_max_width": 896,
+    "description": "Configurable facility video stream. The default expects a local RTSP camera publishing H.264 video."
+  },
+  "vl_model": {
+    "provider": "ollama",
+    "base_url": "http://192.168.4.173:11434",
+    "model": "nemotron3:33b",
+    "endpoint": "/api/generate",
+    "timeout_seconds": 90,
+    "temperature": 0.0,
+    "description": "Configurable vision-language model used to understand sampled facility video frames."
   },
   "logging": {
     "events": [
@@ -71,7 +90,13 @@
       "simulation_step_started",
       "llm_decision",
       "simulation_state_updated",
-      "run_completed"
+      "run_completed",
+      "door_camera_frame_analyzed",
+      "door_camera_face_detected",
+      "door_camera_slack_alert_sent",
+      "door_camera_slack_alert_skipped",
+      "door_camera_slack_alert_error",
+      "door_camera_frame_analysis_failed"
     ],
     "events_jsonl": true,
     "level": "INFO",
@@ -86,7 +111,7 @@
   "mode": "mock",
   "outputs": {
     "adapter": "local_run_store",
-    "artifact_contract": "Detection events, alert decisions, and notification payloads.",
+    "artifact_contract": "Face detection events, observable facial appearance descriptions, alert decisions, and notification payloads.",
     "run_root": "~/.mn/runs",
     "write_run_store": true
   },
@@ -109,99 +134,45 @@
     "type": "Video stream sampling with alert state."
   },
   "standard_version": "1.0",
-  "video_source": {
-    "uri": "samples/door-demo.mp4",
-    "camera_id": "front-door",
-    "interval_ms": 5000,
-    "frame_sample_seconds": 5.0,
-    "frame_jpeg_max_width": 896
-  },
-  "vl_model": {
-    "base_url": "http://192.168.4.173:11434",
-    "model": "nemotron3:33b"
-  },
-  "safety_alerts": {
-    "confidence_threshold": 0.65,
-    "alert_cooldown_seconds": 60,
-    "slack_enabled": "true",
-    "slack_channel": "#safety",
-    "slack_message_prefix": "Door camera safety alert"
+  "web_ui": {
+    "enabled": true,
+    "input": {
+      "adapter": "none"
+    },
+    "output": {
+      "adapter": "gradio",
+      "title": "Facility Safety Video Guardian",
+      "server": "blueprint_support",
+      "host": "127.0.0.1",
+      "refresh_seconds": 2.0
+    },
+    "dashboard": {
+      "default_video_source": "person_detector/samples/door-demo.mp4",
+      "browser_video_source": "http://127.0.0.1:8889/local-camera/",
+      "browser_publish_source": "http://127.0.0.1:8889/local-camera/publish?video-codec=h264%2F90000&audio-device=none&video-width=1280&video-height=720&video-framerate=30",
+      "event_types": [
+        "door_camera_frame_analyzed",
+        "door_camera_face_detected",
+        "door_camera_slack_alert_sent",
+        "door_camera_slack_alert_skipped",
+        "door_camera_slack_alert_error",
+        "door_camera_frame_analysis_failed"
+      ],
+      "event_feed": {
+        "format": "jsonl",
+        "default_path": "~/.mn/runs/<run_id>/events.jsonl"
+      }
+    }
   },
   "manifest_config_bindings": [
     {
-      "config_path": "video_source.camera_id",
-      "manifest_path": "nodes.door_camera_tick_source.config.camera_id"
-    },
-    {
-      "config_path": "video_source.interval_ms",
-      "manifest_path": "nodes.door_camera_tick_source.config.interval_ms"
-    },
-    {
-      "config_path": "video_source.uri",
-      "manifest_path": "nodes.person_detector.config.environment.VIDEO_SOURCE_URI",
+      "config_path": "identity.run_id",
+      "manifest_path": "nodes.person_detector.config.environment.MN_RUN_ID",
       "stringify": true
     },
     {
-      "config_path": "video_source.frame_sample_seconds",
-      "manifest_path": "nodes.person_detector.config.environment.FRAME_SAMPLE_SECONDS",
-      "stringify": true
-    },
-    {
-      "config_path": "video_source.frame_jpeg_max_width",
-      "manifest_path": "nodes.person_detector.config.environment.FRAME_JPEG_MAX_WIDTH",
-      "stringify": true
-    },
-    {
-      "config_path": "vl_model.base_url",
-      "manifest_path": "initial_inputs.ingress.0.ollama_base_url"
-    },
-    {
-      "config_path": "vl_model.base_url",
-      "manifest_path": "nodes.person_detector.config.environment.OLLAMA_BASE_URL",
-      "stringify": true
-    },
-    {
-      "config_path": "vl_model.base_url",
-      "manifest_path": "nodes.person_detector.config.environment.VL_MODEL_BASE_URL",
-      "stringify": true
-    },
-    {
-      "config_path": "vl_model.model",
-      "manifest_path": "initial_inputs.ingress.0.ollama_model"
-    },
-    {
-      "config_path": "vl_model.model",
-      "manifest_path": "nodes.person_detector.config.environment.OLLAMA_MODEL",
-      "stringify": true
-    },
-    {
-      "config_path": "vl_model.model",
-      "manifest_path": "nodes.person_detector.config.environment.VL_MODEL_NAME",
-      "stringify": true
-    },
-    {
-      "config_path": "safety_alerts.confidence_threshold",
-      "manifest_path": "nodes.person_detector.config.environment.PERSON_DETECTION_CONFIDENCE_THRESHOLD",
-      "stringify": true
-    },
-    {
-      "config_path": "safety_alerts.alert_cooldown_seconds",
-      "manifest_path": "nodes.person_detector.config.environment.PERSON_ALERT_COOLDOWN_SECONDS",
-      "stringify": true
-    },
-    {
-      "config_path": "safety_alerts.slack_enabled",
-      "manifest_path": "nodes.person_detector.config.environment.SLACK_ALERT_ENABLED",
-      "stringify": true
-    },
-    {
-      "config_path": "safety_alerts.slack_channel",
-      "manifest_path": "nodes.person_detector.config.environment.SLACK_DEFAULT_CHANNEL",
-      "stringify": true
-    },
-    {
-      "config_path": "safety_alerts.slack_message_prefix",
-      "manifest_path": "nodes.person_detector.config.environment.SLACK_MESSAGE_PREFIX",
+      "config_path": "outputs.run_root",
+      "manifest_path": "nodes.person_detector.config.environment.MN_RUNS_ROOT",
       "stringify": true
     }
   ]

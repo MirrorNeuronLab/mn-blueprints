@@ -5,17 +5,21 @@ import base64
 import json
 import mimetypes
 import os
+import shutil
+import socket
 import subprocess
 import sys
 import tempfile
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any
 
-
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
+DEFAULT_VIDEO_SOURCE_URI = "rtsp://127.0.0.1:8554/local-camera"
+LIVE_STREAM_SCHEMES = ("rtsp://", "rtsps://", "rtmp://", "rtmps://")
 
 
 def load_json_env(name: str) -> dict[str, Any]:
@@ -35,6 +39,7 @@ def initial_state() -> dict[str, Any]:
         "last_alert_wall_ts": 0.0,
         "detections": 0,
         "last_detection": None,
+        "last_face_description": None,
         "last_error": None,
     }
 
@@ -55,6 +60,99 @@ def resolve_source_uri(source_uri: str) -> str:
     return source_uri
 
 
+def is_live_stream_source(source_uri: str) -> bool:
+    return source_uri.strip().lower().startswith(LIVE_STREAM_SCHEMES)
+
+
+def source_uri_with_host(parsed: urllib.parse.SplitResult, host: str) -> str:
+    if ":" in host and not host.startswith("["):
+        host = f"[{host}]"
+
+    userinfo = ""
+    if parsed.username:
+        userinfo = parsed.username
+        if parsed.password is not None:
+            userinfo = f"{userinfo}:{parsed.password}"
+        userinfo = f"{userinfo}@"
+
+    if parsed.port is not None:
+        host = f"{host}:{parsed.port}"
+    return urllib.parse.urlunsplit((parsed.scheme, f"{userinfo}{host}", parsed.path, parsed.query, parsed.fragment))
+
+
+def docker_host_fallback_sources(source_uri: str) -> list[str]:
+    parsed = urllib.parse.urlsplit(source_uri)
+    if parsed.hostname != "host.docker.internal":
+        return []
+
+    candidates: list[str] = []
+    seen: set[str] = set()
+    try:
+        for family, _type, _proto, _canonname, sockaddr in socket.getaddrinfo(
+            "host.docker.internal",
+            parsed.port or 0,
+            socket.AF_INET,
+            socket.SOCK_STREAM,
+        ):
+            if family != socket.AF_INET:
+                continue
+            host = sockaddr[0]
+            if host in seen:
+                continue
+            seen.add(host)
+            candidates.append(source_uri_with_host(parsed, host))
+    except OSError:
+        pass
+
+    gateway_hosts = os.environ.get("MN_DOCKER_HOST_GATEWAY_IPS", "192.168.65.254")
+    for host in [item.strip() for item in gateway_hosts.split(",") if item.strip()]:
+        if host in seen:
+            continue
+        seen.add(host)
+        candidates.append(source_uri_with_host(parsed, host))
+
+    local_source = source_uri_with_host(parsed, "127.0.0.1")
+    if local_source not in candidates:
+        candidates.append(local_source)
+    return candidates
+
+
+def should_retry_with_docker_host_fallback(source_uri: str, error: str) -> bool:
+    return (
+        bool(docker_host_fallback_sources(source_uri))
+        and "host.docker.internal" in error
+        and "resolve" in error.lower()
+    )
+
+
+def ffmpeg_rtsp_transport() -> str:
+    transport = os.environ.get("FFMPEG_RTSP_TRANSPORT", "tcp").strip().lower()
+    if transport not in {"tcp", "udp"}:
+        return "tcp"
+    return transport
+
+
+def ffmpeg_binary() -> str:
+    configured = os.environ.get("FFMPEG_BINARY", "").strip()
+    if configured:
+        return configured
+    discovered = shutil.which("ffmpeg")
+    if discovered:
+        return discovered
+    try:
+        import imageio_ffmpeg
+
+        packaged = imageio_ffmpeg.get_ffmpeg_exe()
+        if packaged:
+            return packaged
+    except Exception:
+        pass
+    for candidate in ("/opt/homebrew/bin/ffmpeg", "/usr/local/bin/ffmpeg", "/usr/bin/ffmpeg"):
+        if Path(candidate).is_file():
+            return candidate
+    return "ffmpeg"
+
+
 def extract_frame(source_uri: str, position_seconds: float, max_width: int) -> tuple[bytes, str]:
     resolved = resolve_source_uri(source_uri)
     suffix = Path(resolved).suffix.lower()
@@ -65,37 +163,60 @@ def extract_frame(source_uri: str, position_seconds: float, max_width: int) -> t
         temp_path = Path(temp_file.name)
 
     vf = f"scale='min({max_width},iw)':-2"
-    command = [
-        "ffmpeg",
-        "-hide_banner",
-        "-loglevel",
-        "error",
-        "-nostdin",
-        "-ss",
-        f"{position_seconds:.3f}",
-        "-i",
-        resolved,
-        "-frames:v",
-        "1",
-        "-vf",
-        vf,
-        "-q:v",
-        "4",
-        "-y",
-        str(temp_path),
-    ]
-
     try:
-        subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
-        data = temp_path.read_bytes()
-        if not data:
-            raise RuntimeError("ffmpeg produced an empty frame")
-        return data, "image/jpeg"
+        last_error: str | None = None
+        fallback_sources = docker_host_fallback_sources(resolved)
+        sources = [resolved, *fallback_sources]
+        using_fallbacks = False
+
+        for index, candidate_source in enumerate(sources):
+            command = [
+                ffmpeg_binary(),
+                "-hide_banner",
+                "-loglevel",
+                "error",
+                "-nostdin",
+            ]
+            if is_live_stream_source(candidate_source):
+                if candidate_source.lower().startswith(("rtsp://", "rtsps://")):
+                    command.extend(["-rtsp_transport", ffmpeg_rtsp_transport()])
+            else:
+                command.extend(["-ss", f"{position_seconds:.3f}"])
+
+            command.extend(
+                [
+                    "-i",
+                    candidate_source,
+                    "-frames:v",
+                    "1",
+                    "-vf",
+                    vf,
+                    "-q:v",
+                    "4",
+                    "-y",
+                    str(temp_path),
+                ]
+            )
+
+            try:
+                subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
+                data = temp_path.read_bytes()
+                if not data:
+                    raise RuntimeError("ffmpeg produced an empty frame")
+                return data, "image/jpeg"
+            except subprocess.CalledProcessError as exc:
+                last_error = exc.stderr.decode("utf-8", errors="replace").strip()
+                if candidate_source == resolved:
+                    using_fallbacks = should_retry_with_docker_host_fallback(resolved, last_error)
+                    if using_fallbacks:
+                        continue
+                elif using_fallbacks and index < len(sources) - 1:
+                    continue
+                raise RuntimeError(f"ffmpeg failed to extract frame: {last_error}") from exc
+
+        raise RuntimeError(f"ffmpeg failed to extract frame: {last_error or 'unknown error'}")
     except FileNotFoundError as exc:
         return extract_frame_with_cv2(resolved, position_seconds, max_width, exc)
-    except subprocess.CalledProcessError as exc:
-        error = exc.stderr.decode("utf-8", errors="replace").strip()
-        raise RuntimeError(f"ffmpeg failed to extract frame: {error}") from exc
     finally:
         try:
             temp_path.unlink()
@@ -122,7 +243,7 @@ def extract_frame_with_cv2(
 
     try:
         fps = float(capture.get(cv2.CAP_PROP_FPS) or 0.0)
-        if fps > 0 and position_seconds > 0:
+        if not is_live_stream_source(source_uri) and fps > 0 and position_seconds > 0:
             capture.set(cv2.CAP_PROP_POS_MSEC, position_seconds * 1000.0)
 
         ok, frame = capture.read()
@@ -149,17 +270,29 @@ def extract_frame_with_cv2(
 def mock_detection(frame_seq: int) -> dict[str, Any]:
     detected = frame_seq % 4 in {2, 3}
     return {
+        "face_detected": detected,
         "person_detected": detected,
         "confidence": 0.82 if detected else 0.18,
-        "summary": "Mock mode detected a person near the door." if detected else "Mock mode sees no person at the door.",
+        "summary": "Mock mode detected a visible face near the door." if detected else "Mock mode sees no clear face at the door.",
+        "face_description": (
+            "A face is visible near the camera with a neutral expression; mock mode does not infer identity."
+            if detected
+            else ""
+        ),
+        "facial_features": ["visible face", "neutral expression"] if detected else [],
+        "appearance_notes": ["Face details are synthetic in mock mode."] if detected else [],
         "risk_level": "medium" if detected else "low",
-        "visible_subjects": ["person"] if detected else [],
+        "visible_subjects": ["face"] if detected else [],
     }
 
 
 def call_ollama(frame: bytes, prompt: str) -> dict[str, Any]:
-    base_url = os.environ.get("OLLAMA_BASE_URL", "http://192.168.4.173:11434").rstrip("/")
-    model = os.environ.get("OLLAMA_MODEL", "nemotron3:33b")
+    base_url = (
+        os.environ.get("VL_MODEL_BASE_URL")
+        or os.environ.get("OLLAMA_BASE_URL")
+        or "http://192.168.4.173:11434"
+    ).rstrip("/")
+    model = os.environ.get("VL_MODEL_NAME") or os.environ.get("OLLAMA_MODEL") or "nemotron3:33b"
     timeout = float(os.environ.get("OLLAMA_TIMEOUT_SECONDS", "90"))
     payload = {
         "model": model,
@@ -204,9 +337,9 @@ def normalize_detection(result: dict[str, Any]) -> dict[str, Any]:
     except (TypeError, ValueError):
         confidence = 0.0
 
-    detected = result.get("person_detected", False)
+    detected = result.get("face_detected", result.get("person_detected", False))
     if isinstance(detected, str):
-        detected = detected.strip().lower() in {"true", "yes", "1", "person", "detected"}
+        detected = detected.strip().lower() in {"true", "yes", "1", "face", "person", "detected", "visible"}
 
     risk_level = str(result.get("risk_level", "low")).lower()
     if risk_level not in {"low", "medium", "high"}:
@@ -214,16 +347,32 @@ def normalize_detection(result: dict[str, Any]) -> dict[str, Any]:
 
     summary = str(result.get("summary", "")).strip()
     if not summary:
-        summary = "A person is visible near the door." if detected else "No person is visible near the door."
+        summary = "A human face is visible near the door." if detected else "No clear human face is visible near the door."
+
+    face_description = str(result.get("face_description", "")).strip()
+    if not face_description and detected:
+        face_description = summary
+
+    facial_features = result.get("facial_features", [])
+    if not isinstance(facial_features, list):
+        facial_features = [str(facial_features)]
+
+    appearance_notes = result.get("appearance_notes", [])
+    if not isinstance(appearance_notes, list):
+        appearance_notes = [str(appearance_notes)]
 
     visible_subjects = result.get("visible_subjects", [])
     if not isinstance(visible_subjects, list):
         visible_subjects = [str(visible_subjects)]
 
     return {
+        "face_detected": bool(detected),
         "person_detected": bool(detected),
         "confidence": max(0.0, min(confidence, 1.0)),
         "summary": summary[:500],
+        "face_description": face_description[:700],
+        "facial_features": [str(item)[:120] for item in facial_features[:12] if str(item).strip()],
+        "appearance_notes": [str(item)[:120] for item in appearance_notes[:8] if str(item).strip()],
         "risk_level": risk_level,
         "visible_subjects": [str(item)[:80] for item in visible_subjects[:8]],
     }
@@ -231,20 +380,34 @@ def normalize_detection(result: dict[str, Any]) -> dict[str, Any]:
 
 def detection_prompt(camera_id: str) -> str:
     return os.environ.get(
-        "PERSON_DETECTION_PROMPT",
-        (
-            "You are monitoring a 24/7 door camera for safety. Inspect the image and decide whether any person "
-            "is visible anywhere in the frame. Return only JSON with keys: person_detected boolean, confidence "
-            "number from 0 to 1, summary short string, risk_level one of low/medium/high, and visible_subjects "
-            f"array. Camera id: {camera_id}."
+        "FACE_DETECTION_PROMPT",
+        os.environ.get(
+            "PERSON_DETECTION_PROMPT",
+            (
+                "You are monitoring a 24/7 door camera for safety. Inspect the image and decide whether a "
+                "human face is clearly visible anywhere in the frame. If a face is visible, describe only "
+                "observable, non-identifying appearance details such as face position, expression, hair/facial "
+                "hair if visible, glasses, mask/hat, lighting/occlusion, and notable visible facial features. "
+                "Do not identify the person, compare them to a known person, infer sensitive attributes, or "
+                "guess age, gender, race, ethnicity, health, emotion beyond visible expression, or any private "
+                "trait. Return only JSON with keys: face_detected boolean, confidence number from 0 to 1, "
+                "summary short string, face_description string, facial_features array of strings, "
+                "appearance_notes array of strings, risk_level one of low/medium/high, and visible_subjects "
+                f"array. Camera id: {camera_id}."
+            ),
         ),
     )
 
 
 def should_alert(detection: dict[str, Any], state: dict[str, Any]) -> bool:
-    threshold = float(os.environ.get("PERSON_DETECTION_CONFIDENCE_THRESHOLD", "0.65"))
-    cooldown = float(os.environ.get("PERSON_ALERT_COOLDOWN_SECONDS", "60"))
-    if not detection.get("person_detected") or float(detection.get("confidence", 0)) < threshold:
+    threshold = float(
+        os.environ.get(
+            "FACE_DETECTION_CONFIDENCE_THRESHOLD",
+            os.environ.get("PERSON_DETECTION_CONFIDENCE_THRESHOLD", "0.65"),
+        )
+    )
+    cooldown = float(os.environ.get("FACE_ALERT_COOLDOWN_SECONDS", os.environ.get("PERSON_ALERT_COOLDOWN_SECONDS", "60")))
+    if not detection.get("face_detected") or float(detection.get("confidence", 0)) < threshold:
         return False
     return time.time() - float(state.get("last_alert_wall_ts", 0.0)) >= cooldown
 
@@ -276,11 +439,15 @@ def post_slack(text: str) -> tuple[str, dict[str, Any]]:
 
 
 def alert_text(camera_id: str, detection: dict[str, Any], frame_seq: int, source_uri: str) -> str:
-    prefix = os.environ.get("SLACK_MESSAGE_PREFIX", "Door camera safety alert")
+    prefix = os.environ.get("SLACK_MESSAGE_PREFIX", "Door camera face alert")
+    features = detection.get("facial_features") or []
+    feature_text = ", ".join(str(item) for item in features[:6]) if features else "No specific facial features reported."
+    description = detection.get("face_description") or detection["summary"]
     return (
-        f"{prefix}: person detected on {camera_id}\n"
+        f"{prefix}: human face detected on {camera_id}\n"
         f"Confidence: {detection['confidence']:.2f} | Risk: {detection['risk_level']} | Frame: {frame_seq}\n"
-        f"{detection['summary']}\n"
+        f"{description}\n"
+        f"Visible features: {feature_text}\n"
         f"Source: {source_uri}"
     )
 
@@ -293,7 +460,7 @@ def main() -> None:
 
     frame_seq = int(payload.get("tick_seq") or state.get("frames_seen", 0) + 1)
     camera_id = payload.get("camera_id") or os.environ.get("CAMERA_ID", "front-door")
-    source_uri = os.environ.get("VIDEO_SOURCE_URI", "samples/door-demo.mp4")
+    source_uri = os.environ.get("VIDEO_SOURCE_URI", DEFAULT_VIDEO_SOURCE_URI)
     sample_seconds = float(os.environ.get("FRAME_SAMPLE_SECONDS", "5.0"))
     max_width = int(os.environ.get("FRAME_JPEG_MAX_WIDTH", "896"))
 
@@ -318,10 +485,11 @@ def main() -> None:
         }
         events.append({"type": "door_camera_frame_analyzed", "payload": detection_payload})
 
-        if detection["person_detected"]:
+        if detection["face_detected"]:
             state["detections"] = int(state.get("detections", 0)) + 1
             state["last_detection"] = detection_payload
-            events.append({"type": "door_camera_person_detected", "payload": detection_payload})
+            state["last_face_description"] = detection_payload.get("face_description")
+            events.append({"type": "door_camera_face_detected", "payload": detection_payload})
 
         if should_alert(detection, state):
             status, slack_payload = post_slack(alert_text(camera_id, detection, frame_seq, source_uri))
@@ -335,7 +503,11 @@ def main() -> None:
         state["frames_seen"] = int(state.get("frames_seen", 0)) + 1
     except Exception as exc:
         message_text = str(exc)[:800]
-        if "ffmpeg failed" in message_text and float(state.get("video_position_seconds", 0.0)) > 0:
+        if (
+            not is_live_stream_source(source_uri)
+            and "ffmpeg failed" in message_text
+            and float(state.get("video_position_seconds", 0.0)) > 0
+        ):
             state["video_position_seconds"] = 0.0
             message_text = f"{message_text}; rewound source for next tick"
         state["last_error"] = message_text

@@ -2,121 +2,100 @@
 
 `Blueprint ID:` `business_facility_safety_video_guardian`  
 `Category:` business - Business Solution Template  
-`Default LLM:` Ollama `nemotron3:33b` with deterministic fake LLM support for tests
+`Default Video Source:` local RTSP/H.264 stream at `rtsp://127.0.0.1:8554/local-camera`  
+`Default VL Model:` Ollama `nemotron3:33b` at `http://192.168.4.173:11434` with deterministic mock support for tests
 
-## One-line value proposition
+## Intro
 
-Monitor facility video streams and escalate safety-relevant observations with LLM reasoning.
+Facility Safety Video Guardian is an early MirrorNeuron blueprint for monitoring facility video streams and escalating safety-relevant observations. It demonstrates how an agent can watch sampled video state, reason over whether a human face is visible, describe observable facial appearance, apply alert cooldown logic, and produce reviewable notification payloads.
 
-## What it is
+This README is the short product introduction. The detailed design contract, expected customer outcome, inputs, outputs, and evaluation criteria live in [SPEC.md](SPEC.md).
 
-This blueprint is a reusable MirrorNeuron solution template for an operating decision where delay, cost, service quality, or revenue can change materially over time. It ships with mock or synthetic inputs so it runs immediately, and it defines a path for replacing those inputs with production data while keeping the same blueprint identity, configuration model, and output contract.
+## Who It Serves
 
-## Who this is for
+This blueprint is for facilities, security, safety operations, and property management teams that need help reducing manual monitoring burden without losing reviewability.
 
-Facilities, security, safety operations, and property management teams.
+## What It Demonstrates
 
-## Why it matters
+- Video stream sampling for a door or facility camera.
+- Configurable camera source, defaulting to a local RTSP/H.264 stream.
+- Human face detection and observable facial appearance description through a configurable VL model endpoint or deterministic mock mode.
+- Cooldown-aware alert decisions to avoid notification noise.
+- Structured events and artifacts that a human reviewer can audit.
 
-Video monitoring is continuous, noisy, and operationally sensitive; teams need stateful alerts, cooldowns, and explainable observations rather than raw frames. A static dashboard can show the current state, and a one-shot LLM prompt can summarize it, but neither tests what happens after a decision is applied. This blueprint makes the feedback loop visible: state changes, the agent observes it, the agent chooses an action, and the system evolves again.
+## Example Scenario
 
-## Why this runtime is useful here
+A front-door camera is sampled every few seconds. The agent checks whether a human face is visible, describes visible non-identifying facial appearance details, decides whether the event is alert-worthy, suppresses duplicates during cooldown, and emits an alert payload for review or Slack delivery.
 
-MirrorNeuron is useful here because it combines LLM reasoning with dynamic system simulation. The agent is placed inside a changing environment instead of outside it as a commentator. Each run has stable identity fields, configurable inputs, structured events, and an auditable final artifact, so teams can compare scenarios, debug decisions, and graduate from mock data to real adapters.
+## Quick Start
 
-## How it works
-
-1. Load the graph in `manifest.json` and start `ingress` with bundled mock inputs.
-2. Route work through the agents described by the manifest, using video stream sampling with alert state as the evolving system.
-3. Let the `Safety observation and escalation agent` observe intermediate state, produce decisions or artifacts, and emit typed messages.
-4. Preserve execution metadata, logs, and generated artifacts so users can audit what happened.
-5. Return detection events, alert decisions, and notification payloads for review, customization, or downstream workflow integration.
-
-## Example scenario
-
-A door-camera stream is sampled, an Ollama-backed agent checks whether a person is visible, and alerts are throttled to avoid noise.
-
-## Inputs
-
-| Input | What it controls | Example | Can customize? |
-|---|---|---|---|
-| `manifest.json` initial inputs | Sample payloads routed into ingress. | `initial_inputs` | Yes |
-| `config/default.json` | Standard identity, mock input, LLM, output, logging, and adapter settings. | `outputs.run_root` | Yes |
-| `config/overwrite.json` | Local overwrite values layered on top of defaults before launch. | `vl_model.model`, `outputs.run_root` | Yes |
-| Payload fixtures | Bundled synthetic data, policies, scripts, templates, or media used by workers. | `payloads/` or `input/` | Yes |
-| Environment variables | Runtime and provider settings for local services or optional integrations. | `MN_LLM_MODEL`, `MN_BLUEPRINT_QUICK_TEST` | Yes |
-
-## Outputs
-
-| Output | What it means | Where to look |
-|---|---|---|
-| Runtime events | Typed messages and worker events emitted through the manifest graph. | `blueprint_report`, worker-specific events |
-| Final artifact | The user-facing detection events, alert decisions, and notification payloads. | `result.json`, report, alert, or generated artifact |
-| Operational logs | Status lines and worker logs for debugging and audit. | `events.jsonl`, runtime logs, worker stderr |
-| Payload output | Files produced by specialized workers. | `payloads/`, reports, visual artifacts |
-
-## How to run
-
-Run the committed blueprint bundle directly:
+Generate a quick deterministic bundle for local review:
 
 ```bash
 cd business_facility_safety_video_guardian
-mn blueprint run .
+python3 generate_bundle.py --quick-test --output-dir /tmp/mirror-neuron-bundles
 ```
 
-Use `config/default.json` as the stable default contract and `config/overwrite.json` for local customer-specific values. When a blueprint declares `init_config_review`, the CLI can review those fields before launch and apply the answers as runtime config overrides.
+Then run the generated bundle with the MirrorNeuron runtime entrypoint.
 
-Run the shared repository tests:
+Use a live VL model by overriding the endpoint and model name:
 
 ```bash
-cd ..
-python3 -m pytest -q
+python3 generate_bundle.py \
+  --video-source-uri rtsp://127.0.0.1:8554/local-camera \
+  --video-source-transport rtsp \
+  --video-source-codec h264 \
+  --vl-model-base-url http://192.168.4.173:11434 \
+  --vl-model-name nemotron3:33b
 ```
 
-## How to customize it
+For bundled demo media instead of a live camera, pass `--video-source-uri samples/door-demo.mp4`. The detector also honors `VIDEO_SOURCE_URI`, `VIDEO_SOURCE_TRANSPORT`, `VIDEO_SOURCE_CODEC`, `VL_MODEL_BASE_URL`, and `VL_MODEL_NAME` at runtime. Existing `OLLAMA_BASE_URL` and `OLLAMA_MODEL` environment variables still work as compatibility aliases.
 
-Replace the sample video, tune sampling cadence and alert cooldown, add site-specific safety policies, and connect security notification channels.
+Third-party apps can edit or replace `config/overwrite.json` before launch to override the video source and VL model settings without changing `config/default.json`. Runtime should load `config/default.json` first, then deep-merge `config/overwrite.json` when present; direct runtime environment variables may still override the resolved config if the runner supports them.
 
-A practical customization path is:
+For Docker-backed local runs with the detector in OpenShell, `config/overwrite.json` points the detector at sandbox-local `/sandbox/live/latest.jpg`. The Mac webcam script keeps MediaMTX publishing on the host and uploads a rolling `latest.jpg` frame into the detector OpenShell sandbox, so detection uses the live Mac camera without adding OpenCV or ffmpeg to the core Docker image.
 
-1. Replace the mock input source with your system of record while preserving the input shape.
-2. Calibrate simulation parameters and action effects with historical data or domain experts.
-3. Update the LLM agent role, responsibilities, and allowed action schema.
-4. Extend `final_artifact` so it matches the report, ticket, plan, or recommendation your team already uses.
-5. Connect outputs to the review, approval, alerting, or execution system where real decisions happen.
+The detector runs in its own OpenShell sandbox, not in the core Docker image. The `person_detector` node declares `custom_openshell_image: "person_detector/openshell_sandbox"`, which points at `payloads/person_detector/openshell_sandbox`; that Dockerfile installs ffmpeg and OpenCV with apt inside only the detector sandbox image. Other OpenShell agents can declare their own `custom_openshell_image` values, and agents without that field use the default OpenShell environment. Deleting or stopping the job removes the shared OpenShell sandbox and its ports/resources without adding OpenCV or ffmpeg to MirrorNeuron core Docker.
 
-## What to look for in results
+For a local Mac webcam smoke test, start MediaMTX and publish from the browser:
 
-Inspect the manifest-declared output message, worker logs, and generated artifacts. The important question is whether the workflow preserved enough state and evidence for a user to understand why the final result was produced.
+```bash
+scripts/start_demo_camera_stream_for_mac.sh
+```
 
-The strongest signal is not only the final recommendation. Look for whether the state trajectory, agent rationale, applied actions, and output artifact tell a coherent story that a domain user could review.
+The script opens the MediaMTX webcam publisher at `http://127.0.0.1:8889/local-camera/publish` with H.264 video and audio disabled. Allow camera access and click Publish; the detector reads live frames uploaded to `/sandbox/live/latest.jpg` inside its OpenShell sandbox, while the dashboard preview reads `http://127.0.0.1:8889/local-camera/`. For a deterministic file-backed stream, use:
 
-## Investor and evaluator narrative
+```bash
+VIDEO_FILE=payloads/person_detector/samples/door-demo.mp4 scripts/start_demo_camera_stream_for_mac.sh
+```
 
-This illustrates vertical AI for physical operations: agents reason over evolving sensor state and trigger controlled workflows. The product lesson is that this is not just a chatbot around data. It is a repeatable pattern for vertical workflows where simulation, state, and agent decisions create a more defensible user experience than static analytics alone.
 
-## Runtime features demonstrated
+## Web UI
 
-- video sampling
-- Ollama decision path
-- cooldown state
-- Slack alerting
+This blueprint uses the shared Gradio dashboard from `mn_blueprint_support.gradio_dashboard`. `mn run` launches that support module for the blueprint, and the module writes `ui.json` and `web_ui.json` into `~/.mn/runs/<run_id>`.
 
-## Test coverage
+```text
+~/.mn/runs/<run_id>/web_ui.json
+```
 
-The shared test suite verifies manifest loading, standard config sections, mock inputs, deterministic fake LLM execution where applicable, state changes over time, CLI execution for shared runners, run-store artifacts, and structured final outputs. This blueprint is covered by business scenario smoke tests, mock input paths, and final artifact structure checks. Optional Ollama tests are marked separately so local development stays fast.
+Start MirrorNeuron services before running the blueprint:
 
-## Limitations
+```bash
+mn start
+```
 
-- Mock data and simplified dynamics are included for repeatable local runs.
-- Outputs are decision-support artifacts, not production advice.
-- Domain assumptions should be validated before connecting real systems or acting on recommendations.
-- Specialized worker blueprints may require the MirrorNeuron runtime or optional local services to execute the full graph.
+Open the URL recorded in `web_ui.json`. The shared dashboard reads this blueprint's run store configuration, shows one merged Video Source area, links the browser webcam publisher, embeds the MediaMTX WebRTC preview for live streams, and polls detector events such as `door_camera_frame_analyzed`, `door_camera_face_detected`, alert delivery, and frame-analysis failures.
 
-## Next steps
+Browsers usually cannot play raw RTSP URLs directly. For local live review, the default dashboard uses MediaMTX's WebRTC pages: `http://127.0.0.1:8889/local-camera/publish` for webcam publishing and `http://127.0.0.1:8889/local-camera/` for playback.
 
-- Connect a real data adapter and keep the input contract stable.
-- Add scenario comparison, dashboards, or persisted memory for repeated runs.
-- Add human approval gates for high-impact actions.
-- Track evaluation metrics that compare simulated recommendations against known outcomes.
-- Move operational logs and final artifacts into your team's normal review workflow.
+## Documentation Map
+
+- [SPEC.md](SPEC.md): design details, desired customer outcome, input/output contract, evaluation criteria, prototype limits, and upgrade path.
+- `manifest.json`: runtime graph, nodes, edges, initial inputs, and metadata.
+- `config/default.json`: default identity, inputs, LLM, output, logging, and adapter settings.
+- `config/overwrite.json`: editable third-party override template for video source and VL model settings.
+- `payloads/`: bundled worker code, demo media, and supporting runtime assets.
+
+## Prototype Status
+
+This blueprint is a working prototype with mock-friendly execution paths. It is intended for product evaluation and customer discovery before connecting real cameras, incident workflows, and production safety policies.

@@ -1,6 +1,6 @@
 {
   "daemon": true,
-  "description": "Monitor facility video streams and escalate safety-relevant observations with LLM reasoning.",
+  "description": "Monitor facility video streams and escalate safety-relevant observations with VL model reasoning.",
   "edges": [
     {
       "edge_id": "ingress_to_tick_source",
@@ -22,11 +22,16 @@
   "initial_inputs": {
     "ingress": [
       {
-        "description": "Continuously sample a 24/7 door camera or looping demo video, ask Nemotron 3 through Ollama whether a person is visible, and send Slack alerts when someone is detected.",
+        "description": "Continuously sample a 24/7 door camera or looping demo video, ask the configured VL model whether a human face is visible, describe observable facial appearance, and send Slack alerts when a face is detected.",
         "ollama_base_url": "http://192.168.4.173:11434",
         "ollama_model": "nemotron3:33b",
         "scenario": "door_camera_safety_monitor",
-        "slack_optional": true
+        "slack_optional": true,
+        "video_source_codec": "h264",
+        "video_source_transport": "rtsp",
+        "video_source_uri": "rtsp://127.0.0.1:8554/local-camera",
+        "vl_model_base_url": "http://192.168.4.173:11434",
+        "vl_model_name": "nemotron3:33b"
       }
     ]
   },
@@ -36,17 +41,20 @@
     "blueprint_id": "business_facility_safety_video_guardian",
     "category": "business",
     "customizable_for": "Door monitoring, restricted-area alerts, retail safety, warehouse operations.",
-    "description": "Monitor facility video streams and escalate safety-relevant observations with LLM reasoning.",
+    "description": "Monitor facility video streams, detect visible human faces, describe observable facial appearance, and escalate safety-relevant observations with VL model reasoning.",
     "interfaces": {
       "config": [
         "metadata",
         "identity",
         "inputs",
         "simulation",
+        "video_source",
+        "vl_model",
         "llm",
         "outputs",
         "logging",
-        "real_adapters"
+        "real_adapters",
+        "web_ui"
       ],
       "identity": [
         "blueprint_id",
@@ -68,13 +76,39 @@
         "inputs.json",
         "events.jsonl",
         "result.json",
-        "final_artifact.json"
+        "final_artifact.json",
+        "ui.json",
+        "web_ui.json"
+      ]
+    },
+    "init_config_review": {
+      "required": true,
+      "instruction": "When running in OtterDesk, show these overwriteable fields during init config and ask the user to change them or keep the defaults before launch.",
+      "fields": [
+        {
+          "path": "video_source.uri",
+          "label": "Video source",
+          "default": "rtsp://127.0.0.1:8554/local-camera",
+          "description": "Facility camera or video stream URI. Default is a local RTSP/H.264 camera stream."
+        },
+        {
+          "path": "vl_model.base_url",
+          "label": "VL model URL",
+          "default": "http://192.168.4.173:11434",
+          "description": "Base URL for the Ollama-compatible vision-language model server."
+        },
+        {
+          "path": "vl_model.model",
+          "label": "VL model name",
+          "default": "nemotron3:33b",
+          "description": "Vision-language model name used to understand sampled video frames."
+        }
       ]
     },
     "llm": {},
-    "llm_agent_role": "Safety observation and escalation agent.",
+    "llm_agent_role": "Safety observation and face-description escalation agent.",
     "name": "Facility Safety Video Guardian",
-    "output": "Detection events, alert decisions, and notification payloads.",
+    "output": "Face detection events, observable facial appearance descriptions, alert decisions, and notification payloads.",
     "output_contract": {
       "events": "typed event objects with payload",
       "status": "JSON lines on stderr",
@@ -82,13 +116,13 @@
     },
     "problem_solved": "Video monitoring is continuous, noisy, and operationally sensitive; teams need stateful alerts, cooldowns, and explainable observations rather than raw frames.",
     "quick_test": {
-      "description": "Quick test mode shortens the sample interval, disables Slack, and uses mock VLM detection unless OLLAMA_LIVE_IN_QUICK_TEST=1.",
+      "description": "Quick test mode shortens the sample interval, disables Slack, and uses mock face detection unless OLLAMA_LIVE_IN_QUICK_TEST=1.",
       "enabled": false,
       "env": "MN_BLUEPRINT_QUICK_TEST=1"
     },
     "runtime_features": [
       "video sampling",
-      "Ollama decision path",
+      "configurable VL model decision path",
       "cooldown state",
       "Slack alerting"
     ],
@@ -111,7 +145,60 @@
       "format": "jsonl",
       "stream": "stderr"
     },
-    "target_user": "Facilities, security, safety operations, and property management teams."
+    "target_user": "Facilities, security, safety operations, and property management teams.",
+    "video_source": {
+      "uri": "rtsp://127.0.0.1:8554/local-camera",
+      "transport": "rtsp",
+      "codec": "h264",
+      "config_env": [
+        "VIDEO_SOURCE_URI",
+        "VIDEO_SOURCE_TRANSPORT",
+        "VIDEO_SOURCE_CODEC"
+      ]
+    },
+    "vl_model": {
+      "provider": "ollama",
+      "base_url": "http://192.168.4.173:11434",
+      "model": "nemotron3:33b",
+      "config_env": [
+        "VL_MODEL_BASE_URL",
+        "VL_MODEL_NAME"
+      ],
+      "legacy_env_aliases": [
+        "OLLAMA_BASE_URL",
+        "OLLAMA_MODEL"
+      ]
+    },
+    "web_ui": {
+      "enabled": true,
+      "kind": "output",
+      "adapter": "gradio",
+      "server": "blueprint_support",
+      "description": "Shared blueprint support Gradio dashboard that shows this blueprint's configured camera/demo video source beside streamed safety events from the shared run store.",
+      "event_types": [
+        "door_camera_frame_analyzed",
+        "door_camera_face_detected",
+        "door_camera_slack_alert_sent",
+        "door_camera_slack_alert_skipped",
+        "door_camera_slack_alert_error",
+        "door_camera_frame_analysis_failed"
+      ],
+      "arguments": {
+        "run_id": "MirrorNeuron run id used to resolve ~/.mn/runs/<run_id>.",
+        "runs_root": "MirrorNeuron runs root, defaulting to ~/.mn/runs.",
+        "url": "Shared support Gradio app URL written to web_ui.json.",
+        "browser_video_source": "MediaMTX WebRTC preview URL, defaulting to http://127.0.0.1:8889/local-camera/ for local testing.",
+        "browser_publish_source": "MediaMTX browser webcam publisher URL, defaulting to the local-camera publish page with H.264 video and no audio for local testing."
+      },
+      "registration": {
+        "module": "mn_blueprint_support.gradio_dashboard",
+        "package": "mirrorneuron-blueprint-support-skill[webui]",
+        "api": [
+          "main"
+        ],
+        "writes": "ui.json and web_ui.json"
+      }
+    }
   },
   "name": "Facility Safety Video Guardian",
   "nodes": [
@@ -141,34 +228,51 @@
       "agent_type": "executor",
       "config": {
         "command": [
-          "python3",
-          "scripts/analyze_door_camera_frame.py"
+          "bash",
+          "scripts/run_detector_in_openshell.sh"
         ],
         "environment": {
           "FRAME_JPEG_MAX_WIDTH": "896",
           "FRAME_SAMPLE_SECONDS": "5.0",
+          "FFMPEG_RTSP_TRANSPORT": "tcp",
           "MN_BLUEPRINT_LOG_LEVEL": "info",
           "OLLAMA_BASE_URL": "http://192.168.4.173:11434",
           "OLLAMA_MODEL": "nemotron3:33b",
           "OLLAMA_THINK": "false",
+          "FACE_ALERT_COOLDOWN_SECONDS": "60",
+          "FACE_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
           "PERSON_ALERT_COOLDOWN_SECONDS": "60",
           "PERSON_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
           "SLACK_ALERT_ENABLED": "true",
           "SLACK_DEFAULT_CHANNEL": "#safety",
-          "SLACK_MESSAGE_PREFIX": "Door camera safety alert",
-          "VIDEO_SOURCE_URI": "samples/door-demo.mp4"
+          "SLACK_MESSAGE_PREFIX": "Door camera face alert",
+          "VIDEO_SOURCE_CODEC": "h264",
+          "VIDEO_SOURCE_TRANSPORT": "rtsp",
+          "VIDEO_SOURCE_URI": "rtsp://127.0.0.1:8554/local-camera",
+          "VL_MODEL_BASE_URL": "http://192.168.4.173:11434",
+          "VL_MODEL_NAME": "nemotron3:33b"
         },
+        "cleanup_remote_dir": true,
+        "custom_openshell_image": "person_detector/openshell_sandbox",
+        "gpu": false,
+        "name_prefix": "facility-safety-detector",
         "output_message_type": null,
-        "python_environment": {
-          "requirements": "person_detector/requirements.txt"
-        },
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "persistent_workspace": false,
+        "policy": "person_detector/policies/local-video-egress.yaml",
+        "reuse_shared_sandbox": true,
+        "runner_module": "MirrorNeuron.Sandbox.OpenShell",
         "upload_as": "person_detector",
         "upload_path": "person_detector",
+        "upload_paths": [
+          {
+            "source": "person_detector",
+            "target": "person_detector"
+          }
+        ],
         "workdir": "/sandbox/job/person_detector"
       },
       "node_id": "person_detector",
-      "role": "nemotron3_video_safety_detector",
+      "role": "vl_model_video_safety_detector",
       "type": "stream"
     }
   ],
@@ -176,41 +280,5 @@
     "recovery_mode": "cluster_recover",
     "stream_mode": "live"
   },
-  "requiredContextEngine": false,
-  "init_config_review": {
-    "required": false,
-    "instruction": "Review camera, model, and alert settings before launching the video safety monitor.",
-    "fields": [
-      {
-        "path": "video_source.uri",
-        "label": "Video source",
-        "default": "samples/door-demo.mp4",
-        "description": "Camera stream URI or bundled demo video path."
-      },
-      {
-        "path": "vl_model.base_url",
-        "label": "VL model URL",
-        "default": "http://192.168.4.173:11434",
-        "description": "Ollama-compatible vision-language model server."
-      },
-      {
-        "path": "vl_model.model",
-        "label": "VL model name",
-        "default": "nemotron3:33b",
-        "description": "Vision-language model used to inspect sampled frames."
-      },
-      {
-        "path": "safety_alerts.slack_enabled",
-        "label": "Slack alerts enabled",
-        "default": "true",
-        "description": "Set false to suppress Slack-style notifications."
-      },
-      {
-        "path": "safety_alerts.slack_channel",
-        "label": "Slack channel",
-        "default": "#safety",
-        "description": "Destination channel for safety alerts."
-      }
-    ]
-  }
+  "requiredContextEngine": false
 }

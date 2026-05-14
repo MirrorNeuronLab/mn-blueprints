@@ -5,11 +5,11 @@
 
 ## One-line value proposition
 
-Monitor facility video streams, detect visible human faces, describe observable facial appearance, and escalate safety-relevant observations with VL model reasoning.
+Monitor facility video streams, detect visible humans, describe observable appearance and activity, and escalate safety-relevant observations with VL model reasoning.
 
 ## What it is
 
-Facility Safety Video Guardian is a MirrorNeuron blueprint for continuous safety monitoring over facility video. It samples a camera or demo video stream, asks a configurable vision-language model whether a human face is visible, applies cooldown state, and writes reviewable alert artifacts.
+Facility Safety Video Guardian is a MirrorNeuron blueprint for continuous safety monitoring over facility video. It samples a live webcam or RTSP camera stream, asks a configurable vision-language model whether a human is visible, applies cooldown state, and writes reviewable alert artifacts.
 
 ## Who this is for
 
@@ -21,19 +21,19 @@ Video monitoring is continuous, noisy, and operationally sensitive. A stateful w
 
 ## Why this runtime is useful here
 
-The runtime gives this workflow persistent events, local run artifacts, configurable inputs, optional web UI handles, stream declarations, and clean boundaries for OpenShell workers. That makes it easier to replace demo media with real facility sources while keeping safety decisions inspectable.
+The runtime gives this workflow persistent events, local run artifacts, configurable inputs, optional web UI handles, stream declarations, and clean boundaries for OpenShell workers. That makes it easier to connect approved facility sources while keeping safety decisions inspectable.
 
 ## How it works
 
 1. Loads `config/default.json` and any overrides.
 2. Resolves the video source, VL model endpoint, sampling cadence, and cooldown settings.
-3. Samples a local file, RTSP stream, or browser-published MediaMTX stream.
-4. Emits typed events for frame analysis, face detection, alert decisions, errors, and completion.
+3. Samples a live RTSP/H.264 camera stream or browser-published MediaMTX webcam stream.
+4. Emits typed events for frame analysis, human detection, alert decisions, errors, and completion.
 5. Writes `result.json`, `final_artifact.json`, `events.jsonl`, and optional dashboard metadata under the local run store.
 
 ## Example scenario
 
-A front-door camera is sampled every few seconds. The agent checks whether a human face is visible, describes visible non-identifying appearance details, decides whether the event is alert-worthy, suppresses duplicates during cooldown, and emits an alert payload for review or Slack delivery.
+A front-door camera is sampled every 10 seconds. The agent checks whether a human is visible, describes visible non-identifying appearance details, decides whether the event is alert-worthy, suppresses duplicates during cooldown, and emits an alert payload for review or Slack delivery.
 
 ## Inputs
 
@@ -44,38 +44,32 @@ A front-door camera is sampled every few seconds. The agent checks whether a hum
 
 ## Outputs
 
-- Face detection events and frame-analysis events.
+- Human detection events emitted only when a person is visible.
 - Alert decisions and notification payloads.
 - A final artifact summarizing the run, observations, and recommended next steps.
 - Optional shared Gradio or static dashboard metadata in `web_ui.json`.
 
 ## How to run
 
-Run with the bundled deterministic media or mock path from the blueprint directory:
+Run the detector script from the blueprint directory:
 
 ```bash
 python3 payloads/person_detector/scripts/analyze_door_camera_frame.py
 ```
 
-For a local Mac webcam smoke test, start the demo camera stream:
+For a local Mac webcam smoke test, start the webcam stream:
 
 ```bash
-scripts/start_demo_camera_stream_for_mac.sh
-```
-
-For a deterministic file-backed stream:
-
-```bash
-VIDEO_FILE=payloads/person_detector/samples/door-demo.mp4 scripts/start_demo_camera_stream_for_mac.sh
+scripts/start_webcam_stream_for_mac.sh
 ```
 
 ## How to customize it
 
-Replace the sample video, tune sampling cadence and alert cooldown, change the VL model endpoint, update safety policy text, and connect approved notification output skills. Third-party apps can edit `config/overwrite.json` before launch without changing `config/default.json`.
+Point the stream URI at an approved webcam or facility RTSP source, tune sampling cadence and alert cooldown, change the VL model endpoint, update safety policy text, and connect approved notification output skills. Third-party apps can edit `config/overwrite.json` before launch without changing `config/default.json`.
 
 ## What to look for in results
 
-Check whether `events.jsonl` shows frame-analysis events, face-detection decisions, cooldown suppressions, alert delivery attempts, and clean completion. The final artifact should explain what was observed, what action was selected, and which operator follow-up is recommended.
+Check whether `events.jsonl` shows frame-analysis events, human-detection decisions, cooldown suppressions, alert delivery attempts, and clean completion. The final artifact should explain what was observed, what action was selected, and which operator follow-up is recommended.
 
 ## Investor and evaluator narrative
 
@@ -99,7 +93,7 @@ This prototype is for evaluation and customer discovery. It should be reviewed a
 
 ## Next steps
 
-Replace demo sources with approved facility streams, add human review gates for sensitive alerts, connect notification output skills, and tune privacy rules for production deployments.
+Replace the local webcam source with approved facility streams, add human review gates for sensitive alerts, connect notification output skills, and tune privacy rules for production deployments.
 
 ## Documentation map
 
@@ -107,4 +101,4 @@ Replace demo sources with approved facility streams, add human review gates for 
 - `manifest.json`: graph, nodes, edges, initial inputs, metadata, stream declarations, and interface contract.
 - `config/default.json`: default identity, inputs, streams, LLM, outputs, logging, privacy, budgets, and adapters.
 - `config/overwrite.json`: editable local override template.
-- `payloads/`: worker code, demo media, policies, and supporting runtime assets.
+- `payloads/`: worker code, policies, and supporting runtime assets.

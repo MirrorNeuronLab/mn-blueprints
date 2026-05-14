@@ -1,6 +1,6 @@
 {
   "daemon": true,
-  "description": "Monitor facility video streams, detect visible human faces, describe observable facial appearance, and escalate safety-relevant observations with VL model reasoning.",
+  "description": "Monitor facility video streams, detect visible humans, describe observable appearance and activity, and escalate safety-relevant observations with VL model reasoning.",
   "edges": [
     {
       "edge_id": "ingress_to_tick_source",
@@ -22,14 +22,14 @@
   "initial_inputs": {
     "ingress": [
       {
-        "description": "Continuously sample a 24/7 door camera or looping demo video, ask the configured VL model whether a human face is visible, describe observable facial appearance, and send Slack alerts when a face is detected.",
+        "description": "Continuously sample a 24/7 door camera or local webcam stream, ask the configured VL model whether a human is visible, describe observable appearance and activity, and send Slack alerts when a human is detected.",
         "ollama_base_url": "http://192.168.4.173:11434",
         "ollama_model": "nemotron3:33b",
         "scenario": "door_camera_safety_monitor",
         "slack_optional": true,
         "video_source_codec": "h264",
         "video_source_transport": "rtsp",
-        "video_source_uri": "rtsp://127.0.0.1:8554/local-camera",
+        "video_source_uri": "rtsp://host.docker.internal:8554/local-camera",
         "vl_model_base_url": "http://192.168.4.173:11434",
         "vl_model_name": "nemotron3:33b"
       }
@@ -74,11 +74,11 @@
       ]
     },
     "customizable_for": "Door monitoring, restricted-area alerts, retail safety, warehouse operations.",
-    "description": "Monitor facility video streams, detect visible human faces, describe observable facial appearance, and escalate safety-relevant observations with VL model reasoning.",
+    "description": "Monitor facility video streams, detect visible humans, describe observable appearance and activity, and escalate safety-relevant observations with VL model reasoning.",
     "init_config_review": {
       "fields": [
         {
-          "default": "rtsp://127.0.0.1:8554/local-camera",
+          "default": "rtsp://host.docker.internal:8554/local-camera",
           "description": "Facility camera or video stream URI. Default is a local RTSP/H.264 camera stream.",
           "label": "Video source",
           "path": "video_source.uri"
@@ -269,9 +269,9 @@
       ]
     },
     "llm": {},
-    "llm_agent_role": "Safety observation and face-description escalation agent.",
+    "llm_agent_role": "Safety observation and human-activity escalation agent.",
     "name": "Facility Safety Video Guardian",
-    "output": "Face detection events, observable facial appearance descriptions, alert decisions, and notification payloads.",
+    "output": "Human detection events, observable appearance and activity descriptions, alert decisions, and notification payloads.",
     "output_contract": {
       "events": "typed event objects with payload",
       "events_jsonl": "events.jsonl",
@@ -285,7 +285,7 @@
     },
     "problem_solved": "Video monitoring is continuous, noisy, and operationally sensitive; teams need stateful alerts, cooldowns, and explainable observations rather than raw frames.",
     "quick_test": {
-      "description": "Quick test mode shortens the sample interval, disables Slack, and uses mock face detection unless OLLAMA_LIVE_IN_QUICK_TEST=1.",
+      "description": "Quick test mode shortens the sample interval, disables Slack, and uses mock human detection unless OLLAMA_LIVE_IN_QUICK_TEST=1.",
       "enabled": false,
       "env": "MN_BLUEPRINT_QUICK_TEST=1"
     },
@@ -342,7 +342,7 @@
       },
       "kind": "video",
       "primary_stream": "door_camera_video",
-      "transport": "file",
+      "transport": "rtsp",
       "websocket_skill": false
     },
     "target_user": "Facilities, security, safety operations, and property management teams.",
@@ -354,7 +354,7 @@
         "VIDEO_SOURCE_CODEC"
       ],
       "transport": "rtsp",
-      "uri": "rtsp://127.0.0.1:8554/local-camera"
+      "uri": "rtsp://host.docker.internal:8554/local-camera"
     },
     "vl_model": {
       "base_url": "http://192.168.4.173:11434",
@@ -378,11 +378,10 @@
         "runs_root": "MirrorNeuron runs root, defaulting to ~/.mn/runs.",
         "url": "Shared support Gradio app URL written to web_ui.json."
       },
-      "description": "Shared blueprint support Gradio dashboard that shows this blueprint's configured camera/demo video source beside streamed safety events from the shared run store.",
+      "description": "Shared blueprint support Gradio dashboard that shows this blueprint's configured live camera source beside streamed safety events from the shared run store.",
       "enabled": true,
       "event_types": [
-        "door_camera_frame_analyzed",
-        "door_camera_face_detected",
+        "door_camera_human_detected",
         "door_camera_slack_alert_sent",
         "door_camera_slack_alert_skipped",
         "door_camera_slack_alert_error",
@@ -421,7 +420,7 @@
       "agent_type": "module",
       "config": {
         "camera_id": "front-door",
-        "interval_ms": 5000,
+        "interval_ms": 10000,
         "module": "MirrorNeuron.Examples.VideoSafetyDoorMonitor.DoorCameraTickSource",
         "module_source": "beam_modules/door_camera_tick_source.ex",
         "target_node": "person_detector"
@@ -432,7 +431,7 @@
       "uses": "mn-agents.module_agent@1.0.0",
       "with": {
         "camera_id": "front-door",
-        "interval_ms": 5000,
+        "interval_ms": 10000,
         "module": "MirrorNeuron.Examples.VideoSafetyDoorMonitor.DoorCameraTickSource",
         "module_source": "beam_modules/door_camera_tick_source.ex",
         "node_type": "stream",
@@ -452,9 +451,10 @@
         "environment": {
           "FACE_ALERT_COOLDOWN_SECONDS": "60",
           "FACE_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
+          "FFMPEG_FRAME_TIMEOUT_SECONDS": "8",
           "FFMPEG_RTSP_TRANSPORT": "tcp",
           "FRAME_JPEG_MAX_WIDTH": "896",
-          "FRAME_SAMPLE_SECONDS": "5.0",
+          "FRAME_SAMPLE_SECONDS": "10.0",
           "MN_BLUEPRINT_LOG_LEVEL": "info",
           "OLLAMA_BASE_URL": "http://192.168.4.173:11434",
           "OLLAMA_MODEL": "nemotron3:33b",
@@ -463,10 +463,10 @@
           "PERSON_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
           "SLACK_ALERT_ENABLED": "true",
           "SLACK_DEFAULT_CHANNEL": "#safety",
-          "SLACK_MESSAGE_PREFIX": "Door camera face alert",
+          "SLACK_MESSAGE_PREFIX": "Door camera human alert",
           "VIDEO_SOURCE_CODEC": "h264",
           "VIDEO_SOURCE_TRANSPORT": "rtsp",
-          "VIDEO_SOURCE_URI": "rtsp://127.0.0.1:8554/local-camera",
+          "VIDEO_SOURCE_URI": "rtsp://host.docker.internal:8554/local-camera",
           "VL_MODEL_BASE_URL": "http://192.168.4.173:11434",
           "VL_MODEL_NAME": "nemotron3:33b"
         },
@@ -501,9 +501,10 @@
         "environment": {
           "FACE_ALERT_COOLDOWN_SECONDS": "60",
           "FACE_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
+          "FFMPEG_FRAME_TIMEOUT_SECONDS": "8",
           "FFMPEG_RTSP_TRANSPORT": "tcp",
           "FRAME_JPEG_MAX_WIDTH": "896",
-          "FRAME_SAMPLE_SECONDS": "5.0",
+          "FRAME_SAMPLE_SECONDS": "10.0",
           "MN_BLUEPRINT_LOG_LEVEL": "info",
           "OLLAMA_BASE_URL": "http://192.168.4.173:11434",
           "OLLAMA_MODEL": "nemotron3:33b",
@@ -512,10 +513,10 @@
           "PERSON_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
           "SLACK_ALERT_ENABLED": "true",
           "SLACK_DEFAULT_CHANNEL": "#safety",
-          "SLACK_MESSAGE_PREFIX": "Door camera face alert",
+          "SLACK_MESSAGE_PREFIX": "Door camera human alert",
           "VIDEO_SOURCE_CODEC": "h264",
           "VIDEO_SOURCE_TRANSPORT": "rtsp",
-          "VIDEO_SOURCE_URI": "rtsp://127.0.0.1:8554/local-camera",
+          "VIDEO_SOURCE_URI": "rtsp://host.docker.internal:8554/local-camera",
           "VL_MODEL_BASE_URL": "http://192.168.4.173:11434",
           "VL_MODEL_NAME": "nemotron3:33b"
         },

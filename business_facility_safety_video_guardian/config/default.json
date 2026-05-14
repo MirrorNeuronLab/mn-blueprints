@@ -287,8 +287,7 @@
       "llm_decision",
       "simulation_state_updated",
       "run_completed",
-      "door_camera_frame_analyzed",
-      "door_camera_face_detected",
+      "door_camera_human_detected",
       "door_camera_slack_alert_sent",
       "door_camera_slack_alert_skipped",
       "door_camera_slack_alert_error",
@@ -344,7 +343,7 @@
   },
   "outputs": {
     "adapter": "local_run_store",
-    "artifact_contract": "Face detection events, observable facial appearance descriptions, alert decisions, and notification payloads.",
+    "artifact_contract": "Human detection events, observable appearance and activity descriptions, alert decisions, and notification payloads.",
     "run_root": "~/.mn/runs",
     "skills": {
       "websocket_events": {
@@ -431,15 +430,15 @@
   },
   "streams": {
     "door_camera_video": {
-      "codec": "mp4",
+      "codec": "h264",
       "enabled": true,
       "kind": "video",
-      "transport": "file",
-      "uri": "payloads/person_detector/samples/door-demo.mp4"
+      "transport": "rtsp",
+      "uri": "rtsp://host.docker.internal:8554/local-camera"
     }
   },
   "triggers": {
-    "daemon": false,
+    "daemon": true,
     "schedule": null,
     "sources": [
       "door_camera_video"
@@ -451,9 +450,9 @@
     "codec": "h264",
     "description": "Configurable facility video stream. The default expects a local RTSP camera publishing H.264 video.",
     "frame_jpeg_max_width": 896,
-    "frame_sample_seconds": 5.0,
+    "frame_sample_seconds": 10.0,
     "transport": "rtsp",
-    "uri": "rtsp://127.0.0.1:8554/local-camera"
+    "uri": "rtsp://host.docker.internal:8554/local-camera"
   },
   "vl_model": {
     "base_url": "http://192.168.4.173:11434",
@@ -468,14 +467,13 @@
     "dashboard": {
       "browser_publish_source": "http://127.0.0.1:8889/local-camera/publish?video-codec=h264%2F90000&audio-device=none&video-width=1280&video-height=720&video-framerate=30",
       "browser_video_source": "http://127.0.0.1:8889/local-camera/",
-      "default_video_source": "person_detector/samples/door-demo.mp4",
+      "default_video_source": "rtsp://host.docker.internal:8554/local-camera",
       "event_feed": {
         "default_path": "~/.mn/runs/<run_id>/events.jsonl",
         "format": "jsonl"
       },
       "event_types": [
-        "door_camera_frame_analyzed",
-        "door_camera_face_detected",
+        "door_camera_human_detected",
         "door_camera_slack_alert_sent",
         "door_camera_slack_alert_skipped",
         "door_camera_slack_alert_error",

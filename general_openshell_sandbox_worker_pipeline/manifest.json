@@ -30,6 +30,26 @@
   "job_name": "general-openshell-sandbox-worker-pipeline",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "shell_worker",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "python_worker",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "result_sink",
+          "uses": "mn-agents.report_aggregator@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "general_openshell_sandbox_worker_pipeline",
     "category": "general",
     "configuration_contract": {
@@ -316,7 +336,21 @@
       },
       "node_id": "shell_worker",
       "role": "root_coordinator",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "bash",
+          "scripts/collect_metrics.sh"
+        ],
+        "name_prefix": "shell-worker",
+        "node_type": "generic",
+        "output_message_type": "shell_metrics",
+        "policy": "policies/api-egress.yaml",
+        "role": "root_coordinator",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "word_count"
+      }
     },
     {
       "agent_type": "executor",
@@ -339,7 +373,16 @@
         "workdir": "/sandbox/job/report"
       },
       "node_id": "python_worker",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "name_prefix": "python-worker",
+        "node_type": "generic",
+        "output_message_type": "python_report",
+        "policy": "policies/api-egress.yaml",
+        "script": "scripts/build_report.py",
+        "upload_path": "report"
+      }
     },
     {
       "agent_type": "aggregator",
@@ -347,7 +390,12 @@
         "complete_on_message": true
       },
       "node_id": "result_sink",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.report_aggregator@1.0.0",
+      "with": {
+        "complete_on_message": true,
+        "node_type": "reduce"
+      }
     }
   ],
   "policies": {

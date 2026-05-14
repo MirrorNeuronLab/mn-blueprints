@@ -1245,6 +1245,426 @@
   "job_name": "general-parallel-worker-scale-benchmark",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "dispatcher",
+          "uses": "mn-agents.router_agent@1.0.0"
+        },
+        {
+          "node_id": "collector",
+          "uses": "mn-agents.report_aggregator@1.0.0"
+        },
+        {
+          "node_id": "summarizer",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0001",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0002",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0003",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0004",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0005",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0006",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0007",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0008",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0009",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0010",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0011",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0012",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0013",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0014",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0015",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0016",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0017",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0018",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0019",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0020",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0021",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0022",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0023",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0024",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0025",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0026",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0027",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0028",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0029",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0030",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0031",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0032",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0033",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0034",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0035",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0036",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0037",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0038",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0039",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0040",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0041",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0042",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0043",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0044",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0045",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0046",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0047",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0048",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0049",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0050",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0051",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0052",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0053",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0054",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0055",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0056",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0057",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0058",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0059",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0060",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0061",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0062",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0063",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0064",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0065",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0066",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0067",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0068",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0069",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0070",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0071",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0072",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0073",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0074",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0075",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0076",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0077",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0078",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0079",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0080",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0081",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0082",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0083",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0084",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0085",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0086",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0087",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0088",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0089",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0090",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0091",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0092",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0093",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0094",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0095",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0096",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0097",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0098",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0099",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "prime_worker_0100",
+          "uses": "mn-agents.python_executor@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "general_parallel_worker_scale_benchmark",
     "category": "general",
     "configuration_contract": {
@@ -1516,7 +1936,13 @@
       },
       "node_id": "dispatcher",
       "role": "root_coordinator",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.router_agent@1.0.0",
+      "with": {
+        "emit_type": "prime_chunk_request",
+        "node_type": "map",
+        "role": "root_coordinator"
+      }
     },
     {
       "agent_type": "aggregator",
@@ -1525,7 +1951,14 @@
         "output_message_type": "prime_chunk_collection"
       },
       "node_id": "collector",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.report_aggregator@1.0.0",
+      "with": {
+        "complete_after": 100,
+        "complete_on_message": true,
+        "node_type": "reduce",
+        "output_message_type": "prime_chunk_collection"
+      }
     },
     {
       "agent_type": "executor",
@@ -1542,7 +1975,16 @@
         "workdir": "/sandbox/job/summary_worker"
       },
       "node_id": "summarizer",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "name_prefix": "prime-summary",
+        "node_type": "reduce",
+        "output_message_type": null,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/summarize_prime_sweep.py",
+        "upload_path": "summary_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1571,7 +2013,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0001",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0001",
+          "1000003",
+          "1000102"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0001",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1600,7 +2061,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0002",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0002",
+          "1000103",
+          "1000202"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0002",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1629,7 +2109,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0003",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0003",
+          "1000203",
+          "1000302"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0003",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1658,7 +2157,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0004",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0004",
+          "1000303",
+          "1000402"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0004",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1687,7 +2205,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0005",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0005",
+          "1000403",
+          "1000502"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0005",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1716,7 +2253,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0006",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0006",
+          "1000503",
+          "1000602"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0006",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1745,7 +2301,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0007",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0007",
+          "1000603",
+          "1000702"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0007",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1774,7 +2349,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0008",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0008",
+          "1000703",
+          "1000802"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0008",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1803,7 +2397,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0009",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0009",
+          "1000803",
+          "1000902"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0009",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1832,7 +2445,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0010",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0010",
+          "1000903",
+          "1001002"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0010",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1861,7 +2493,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0011",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0011",
+          "1001003",
+          "1001102"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0011",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1890,7 +2541,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0012",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0012",
+          "1001103",
+          "1001202"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0012",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1919,7 +2589,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0013",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0013",
+          "1001203",
+          "1001302"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0013",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1948,7 +2637,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0014",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0014",
+          "1001303",
+          "1001402"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0014",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -1977,7 +2685,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0015",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0015",
+          "1001403",
+          "1001502"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0015",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2006,7 +2733,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0016",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0016",
+          "1001503",
+          "1001602"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0016",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2035,7 +2781,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0017",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0017",
+          "1001603",
+          "1001702"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0017",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2064,7 +2829,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0018",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0018",
+          "1001703",
+          "1001802"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0018",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2093,7 +2877,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0019",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0019",
+          "1001803",
+          "1001902"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0019",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2122,7 +2925,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0020",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0020",
+          "1001903",
+          "1002002"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0020",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2151,7 +2973,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0021",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0021",
+          "1002003",
+          "1002102"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0021",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2180,7 +3021,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0022",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0022",
+          "1002103",
+          "1002202"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0022",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2209,7 +3069,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0023",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0023",
+          "1002203",
+          "1002302"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0023",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2238,7 +3117,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0024",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0024",
+          "1002303",
+          "1002402"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0024",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2267,7 +3165,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0025",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0025",
+          "1002403",
+          "1002502"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0025",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 0,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2296,7 +3213,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0026",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0026",
+          "1002503",
+          "1002602"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0026",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2325,7 +3261,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0027",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0027",
+          "1002603",
+          "1002702"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0027",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2354,7 +3309,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0028",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0028",
+          "1002703",
+          "1002802"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0028",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2383,7 +3357,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0029",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0029",
+          "1002803",
+          "1002902"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0029",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2412,7 +3405,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0030",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0030",
+          "1002903",
+          "1003002"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0030",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2441,7 +3453,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0031",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0031",
+          "1003003",
+          "1003102"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0031",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2470,7 +3501,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0032",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0032",
+          "1003103",
+          "1003202"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0032",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2499,7 +3549,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0033",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0033",
+          "1003203",
+          "1003302"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0033",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2528,7 +3597,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0034",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0034",
+          "1003303",
+          "1003402"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0034",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2557,7 +3645,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0035",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0035",
+          "1003403",
+          "1003502"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0035",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2586,7 +3693,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0036",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0036",
+          "1003503",
+          "1003602"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0036",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2615,7 +3741,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0037",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0037",
+          "1003603",
+          "1003702"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0037",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2644,7 +3789,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0038",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0038",
+          "1003703",
+          "1003802"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0038",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2673,7 +3837,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0039",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0039",
+          "1003803",
+          "1003902"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0039",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2702,7 +3885,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0040",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0040",
+          "1003903",
+          "1004002"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0040",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2731,7 +3933,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0041",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0041",
+          "1004003",
+          "1004102"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0041",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2760,7 +3981,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0042",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0042",
+          "1004103",
+          "1004202"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0042",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2789,7 +4029,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0043",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0043",
+          "1004203",
+          "1004302"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0043",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2818,7 +4077,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0044",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0044",
+          "1004303",
+          "1004402"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0044",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2847,7 +4125,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0045",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0045",
+          "1004403",
+          "1004502"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0045",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2876,7 +4173,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0046",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0046",
+          "1004503",
+          "1004602"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0046",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2905,7 +4221,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0047",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0047",
+          "1004603",
+          "1004702"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0047",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2934,7 +4269,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0048",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0048",
+          "1004703",
+          "1004802"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0048",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2963,7 +4317,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0049",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0049",
+          "1004803",
+          "1004902"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0049",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -2992,7 +4365,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0050",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0050",
+          "1004903",
+          "1005002"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0050",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 250,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3021,7 +4413,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0051",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0051",
+          "1005003",
+          "1005102"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0051",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3050,7 +4461,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0052",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0052",
+          "1005103",
+          "1005202"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0052",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3079,7 +4509,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0053",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0053",
+          "1005203",
+          "1005302"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0053",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3108,7 +4557,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0054",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0054",
+          "1005303",
+          "1005402"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0054",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3137,7 +4605,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0055",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0055",
+          "1005403",
+          "1005502"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0055",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3166,7 +4653,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0056",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0056",
+          "1005503",
+          "1005602"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0056",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3195,7 +4701,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0057",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0057",
+          "1005603",
+          "1005702"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0057",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3224,7 +4749,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0058",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0058",
+          "1005703",
+          "1005802"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0058",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3253,7 +4797,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0059",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0059",
+          "1005803",
+          "1005902"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0059",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3282,7 +4845,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0060",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0060",
+          "1005903",
+          "1006002"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0060",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3311,7 +4893,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0061",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0061",
+          "1006003",
+          "1006102"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0061",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3340,7 +4941,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0062",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0062",
+          "1006103",
+          "1006202"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0062",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3369,7 +4989,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0063",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0063",
+          "1006203",
+          "1006302"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0063",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3398,7 +5037,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0064",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0064",
+          "1006303",
+          "1006402"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0064",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3427,7 +5085,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0065",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0065",
+          "1006403",
+          "1006502"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0065",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3456,7 +5133,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0066",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0066",
+          "1006503",
+          "1006602"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0066",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3485,7 +5181,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0067",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0067",
+          "1006603",
+          "1006702"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0067",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3514,7 +5229,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0068",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0068",
+          "1006703",
+          "1006802"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0068",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3543,7 +5277,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0069",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0069",
+          "1006803",
+          "1006902"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0069",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3572,7 +5325,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0070",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0070",
+          "1006903",
+          "1007002"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0070",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3601,7 +5373,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0071",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0071",
+          "1007003",
+          "1007102"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0071",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3630,7 +5421,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0072",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0072",
+          "1007103",
+          "1007202"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0072",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3659,7 +5469,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0073",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0073",
+          "1007203",
+          "1007302"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0073",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3688,7 +5517,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0074",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0074",
+          "1007303",
+          "1007402"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0074",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3717,7 +5565,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0075",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0075",
+          "1007403",
+          "1007502"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0075",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 500,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3746,7 +5613,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0076",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0076",
+          "1007503",
+          "1007602"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0076",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3775,7 +5661,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0077",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0077",
+          "1007603",
+          "1007702"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0077",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3804,7 +5709,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0078",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0078",
+          "1007703",
+          "1007802"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0078",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3833,7 +5757,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0079",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0079",
+          "1007803",
+          "1007902"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0079",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3862,7 +5805,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0080",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0080",
+          "1007903",
+          "1008002"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0080",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3891,7 +5853,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0081",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0081",
+          "1008003",
+          "1008102"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0081",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3920,7 +5901,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0082",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0082",
+          "1008103",
+          "1008202"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0082",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3949,7 +5949,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0083",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0083",
+          "1008203",
+          "1008302"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0083",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -3978,7 +5997,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0084",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0084",
+          "1008303",
+          "1008402"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0084",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4007,7 +6045,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0085",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0085",
+          "1008403",
+          "1008502"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0085",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4036,7 +6093,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0086",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0086",
+          "1008503",
+          "1008602"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0086",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4065,7 +6141,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0087",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0087",
+          "1008603",
+          "1008702"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0087",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4094,7 +6189,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0088",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0088",
+          "1008703",
+          "1008802"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0088",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4123,7 +6237,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0089",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0089",
+          "1008803",
+          "1008902"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0089",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4152,7 +6285,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0090",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0090",
+          "1008903",
+          "1009002"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0090",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4181,7 +6333,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0091",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0091",
+          "1009003",
+          "1009102"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0091",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4210,7 +6381,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0092",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0092",
+          "1009103",
+          "1009202"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0092",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4239,7 +6429,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0093",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0093",
+          "1009203",
+          "1009302"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0093",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4268,7 +6477,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0094",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0094",
+          "1009303",
+          "1009402"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0094",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4297,7 +6525,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0095",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0095",
+          "1009403",
+          "1009502"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0095",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4326,7 +6573,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0096",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0096",
+          "1009503",
+          "1009602"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0096",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4355,7 +6621,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0097",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0097",
+          "1009603",
+          "1009702"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0097",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4384,7 +6669,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0098",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0098",
+          "1009703",
+          "1009802"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0098",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4413,7 +6717,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0099",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0099",
+          "1009803",
+          "1009902"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0099",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -4442,7 +6765,26 @@
         "workdir": "/sandbox/job/prime_worker"
       },
       "node_id": "prime_worker_0100",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/check_prime_range.py",
+          "prime_worker_0100",
+          "1009903",
+          "1010002"
+        ],
+        "max_attempts": 4,
+        "name_prefix": "prime-worker-0100",
+        "node_type": "map",
+        "output_message_type": "prime_chunk_result",
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "startup_delay_ms": 750,
+        "upload_path": "prime_worker"
+      }
     }
   ],
   "policies": {

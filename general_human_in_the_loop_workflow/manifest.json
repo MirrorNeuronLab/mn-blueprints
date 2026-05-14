@@ -31,6 +31,22 @@
   "job_name": "general-human-in-the-loop-workflow",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "simulation_loop",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "report_sink",
+          "uses": "mn-agents.report_aggregator@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "general_human_in_the_loop_workflow",
     "category": "general",
     "configuration_contract": {
@@ -340,7 +356,29 @@
       },
       "node_id": "simulation_loop",
       "role": "root_coordinator",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_MAX_TOKENS": "700",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_NUM_RETRIES": "1",
+          "LITELLM_TIMEOUT_SECONDS": "60",
+          "MN_BLUEPRINT_ID": "general_human_in_the_loop_workflow",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_MAX_TOKENS": "700",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_NUM_RETRIES": "1",
+          "MN_LLM_TIMEOUT_SECONDS": "60"
+        },
+        "name_prefix": "general_human_in_the_loop_workflow",
+        "node_type": "generic",
+        "output_message_type": "blueprint_report",
+        "role": "root_coordinator",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "simulation_loop"
+      }
     },
     {
       "agent_type": "aggregator",
@@ -349,7 +387,13 @@
       },
       "node_id": "report_sink",
       "role": "result_sink",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.report_aggregator@1.0.0",
+      "with": {
+        "complete_on_message": true,
+        "node_type": "reduce",
+        "role": "result_sink"
+      }
     }
   ],
   "policies": {

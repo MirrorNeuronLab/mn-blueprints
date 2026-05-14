@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL_SRC = ROOT.parent / "mn-skills" / "blueprint_support_skill" / "src"
 if SKILL_SRC.exists() and str(SKILL_SRC) not in sys.path:
     sys.path.insert(0, str(SKILL_SRC))
+AGENTS_ROOT = ROOT.parent / "mn-agents"
 
 from mn_blueprint_support import FakeLLMClient, LEGACY_ALIASES, PRODUCT_PROFILES, REQUIRED_BLUEPRINT_IDS, SCENARIOS, get_scenario, run_blueprint
 from mn_blueprint_support.llm import DEFAULT_OLLAMA_BASE, OllamaLLMClient, ollama_model_available
@@ -25,6 +26,8 @@ from mn_blueprint_support.standard import (
     STANDARD_VERSION,
     STREAM_TRANSPORTS,
     RunStore,
+    render_manifest_agent_templates,
+    validate_agent_library,
 )
 
 
@@ -444,6 +447,41 @@ def test_blueprint_repo_does_not_carry_support_code() -> None:
     assert not (ROOT / "blueprints.py").exists()
     assert not (ROOT / "blueprint_runtime").exists()
     assert not list(ROOT.glob("*/generate_bundle.py"))
+
+
+def test_shared_agent_library_is_valid_and_cataloged() -> None:
+    index = json.loads((AGENTS_ROOT / "index.json").read_text())
+    template_ids = {entry["template_id"] for entry in index["agents"]}
+
+    assert validate_agent_library(AGENTS_ROOT) == []
+    assert {
+        "mn-agents.python_executor",
+        "mn-agents.report_aggregator",
+        "mn-agents.module_agent",
+        "mn-agents.router_agent",
+        "mn-agents.llm_agent",
+        "mn-agents.web_ui_output",
+    }.issubset(template_ids)
+
+
+def test_blueprint_nodes_reference_shared_agent_templates_and_render() -> None:
+    index = json.loads((ROOT / "index.json").read_text())
+
+    for entry in index:
+        manifest_path = ROOT / entry["path"] / "manifest.json"
+        manifest = json.loads(manifest_path.read_text())
+        usages = (manifest["metadata"].get("agent_templates") or {}).get("nodes") or []
+        assert usages, entry["id"]
+        for node in manifest.get("nodes") or []:
+            assert "uses" in node, (entry["id"], node.get("node_id"))
+            assert node["uses"].startswith("mn-agents."), (entry["id"], node.get("node_id"))
+            assert "@" in node["uses"] and not node["uses"].endswith("@latest"), (entry["id"], node.get("node_id"))
+            assert isinstance(node.get("with"), dict), (entry["id"], node.get("node_id"))
+
+        rendered = render_manifest_agent_templates(manifest, AGENTS_ROOT)
+        assert len(rendered["nodes"]) == len(manifest["nodes"])
+        assert len(rendered["metadata"]["agent_templates"]["rendered"]) == len(manifest["nodes"])
+        assert all("uses" not in node and "with" not in node for node in rendered["nodes"])
 
 
 def test_renamed_blueprint_aliases_resolve_to_new_scenarios() -> None:

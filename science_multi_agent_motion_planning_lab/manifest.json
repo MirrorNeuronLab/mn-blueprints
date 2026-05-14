@@ -84,6 +84,30 @@
   "job_name": "science-multi-agent-motion-planning-lab",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "ingress",
+          "uses": "mn-agents.router_agent@1.0.0"
+        },
+        {
+          "node_id": "collector",
+          "uses": "mn-agents.report_aggregator@1.0.0"
+        },
+        {
+          "node_id": "visualizer",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "shared_world",
+          "uses": "mn-agents.python_executor@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "science_multi_agent_motion_planning_lab",
     "category": "science",
     "configuration_contract": {
@@ -355,7 +379,13 @@
       },
       "node_id": "ingress",
       "role": "root_coordinator",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.router_agent@1.0.0",
+      "with": {
+        "emit_type": "simulation_start",
+        "node_type": "map",
+        "role": "root_coordinator"
+      }
     },
     {
       "agent_type": "aggregator",
@@ -364,7 +394,14 @@
         "output_message_type": "shared_world_collection"
       },
       "node_id": "collector",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.report_aggregator@1.0.0",
+      "with": {
+        "complete_after": 1,
+        "complete_on_message": true,
+        "node_type": "reduce",
+        "output_message_type": "shared_world_collection"
+      }
     },
     {
       "agent_type": "executor",
@@ -385,7 +422,19 @@
         "workdir": "/sandbox/job/visualizer"
       },
       "node_id": "visualizer",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "name_prefix": "mpe-crowd-visualizer",
+        "node_type": "reduce",
+        "output_message_type": null,
+        "pass_env": [
+          "PATH"
+        ],
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/build_shared_world_visualization.py",
+        "upload_path": "visualizer"
+      }
     },
     {
       "agent_type": "executor",
@@ -421,7 +470,34 @@
       },
       "node_id": "shared_world",
       "role": "world",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "MAX_CYCLES": "60",
+          "NUM_ADVERSARIES": "75",
+          "NUM_GOOD": "25",
+          "NUM_OBSTACLES": "8",
+          "POLICY_MODE": "swarm",
+          "SIMULATION_SEED": "4200"
+        },
+        "name_prefix": "mpe-crowd-world",
+        "node_type": "map",
+        "output_message_type": "shared_world_result",
+        "pass_env": [
+          "PATH",
+          "MN_RUN_ID",
+          "MN_RUNS_ROOT",
+          "MN_NO_RUN_STORE",
+          "MN_DISABLE_RUN_STORE",
+          "MN_BLUEPRINT_CONFIG_PATH",
+          "MN_BLUEPRINT_CONFIG_JSON"
+        ],
+        "role": "world",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_shared_world.py",
+        "upload_path": "world_worker"
+      }
     }
   ],
   "policies": {

@@ -410,6 +410,138 @@
   "job_name": "finance-liquidity-microstructure-radar",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "ingress",
+          "uses": "mn-agents.router_agent@1.0.0"
+        },
+        {
+          "node_id": "exchange",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "fake_stock_stream",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "stock_signal_analyzer",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "llm_market_explainer",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "market_advisor",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_000",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_001",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_002",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_003",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_004",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_005",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_006",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_007",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_008",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_009",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_010",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_011",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_012",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_013",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_014",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_015",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_016",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_017",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_018",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_019",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_020",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_021",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_022",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_023",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "trader_024",
+          "uses": "mn-agents.module_agent@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "finance_liquidity_microstructure_radar",
     "category": "finance",
     "configuration_contract": {
@@ -681,7 +813,13 @@
       },
       "node_id": "ingress",
       "role": "root_coordinator",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.router_agent@1.0.0",
+      "with": {
+        "emit_type": "simulation_start",
+        "node_type": "map",
+        "role": "root_coordinator"
+      }
     },
     {
       "agent_type": "module",
@@ -697,7 +835,20 @@
       },
       "node_id": "exchange",
       "role": "exchange",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_market_data_every_ticks": 30,
+        "module": "MirrorNeuron.Examples.FinancialMarket.ExchangeAgent",
+        "module_source": "beam_modules/exchange_agent.ex",
+        "node_type": "reduce",
+        "role": "exchange",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "executor",
@@ -744,7 +895,46 @@
       },
       "node_id": "fake_stock_stream",
       "role": "fake_data_stream_agent",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "daily_drift": 0.001,
+        "daily_volatility": 0.018,
+        "environment": {
+          "STOCK_STREAM_DAILY_DRIFT": "0.001",
+          "STOCK_STREAM_DAILY_VOLATILITY": "0.018",
+          "STOCK_STREAM_INTERVAL_MAX_MS": "1000",
+          "STOCK_STREAM_INTERVAL_MIN_MS": "1000",
+          "STOCK_STREAM_MAX_DAILY_MOVE": "0.06",
+          "STOCK_STREAM_SEED": "729905862",
+          "STOCK_STREAM_START_DATE": "2026-04-30",
+          "STOCK_STREAM_SYMBOLS": "AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA",
+          "STOCK_STREAM_TARGET_NODE": "stock_signal_analyzer",
+          "STOCK_STREAM_TRADING_DAYS": "252"
+        },
+        "interval_max_ms": 1000,
+        "interval_min_ms": 1000,
+        "max_daily_move": 0.06,
+        "node_type": "stream",
+        "output_message_type": null,
+        "role": "fake_data_stream_agent",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/generate_stock_stream.py",
+        "seed": 729905862,
+        "start_date": "2026-04-30",
+        "symbols": [
+          "AAPL",
+          "MSFT",
+          "NVDA",
+          "GOOGL",
+          "AMZN",
+          "META",
+          "TSLA"
+        ],
+        "target_node": "stock_signal_analyzer",
+        "trading_days": 252,
+        "upload_path": "fake_stock_stream"
+      }
     },
     {
       "agent_type": "executor",
@@ -765,7 +955,20 @@
       },
       "node_id": "stock_signal_analyzer",
       "role": "technical_signal_analyzer",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "LLM_SIGNAL_EVERY_EVENTS": "30",
+          "LLM_SIGNAL_MIN_CONFIDENCE": "0.72"
+        },
+        "node_type": "stream",
+        "output_message_type": null,
+        "role": "technical_signal_analyzer",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/analyze_stock_signal.py",
+        "upload_path": "stock_signal_analyzer"
+      }
     },
     {
       "agent_type": "executor",
@@ -802,7 +1005,36 @@
       },
       "node_id": "llm_market_explainer",
       "role": "market_explanation_agent",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MAX_TOKENS": "800",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_NUM_RETRIES": "2",
+          "LITELLM_RETRY_BACKOFF_SECONDS": "1.0",
+          "LITELLM_TIMEOUT_SECONDS": "60.0",
+          "LLM_EXPLANATION_INTERVAL_EVENTS": "0",
+          "LLM_EXPLANATION_INTERVAL_SECONDS": "300.0",
+          "LLM_EXPLANATION_MAX_PENDING": "25",
+          "LLM_EXPLANATION_RETRY_DELAY_SECONDS": "5.0",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MAX_TOKENS": "800",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_NUM_RETRIES": "2",
+          "MN_LLM_RETRY_BACKOFF_SECONDS": "1.0",
+          "MN_LLM_TIMEOUT_SECONDS": "60.0"
+        },
+        "node_type": "stream",
+        "output_message_type": null,
+        "role": "market_explanation_agent",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/explain_market.py",
+        "upload_path": "llm_market_explainer"
+      }
     },
     {
       "agent_type": "module",
@@ -823,7 +1055,25 @@
       },
       "node_id": "market_advisor",
       "role": "advisor",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "advice_interval_ticks": 5,
+        "important_move_pct": 1.5,
+        "module": "MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent",
+        "module_source": "beam_modules/market_advisor_agent.ex",
+        "node_type": "map",
+        "role": "advisor",
+        "slack_channel": "#claw",
+        "slack_enabled": true,
+        "slack_policy": {
+          "alert_on_action_change": true,
+          "cooldown_ticks_per_symbol": 20,
+          "digest_every_ticks": 100,
+          "min_confidence": 0.65,
+          "mode": "important_only"
+        }
+      }
     },
     {
       "agent_type": "module",
@@ -840,7 +1090,21 @@
       },
       "node_id": "trader_000",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -857,7 +1121,21 @@
       },
       "node_id": "trader_001",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -874,7 +1152,21 @@
       },
       "node_id": "trader_002",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -891,7 +1183,21 @@
       },
       "node_id": "trader_003",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -908,7 +1214,21 @@
       },
       "node_id": "trader_004",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -925,7 +1245,21 @@
       },
       "node_id": "trader_005",
       "role": "mean_reversion",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "mean_reversion",
+        "strategy": "mean_reversion",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -942,7 +1276,21 @@
       },
       "node_id": "trader_006",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -959,7 +1307,21 @@
       },
       "node_id": "trader_007",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -976,7 +1338,21 @@
       },
       "node_id": "trader_008",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -993,7 +1369,21 @@
       },
       "node_id": "trader_009",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1010,7 +1400,21 @@
       },
       "node_id": "trader_010",
       "role": "mean_reversion",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "mean_reversion",
+        "strategy": "mean_reversion",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1027,7 +1431,21 @@
       },
       "node_id": "trader_011",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1044,7 +1462,21 @@
       },
       "node_id": "trader_012",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1061,7 +1493,21 @@
       },
       "node_id": "trader_013",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1078,7 +1524,21 @@
       },
       "node_id": "trader_014",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1095,7 +1555,21 @@
       },
       "node_id": "trader_015",
       "role": "momentum",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "momentum",
+        "strategy": "momentum",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1112,7 +1586,21 @@
       },
       "node_id": "trader_016",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1129,7 +1617,21 @@
       },
       "node_id": "trader_017",
       "role": "market_maker",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "market_maker",
+        "strategy": "market_maker",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1146,7 +1648,21 @@
       },
       "node_id": "trader_018",
       "role": "mean_reversion",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "mean_reversion",
+        "strategy": "mean_reversion",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1163,7 +1679,21 @@
       },
       "node_id": "trader_019",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1180,7 +1710,21 @@
       },
       "node_id": "trader_020",
       "role": "market_maker",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "market_maker",
+        "strategy": "market_maker",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1197,7 +1741,21 @@
       },
       "node_id": "trader_021",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1214,7 +1772,21 @@
       },
       "node_id": "trader_022",
       "role": "momentum",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "momentum",
+        "strategy": "momentum",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1231,7 +1803,21 @@
       },
       "node_id": "trader_023",
       "role": "noise",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "noise",
+        "strategy": "noise",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     },
     {
       "agent_type": "module",
@@ -1248,7 +1834,21 @@
       },
       "node_id": "trader_024",
       "role": "momentum",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "duration_seconds": 86400,
+        "initial_price": 100.0,
+        "live_mode": true,
+        "llm_order_sample_rate": 20,
+        "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+        "module_source": "beam_modules/trader_agent.ex",
+        "node_type": "reduce",
+        "role": "momentum",
+        "strategy": "momentum",
+        "tick_delay_ms": 1000,
+        "tick_seconds": 1
+      }
     }
   ],
   "policies": {

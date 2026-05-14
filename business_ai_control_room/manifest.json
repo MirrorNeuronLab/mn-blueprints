@@ -24,6 +24,22 @@
   "job_name": "business-ai-control-room",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "readiness_workflow",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "result_sink",
+          "uses": "mn-agents.report_aggregator@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "business_ai_control_room",
     "category": "business",
     "configuration_contract": {
@@ -338,7 +354,46 @@
       },
       "node_id": "readiness_workflow",
       "role": "root_coordinator",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "name_prefix": "business-ai-control-room",
+        "node_type": "generic",
+        "output_message_type": "control_readiness_pack",
+        "role": "root_coordinator",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "readiness_workflow",
+        "upload_paths": [
+          {
+            "source": "readiness_workflow",
+            "target": "readiness_workflow"
+          },
+          {
+            "source": "config",
+            "target": "config"
+          },
+          {
+            "source": "mn-skills/blueprint_support_skill",
+            "target": "mn-skills/blueprint_support_skill"
+          },
+          {
+            "source": "mn-skills/document_reading_skill",
+            "target": "mn-skills/document_reading_skill"
+          },
+          {
+            "source": "mn-skills/implementation_plan_skill",
+            "target": "mn-skills/implementation_plan_skill"
+          },
+          {
+            "source": "mn-skills/process_map_skill",
+            "target": "mn-skills/process_map_skill"
+          },
+          {
+            "source": "mn-skills/client_report_skill",
+            "target": "mn-skills/client_report_skill"
+          }
+        ]
+      }
     },
     {
       "agent_type": "aggregator",
@@ -347,7 +402,13 @@
       },
       "node_id": "result_sink",
       "role": "result_sink",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.report_aggregator@1.0.0",
+      "with": {
+        "complete_on_message": true,
+        "node_type": "reduce",
+        "role": "result_sink"
+      }
     }
   ],
   "policies": {

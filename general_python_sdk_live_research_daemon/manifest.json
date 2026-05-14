@@ -32,6 +32,26 @@
   "job_name": "general-python-sdk-live-research-daemon",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "daemon_ingress",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "daemon_analyzer",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "daemon_memory",
+          "uses": "mn-agents.python_executor@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "general_python_sdk_live_research_daemon",
     "category": "general",
     "compiler_version": "0.2.0",
@@ -352,7 +372,34 @@
       },
       "node_id": "daemon_ingress",
       "role": "root_coordinator",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "backpressure": {
+          "high_watermark": 3,
+          "low_watermark": 1,
+          "max_queue_depth": 6,
+          "retry_after_ms": 500
+        },
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "0",
+          "MN_PY_FINAL": "0",
+          "MN_PY_METHOD": "ingress",
+          "MN_PY_OUTPUT_TYPE": "daemon_ingress_result",
+          "MN_PY_OWNER_CLASS": "DaemonAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-daemon_ingress",
+        "node_type": "stream",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "role": "root_coordinator",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "mn_worker.py",
+        "timeout_seconds": 10,
+        "upload_path": "mn_python_workflow"
+      }
     },
     {
       "agent_type": "executor",
@@ -386,7 +433,33 @@
         "workdir": "/sandbox/job/mn_python_workflow"
       },
       "node_id": "daemon_analyzer",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "backpressure": {
+          "high_watermark": 3,
+          "low_watermark": 1,
+          "max_queue_depth": 6,
+          "retry_after_ms": 500
+        },
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "0",
+          "MN_PY_FINAL": "0",
+          "MN_PY_METHOD": "analyzer",
+          "MN_PY_OUTPUT_TYPE": "daemon_analyzer_result",
+          "MN_PY_OWNER_CLASS": "DaemonAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-daemon_analyzer",
+        "node_type": "stream",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "mn_worker.py",
+        "timeout_seconds": 10,
+        "upload_path": "mn_python_workflow"
+      }
     },
     {
       "agent_type": "executor",
@@ -420,7 +493,33 @@
         "workdir": "/sandbox/job/mn_python_workflow"
       },
       "node_id": "daemon_memory",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "backpressure": {
+          "high_watermark": 3,
+          "low_watermark": 1,
+          "max_queue_depth": 6,
+          "retry_after_ms": 500
+        },
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "0",
+          "MN_PY_FINAL": "1",
+          "MN_PY_METHOD": "memory",
+          "MN_PY_OUTPUT_TYPE": "daemon_memory_result",
+          "MN_PY_OWNER_CLASS": "DaemonAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-daemon_memory",
+        "node_type": "stream",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "mn_worker.py",
+        "timeout_seconds": 10,
+        "upload_path": "mn_python_workflow"
+      }
     }
   ],
   "policies": {

@@ -29,6 +29,26 @@
   "job_name": "general-message-routing-trace",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "ingress",
+          "uses": "mn-agents.router_agent@1.0.0"
+        },
+        {
+          "node_id": "retriever",
+          "uses": "mn-agents.router_agent@1.0.0"
+        },
+        {
+          "node_id": "reviewer",
+          "uses": "mn-agents.report_aggregator@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "general_message_routing_trace",
     "category": "general",
     "configuration_contract": {
@@ -300,13 +320,24 @@
       },
       "node_id": "ingress",
       "role": "root_coordinator",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.router_agent@1.0.0",
+      "with": {
+        "emit_type": "test_request",
+        "node_type": "map",
+        "role": "root_coordinator"
+      }
     },
     {
       "agent_type": "router",
       "node_id": "retriever",
       "role": "researcher",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.router_agent@1.0.0",
+      "with": {
+        "node_type": "map",
+        "role": "researcher"
+      }
     },
     {
       "agent_type": "aggregator",
@@ -315,7 +346,13 @@
       },
       "node_id": "reviewer",
       "role": "result_sink",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.report_aggregator@1.0.0",
+      "with": {
+        "complete_on_message": true,
+        "node_type": "reduce",
+        "role": "result_sink"
+      }
     }
   ],
   "policies": {

@@ -24,6 +24,22 @@
   "job_name": "business-ai-strategy-workbench",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "advisory_workflow",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "result_sink",
+          "uses": "mn-agents.report_aggregator@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "business_ai_strategy_workbench",
     "category": "business",
     "configuration_contract": {
@@ -354,7 +370,62 @@
       },
       "node_id": "advisory_workflow",
       "role": "root_coordinator",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "name_prefix": "business-ai-strategy-workbench",
+        "node_type": "generic",
+        "output_message_type": "strategy_recommendation_pack",
+        "role": "root_coordinator",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "advisory_workflow",
+        "upload_paths": [
+          {
+            "source": "advisory_workflow",
+            "target": "advisory_workflow"
+          },
+          {
+            "source": "config",
+            "target": "config"
+          },
+          {
+            "source": "mn-skills/blueprint_support_skill",
+            "target": "mn-skills/blueprint_support_skill"
+          },
+          {
+            "source": "mn-skills/document_reading_skill",
+            "target": "mn-skills/document_reading_skill"
+          },
+          {
+            "source": "mn-skills/meeting_summary_skill",
+            "target": "mn-skills/meeting_summary_skill"
+          },
+          {
+            "source": "mn-skills/first_draft_slides_skill",
+            "target": "mn-skills/first_draft_slides_skill"
+          },
+          {
+            "source": "mn-skills/market_research_skill",
+            "target": "mn-skills/market_research_skill"
+          },
+          {
+            "source": "mn-skills/spreadsheet_analysis_skill",
+            "target": "mn-skills/spreadsheet_analysis_skill"
+          },
+          {
+            "source": "mn-skills/implementation_plan_skill",
+            "target": "mn-skills/implementation_plan_skill"
+          },
+          {
+            "source": "mn-skills/process_map_skill",
+            "target": "mn-skills/process_map_skill"
+          },
+          {
+            "source": "mn-skills/client_report_skill",
+            "target": "mn-skills/client_report_skill"
+          }
+        ]
+      }
     },
     {
       "agent_type": "aggregator",
@@ -363,7 +434,13 @@
       },
       "node_id": "result_sink",
       "role": "result_sink",
-      "type": "reduce"
+      "type": "reduce",
+      "uses": "mn-agents.report_aggregator@1.0.0",
+      "with": {
+        "complete_on_message": true,
+        "node_type": "reduce",
+        "role": "result_sink"
+      }
     }
   ],
   "policies": {

@@ -66,6 +66,26 @@
   "job_name": "general-live-telemetry-stream-pipeline",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "ingress",
+          "uses": "mn-agents.router_agent@1.0.0"
+        },
+        {
+          "node_id": "telemetry_source",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "peak_detector",
+          "uses": "mn-agents.python_executor@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "general_live_telemetry_stream_pipeline",
     "category": "general",
     "configuration_contract": {
@@ -353,7 +373,13 @@
       },
       "node_id": "ingress",
       "role": "root_coordinator",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.router_agent@1.0.0",
+      "with": {
+        "emit_type": "stream_start",
+        "node_type": "map",
+        "role": "root_coordinator"
+      }
     },
     {
       "agent_type": "module",
@@ -372,7 +398,23 @@
       },
       "node_id": "telemetry_source",
       "role": "producer",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "baseline": 24,
+        "chunk_size": 6,
+        "content_encoding": "gzip",
+        "device_id": "sensor-alpha",
+        "interval_ms": 1000,
+        "jitter": 4,
+        "module": "MirrorNeuron.Examples.StreamBasicDaemon.TelemetrySource",
+        "module_source": "beam_modules/telemetry_source.ex",
+        "node_type": "stream",
+        "peak_every": 20,
+        "peak_height": 55,
+        "role": "producer",
+        "target_node": "peak_detector"
+      }
     },
     {
       "agent_type": "executor",
@@ -395,7 +437,22 @@
       },
       "node_id": "peak_detector",
       "role": "consumer",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "MIN_SPIKE_DELTA": "20.0",
+          "SPIKE_MULTIPLIER": "2.4",
+          "WARMUP_POINTS": "5",
+          "WINDOW_SIZE": "8"
+        },
+        "node_type": "stream",
+        "output_message_type": null,
+        "role": "consumer",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/detect_stream_peaks.py",
+        "upload_path": "stream_worker"
+      }
     }
   ],
   "policies": {

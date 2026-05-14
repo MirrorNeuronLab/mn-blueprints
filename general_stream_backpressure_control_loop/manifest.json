@@ -37,6 +37,30 @@
   "job_name": "general-stream-backpressure-control-loop",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "ingress",
+          "uses": "mn-agents.router_agent@1.0.0"
+        },
+        {
+          "node_id": "live_source",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "slow_enricher",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "metrics_sink",
+          "uses": "mn-agents.python_executor@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "general_stream_backpressure_control_loop",
     "category": "general",
     "configuration_contract": {
@@ -331,7 +355,19 @@
       },
       "node_id": "ingress",
       "role": "root_coordinator",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.router_agent@1.0.0",
+      "with": {
+        "backpressure": {
+          "high_watermark": 8,
+          "low_watermark": 3,
+          "max_queue_depth": 16,
+          "retry_after_ms": 250
+        },
+        "emit_type": "stream_start",
+        "node_type": "generic",
+        "role": "root_coordinator"
+      }
     },
     {
       "agent_type": "module",
@@ -350,7 +386,23 @@
       },
       "node_id": "live_source",
       "role": "source",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "backpressure": {
+          "high_watermark": 8,
+          "low_watermark": 3,
+          "max_queue_depth": 16,
+          "retry_after_ms": 250
+        },
+        "interval_ms": 250,
+        "module": "MirrorNeuron.Examples.StreamLiveBackpressure.LiveSource",
+        "module_source": "beam_modules/live_source.ex",
+        "node_type": "stream",
+        "role": "source",
+        "stream_id": "bp-live",
+        "target_node": "slow_enricher"
+      }
     },
     {
       "agent_type": "executor",
@@ -376,7 +428,25 @@
       },
       "node_id": "slow_enricher",
       "role": "processor",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "backpressure": {
+          "high_watermark": 2,
+          "low_watermark": 1,
+          "max_queue_depth": 4,
+          "retry_after_ms": 750
+        },
+        "environment": {
+          "SLOW_MS": "1200"
+        },
+        "node_type": "stream",
+        "output_message_type": "enriched_event",
+        "role": "processor",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/slow_enrich.py",
+        "upload_path": "slow"
+      }
     },
     {
       "agent_type": "executor",
@@ -402,7 +472,25 @@
       },
       "node_id": "metrics_sink",
       "role": "sink",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "backpressure": {
+          "high_watermark": 2,
+          "low_watermark": 1,
+          "max_queue_depth": 5,
+          "retry_after_ms": 500
+        },
+        "environment": {
+          "SINK_SLOW_MS": "450"
+        },
+        "node_type": "stream",
+        "output_message_type": null,
+        "role": "sink",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/collect_metrics.py",
+        "upload_path": "sink"
+      }
     }
   ],
   "policies": {

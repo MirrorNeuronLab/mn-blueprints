@@ -23,6 +23,22 @@
   "job_name": "general-native-live-monitor-daemon",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "question_generator",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "answer_agent",
+          "uses": "mn-agents.module_agent@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "general_native_live_monitor_daemon",
     "category": "general",
     "configuration_contract": {
@@ -317,7 +333,20 @@
       },
       "node_id": "question_generator",
       "role": "question_source",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "answer_node": "answer_agent",
+        "interval_ms": 10000,
+        "max_x": 500,
+        "max_y": 25,
+        "min_x": 10,
+        "min_y": 2,
+        "module": "MirrorNeuron.Examples.DivisibilityMonitor.QuestionGenerator",
+        "module_source": "beam_modules/question_generator.ex",
+        "node_type": "stream",
+        "role": "question_source"
+      }
     },
     {
       "agent_type": "module",
@@ -327,7 +356,14 @@
       },
       "node_id": "answer_agent",
       "role": "answer_sink",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "module": "MirrorNeuron.Examples.DivisibilityMonitor.AnswerAgent",
+        "module_source": "beam_modules/answer_agent.ex",
+        "node_type": "stream",
+        "role": "answer_sink"
+      }
     }
   ],
   "policies": {

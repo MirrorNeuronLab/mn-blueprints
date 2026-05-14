@@ -188,6 +188,54 @@
   "long_lived": true,
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "ingress",
+          "uses": "mn-agents.router_agent@1.0.0"
+        },
+        {
+          "node_id": "monitor_scheduler_agent",
+          "uses": "mn-agents.module_agent@1.0.0"
+        },
+        {
+          "node_id": "customer_research_agent",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "lifecycle_copywriter_agent",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "email_designer_agent",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "deliverability_ops_agent",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "control_manager_agent",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "marketing_automation_agent",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "inbox_reply_agent",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "inbox_poller_agent",
+          "uses": "mn-agents.module_agent@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "business_customer_lifecycle_email_copilot",
     "category": "business",
     "configuration_contract": {
@@ -459,7 +507,13 @@
       },
       "node_id": "ingress",
       "role": "root_coordinator",
-      "type": "map"
+      "type": "map",
+      "uses": "mn-agents.router_agent@1.0.0",
+      "with": {
+        "emit_type": "bundle_request",
+        "node_type": "map",
+        "role": "root_coordinator"
+      }
     },
     {
       "agent_type": "module",
@@ -471,7 +525,16 @@
       },
       "node_id": "monitor_scheduler_agent",
       "role": "Monitor Scheduler Agent",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "fast_test_mode": true,
+        "interval_ms": 0,
+        "module": "Synaptic.MonitorScheduler",
+        "module_source": "monitor_scheduler/beam_modules/monitor_scheduler.ex",
+        "node_type": "stream",
+        "role": "Monitor Scheduler Agent"
+      }
     },
     {
       "agent_type": "executor",
@@ -535,7 +598,57 @@
       },
       "node_id": "customer_research_agent",
       "role": "Customer Research Agent",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
+          "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw",
+          "SYNAPTIC_DB_CONNECTION": "sqlite:////tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_DB_PATH": "/tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_EMAIL_DELIVERY_MODE": "agentmail",
+          "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
+          "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
+        },
+        "name_prefix": "customer_research",
+        "node_type": "generic",
+        "output_message_type": "customer_research_result",
+        "role": "Customer Research Agent",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/execute.py",
+        "upload_path": "customer_research",
+        "upload_paths": [
+          {
+            "source": "customer_research",
+            "target": "customer_research"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
+          }
+        ]
+      }
     },
     {
       "agent_type": "executor",
@@ -599,7 +712,57 @@
       },
       "node_id": "lifecycle_copywriter_agent",
       "role": "Lifecycle Copywriter Agent",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
+          "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw",
+          "SYNAPTIC_DB_CONNECTION": "sqlite:////tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_DB_PATH": "/tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_EMAIL_DELIVERY_MODE": "agentmail",
+          "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
+          "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
+        },
+        "name_prefix": "lifecycle_copywriter",
+        "node_type": "generic",
+        "output_message_type": "lifecycle_copywriter_result",
+        "role": "Lifecycle Copywriter Agent",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/execute.py",
+        "upload_path": "lifecycle_copywriter",
+        "upload_paths": [
+          {
+            "source": "lifecycle_copywriter",
+            "target": "lifecycle_copywriter"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
+          }
+        ]
+      }
     },
     {
       "agent_type": "executor",
@@ -663,7 +826,57 @@
       },
       "node_id": "email_designer_agent",
       "role": "Email Designer Agent",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
+          "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw",
+          "SYNAPTIC_DB_CONNECTION": "sqlite:////tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_DB_PATH": "/tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_EMAIL_DELIVERY_MODE": "agentmail",
+          "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
+          "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
+        },
+        "name_prefix": "email_designer",
+        "node_type": "generic",
+        "output_message_type": "email_designer_result",
+        "role": "Email Designer Agent",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/execute.py",
+        "upload_path": "email_designer",
+        "upload_paths": [
+          {
+            "source": "email_designer",
+            "target": "email_designer"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
+          }
+        ]
+      }
     },
     {
       "agent_type": "executor",
@@ -727,7 +940,57 @@
       },
       "node_id": "deliverability_ops_agent",
       "role": "Deliverability & Ops Specialist Agent",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
+          "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw",
+          "SYNAPTIC_DB_CONNECTION": "sqlite:////tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_DB_PATH": "/tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_EMAIL_DELIVERY_MODE": "agentmail",
+          "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
+          "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
+        },
+        "name_prefix": "deliverability_ops",
+        "node_type": "generic",
+        "output_message_type": "deliverability_ops_result",
+        "role": "Deliverability & Ops Specialist Agent",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/execute.py",
+        "upload_path": "deliverability_ops",
+        "upload_paths": [
+          {
+            "source": "deliverability_ops",
+            "target": "deliverability_ops"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
+          }
+        ]
+      }
     },
     {
       "agent_type": "executor",
@@ -791,7 +1054,57 @@
       },
       "node_id": "control_manager_agent",
       "role": "Control Manager Agent",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
+          "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw",
+          "SYNAPTIC_DB_CONNECTION": "sqlite:////tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_DB_PATH": "/tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_EMAIL_DELIVERY_MODE": "agentmail",
+          "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
+          "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
+        },
+        "name_prefix": "control_manager",
+        "node_type": "generic",
+        "output_message_type": "control_manager_result",
+        "role": "Control Manager Agent",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/execute.py",
+        "upload_path": "control_manager",
+        "upload_paths": [
+          {
+            "source": "control_manager",
+            "target": "control_manager"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
+          }
+        ]
+      }
     },
     {
       "agent_type": "executor",
@@ -855,7 +1168,57 @@
       },
       "node_id": "marketing_automation_agent",
       "role": "Marketing Automation Engineer Agent",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
+          "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw",
+          "SYNAPTIC_DB_CONNECTION": "sqlite:////tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_DB_PATH": "/tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_EMAIL_DELIVERY_MODE": "agentmail",
+          "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
+          "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
+        },
+        "name_prefix": "marketing_automation",
+        "node_type": "generic",
+        "output_message_type": null,
+        "role": "Marketing Automation Engineer Agent",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/execute.py",
+        "upload_path": "marketing_automation",
+        "upload_paths": [
+          {
+            "source": "marketing_automation",
+            "target": "marketing_automation"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
+          }
+        ]
+      }
     },
     {
       "agent_type": "executor",
@@ -918,7 +1281,56 @@
       },
       "node_id": "inbox_reply_agent",
       "role": "Inbox Reply Agent",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
+          "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "RESEND_API_KEY": "re_9MQv1MGy_AAUvHEopuVyEqFxAUj5fc9YD",
+          "RESEND_FROM_EMAIL": "homer@bibblio.app",
+          "SLACK_DEFAULT_CHANNEL": "#claw",
+          "SYNAPTIC_DB_CONNECTION": "sqlite:////tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_DB_PATH": "/tmp/mn_business_email_campaign.db",
+          "SYNAPTIC_EMAIL_DELIVERY_MODE": "agentmail",
+          "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
+          "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
+        },
+        "name_prefix": "inbox_reply",
+        "node_type": "generic",
+        "role": "Inbox Reply Agent",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/execute.py",
+        "upload_path": "inbox_reply",
+        "upload_paths": [
+          {
+            "source": "inbox_reply",
+            "target": "inbox_reply"
+          },
+          {
+            "source": "_shared_skills/business_email_campaign_skill",
+            "target": "_shared_skills/business_email_campaign_skill"
+          },
+          {
+            "source": "_shared_skills/mn_email_delivery_skill",
+            "target": "_shared_skills/mn_email_delivery_skill"
+          },
+          {
+            "source": "_shared_skills/mn_litellm_communicate_skill",
+            "target": "_shared_skills/mn_litellm_communicate_skill"
+          },
+          {
+            "source": "_shared_skills/mn_external_rate_limit_skill",
+            "target": "_shared_skills/mn_external_rate_limit_skill"
+          }
+        ]
+      }
     },
     {
       "agent_type": "module",
@@ -929,7 +1341,15 @@
       },
       "node_id": "inbox_poller_agent",
       "role": "Inbox Poller",
-      "type": "stream"
+      "type": "stream",
+      "uses": "mn-agents.module_agent@1.0.0",
+      "with": {
+        "interval_ms": 10000,
+        "module": "Synaptic.InboxPoller",
+        "module_source": "inbox_poller/beam_modules/inbox_poller.ex",
+        "node_type": "stream",
+        "role": "Inbox Poller"
+      }
     }
   ],
   "policies": {

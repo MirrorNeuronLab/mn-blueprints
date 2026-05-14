@@ -70,6 +70,38 @@
   "job_name": "science-drug-discovery-closed-loop-lab",
   "manifest_version": "1.0",
   "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "target_discovery",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "structure_generation",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "candidate_generation",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "binding_evaluation",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "ranking_reporting",
+          "uses": "mn-agents.python_executor@1.0.0"
+        },
+        {
+          "node_id": "manager_monitor",
+          "uses": "mn-agents.python_executor@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
     "blueprint_id": "science_drug_discovery_closed_loop_lab",
     "category": "science",
     "configuration_contract": {
@@ -350,7 +382,15 @@
         "workdir": "/sandbox/job/worker"
       },
       "node_id": "target_discovery",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "node_type": "generic",
+        "output_message_type": "targets_ready",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/stage_a.py",
+        "upload_path": "worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -368,7 +408,15 @@
         "workdir": "/sandbox/job/worker"
       },
       "node_id": "structure_generation",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "node_type": "generic",
+        "output_message_type": "structures_ready",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/stage_b.py",
+        "upload_path": "worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -386,7 +434,15 @@
         "workdir": "/sandbox/job/worker"
       },
       "node_id": "candidate_generation",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "node_type": "generic",
+        "output_message_type": "candidates_ready",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/stage_c.py",
+        "upload_path": "worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -404,7 +460,15 @@
         "workdir": "/sandbox/job/worker"
       },
       "node_id": "binding_evaluation",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "node_type": "generic",
+        "output_message_type": "evaluations_ready",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/stage_d.py",
+        "upload_path": "worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -422,7 +486,15 @@
         "workdir": "/sandbox/job/worker"
       },
       "node_id": "ranking_reporting",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "node_type": "generic",
+        "output_message_type": "pipeline_complete",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/stage_e.py",
+        "upload_path": "worker"
+      }
     },
     {
       "agent_type": "executor",
@@ -439,7 +511,14 @@
         "workdir": "/sandbox/job/worker"
       },
       "node_id": "manager_monitor",
-      "type": "generic"
+      "type": "generic",
+      "uses": "mn-agents.python_executor@1.0.0",
+      "with": {
+        "node_type": "generic",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/manager.py",
+        "upload_path": "worker"
+      }
     }
   ],
   "policies": {

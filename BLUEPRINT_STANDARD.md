@@ -4,6 +4,16 @@ This document defines the shared contract every OtterDesk blueprint should follo
 
 The current standard version is `1.0`.
 
+## Architecture Model
+
+Agents are the working units of a MirrorNeuron workflow. A blueprint should describe how agents work together: what starts the graph, which messages move between agents, what each agent produces, and which runtime boundaries apply. Shared `mn-agents` entries are generic agent templates. A blueprint actualizes those templates into concrete workflow agents with `uses`, `with`, and `config`, then assembles them like reusable blocks.
+
+Actualized agents may be deterministic workers, routers, reducers, stream processors, services, output adapters, or LLM-backed decision makers. Control templates coordinate workflow behavior such as lifecycle, retry, joins, filters, checkpoints, approval, and fanout. Data templates are the workhorse units that blueprints customize for Python execution, native modules, LLM decisions/tools, observation, sandboxed code work, edge model inference, and data services.
+
+MirrorNeuron is the runtime system that executes the workflow in an orchestrated way. It owns scheduling, routing, run state, event capture, artifact capture, resource limits, retries, and isolation. Blueprints own the workflow shape and domain intent. This split should make workflows reliable, inspectable, and efficient across local, cloud, and edge deployments.
+
+Not every agent should call an LLM. When an agent does call an LLM, it must reference named LLM config. Agents that generate, review, browse, shell into, or execute code should declare a sandbox boundary, because model output and untrusted inputs must not share the same trust level as ordinary deterministic workers.
+
 ## Normative Language
 
 This standard uses:
@@ -25,6 +35,8 @@ Every blueprint should be:
 - Observable through the same run store artifacts and event format.
 - Explainable to a product user through consistent metadata.
 - Safe to customize without editing runtime code.
+- Clear about which agents communicate, which agents call LLMs, and which agents require sandboxing or external capabilities.
+- Efficient enough to run in constrained edge environments when the blueprint is marked or adapted for edge use.
 
 ## Required Files
 
@@ -1018,6 +1030,8 @@ Domain-specific steps should preserve the shared lifecycle ordering around confi
 - `edges`
 - `initial_inputs`
 
+The manifest graph is the actualized-agent communication contract. It should make the workflow inspectable without reading every payload script. A reader should be able to identify the templates used, the concrete agents produced from those templates, their responsibilities, their message handoffs, and the runtime concerns that matter for reliability or edge execution.
+
 Each node should include:
 
 - `node_id`
@@ -1028,6 +1042,9 @@ Each node should include:
 - `config.workdir`
 - `config.upload_path` or `config.upload_paths`, when payload files must be staged
 - `config.output_message_type`, when the node emits graph messages
+- `uses`, when the node is rendered from a shared `mn-agents` template
+- `config.llm_config`, when the agent calls an LLM
+- sandbox or service config, when the agent runs untrusted code, generated code, browser automation, shell commands, custom images, or network-facing services
 
 Edges must include:
 
@@ -1035,6 +1052,8 @@ Edges must include:
 - `from_node`
 - `to_node`
 - `message_type`
+
+Multi-agent workflows should keep message types stable and explicit. Avoid implicit handoffs through shared files unless the artifact is also declared in metadata or output contracts.
 
 Long-running blueprints should set `daemon: true`. Finite batch blueprints should set `daemon: false` or omit it when the default is finite.
 
@@ -1098,6 +1117,8 @@ OpenShell tunnel failures should follow `error_handling`: use `retry` for tempor
 LLM usage is part of the shared blueprint standard. Any blueprint that calls a language, vision-language, embedding, reranking, or multimodal model must declare those model settings in `llm`.
 
 One blueprint may have one or many named `LLM_CONFIG` entries. The `llm` section is the registry for those entries.
+
+LLM use is an agent capability, not a workflow default. Prefer deterministic agents when rules, simulation, routing, validation, aggregation, or formatting can be handled without model inference. Reserve LLM agents for judgment, language, multimodal interpretation, planning, code generation, or other tasks that need model behavior.
 
 Recommended shape:
 
@@ -1172,6 +1193,8 @@ Allowed agent-level fields:
 Agent prompts, worker manifests, manifest environment blocks, and script defaults should quote the config reference only, for example `LLM_CONFIG.primary` or `llm.configs.primary`. They must not restate the concrete `model`, `api_base`, credential, timeout, retry, or max-token values. Manifest node environments should reference resolved config-derived environment names rather than literal model settings.
 
 Domain-specific model sections such as `vl_model` should be folded into `llm.configs` unless they contain non-LLM stream or device settings. For example, a video blueprint should keep stream source fields in `streams`, but place the vision-language model endpoint in `llm.configs.vision`.
+
+LLM agents that generate, modify, review, browse, shell into, install dependencies for, or execute code should run in a declared sandbox, such as OpenShell or another runtime-supported isolation boundary. The blueprint should declare relevant sandbox image, file access, network access, service ports, and output artifacts so MirrorNeuron can enforce the boundary and record what happened.
 
 Mock mode must be available for quick tests and offline demos.
 

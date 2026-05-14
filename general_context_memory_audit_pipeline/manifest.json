@@ -52,31 +52,31 @@
       "nodes": [
         {
           "node_id": "initializer",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "interpreter",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "extractor",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "classifier",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "decision",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "critic",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "sink",
-          "uses": "mn-agents.report_aggregator@1.0.0"
+          "uses": "mn-agents.control_join@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -410,7 +410,7 @@
       "node_id": "initializer",
       "role": "initializer",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "bash",
@@ -531,7 +531,7 @@
       "node_id": "interpreter",
       "role": "policy_interpreter",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "bash",
@@ -652,7 +652,7 @@
       "node_id": "extractor",
       "role": "evidence_extractor",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "bash",
@@ -773,7 +773,7 @@
       "node_id": "classifier",
       "role": "risk_classifier",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "bash",
@@ -894,7 +894,7 @@
       "node_id": "decision",
       "role": "decision_agent",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "bash",
@@ -1015,7 +1015,7 @@
       "node_id": "critic",
       "role": "critic_auditor",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "bash",
@@ -1088,7 +1088,7 @@
       },
       "node_id": "sink",
       "type": "reduce",
-      "uses": "mn-agents.report_aggregator@1.0.0",
+      "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_on_message": true,
         "environment": {

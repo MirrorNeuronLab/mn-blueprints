@@ -1250,415 +1250,415 @@
       "nodes": [
         {
           "node_id": "dispatcher",
-          "uses": "mn-agents.router_agent@1.0.0"
+          "uses": "mn-agents.control_router@1.0.0"
         },
         {
           "node_id": "collector",
-          "uses": "mn-agents.report_aggregator@1.0.0"
+          "uses": "mn-agents.control_join@1.0.0"
         },
         {
           "node_id": "summarizer",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0001",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0002",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0003",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0004",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0005",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0006",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0007",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0008",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0009",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0010",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0011",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0012",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0013",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0014",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0015",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0016",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0017",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0018",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0019",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0020",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0021",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0022",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0023",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0024",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0025",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0026",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0027",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0028",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0029",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0030",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0031",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0032",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0033",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0034",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0035",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0036",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0037",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0038",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0039",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0040",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0041",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0042",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0043",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0044",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0045",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0046",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0047",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0048",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0049",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0050",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0051",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0052",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0053",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0054",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0055",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0056",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0057",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0058",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0059",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0060",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0061",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0062",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0063",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0064",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0065",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0066",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0067",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0068",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0069",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0070",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0071",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0072",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0073",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0074",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0075",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0076",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0077",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0078",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0079",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0080",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0081",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0082",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0083",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0084",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0085",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0086",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0087",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0088",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0089",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0090",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0091",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0092",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0093",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0094",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0095",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0096",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0097",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0098",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0099",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "prime_worker_0100",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -1937,7 +1937,7 @@
       "node_id": "dispatcher",
       "role": "root_coordinator",
       "type": "map",
-      "uses": "mn-agents.router_agent@1.0.0",
+      "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "prime_chunk_request",
         "node_type": "map",
@@ -1952,7 +1952,7 @@
       },
       "node_id": "collector",
       "type": "reduce",
-      "uses": "mn-agents.report_aggregator@1.0.0",
+      "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_after": 100,
         "complete_on_message": true,
@@ -1976,7 +1976,7 @@
       },
       "node_id": "summarizer",
       "type": "reduce",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "name_prefix": "prime-summary",
         "node_type": "reduce",
@@ -2014,7 +2014,7 @@
       },
       "node_id": "prime_worker_0001",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2062,7 +2062,7 @@
       },
       "node_id": "prime_worker_0002",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2110,7 +2110,7 @@
       },
       "node_id": "prime_worker_0003",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2158,7 +2158,7 @@
       },
       "node_id": "prime_worker_0004",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2206,7 +2206,7 @@
       },
       "node_id": "prime_worker_0005",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2254,7 +2254,7 @@
       },
       "node_id": "prime_worker_0006",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2302,7 +2302,7 @@
       },
       "node_id": "prime_worker_0007",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2350,7 +2350,7 @@
       },
       "node_id": "prime_worker_0008",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2398,7 +2398,7 @@
       },
       "node_id": "prime_worker_0009",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2446,7 +2446,7 @@
       },
       "node_id": "prime_worker_0010",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2494,7 +2494,7 @@
       },
       "node_id": "prime_worker_0011",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2542,7 +2542,7 @@
       },
       "node_id": "prime_worker_0012",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2590,7 +2590,7 @@
       },
       "node_id": "prime_worker_0013",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2638,7 +2638,7 @@
       },
       "node_id": "prime_worker_0014",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2686,7 +2686,7 @@
       },
       "node_id": "prime_worker_0015",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2734,7 +2734,7 @@
       },
       "node_id": "prime_worker_0016",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2782,7 +2782,7 @@
       },
       "node_id": "prime_worker_0017",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2830,7 +2830,7 @@
       },
       "node_id": "prime_worker_0018",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2878,7 +2878,7 @@
       },
       "node_id": "prime_worker_0019",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2926,7 +2926,7 @@
       },
       "node_id": "prime_worker_0020",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -2974,7 +2974,7 @@
       },
       "node_id": "prime_worker_0021",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3022,7 +3022,7 @@
       },
       "node_id": "prime_worker_0022",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3070,7 +3070,7 @@
       },
       "node_id": "prime_worker_0023",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3118,7 +3118,7 @@
       },
       "node_id": "prime_worker_0024",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3166,7 +3166,7 @@
       },
       "node_id": "prime_worker_0025",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3214,7 +3214,7 @@
       },
       "node_id": "prime_worker_0026",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3262,7 +3262,7 @@
       },
       "node_id": "prime_worker_0027",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3310,7 +3310,7 @@
       },
       "node_id": "prime_worker_0028",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3358,7 +3358,7 @@
       },
       "node_id": "prime_worker_0029",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3406,7 +3406,7 @@
       },
       "node_id": "prime_worker_0030",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3454,7 +3454,7 @@
       },
       "node_id": "prime_worker_0031",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3502,7 +3502,7 @@
       },
       "node_id": "prime_worker_0032",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3550,7 +3550,7 @@
       },
       "node_id": "prime_worker_0033",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3598,7 +3598,7 @@
       },
       "node_id": "prime_worker_0034",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3646,7 +3646,7 @@
       },
       "node_id": "prime_worker_0035",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3694,7 +3694,7 @@
       },
       "node_id": "prime_worker_0036",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3742,7 +3742,7 @@
       },
       "node_id": "prime_worker_0037",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3790,7 +3790,7 @@
       },
       "node_id": "prime_worker_0038",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3838,7 +3838,7 @@
       },
       "node_id": "prime_worker_0039",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3886,7 +3886,7 @@
       },
       "node_id": "prime_worker_0040",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3934,7 +3934,7 @@
       },
       "node_id": "prime_worker_0041",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -3982,7 +3982,7 @@
       },
       "node_id": "prime_worker_0042",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4030,7 +4030,7 @@
       },
       "node_id": "prime_worker_0043",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4078,7 +4078,7 @@
       },
       "node_id": "prime_worker_0044",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4126,7 +4126,7 @@
       },
       "node_id": "prime_worker_0045",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4174,7 +4174,7 @@
       },
       "node_id": "prime_worker_0046",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4222,7 +4222,7 @@
       },
       "node_id": "prime_worker_0047",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4270,7 +4270,7 @@
       },
       "node_id": "prime_worker_0048",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4318,7 +4318,7 @@
       },
       "node_id": "prime_worker_0049",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4366,7 +4366,7 @@
       },
       "node_id": "prime_worker_0050",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4414,7 +4414,7 @@
       },
       "node_id": "prime_worker_0051",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4462,7 +4462,7 @@
       },
       "node_id": "prime_worker_0052",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4510,7 +4510,7 @@
       },
       "node_id": "prime_worker_0053",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4558,7 +4558,7 @@
       },
       "node_id": "prime_worker_0054",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4606,7 +4606,7 @@
       },
       "node_id": "prime_worker_0055",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4654,7 +4654,7 @@
       },
       "node_id": "prime_worker_0056",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4702,7 +4702,7 @@
       },
       "node_id": "prime_worker_0057",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4750,7 +4750,7 @@
       },
       "node_id": "prime_worker_0058",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4798,7 +4798,7 @@
       },
       "node_id": "prime_worker_0059",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4846,7 +4846,7 @@
       },
       "node_id": "prime_worker_0060",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4894,7 +4894,7 @@
       },
       "node_id": "prime_worker_0061",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4942,7 +4942,7 @@
       },
       "node_id": "prime_worker_0062",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -4990,7 +4990,7 @@
       },
       "node_id": "prime_worker_0063",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5038,7 +5038,7 @@
       },
       "node_id": "prime_worker_0064",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5086,7 +5086,7 @@
       },
       "node_id": "prime_worker_0065",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5134,7 +5134,7 @@
       },
       "node_id": "prime_worker_0066",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5182,7 +5182,7 @@
       },
       "node_id": "prime_worker_0067",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5230,7 +5230,7 @@
       },
       "node_id": "prime_worker_0068",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5278,7 +5278,7 @@
       },
       "node_id": "prime_worker_0069",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5326,7 +5326,7 @@
       },
       "node_id": "prime_worker_0070",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5374,7 +5374,7 @@
       },
       "node_id": "prime_worker_0071",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5422,7 +5422,7 @@
       },
       "node_id": "prime_worker_0072",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5470,7 +5470,7 @@
       },
       "node_id": "prime_worker_0073",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5518,7 +5518,7 @@
       },
       "node_id": "prime_worker_0074",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5566,7 +5566,7 @@
       },
       "node_id": "prime_worker_0075",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5614,7 +5614,7 @@
       },
       "node_id": "prime_worker_0076",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5662,7 +5662,7 @@
       },
       "node_id": "prime_worker_0077",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5710,7 +5710,7 @@
       },
       "node_id": "prime_worker_0078",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5758,7 +5758,7 @@
       },
       "node_id": "prime_worker_0079",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5806,7 +5806,7 @@
       },
       "node_id": "prime_worker_0080",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5854,7 +5854,7 @@
       },
       "node_id": "prime_worker_0081",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5902,7 +5902,7 @@
       },
       "node_id": "prime_worker_0082",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5950,7 +5950,7 @@
       },
       "node_id": "prime_worker_0083",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -5998,7 +5998,7 @@
       },
       "node_id": "prime_worker_0084",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6046,7 +6046,7 @@
       },
       "node_id": "prime_worker_0085",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6094,7 +6094,7 @@
       },
       "node_id": "prime_worker_0086",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6142,7 +6142,7 @@
       },
       "node_id": "prime_worker_0087",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6190,7 +6190,7 @@
       },
       "node_id": "prime_worker_0088",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6238,7 +6238,7 @@
       },
       "node_id": "prime_worker_0089",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6286,7 +6286,7 @@
       },
       "node_id": "prime_worker_0090",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6334,7 +6334,7 @@
       },
       "node_id": "prime_worker_0091",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6382,7 +6382,7 @@
       },
       "node_id": "prime_worker_0092",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6430,7 +6430,7 @@
       },
       "node_id": "prime_worker_0093",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6478,7 +6478,7 @@
       },
       "node_id": "prime_worker_0094",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6526,7 +6526,7 @@
       },
       "node_id": "prime_worker_0095",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6574,7 +6574,7 @@
       },
       "node_id": "prime_worker_0096",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6622,7 +6622,7 @@
       },
       "node_id": "prime_worker_0097",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6670,7 +6670,7 @@
       },
       "node_id": "prime_worker_0098",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6718,7 +6718,7 @@
       },
       "node_id": "prime_worker_0099",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -6766,7 +6766,7 @@
       },
       "node_id": "prime_worker_0100",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",

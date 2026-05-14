@@ -267,83 +267,83 @@
       "nodes": [
         {
           "node_id": "ingress",
-          "uses": "mn-agents.router_agent@1.0.0"
+          "uses": "mn-agents.control_router@1.0.0"
         },
         {
           "node_id": "world",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "collector",
-          "uses": "mn-agents.report_aggregator@1.0.0"
+          "uses": "mn-agents.control_join@1.0.0"
         },
         {
           "node_id": "summarizer",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_00",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_01",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_02",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_03",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_04",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_05",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_06",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_07",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_08",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_09",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_10",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_11",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_12",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_13",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_14",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "region_15",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -622,7 +622,7 @@
       "node_id": "ingress",
       "role": "root_coordinator",
       "type": "map",
-      "uses": "mn-agents.router_agent@1.0.0",
+      "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "simulation_start",
         "node_type": "map",
@@ -650,7 +650,7 @@
       "node_id": "world",
       "role": "world",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -678,7 +678,7 @@
       },
       "node_id": "collector",
       "type": "reduce",
-      "uses": "mn-agents.report_aggregator@1.0.0",
+      "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_after": 16,
         "complete_on_message": true,
@@ -694,7 +694,7 @@
       },
       "node_id": "summarizer",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "module": "MirrorNeuron.Examples.EcosystemSimulation.LeaderboardAgent",
         "module_source": "beam_modules/leaderboard_agent.ex",
@@ -723,7 +723,7 @@
       "node_id": "region_00",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -766,7 +766,7 @@
       "node_id": "region_01",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -809,7 +809,7 @@
       "node_id": "region_02",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -852,7 +852,7 @@
       "node_id": "region_03",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -895,7 +895,7 @@
       "node_id": "region_04",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -938,7 +938,7 @@
       "node_id": "region_05",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -981,7 +981,7 @@
       "node_id": "region_06",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -1024,7 +1024,7 @@
       "node_id": "region_07",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -1067,7 +1067,7 @@
       "node_id": "region_08",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -1110,7 +1110,7 @@
       "node_id": "region_09",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -1153,7 +1153,7 @@
       "node_id": "region_10",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -1196,7 +1196,7 @@
       "node_id": "region_11",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -1239,7 +1239,7 @@
       "node_id": "region_12",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -1282,7 +1282,7 @@
       "node_id": "region_13",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -1325,7 +1325,7 @@
       "node_id": "region_14",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,
@@ -1368,7 +1368,7 @@
       "node_id": "region_15",
       "role": "region",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 300,
         "food_regen_per_tick": 72.0,

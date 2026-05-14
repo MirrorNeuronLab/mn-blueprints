@@ -133,27 +133,27 @@
       "nodes": [
         {
           "node_id": "codegen_round_1",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "review_round_1",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "codegen_round_2",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "review_round_2",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "codegen_round_3",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "validator",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -467,7 +467,7 @@
       "node_id": "codegen_round_1",
       "role": "root_coordinator",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -544,7 +544,7 @@
       },
       "node_id": "review_round_1",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -620,7 +620,7 @@
       },
       "node_id": "codegen_round_2",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -696,7 +696,7 @@
       },
       "node_id": "review_round_2",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -772,7 +772,7 @@
       },
       "node_id": "codegen_round_3",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "python3",
@@ -846,7 +846,7 @@
       },
       "node_id": "validator",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "complete_job": true,
         "environment": {

@@ -75,27 +75,27 @@
       "nodes": [
         {
           "node_id": "target_discovery",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "structure_generation",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "candidate_generation",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "binding_evaluation",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "ranking_reporting",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "manager_monitor",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -383,7 +383,7 @@
       },
       "node_id": "target_discovery",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "node_type": "generic",
         "output_message_type": "targets_ready",
@@ -409,7 +409,7 @@
       },
       "node_id": "structure_generation",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "node_type": "generic",
         "output_message_type": "structures_ready",
@@ -435,7 +435,7 @@
       },
       "node_id": "candidate_generation",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "node_type": "generic",
         "output_message_type": "candidates_ready",
@@ -461,7 +461,7 @@
       },
       "node_id": "binding_evaluation",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "node_type": "generic",
         "output_message_type": "evaluations_ready",
@@ -487,7 +487,7 @@
       },
       "node_id": "ranking_reporting",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "node_type": "generic",
         "output_message_type": "pipeline_complete",
@@ -512,7 +512,7 @@
       },
       "node_id": "manager_monitor",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "node_type": "generic",
         "runner_module": "MirrorNeuron.Runner.HostLocal",

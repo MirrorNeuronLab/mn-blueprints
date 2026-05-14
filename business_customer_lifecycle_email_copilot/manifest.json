@@ -193,43 +193,43 @@
       "nodes": [
         {
           "node_id": "ingress",
-          "uses": "mn-agents.router_agent@1.0.0"
+          "uses": "mn-agents.control_router@1.0.0"
         },
         {
           "node_id": "monitor_scheduler_agent",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "customer_research_agent",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "lifecycle_copywriter_agent",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "email_designer_agent",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "deliverability_ops_agent",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "control_manager_agent",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "marketing_automation_agent",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "inbox_reply_agent",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "inbox_poller_agent",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -508,7 +508,7 @@
       "node_id": "ingress",
       "role": "root_coordinator",
       "type": "map",
-      "uses": "mn-agents.router_agent@1.0.0",
+      "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "bundle_request",
         "node_type": "map",
@@ -526,7 +526,7 @@
       "node_id": "monitor_scheduler_agent",
       "role": "Monitor Scheduler Agent",
       "type": "stream",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "fast_test_mode": true,
         "interval_ms": 0,
@@ -599,7 +599,7 @@
       "node_id": "customer_research_agent",
       "role": "Customer Research Agent",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
@@ -713,7 +713,7 @@
       "node_id": "lifecycle_copywriter_agent",
       "role": "Lifecycle Copywriter Agent",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
@@ -827,7 +827,7 @@
       "node_id": "email_designer_agent",
       "role": "Email Designer Agent",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
@@ -941,7 +941,7 @@
       "node_id": "deliverability_ops_agent",
       "role": "Deliverability & Ops Specialist Agent",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
@@ -1055,7 +1055,7 @@
       "node_id": "control_manager_agent",
       "role": "Control Manager Agent",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
@@ -1169,7 +1169,7 @@
       "node_id": "marketing_automation_agent",
       "role": "Marketing Automation Engineer Agent",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
@@ -1282,7 +1282,7 @@
       "node_id": "inbox_reply_agent",
       "role": "Inbox Reply Agent",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
@@ -1342,7 +1342,7 @@
       "node_id": "inbox_poller_agent",
       "role": "Inbox Poller",
       "type": "stream",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "interval_ms": 10000,
         "module": "Synaptic.InboxPoller",

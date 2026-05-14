@@ -415,127 +415,127 @@
       "nodes": [
         {
           "node_id": "ingress",
-          "uses": "mn-agents.router_agent@1.0.0"
+          "uses": "mn-agents.control_router@1.0.0"
         },
         {
           "node_id": "exchange",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "fake_stock_stream",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "stock_signal_analyzer",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "llm_market_explainer",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "market_advisor",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_000",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_001",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_002",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_003",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_004",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_005",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_006",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_007",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_008",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_009",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_010",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_011",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_012",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_013",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_014",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_015",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_016",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_017",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_018",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_019",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_020",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_021",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_022",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_023",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "trader_024",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -814,7 +814,7 @@
       "node_id": "ingress",
       "role": "root_coordinator",
       "type": "map",
-      "uses": "mn-agents.router_agent@1.0.0",
+      "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "simulation_start",
         "node_type": "map",
@@ -836,7 +836,7 @@
       "node_id": "exchange",
       "role": "exchange",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -896,7 +896,7 @@
       "node_id": "fake_stock_stream",
       "role": "fake_data_stream_agent",
       "type": "stream",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "daily_drift": 0.001,
         "daily_volatility": 0.018,
@@ -956,7 +956,7 @@
       "node_id": "stock_signal_analyzer",
       "role": "technical_signal_analyzer",
       "type": "stream",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "LLM_SIGNAL_EVERY_EVENTS": "30",
@@ -1006,7 +1006,7 @@
       "node_id": "llm_market_explainer",
       "role": "market_explanation_agent",
       "type": "stream",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "LITELLM_API_BASE": "http://192.168.4.173:11434",
@@ -1056,7 +1056,7 @@
       "node_id": "market_advisor",
       "role": "advisor",
       "type": "map",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "advice_interval_ticks": 5,
         "important_move_pct": 1.5,
@@ -1091,7 +1091,7 @@
       "node_id": "trader_000",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1122,7 +1122,7 @@
       "node_id": "trader_001",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1153,7 +1153,7 @@
       "node_id": "trader_002",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1184,7 +1184,7 @@
       "node_id": "trader_003",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1215,7 +1215,7 @@
       "node_id": "trader_004",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1246,7 +1246,7 @@
       "node_id": "trader_005",
       "role": "mean_reversion",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1277,7 +1277,7 @@
       "node_id": "trader_006",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1308,7 +1308,7 @@
       "node_id": "trader_007",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1339,7 +1339,7 @@
       "node_id": "trader_008",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1370,7 +1370,7 @@
       "node_id": "trader_009",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1401,7 +1401,7 @@
       "node_id": "trader_010",
       "role": "mean_reversion",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1432,7 +1432,7 @@
       "node_id": "trader_011",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1463,7 +1463,7 @@
       "node_id": "trader_012",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1494,7 +1494,7 @@
       "node_id": "trader_013",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1525,7 +1525,7 @@
       "node_id": "trader_014",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1556,7 +1556,7 @@
       "node_id": "trader_015",
       "role": "momentum",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1587,7 +1587,7 @@
       "node_id": "trader_016",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1618,7 +1618,7 @@
       "node_id": "trader_017",
       "role": "market_maker",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1649,7 +1649,7 @@
       "node_id": "trader_018",
       "role": "mean_reversion",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1680,7 +1680,7 @@
       "node_id": "trader_019",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1711,7 +1711,7 @@
       "node_id": "trader_020",
       "role": "market_maker",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1742,7 +1742,7 @@
       "node_id": "trader_021",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1773,7 +1773,7 @@
       "node_id": "trader_022",
       "role": "momentum",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1804,7 +1804,7 @@
       "node_id": "trader_023",
       "role": "noise",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,
@@ -1835,7 +1835,7 @@
       "node_id": "trader_024",
       "role": "momentum",
       "type": "reduce",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "duration_seconds": 86400,
         "initial_price": 100.0,

@@ -28,11 +28,11 @@
       "nodes": [
         {
           "node_id": "question_generator",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "answer_agent",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -334,7 +334,7 @@
       "node_id": "question_generator",
       "role": "question_source",
       "type": "stream",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "answer_node": "answer_agent",
         "interval_ms": 10000,
@@ -357,7 +357,7 @@
       "node_id": "answer_agent",
       "role": "answer_sink",
       "type": "stream",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "module": "MirrorNeuron.Examples.DivisibilityMonitor.AnswerAgent",
         "module_source": "beam_modules/answer_agent.ex",

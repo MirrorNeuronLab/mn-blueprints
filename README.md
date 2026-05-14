@@ -4,6 +4,10 @@ Runnable workflow blueprints for MirrorNeuron.
 
 Each blueprint is a deployable workflow folder with a manifest, configuration, payloads, tests, documentation, and a customer-facing `SPEC.md`. Blueprints can run with mock inputs first, then be adapted to real data sources and operational systems. The `SPEC.md` files describe the intended real-world customer problem and expected outcome even when the prototype implementation is still partial.
 
+In this architecture, agents are the working units. A blueprint describes how agents work together: which agent starts, what messages flow between agents, what state and artifacts are produced, and which execution boundaries apply. MirrorNeuron is the runtime system that runs that workflow in an orchestrated way, with scheduling, message routing, run-state tracking, artifact capture, and resource controls.
+
+Shared entries in `mn-agents` are generic agent templates. A blueprint actualizes those templates into customized workflow agents with `uses`, `with`, and `config`, then assembles them like reusable blocks. Control templates coordinate lifecycle, routing, retry, joins, filters, checkpoints, approval, and output fanout. Data templates do the work: Python execution, native modules, LLM decisions/tools, observation, sandboxed code work, edge model inference, and data services. Not every agent should call an LLM. Agents that do call LLMs should reference named LLM config, and agents that generate, review, browse, or execute code should run inside an explicit sandbox. The blueprint should make those choices visible so the same workflow can be tested locally and run reliably on constrained or edge environments.
+
 ## Categories
 
 Use these prefixes for new blueprints:
@@ -177,6 +181,19 @@ Most blueprint folders contain:
 | `tests/` | Smoke tests or package-specific tests. |
 
 The root `index.json` is the catalog source of truth.
+
+## Agent Workflow Model
+
+Blueprint manifests should treat each node as an actualized agent with a clear job and communication contract. Shared `mn-agents` templates provide generic building blocks; the blueprint gives them concrete roles, configs, message types, and domain payloads. The graph should explain:
+
+- what starts the workflow;
+- which message types move between agents;
+- which agents are deterministic and which may call an LLM;
+- which agents need a sandbox, custom image, service port, or external capability;
+- what artifacts and events are expected from each stage;
+- how the runtime should remain efficient under local, cloud, or edge constraints.
+
+MirrorNeuron owns execution concerns such as scheduling, retries, pools, event recording, run storage, and resource isolation. Blueprints own the workflow shape and domain intent. Shared templates in `mn-agents` provide reusable agent contracts so those workflows stay consistent and testable.
 
 ## Customization
 

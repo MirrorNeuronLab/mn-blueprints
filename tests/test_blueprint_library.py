@@ -15,6 +15,21 @@ SKILL_SRC = ROOT.parent / "mn-skills" / "blueprint_support_skill" / "src"
 if SKILL_SRC.exists() and str(SKILL_SRC) not in sys.path:
     sys.path.insert(0, str(SKILL_SRC))
 AGENTS_ROOT = ROOT.parent / "mn-agents"
+if AGENTS_ROOT.exists() and str(AGENTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(AGENTS_ROOT))
+LEGACY_AGENT_TEMPLATE_IDS = {
+    "mn-agents.python_executor",
+    "mn-agents.python_workflow",
+    "mn-agents.report_aggregator",
+    "mn-agents.module_agent",
+    "mn-agents.router_agent",
+    "mn-agents.stream_tick_source",
+    "mn-agents.input_skill_listener",
+    "mn-agents.output_skill_fanout",
+    "mn-agents.llm_agent",
+    "mn-agents.openshell_service",
+    "mn-agents.web_ui_output",
+}
 
 from mn_blueprint_support import FakeLLMClient, LEGACY_ALIASES, PRODUCT_PROFILES, REQUIRED_BLUEPRINT_IDS, SCENARIOS, get_scenario, run_blueprint
 from mn_blueprint_support.llm import DEFAULT_OLLAMA_BASE, OllamaLLMClient, ollama_model_available
@@ -29,6 +44,7 @@ from mn_blueprint_support.standard import (
     render_manifest_agent_templates,
     validate_agent_library,
 )
+from tools.agent_behavior import simulate_agent_instance
 
 
 def _category_slug(value: str) -> str:
@@ -452,15 +468,27 @@ def test_blueprint_repo_does_not_carry_support_code() -> None:
 def test_shared_agent_library_is_valid_and_cataloged() -> None:
     index = json.loads((AGENTS_ROOT / "index.json").read_text())
     template_ids = {entry["template_id"] for entry in index["agents"]}
+    categories = {entry["template_category"] for entry in index["agents"]}
 
     assert validate_agent_library(AGENTS_ROOT) == []
+    assert categories == {"control", "data"}
+    assert template_ids.isdisjoint(LEGACY_AGENT_TEMPLATE_IDS)
     assert {
-        "mn-agents.python_executor",
-        "mn-agents.report_aggregator",
-        "mn-agents.module_agent",
-        "mn-agents.router_agent",
-        "mn-agents.llm_agent",
-        "mn-agents.web_ui_output",
+        "mn-agents.control_approval_gate",
+        "mn-agents.control_checkpoint",
+        "mn-agents.data_python_executor",
+        "mn-agents.control_join",
+        "mn-agents.control_lifecycle",
+        "mn-agents.control_message_filter",
+        "mn-agents.control_retry",
+        "mn-agents.data_module",
+        "mn-agents.control_router",
+        "mn-agents.data_llm_decision",
+        "mn-agents.data_llm_tool",
+        "mn-agents.data_observer",
+        "mn-agents.data_sandboxed_codegen",
+        "mn-agents.data_edge_model",
+        "mn-agents.control_web_output",
     }.issubset(template_ids)
 
 
@@ -475,6 +503,10 @@ def test_blueprint_nodes_reference_shared_agent_templates_and_render() -> None:
         for node in manifest.get("nodes") or []:
             assert "uses" in node, (entry["id"], node.get("node_id"))
             assert node["uses"].startswith("mn-agents."), (entry["id"], node.get("node_id"))
+            assert not any(node["uses"].startswith(f"{template_id}@") for template_id in LEGACY_AGENT_TEMPLATE_IDS), (
+                entry["id"],
+                node.get("node_id"),
+            )
             assert "@" in node["uses"] and not node["uses"].endswith("@latest"), (entry["id"], node.get("node_id"))
             assert isinstance(node.get("with"), dict), (entry["id"], node.get("node_id"))
 
@@ -482,6 +514,20 @@ def test_blueprint_nodes_reference_shared_agent_templates_and_render() -> None:
         assert len(rendered["nodes"]) == len(manifest["nodes"])
         assert len(rendered["metadata"]["agent_templates"]["rendered"]) == len(manifest["nodes"])
         assert all("uses" not in node and "with" not in node for node in rendered["nodes"])
+
+
+def test_blueprint_nodes_simulate_with_shared_agent_behaviors() -> None:
+    index = json.loads((ROOT / "index.json").read_text())
+
+    for entry in index:
+        manifest_path = ROOT / entry["path"] / "manifest.json"
+        manifest = json.loads(manifest_path.read_text())
+
+        for node in manifest.get("nodes") or []:
+            result = simulate_agent_instance(node, AGENTS_ROOT)
+            assert result["status"] == "completed", (entry["id"], node.get("node_id"))
+            assert result["events"], (entry["id"], node.get("node_id"))
+            assert result["delegation"]["allow_recursive"] is False, (entry["id"], node.get("node_id"))
 
 
 def test_renamed_blueprint_aliases_resolve_to_new_scenarios() -> None:

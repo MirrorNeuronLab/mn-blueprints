@@ -29,11 +29,11 @@
       "nodes": [
         {
           "node_id": "advisory_workflow",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "result_sink",
-          "uses": "mn-agents.report_aggregator@1.0.0"
+          "uses": "mn-agents.control_join@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -371,7 +371,7 @@
       "node_id": "advisory_workflow",
       "role": "root_coordinator",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "name_prefix": "business-ai-strategy-workbench",
         "node_type": "generic",
@@ -435,7 +435,7 @@
       "node_id": "result_sink",
       "role": "result_sink",
       "type": "reduce",
-      "uses": "mn-agents.report_aggregator@1.0.0",
+      "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_on_message": true,
         "node_type": "reduce",

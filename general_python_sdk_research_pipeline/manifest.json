@@ -37,15 +37,15 @@
       "nodes": [
         {
           "node_id": "ingress",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "retriever",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "reviewer",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -351,7 +351,7 @@
       "node_id": "ingress",
       "role": "root_coordinator",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "MN_PY_COMPLETE_FINAL": "1",
@@ -400,7 +400,7 @@
       },
       "node_id": "retriever",
       "type": "map",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "MN_PY_COMPLETE_FINAL": "1",
@@ -448,7 +448,7 @@
       },
       "node_id": "reviewer",
       "type": "reduce",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
           "MN_PY_COMPLETE_FINAL": "1",

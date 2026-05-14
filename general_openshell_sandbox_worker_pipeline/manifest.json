@@ -35,15 +35,15 @@
       "nodes": [
         {
           "node_id": "shell_worker",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "python_worker",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "result_sink",
-          "uses": "mn-agents.report_aggregator@1.0.0"
+          "uses": "mn-agents.control_join@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -337,7 +337,7 @@
       "node_id": "shell_worker",
       "role": "root_coordinator",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
           "bash",
@@ -374,7 +374,7 @@
       },
       "node_id": "python_worker",
       "type": "generic",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "name_prefix": "python-worker",
         "node_type": "generic",
@@ -391,7 +391,7 @@
       },
       "node_id": "result_sink",
       "type": "reduce",
-      "uses": "mn-agents.report_aggregator@1.0.0",
+      "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_on_message": true,
         "node_type": "reduce"

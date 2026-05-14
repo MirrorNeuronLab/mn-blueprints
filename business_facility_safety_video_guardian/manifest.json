@@ -43,15 +43,15 @@
       "nodes": [
         {
           "node_id": "ingress",
-          "uses": "mn-agents.router_agent@1.0.0"
+          "uses": "mn-agents.control_router@1.0.0"
         },
         {
           "node_id": "door_camera_tick_source",
-          "uses": "mn-agents.module_agent@1.0.0"
+          "uses": "mn-agents.data_module@1.0.0"
         },
         {
           "node_id": "person_detector",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -409,7 +409,7 @@
       "node_id": "ingress",
       "role": "root_coordinator",
       "type": "map",
-      "uses": "mn-agents.router_agent@1.0.0",
+      "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "video_monitor_start",
         "node_type": "map",
@@ -428,7 +428,7 @@
       "node_id": "door_camera_tick_source",
       "role": "door_camera_sampler",
       "type": "stream",
-      "uses": "mn-agents.module_agent@1.0.0",
+      "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "camera_id": "front-door",
         "interval_ms": 10000,
@@ -490,7 +490,7 @@
       "node_id": "person_detector",
       "role": "vl_model_video_safety_detector",
       "type": "stream",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "cleanup_remote_dir": true,
         "command": [

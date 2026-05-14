@@ -37,15 +37,15 @@
       "nodes": [
         {
           "node_id": "daemon_ingress",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "daemon_analyzer",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
           "node_id": "daemon_memory",
-          "uses": "mn-agents.python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -373,7 +373,7 @@
       "node_id": "daemon_ingress",
       "role": "root_coordinator",
       "type": "stream",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "backpressure": {
           "high_watermark": 3,
@@ -434,7 +434,7 @@
       },
       "node_id": "daemon_analyzer",
       "type": "stream",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "backpressure": {
           "high_watermark": 3,
@@ -494,7 +494,7 @@
       },
       "node_id": "daemon_memory",
       "type": "stream",
-      "uses": "mn-agents.python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "backpressure": {
           "high_watermark": 3,

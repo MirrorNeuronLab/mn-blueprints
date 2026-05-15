@@ -1,0 +1,211 @@
+{
+  "daemon": false,
+  "description": "Monitoring the network traffic and alarm me about suspected spamware or hack behavior.",
+  "edges": [
+    {
+      "edge_id": "ingress_to_monitor",
+      "from_node": "ingress",
+      "message_type": "network_events",
+      "to_node": "network_monitor"
+    },
+    {
+      "edge_id": "monitor_to_approval",
+      "from_node": "network_monitor",
+      "message_type": "security_alarm",
+      "to_node": "approval_gate"
+    },
+    {
+      "edge_id": "approval_to_alert_sink",
+      "from_node": "approval_gate",
+      "message_type": "approved_security_alarm",
+      "to_node": "alert_sink"
+    }
+  ],
+  "entrypoints": [
+    "ingress"
+  ],
+  "graph_id": "security_monitoring_the_network_traffic_and_alarm_me_about_suspected_spamware_v1",
+  "initial_inputs": {
+    "ingress": [
+      {
+        "events": "inputs/sample_network_events.jsonl",
+        "mode": "dry_run",
+        "scenario": "sample_network_monitoring"
+      }
+    ]
+  },
+  "job_name": "security-monitoring-the-network-traffic-and-alarm-me-about-suspected-spamware",
+  "manifest_version": "1.0",
+  "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "ingress",
+          "uses": "mn-agents.control_router@1.0.0"
+        },
+        {
+          "node_id": "network_monitor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "approval_gate",
+          "uses": "mn-agents.control_approval_gate@1.0.0"
+        },
+        {
+          "node_id": "alert_sink",
+          "uses": "mn-agents.control_join@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
+    "blueprint_id": "security_monitoring_the_network_traffic_and_alarm_me_about_suspected_spamware",
+    "category": "security",
+    "configuration_contract": {
+      "optional_files": [
+        "config/overwrite.json"
+      ],
+      "required_files": [
+        "manifest.json",
+        "README.md",
+        "SPEC.md",
+        "config/default.json",
+        "payloads/"
+      ]
+    },
+    "description": "Monitoring the network traffic and alarm me about suspected spamware or hack behavior.",
+    "generated_by": "Synapse mn-orchastrator",
+    "name": "Monitoring the network traffic and alarm me about suspected spamware",
+    "output_contract": {
+      "events_jsonl": "events.jsonl",
+      "final_artifact_json": "final_artifact.json",
+      "local_run_store": "~/.mn/runs/<run_id>/ or --runs-root/<run_id>/",
+      "result_json": "result.json",
+      "stdout": "JSON object with alarm, risk, events, artifact paths, and run metadata"
+    },
+    "quick_test": {
+      "command": "python3 payloads/network_monitor/scripts/run_blueprint.py --events inputs/sample_network_events.jsonl --runs-root /tmp/mirror-neuron-runs",
+      "enabled": true
+    },
+    "reference_blueprints": [
+      "secuirty_rmf_user_activity",
+      "business_ai_control_room",
+      "business_facility_safety_video_guardian"
+    ],
+    "runtime_features": [
+      "network event normalization",
+      "deterministic suspicious-behavior scoring",
+      "dry-run alarm generation",
+      "human approval gate before response actions",
+      "local run-store artifacts"
+    ],
+    "safety": {
+      "default_mode": "dry_run",
+      "destructive_actions": "not executed by this blueprint",
+      "operator_review": "required before blocking, isolating, or changing firewall policy"
+    },
+    "selected_skills": [
+      {
+        "package_name": "mirrorneuron-blueprint-support-skill",
+        "reason": "Use standard blueprint config, run-store, and artifact helpers.",
+        "skill_id": "blueprint_support_skill"
+      },
+      {
+        "package_name": "mirrorneuron-email-delivery-skill",
+        "reason": "Prepare dry-run/live alert delivery helpers.",
+        "skill_id": "email_delivery_skill"
+      }
+    ]
+  },
+  "name": "Monitoring the network traffic and alarm me about suspected spamware",
+  "nodes": [
+    {
+      "agent_type": "router",
+      "config": {
+        "emit_type": "network_events",
+        "input_path": "inputs/sample_network_events.jsonl"
+      },
+      "node_id": "ingress",
+      "role": "network_event_ingress",
+      "type": "map",
+      "uses": "mn-agents.control_router@1.0.0",
+      "with": {
+        "emit_type": "network_events",
+        "node_type": "map",
+        "role": "network_event_ingress"
+      }
+    },
+    {
+      "agent_type": "executor",
+      "config": {
+        "command": [
+          "python3",
+          "scripts/run_blueprint.py"
+        ],
+        "environment": {
+          "MN_BLUEPRINT_ID": "security_monitoring_the_network_traffic_and_alarm_me_about_suspected_spamware",
+          "MN_RUN_MODE": "dry_run"
+        },
+        "output_message_type": "security_alarm",
+        "pool": "default",
+        "pool_slots": 1,
+        "upload_as": "network_monitor",
+        "upload_path": "network_monitor",
+        "workdir": "/sandbox/job/network_monitor"
+      },
+      "node_id": "network_monitor",
+      "role": "network_security_monitor",
+      "type": "generic",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "node_type": "generic",
+        "output_message_type": "security_alarm",
+        "role": "network_security_monitor",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "network_monitor"
+      }
+    },
+    {
+      "agent_type": "router",
+      "config": {
+        "approval_required": true,
+        "blocked_actions": [
+          "isolate_host",
+          "block_domain",
+          "change_firewall_policy"
+        ],
+        "default_decision": "dry_run_alert_only"
+      },
+      "node_id": "approval_gate",
+      "role": "human_review_gate",
+      "type": "map",
+      "uses": "mn-agents.control_approval_gate@1.0.0",
+      "with": {
+        "approval_required": true,
+        "node_type": "map",
+        "role": "human_review_gate"
+      }
+    },
+    {
+      "agent_type": "aggregator",
+      "config": {
+        "complete_on_message": true
+      },
+      "node_id": "alert_sink",
+      "role": "alert_artifact_sink",
+      "type": "reduce",
+      "uses": "mn-agents.control_join@1.0.0",
+      "with": {
+        "complete_on_message": true,
+        "node_type": "reduce",
+        "role": "alert_artifact_sink"
+      }
+    }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
+  "requiredContextEngine": false
+}

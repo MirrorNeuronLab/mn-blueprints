@@ -1,0 +1,89 @@
+{
+  "budgets": {
+    "max_disk_mb": 100,
+    "max_events": 10000,
+    "max_runtime_seconds": 300
+  },
+  "identity": {
+    "blueprint_id": "security_monitoring_the_network_traffic_and_alarm_me_about_suspected_spamware",
+    "name": "Monitoring the network traffic and alarm me about suspected spamware"
+  },
+  "inputs": {
+    "adapter": "file",
+    "description": "JSONL network flow, DNS, auth, and endpoint events.",
+    "path": "inputs/sample_network_events.jsonl",
+    "payload": {}
+  },
+  "metadata": {
+    "category": "security",
+    "generated_by": "Synapse mn-orchastrator",
+    "reference_blueprints": [
+      "secuirty_rmf_user_activity",
+      "business_ai_control_room",
+      "business_facility_safety_video_guardian"
+    ]
+  },
+  "mode": "dry_run",
+  "network_monitor": {
+    "alert_policy": {
+      "critical": [
+        "notify_operator",
+        "open_incident",
+        "require_human_approval"
+      ],
+      "high": [
+        "notify_operator",
+        "open_investigation"
+      ],
+      "medium": [
+        "notify_operator"
+      ]
+    },
+    "require_human_approval_for": [
+      "isolate_host",
+      "block_domain",
+      "change_firewall_policy",
+      "disable_account"
+    ],
+    "risk_thresholds": {
+      "critical": 90,
+      "high": 60,
+      "low": 0,
+      "medium": 25
+    },
+    "signal_weights": {
+      "admin_protocol_exposed": 25,
+      "failed_login_burst": 20,
+      "known_malware_label": 45,
+      "large_outbound_transfer": 25,
+      "port_scan": 30,
+      "suspicious_dns": 30,
+      "suspicious_remote_port": 20
+    }
+  },
+  "output_skills": {
+    "email_alarm": {
+      "description": "Enable only after configuring approved recipient and delivery credentials.",
+      "enabled": false,
+      "mode": "dry_run",
+      "skill": "email_delivery_skill"
+    }
+  },
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "result.json",
+      "final_artifact.json"
+    ],
+    "run_root": "~/.mn/runs"
+  },
+  "privacy": {
+    "redact_payloads": true,
+    "store_packet_payload_samples": false
+  },
+  "standard_version": "1.0"
+}

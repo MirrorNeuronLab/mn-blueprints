@@ -1,0 +1,136 @@
+{
+  "blueprint_id": "security_monitoring_the_network_traffic_and_alarm_me_about_suspected_spamware",
+  "boundaries": [
+    "No credentials or customer secrets in generated plans, fixtures, or defaults.",
+    "Generated files require an explicit scaffold action after plan review."
+  ],
+  "category": "security",
+  "config_surface": [
+    "identity.blueprint_id",
+    "inputs.problem_brief",
+    "outputs.artifact_dir",
+    "catalogs.agents_dir",
+    "catalogs.skills_dir",
+    "catalogs.blueprints_dir"
+  ],
+  "expected_artifacts": [
+    "composition_plan.md",
+    "manifest.draft.json",
+    "config.default.draft.json",
+    "validation_report.json",
+    "final_artifact.json"
+  ],
+  "message_flow": [
+    "intake --problem_context--> reference_match",
+    "reference_match --reference_blueprints--> compose",
+    "compose --composition_plan--> validate"
+  ],
+  "problem_summary": "Monitoring the network traffic and alarm me about suspected spamware or hack behavior.",
+  "reference_blueprints": [
+    "secuirty_rmf_user_activity",
+    "business_ai_control_room",
+    "business_facility_safety_video_guardian"
+  ],
+  "selected_agents": [
+    {
+      "reason": "Start and describe the workflow lifecycle.",
+      "template_id": "mn-agents.control_lifecycle"
+    },
+    {
+      "reason": "Route messages between composed workflow stages.",
+      "template_id": "mn-agents.control_router"
+    },
+    {
+      "reason": "Write and fan out final artifacts after local run-store output.",
+      "template_id": "mn-agents.control_output_fanout"
+    },
+    {
+      "reason": "Receive external, connector-backed, or streaming inputs.",
+      "template_id": "mn-agents.control_input_listener"
+    },
+    {
+      "reason": "Normalize incoming observations before decision stages.",
+      "template_id": "mn-agents.data_observer"
+    },
+    {
+      "reason": "Gate sensitive recommendations before action.",
+      "template_id": "mn-agents.control_approval_gate"
+    },
+    {
+      "reason": "Run deterministic analysis and artifact assembly.",
+      "template_id": "mn-agents.data_python_executor"
+    },
+    {
+      "reason": "Reuse pattern observed in reference blueprint business_ai_control_room.",
+      "template_id": "mn-agents.control_join"
+    },
+    {
+      "reason": "Reuse pattern observed in reference blueprint business_facility_safety_video_guardian.",
+      "template_id": "mn-agents.data_module"
+    }
+  ],
+  "selected_skills": [
+    {
+      "package_name": "mirrorneuron-blueprint-support-skill",
+      "reason": "Use standard blueprint config, run-store, and artifact helpers.",
+      "skill_id": "blueprint_support_skill"
+    },
+    {
+      "package_name": "mirrorneuron-email-delivery-skill",
+      "reason": "Prepare dry-run/live alert delivery helpers.",
+      "skill_id": "email_delivery_skill"
+    }
+  ],
+  "title": "Monitoring the network traffic and alarm me about suspected spamware",
+  "validation_notes": [
+    "Validate selected agents against mn-agents before scaffold generation.",
+    "Validate selected skills against mn-skills before scaffold generation.",
+    "Review reference blueprints for manifest, config, test, and artifact conventions."
+  ],
+  "workflow_stages": [
+    {
+      "agent_template": "mn-agents.control_input_listener",
+      "description": "Normalize the problem inputs and create the initial workflow message.",
+      "emits": [
+        "problem_context"
+      ],
+      "name": "intake",
+      "skills": []
+    },
+    {
+      "agent_template": "mn-agents.data_python_executor",
+      "description": "Compare the brief against existing blueprint patterns and catalog metadata.",
+      "emits": [
+        "reference_blueprints"
+      ],
+      "name": "reference_match",
+      "skills": [
+        "blueprint_support_skill"
+      ]
+    },
+    {
+      "agent_template": "mn-agents.data_python_executor",
+      "description": "Select agents and skills, then draft topology, message flow, and artifacts.",
+      "emits": [
+        "composition_plan"
+      ],
+      "name": "compose",
+      "skills": [
+        "blueprint_support_skill",
+        "email_delivery_skill"
+      ]
+    },
+    {
+      "agent_template": "mn-agents.data_python_executor",
+      "description": "Check catalog references, safety boundaries, and scaffold readiness.",
+      "emits": [
+        "validation_report",
+        "final_artifact"
+      ],
+      "name": "validate",
+      "skills": [
+        "blueprint_support_skill"
+      ]
+    }
+  ]
+}

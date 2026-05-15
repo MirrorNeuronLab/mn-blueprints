@@ -1,0 +1,4 @@
+{"event_id":"evt_001","timestamp":"2026-05-15T12:00:00Z","event_type":"flow","src_ip":"10.0.1.24","dst_ip":"203.0.113.44","dst_port":4444,"protocol":"tcp","bytes_out":8240000,"bytes_in":12000,"process":"unknown.exe"}
+{"event_id":"evt_002","timestamp":"2026-05-15T12:00:05Z","event_type":"dns","src_ip":"10.0.1.24","query":"xj92-kla8-qwe7-malware-control.example.bad","answer":"203.0.113.44"}
+{"event_id":"evt_003","timestamp":"2026-05-15T12:00:12Z","event_type":"auth","src_ip":"10.0.1.24","user":"svc-backup","failed_attempts":18,"success":false}
+{"event_id":"evt_004","timestamp":"2026-05-15T12:01:00Z","event_type":"endpoint_alert","src_ip":"10.0.1.24","label":"suspected malware beacon","severity":"high"}

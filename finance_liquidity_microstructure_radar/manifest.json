@@ -547,7 +547,8 @@
     "configuration_contract": {
       "optional_files": [
         "scenario.json",
-        "config/overwrite.json"
+        "config/overwrite.json",
+        "knowledge/"
       ],
       "required_files": [
         "manifest.json",

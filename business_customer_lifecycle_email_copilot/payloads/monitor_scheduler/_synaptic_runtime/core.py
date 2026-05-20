@@ -99,6 +99,16 @@ def bundle_input_dir() -> Path:
     return bundle_asset_dir("input")
 
 
+def blueprint_root_dir() -> Path:
+    current = Path(__file__).resolve()
+    for parent in [current.parent, *current.parents]:
+        if (parent / "knowledge").is_dir():
+            return parent
+        if (parent / "config").is_dir() and (parent / "payloads").is_dir():
+            return parent
+    return current.parents[3]
+
+
 def _read_input_json(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
@@ -124,7 +134,9 @@ def load_input_manifest() -> dict[str, Any]:
     input_dir = bundle_input_dir()
     manifest = _read_input_json(input_dir / "manifest.json")
     strategy = _read_input_json(input_dir / "strategy.json")
-    knowledge = _read_input_json(input_dir / "knowledge.json")
+    knowledge = _read_input_json(blueprint_root_dir() / "knowledge" / "init" / "knowledge.json")
+    if not knowledge:
+        knowledge = _read_input_json(input_dir / "knowledge.json")
     merged = dict(manifest)
     if "business_context" in strategy:
         merged["business_context"] = strategy["business_context"]

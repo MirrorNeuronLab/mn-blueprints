@@ -241,7 +241,8 @@
     "configuration_contract": {
       "optional_files": [
         "scenario.json",
-        "config/overwrite.json"
+        "config/overwrite.json",
+        "knowledge/"
       ],
       "required_files": [
         "manifest.json",
@@ -578,6 +579,10 @@
             "target": "customer_research"
           },
           {
+            "source": "knowledge",
+            "target": "knowledge"
+          },
+          {
             "source": "_shared_skills/business_email_campaign_skill",
             "target": "_shared_skills/business_email_campaign_skill"
           },
@@ -630,6 +635,10 @@
           {
             "source": "customer_research",
             "target": "customer_research"
+          },
+          {
+            "source": "knowledge",
+            "target": "knowledge"
           },
           {
             "source": "_shared_skills/business_email_campaign_skill",
@@ -692,6 +701,10 @@
             "target": "lifecycle_copywriter"
           },
           {
+            "source": "knowledge",
+            "target": "knowledge"
+          },
+          {
             "source": "_shared_skills/business_email_campaign_skill",
             "target": "_shared_skills/business_email_campaign_skill"
           },
@@ -744,6 +757,10 @@
           {
             "source": "lifecycle_copywriter",
             "target": "lifecycle_copywriter"
+          },
+          {
+            "source": "knowledge",
+            "target": "knowledge"
           },
           {
             "source": "_shared_skills/business_email_campaign_skill",
@@ -806,6 +823,10 @@
             "target": "email_designer"
           },
           {
+            "source": "knowledge",
+            "target": "knowledge"
+          },
+          {
             "source": "_shared_skills/business_email_campaign_skill",
             "target": "_shared_skills/business_email_campaign_skill"
           },
@@ -858,6 +879,10 @@
           {
             "source": "email_designer",
             "target": "email_designer"
+          },
+          {
+            "source": "knowledge",
+            "target": "knowledge"
           },
           {
             "source": "_shared_skills/business_email_campaign_skill",
@@ -920,6 +945,10 @@
             "target": "deliverability_ops"
           },
           {
+            "source": "knowledge",
+            "target": "knowledge"
+          },
+          {
             "source": "_shared_skills/business_email_campaign_skill",
             "target": "_shared_skills/business_email_campaign_skill"
           },
@@ -972,6 +1001,10 @@
           {
             "source": "deliverability_ops",
             "target": "deliverability_ops"
+          },
+          {
+            "source": "knowledge",
+            "target": "knowledge"
           },
           {
             "source": "_shared_skills/business_email_campaign_skill",
@@ -1034,6 +1067,10 @@
             "target": "control_manager"
           },
           {
+            "source": "knowledge",
+            "target": "knowledge"
+          },
+          {
             "source": "_shared_skills/business_email_campaign_skill",
             "target": "_shared_skills/business_email_campaign_skill"
           },
@@ -1086,6 +1123,10 @@
           {
             "source": "control_manager",
             "target": "control_manager"
+          },
+          {
+            "source": "knowledge",
+            "target": "knowledge"
           },
           {
             "source": "_shared_skills/business_email_campaign_skill",
@@ -1148,6 +1189,10 @@
             "target": "marketing_automation"
           },
           {
+            "source": "knowledge",
+            "target": "knowledge"
+          },
+          {
             "source": "_shared_skills/business_email_campaign_skill",
             "target": "_shared_skills/business_email_campaign_skill"
           },
@@ -1200,6 +1245,10 @@
           {
             "source": "marketing_automation",
             "target": "marketing_automation"
+          },
+          {
+            "source": "knowledge",
+            "target": "knowledge"
           },
           {
             "source": "_shared_skills/business_email_campaign_skill",
@@ -1261,6 +1310,10 @@
             "target": "inbox_reply"
           },
           {
+            "source": "knowledge",
+            "target": "knowledge"
+          },
+          {
             "source": "_shared_skills/business_email_campaign_skill",
             "target": "_shared_skills/business_email_campaign_skill"
           },
@@ -1312,6 +1365,10 @@
           {
             "source": "inbox_reply",
             "target": "inbox_reply"
+          },
+          {
+            "source": "knowledge",
+            "target": "knowledge"
           },
           {
             "source": "_shared_skills/business_email_campaign_skill",

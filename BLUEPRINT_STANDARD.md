@@ -52,6 +52,7 @@ Blueprints may also contain:
 
 - `scenario.json`: canonical scenario input for simulation or demos.
 - `config/overwrite.json`: local or user-specific override values. This file should not be required for correctness.
+- `knowledge/`: optional LLM-agent knowledge content, such as RAG material, prompt context, domain references, embeddings metadata, or other agent knowledge sources.
 - `payloads/.../samples`: bundled demo data.
 - `payloads/.../policies`: runtime or sandbox policy files.
 
@@ -344,6 +345,18 @@ Live input skill events must follow the normal event contract in `events.jsonl`.
 - `slack_file_shared`
 
 Input skill credentials must be managed by the connector or referenced by environment variable names. Blueprint config must not contain literal OAuth tokens, bot tokens, refresh tokens, cookies, or private keys.
+
+## Knowledge Contract
+
+Blueprints may include a `knowledge/` directory beside `config/` and `payloads/` for LLM-agent knowledge content such as RAG material, prompt context, domain references, embeddings metadata, or other agent knowledge sources.
+
+The `knowledge/` directory is optional. If present, it must contain exactly these standard subdirectories:
+
+- `init/`: bundled or base knowledge shipped with the blueprint.
+- `custom/`: user- or customer-provided knowledge.
+- `learned/`: runtime-, feedback-, or experience-derived knowledge.
+
+The standard does not prescribe file formats, indexing behavior, retrieval precedence, embedding strategy, or how agents use these folders. Blueprints and runtime integrations may decide those details.
 
 ## Output Contract
 

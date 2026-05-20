@@ -65,7 +65,8 @@
     "category": "security",
     "configuration_contract": {
       "optional_files": [
-        "config/overwrite.json"
+        "config/overwrite.json",
+        "knowledge/"
       ],
       "required_files": [
         "manifest.json",

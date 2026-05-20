@@ -178,8 +178,25 @@ def payload_input_dir() -> Path:
     return Path(__file__).resolve().parents[3] / "input"
 
 
+def blueprint_root_dir() -> Path:
+    current = Path(__file__).resolve()
+    for parent in [current.parent, *current.parents]:
+        if (parent / "knowledge").is_dir():
+            return parent
+        if (parent / "config").is_dir() and (parent / "payloads").is_dir():
+            return parent
+    return current.parents[3]
+
+
+def load_knowledge() -> dict:
+    knowledge = load_json_file(blueprint_root_dir() / "knowledge" / "init" / "knowledge.json")
+    if knowledge:
+        return knowledge
+    return load_json_file(payload_input_dir() / "knowledge.json")
+
+
 def load_brand() -> dict:
-    knowledge = load_json_file(payload_input_dir() / "knowledge.json")
+    knowledge = load_knowledge()
     brand = knowledge.get("brand", {})
     return brand if isinstance(brand, dict) else {}
 

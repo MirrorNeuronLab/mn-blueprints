@@ -122,6 +122,28 @@ def test_index_entries_point_to_loadable_blueprint_folders() -> None:
         assert manifest["description"] == entry["description"]
 
 
+def test_optional_knowledge_folder_contract() -> None:
+    expected_subdirs = {"init", "custom", "learned"}
+
+    for manifest_path in sorted(ROOT.glob("*/manifest.json")):
+        manifest = json.loads(manifest_path.read_text())
+        contract = manifest.get("metadata", {}).get("configuration_contract")
+        if isinstance(contract, dict):
+            assert "knowledge/" in contract.get("optional_files", []), manifest_path
+
+    for blueprint_dir in sorted(path for path in ROOT.iterdir() if path.is_dir()):
+        knowledge_dir = blueprint_dir / "knowledge"
+        if not knowledge_dir.exists():
+            continue
+        actual_subdirs = {path.name for path in knowledge_dir.iterdir() if path.is_dir()}
+        assert actual_subdirs == expected_subdirs, blueprint_dir
+
+    lifecycle_root = ROOT / "business_customer_lifecycle_email_copilot"
+    assert (lifecycle_root / "knowledge" / "init" / "knowledge.json").exists()
+    assert not (lifecycle_root / "input" / "knowledge.json").exists()
+    assert not list((lifecycle_root / "payloads").glob("*/input/knowledge.json"))
+
+
 def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() -> None:
     blueprint_id = "business_context_memory_compression_code_analsysis"
     blueprint_dir = ROOT / blueprint_id

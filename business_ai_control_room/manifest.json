@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Map AI and cyber requirements to evidence and produce an audit-ready control readiness pack.",
+  "description": "Use this blueprint to turn AI and cyber control requirements into an evidence-backed readiness pack your team can review before audit or launch.",
   "edges": [
     {
       "edge_id": "readiness_to_sink",
@@ -22,6 +22,8 @@
     ]
   },
   "job_name": "business-ai-control-room",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -53,11 +55,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "AI governance, cyber readiness, cloud change assurance, ERP controls, RMF/ATO preparation, and operational control advisory.",
-    "description": "Map AI and cyber requirements to evidence and produce an audit-ready control readiness pack.",
+    "description": "Use this blueprint to turn AI and cyber control requirements into an evidence-backed readiness pack your team can review before audit or launch.",
     "init_config_review": {
       "checks": [
         "identity",

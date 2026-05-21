@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Plan local flood mitigations as rainfall, flood level, pump capacity, and vulnerable assets change.",
+  "description": "Use this blueprint to compare local flood mitigation plans as rainfall, water levels, pump capacity, and vulnerable assets change.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "science-climate-resilience-planning-engine",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Cities, utilities, campuses, hospitals, industrial sites.",
-    "description": "Plan local flood mitigations as rainfall, flood level, pump capacity, and vulnerable assets change.",
+    "description": "Use this blueprint to compare local flood mitigation plans as rainfall, water levels, pump capacity, and vulnerable assets change.",
     "init_config_review": {
       "checks": [
         "identity",

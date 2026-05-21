@@ -1,6 +1,6 @@
 {
   "daemon": true,
-  "description": "Monitor facility video streams, detect visible humans, describe observable appearance and activity, and escalate safety-relevant observations with VL model reasoning.",
+  "description": "Use this blueprint to watch an approved camera stream, detect visible people, summarize what is observable, and raise safety alerts with a reviewable event trail.",
   "edges": [
     {
       "edge_id": "ingress_to_tick_source",
@@ -36,6 +36,8 @@
     ]
   },
   "job_name": "business-facility-safety-video-guardian",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -71,11 +73,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Door monitoring, restricted-area alerts, retail safety, warehouse operations.",
-    "description": "Monitor facility video streams, detect visible humans, describe observable appearance and activity, and escalate safety-relevant observations with VL model reasoning.",
+    "description": "Use this blueprint to watch an approved camera stream, detect visible people, summarize what is observable, and raise safety alerts with a reviewable event trail.",
     "init_config_review": {
       "fields": [
         {

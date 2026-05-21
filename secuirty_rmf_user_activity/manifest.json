@@ -2,7 +2,7 @@
   "base_blueprint": "general_event_stream_triage_state_machine",
   "blueprint_id": "secuirty_rmf_user_activity",
   "canonical_spec_name": "security_user_activity_response_worker",
-  "description": "Detects suspicious user activity, recommends safe step-up authentication, and generates RMF/ATO/cATO-ready evidence artifacts.",
+  "description": "Use this blueprint to review suspicious user activity, recommend safe step-up authentication, and produce RMF/ATO/cATO evidence artifacts.",
   "entrypoint": "src/main.py",
   "initial_inputs": {
     "config": "config.example.json",
@@ -14,6 +14,8 @@
     "events": "inputs/sample_events_high_risk.jsonl"
   },
   "manifest_version": "1.0",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "metadata": {
     "blueprint_id": "secuirty_rmf_user_activity",
     "category": "general",
@@ -28,11 +30,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Identity provider events, SaaS audit logs, GitHub audit logs, CloudTrail, and internal application activity streams.",
-    "description": "Detects suspicious user activity, recommends safe step-up authentication, and generates RMF/ATO/cATO-ready evidence artifacts.",
+    "description": "Use this blueprint to review suspicious user activity, recommend safe step-up authentication, and produce RMF/ATO/cATO evidence artifacts.",
     "init_config_review": {
       "checks": [
         "identity",

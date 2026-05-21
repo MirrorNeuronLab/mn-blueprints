@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Rank property acquisition opportunities with working memory over noisy ZIP-code history, broker flow, financing constraints, and prior decision outcomes.",
+  "description": "Use this blueprint to rank property opportunities while preserving useful deal memory across noisy ZIP-code history, broker flow, financing constraints, and past outcomes.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -30,6 +30,8 @@
     ]
   },
   "job_name": "finance-zip-code-property-alpha-engine-with-memory",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -61,11 +63,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Rental acquisitions, flipping pipelines, multifamily sourcing, market expansion, diligence memory, and capital-allocation committees.",
-    "description": "Rank property acquisition opportunities with working memory over noisy ZIP-code history, broker flow, financing constraints, and prior decision outcomes.",
+    "description": "Use this blueprint to rank property opportunities while preserving useful deal memory across noisy ZIP-code history, broker flow, financing constraints, and past outcomes.",
     "init_config_review": {
       "checks": [
         "identity",

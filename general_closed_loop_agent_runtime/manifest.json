@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Show the core runtime pattern: an LLM agent observes a changing queue and acts over repeated ticks.",
+  "description": "Use this blueprint to understand how a closed-loop agent observes changing work, decides on each tick, and leaves an inspectable action trail.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "general-closed-loop-agent-runtime",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Support queues, claim processing, review pipelines, fulfillment operations.",
-    "description": "Show the core runtime pattern: an LLM agent observes a changing queue and acts over repeated ticks.",
+    "description": "Use this blueprint to understand how a closed-loop agent observes changing work, decides on each tick, and leaves an inspectable action trail.",
     "init_config_review": {
       "checks": [
         "identity",

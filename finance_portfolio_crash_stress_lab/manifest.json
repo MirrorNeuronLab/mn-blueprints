@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Stress a portfolio against drawdown, rate shocks, and liquidity pressure before recommending rebalancing.",
+  "description": "Use this blueprint to stress a portfolio against crash, rate, and liquidity shocks and review rebalancing choices before taking action.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "finance-portfolio-crash-stress-lab",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Wealth management, treasury, family offices, robo-advisory risk overlays.",
-    "description": "Stress a portfolio against drawdown, rate shocks, and liquidity pressure before recommending rebalancing.",
+    "description": "Use this blueprint to stress a portfolio against crash, rate, and liquidity shocks and review rebalancing choices before taking action.",
     "init_config_review": {
       "checks": [
         "identity",

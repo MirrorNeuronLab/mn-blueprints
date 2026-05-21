@@ -1,6 +1,6 @@
 {
   "daemon": true,
-  "description": "Run a Python-defined workflow as a long-lived daemon with repeated stateful turns.",
+  "description": "Use this blueprint to run a Python-defined workflow as a long-lived research daemon with repeated stateful turns.",
   "edges": [
     {
       "edge_id": "daemon_ingress_to_daemon_analyzer",
@@ -30,6 +30,8 @@
     ]
   },
   "job_name": "general-python-sdk-live-research-daemon",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -66,11 +68,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Incident monitors, market watchers, research crawlers.",
-    "description": "Run a Python-defined workflow as a long-lived daemon with repeated stateful turns.",
+    "description": "Use this blueprint to run a Python-defined workflow as a long-lived research daemon with repeated stateful turns.",
     "generated_at": "2026-04-30T11:17:52+00:00",
     "generated_by": "mn-python-sdk",
     "init_config_review": {

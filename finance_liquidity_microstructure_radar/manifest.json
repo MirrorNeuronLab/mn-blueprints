@@ -1,6 +1,6 @@
 {
   "daemon": true,
-  "description": "Watch simulated market microstructure and produce live liquidity-risk explanations.",
+  "description": "Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile.",
   "edges": [
     {
       "edge_id": "ingress_to_exchange",
@@ -408,6 +408,8 @@
     ]
   },
   "job_name": "finance-liquidity-microstructure-radar",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -555,11 +557,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Equities, crypto, FX, liquidity monitoring, trading operations.",
-    "description": "Watch simulated market microstructure and produce live liquidity-risk explanations.",
+    "description": "Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile.",
     "init_config_review": {
       "checks": [
         "identity",

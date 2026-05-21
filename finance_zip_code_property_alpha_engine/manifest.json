@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Rank property acquisition opportunities as ZIP-code demand, cap rate, price, and risk evolve.",
+  "description": "Use this blueprint to rank property acquisition opportunities by ZIP-code demand, price, cap-rate, and risk signals before committing diligence time.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -24,6 +24,8 @@
     ]
   },
   "job_name": "finance-zip-code-property-alpha-engine",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -55,11 +57,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Rental acquisitions, flipping pipelines, multifamily sourcing, market expansion.",
-    "description": "Rank property acquisition opportunities as ZIP-code demand, cap rate, price, and risk evolve.",
+    "description": "Use this blueprint to rank property acquisition opportunities by ZIP-code demand, price, cap-rate, and risk signals before committing diligence time.",
     "init_config_review": {
       "checks": [
         "identity",

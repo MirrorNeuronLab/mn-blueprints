@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Track simulation state deltas so every agent decision is explainable after the run.",
+  "description": "Use this blueprint to record simulation state changes so every agent decision can be inspected after the run.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "general-simulation-state-audit-trail",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Regulated operations, simulations, workflow audits, model evaluations.",
-    "description": "Track simulation state deltas so every agent decision is explainable after the run.",
+    "description": "Use this blueprint to record simulation state changes so every agent decision can be inspected after the run.",
     "init_config_review": {
       "checks": [
         "identity",

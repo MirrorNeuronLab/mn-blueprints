@@ -1,6 +1,6 @@
 {
   "daemon": true,
-  "description": "Move live telemetry chunks through stream workers and summarize the evolving signal.",
+  "description": "Use this blueprint to process live telemetry chunks, detect changing signal patterns, and summarize what operators need to notice.",
   "edges": [
     {
       "edge_id": "ingress_to_source",
@@ -64,6 +64,8 @@
     ]
   },
   "job_name": "general-live-telemetry-stream-pipeline",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -99,11 +101,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "IoT telemetry, application logs, market data, operational sensors.",
-    "description": "Move live telemetry chunks through stream workers and summarize the evolving signal.",
+    "description": "Use this blueprint to process live telemetry chunks, detect changing signal patterns, and summarize what operators need to notice.",
     "init_config_review": {
       "checks": [
         "identity",

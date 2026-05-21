@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Test signal and rerouting controls as traffic speed, incidents, volume, and emissions evolve.",
+  "description": "Use this blueprint to test traffic signal and rerouting controls against speed, incident, volume, and emissions tradeoffs.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "science-urban-traffic-control-lab",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Signal optimization, incident response, transit priority, event planning.",
-    "description": "Test signal and rerouting controls as traffic speed, incidents, volume, and emissions evolve.",
+    "description": "Use this blueprint to test traffic signal and rerouting controls against speed, incident, volume, and emissions tradeoffs.",
     "init_config_review": {
       "checks": [
         "identity",

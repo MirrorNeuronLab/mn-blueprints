@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Model buyer-supplier negotiation as agents respond to changing demand, price, and capacity.",
+  "description": "Use this blueprint to model buyer-supplier negotiation rounds and compare offers as demand, price, and capacity change.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "general-multi-agent-contract-negotiation-loop",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Procurement, renewals, vendor management, enterprise sales deal desks.",
-    "description": "Model buyer-supplier negotiation as agents respond to changing demand, price, and capacity.",
+    "description": "Use this blueprint to model buyer-supplier negotiation rounds and compare offers as demand, price, and capacity change.",
     "init_config_review": {
       "checks": [
         "identity",

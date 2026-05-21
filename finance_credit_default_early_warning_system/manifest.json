@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Detect rising borrower default pressure and compare credit policy responses over time.",
+  "description": "Use this blueprint to spot borrower default pressure early and compare policy responses before credit risk turns into losses.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "finance-credit-default-early-warning-system",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Consumer lending, SMB credit, cards, mortgage prequalification.",
-    "description": "Detect rising borrower default pressure and compare credit policy responses over time.",
+    "description": "Use this blueprint to spot borrower default pressure early and compare policy responses before credit risk turns into losses.",
     "init_config_review": {
       "checks": [
         "identity",

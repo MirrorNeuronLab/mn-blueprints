@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Control a changing environment where load, temperature, reserve, and service levels interact.",
+  "description": "Use this blueprint to experiment with control decisions in a changing environment where load, temperature, reserve, and service levels interact.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "general-dynamic-environment-control-loop",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Energy systems, cloud capacity, industrial operations, logistics control rooms.",
-    "description": "Control a changing environment where load, temperature, reserve, and service levels interact.",
+    "description": "Use this blueprint to experiment with control decisions in a changing environment where load, temperature, reserve, and service levels interact.",
     "init_config_review": {
       "checks": [
         "identity",

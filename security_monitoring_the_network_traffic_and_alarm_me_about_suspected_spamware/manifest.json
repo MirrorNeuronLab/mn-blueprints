@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Monitoring the network traffic and alarm me about suspected spamware or hack behavior.",
+  "description": "Use this blueprint to monitor network events for suspected spyware or hacking behavior and raise evidence-backed alerts for security review.",
   "edges": [
     {
       "edge_id": "ingress_to_monitor",
@@ -35,6 +35,8 @@
     ]
   },
   "job_name": "security-monitoring-the-network-traffic-and-alarm-me-about-suspected-spamware",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -73,10 +75,12 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
-    "description": "Monitoring the network traffic and alarm me about suspected spamware or hack behavior.",
+    "description": "Use this blueprint to monitor network events for suspected spyware or hacking behavior and raise evidence-backed alerts for security review.",
     "generated_by": "Synapse mn-orchastrator",
     "name": "Monitoring the network traffic and alarm me about suspected spamware",
     "output_contract": {

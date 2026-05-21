@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Optimize disruption responses before inventory, supplier delays, and customer service levels break down.",
+  "description": "Use this blueprint to rehearse supplier disruption responses and choose actions that protect inventory, fulfillment, and customer service levels.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -27,6 +27,8 @@
     ]
   },
   "job_name": "business-supply-chain-resilience-war-room",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -58,11 +60,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Manufacturing, retail, healthcare supplies, logistics networks.",
-    "description": "Optimize disruption responses before inventory, supplier delays, and customer service levels break down.",
+    "description": "Use this blueprint to rehearse supplier disruption responses and choose actions that protect inventory, fulfillment, and customer service levels.",
     "init_config_review": {
       "checks": [
         "identity",

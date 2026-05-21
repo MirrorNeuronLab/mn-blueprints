@@ -1,6 +1,6 @@
 {
   "daemon": true,
-  "description": "Observe a fast native-agent live monitor that keeps producing decisions until stopped.",
+  "description": "Use this blueprint to run a lightweight native monitor that keeps producing decisions over live state until you stop it.",
   "edges": [
     {
       "edge_id": "generator_to_answer",
@@ -21,6 +21,8 @@
     ]
   },
   "job_name": "general-native-live-monitor-daemon",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -52,11 +54,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Operations telemetry, rules engines, high-frequency synthetic simulations.",
-    "description": "Observe a fast native-agent live monitor that keeps producing decisions until stopped.",
+    "description": "Use this blueprint to run a lightweight native monitor that keeps producing decisions over live state until you stop it.",
     "init_config_review": {
       "checks": [
         "identity",

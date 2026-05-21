@@ -1,5 +1,5 @@
 {
-  "description": "Visualize shared-world multi-agent motion planning and coordination behavior.",
+  "description": "Use this blueprint to visualize shared-world motion planning so you can inspect coordination, conflicts, and route choices between agents.",
   "edges": [
     {
       "edge_id": "ingress_to_world",
@@ -82,6 +82,8 @@
     ]
   },
   "job_name": "science-multi-agent-motion-planning-lab",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -121,11 +123,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Robotics, warehouse coordination, autonomous planning, teaching labs.",
-    "description": "Visualize shared-world multi-agent motion planning and coordination behavior.",
+    "description": "Use this blueprint to visualize shared-world motion planning so you can inspect coordination, conflicts, and route choices between agents.",
     "init_config_review": {
       "checks": [
         "identity",

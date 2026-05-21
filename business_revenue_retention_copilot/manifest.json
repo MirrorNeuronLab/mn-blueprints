@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Compare retention interventions before deploying them to at-risk customers.",
+  "description": "Use this blueprint to compare retention offers for at-risk customers and choose interventions with clear revenue, churn, and customer-experience tradeoffs.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "business-revenue-retention-copilot",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "SaaS retention, subscription commerce, financial services, telecom.",
-    "description": "Compare retention interventions before deploying them to at-risk customers.",
+    "description": "Use this blueprint to compare retention offers for at-risk customers and choose interventions with clear revenue, churn, and customer-experience tradeoffs.",
     "init_config_review": {
       "checks": [
         "identity",

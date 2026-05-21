@@ -1,5 +1,5 @@
 {
-  "description": "Coordinate customer lifecycle outreach with LLM-generated messaging and delivery controls.",
+  "description": "Use this blueprint to plan, generate, check, send, and track lifecycle emails so customer outreach stays timely, governed, and tied to customer state.",
   "edges": [
     {
       "edge_id": "ingress_to_monitor_scheduler",
@@ -185,6 +185,8 @@
     ]
   },
   "job_name": "business-customer-lifecycle-email-copilot",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "long_lived": true,
   "manifest_version": "1.0",
   "metadata": {
@@ -249,11 +251,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Retention campaigns, onboarding journeys, renewal nudges, education sequences.",
-    "description": "Coordinate customer lifecycle outreach with LLM-generated messaging and delivery controls.",
+    "description": "Use this blueprint to plan, generate, check, send, and track lifecycle emails so customer outreach stays timely, governed, and tied to customer state.",
     "init_config_review": {
       "checks": [
         "identity",

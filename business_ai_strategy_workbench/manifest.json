@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Compress enterprise discovery into a board-ready strategy recommendation pack.",
+  "description": "Use this blueprint to turn messy discovery notes into a board-ready AI strategy recommendation with priorities, risks, and next steps.",
   "edges": [
     {
       "edge_id": "advisory_to_sink",
@@ -22,6 +22,8 @@
     ]
   },
   "job_name": "business-ai-strategy-workbench",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -53,11 +55,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Enterprise strategy, private-equity value creation, CFO transformation, corporate development, and transformation-office discovery.",
-    "description": "Compress enterprise discovery into a board-ready strategy recommendation pack.",
+    "description": "Use this blueprint to turn messy discovery notes into a board-ready AI strategy recommendation with priorities, risks, and next steps.",
     "init_config_review": {
       "checks": [
         "identity",

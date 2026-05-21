@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Turn requirements and vendor responses into a scored recommendation and implementation roadmap.",
+  "description": "Use this blueprint to convert requirements and vendor responses into a scored recommendation, implementation plan, and reviewable decision record.",
   "edges": [
     {
       "edge_id": "vendor_to_sink",
@@ -21,6 +21,8 @@
     ]
   },
   "job_name": "business-vendor-decision-agent",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -52,11 +54,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "ERP, CRM, cloud, cybersecurity, AI platform, robotics, outsourcing, and implementation partner selection.",
-    "description": "Turn requirements and vendor responses into a scored recommendation and implementation roadmap.",
+    "description": "Use this blueprint to convert requirements and vendor responses into a scored recommendation, implementation plan, and reviewable decision record.",
     "init_config_review": {
       "checks": [
         "identity",

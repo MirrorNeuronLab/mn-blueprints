@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Run a full human-in-the-loop decision workflow with review requests, responses, revisions, and auditable applied actions.",
+  "description": "Use this blueprint to run a complete human review loop where requests, decisions, revisions, and applied actions are all captured.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -29,6 +29,8 @@
     ]
   },
   "job_name": "general-human-in-the-loop-workflow",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -60,11 +62,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Risk reviews, ticket approvals, safety checks, compliance sign-off, deployment gates.",
-    "description": "Run a full human-in-the-loop decision workflow with review requests, responses, revisions, and auditable applied actions.",
+    "description": "Use this blueprint to run a complete human review loop where requests, decisions, revisions, and applied actions are all captured.",
     "init_config_review": {
       "checks": [
         "identity",

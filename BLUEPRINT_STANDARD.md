@@ -45,6 +45,8 @@ Each blueprint directory must contain:
 - `manifest.json`: graph, metadata, node, adapter, and product contract.
 - `README.md`: user-facing summary and quick-start instructions.
 - `SPEC.md`: implementation and behavior specification.
+- `LICENSE.md`: license terms for the blueprint code, docs, configuration, scripts, and payloads.
+- `TERM.md`: user-facing terms of use, responsibility, warranty disclaimer, third-party service notice, and liability limitation.
 - `config/default.json`: default configuration following this standard.
 - `payloads/`: executable code, scripts, workers, support modules, sample data, or policies.
 
@@ -70,6 +72,11 @@ Required identity fields:
 - `job_name`: kebab-case job name.
 - `manifest_version`: manifest schema version.
 - `standard_version`: blueprint standard version, currently `1.0`.
+
+Required manifest legal reference fields:
+
+- `license`: relative path to the blueprint license file, usually `LICENSE.md`.
+- `term`: relative path to the blueprint terms file, usually `TERM.md`.
 
 At runtime, the system must also assign:
 
@@ -1042,6 +1049,8 @@ Domain-specific steps should preserve the shared lifecycle ordering around confi
 - `nodes`
 - `edges`
 - `initial_inputs`
+- `license`
+- `term`
 
 The manifest graph is the actualized-agent communication contract. It should make the workflow inspectable without reading every payload script. A reader should be able to identify the templates used, the concrete agents produced from those templates, their responsibilities, their message handoffs, and the runtime concerns that matter for reliability or edge execution.
 
@@ -1283,8 +1292,10 @@ Use this checklist to separate universal requirements from feature-specific requ
 ### Required For All Blueprints
 
 - It appears in `index.json`.
-- It has `manifest.json`, `README.md`, `SPEC.md`, and `config/default.json`.
+- It has `manifest.json`, `README.md`, `SPEC.md`, `LICENSE.md`, `TERM.md`, and `config/default.json`.
 - `manifest.json.metadata.blueprint_id` matches the directory name.
+- `manifest.json.license` points to `LICENSE.md`.
+- `manifest.json.term` points to `TERM.md`.
 - `config/default.json.identity.blueprint_id` matches the directory name.
 - It declares standard version `1.0`.
 - It supports `mock`, `json`, `file`, and `env_json` input adapters.

@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Tune policy thresholds through repeated simulated reward and incident feedback.",
+  "description": "Use this blueprint to tune policy thresholds through repeated feedback so you can compare rewards, incidents, and tradeoffs before deployment.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "general-policy-feedback-optimization-loop",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Fraud thresholds, safety policies, routing rules, pricing guardrails.",
-    "description": "Tune policy thresholds through repeated simulated reward and incident feedback.",
+    "description": "Use this blueprint to tune policy thresholds through repeated feedback so you can compare rewards, incidents, and tradeoffs before deployment.",
     "init_config_review": {
       "checks": [
         "identity",

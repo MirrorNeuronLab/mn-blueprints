@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Show an LLM agent calling a forecast tool before deciding how to rebalance resources.",
+  "description": "Use this blueprint to see an LLM agent call a forecast tool, weigh the result, and choose a resource action you can inspect.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "general-llm-tool-orchestration-loop",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Demand planning, capacity management, operational forecasting, scheduling.",
-    "description": "Show an LLM agent calling a forecast tool before deciding how to rebalance resources.",
+    "description": "Use this blueprint to see an LLM agent call a forecast tool, weigh the result, and choose a resource action you can inspect.",
     "init_config_review": {
       "checks": [
         "identity",

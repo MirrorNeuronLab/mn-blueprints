@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Define a MirrorNeuron workflow directly in Python and compile it into a runnable bundle.",
+  "description": "Use this blueprint to author a MirrorNeuron workflow directly in Python and compile it into a runnable blueprint bundle.",
   "edges": [
     {
       "edge_id": "ingress_to_retriever",
@@ -30,6 +30,8 @@
     ]
   },
   "job_name": "general-python-sdk-research-pipeline",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -66,11 +68,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Internal research, report generation, enrichment workflows.",
-    "description": "Define a MirrorNeuron workflow directly in Python and compile it into a runnable bundle.",
+    "description": "Use this blueprint to author a MirrorNeuron workflow directly in Python and compile it into a runnable blueprint bundle.",
     "generated_at": "2026-04-30T11:17:52+00:00",
     "generated_by": "mn-python-sdk",
     "init_config_review": {

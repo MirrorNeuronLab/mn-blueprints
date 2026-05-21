@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Triage event streams as anomaly pressure, queue depth, and false positives change over time.",
+  "description": "Use this blueprint to triage noisy event streams and see how anomaly pressure, queue depth, and false positives change decisions over time.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "general-event-stream-triage-state-machine",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Security operations, payments monitoring, reliability engineering, fraud detection.",
-    "description": "Triage event streams as anomaly pressure, queue depth, and false positives change over time.",
+    "description": "Use this blueprint to triage noisy event streams and see how anomaly pressure, queue depth, and false positives change decisions over time.",
     "init_config_review": {
       "checks": [
         "identity",

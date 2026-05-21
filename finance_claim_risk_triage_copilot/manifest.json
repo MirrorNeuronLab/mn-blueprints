@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Prioritize insurance claim reviews as fraud signals, queue pressure, and adjuster capacity change.",
+  "description": "Use this blueprint to prioritize claim reviews by combining fraud signals, queue pressure, and adjuster capacity into an auditable triage recommendation.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "finance-claim-risk-triage-copilot",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Auto, property, health, warranty, and specialty claims.",
-    "description": "Prioritize insurance claim reviews as fraud signals, queue pressure, and adjuster capacity change.",
+    "description": "Use this blueprint to prioritize claim reviews by combining fraud signals, queue pressure, and adjuster capacity into an auditable triage recommendation.",
     "init_config_review": {
       "checks": [
         "identity",

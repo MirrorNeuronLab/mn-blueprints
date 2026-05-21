@@ -1,5 +1,5 @@
 {
-  "description": "Generate, review, and validate code through a sandboxed multi-step LLM loop.",
+  "description": "Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result.",
   "edges": [
     {
       "edge_id": "codegen_r1_to_review_r1",
@@ -126,6 +126,8 @@
     ]
   },
   "job_name": "general-sandboxed-llm-codegen-review-loop",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -173,11 +175,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Internal developer tools, data scripts, code repair, controlled automation.",
-    "description": "Generate, review, and validate code through a sandboxed multi-step LLM loop.",
+    "description": "Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result.",
     "init_config_review": {
       "checks": [
         "identity",

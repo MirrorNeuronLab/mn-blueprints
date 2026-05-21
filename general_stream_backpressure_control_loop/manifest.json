@@ -1,6 +1,6 @@
 {
   "daemon": true,
-  "description": "Show bounded queues, slow workers, and retry-later behavior in a live stream.",
+  "description": "Use this blueprint to observe bounded queues, slow workers, and retry-later behavior before building live stream workflows.",
   "edges": [
     {
       "edge_id": "ingress_to_source",
@@ -35,6 +35,8 @@
     ]
   },
   "job_name": "general-stream-backpressure-control-loop",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -74,11 +76,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Customer events, telemetry, alerts, market ticks.",
-    "description": "Show bounded queues, slow workers, and retry-later behavior in a live stream.",
+    "description": "Use this blueprint to observe bounded queues, slow workers, and retry-later behavior before building live stream workflows.",
     "init_config_review": {
       "checks": [
         "identity",

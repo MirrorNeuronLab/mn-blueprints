@@ -1,6 +1,6 @@
 {
   "daemon": false,
-  "description": "Evaluate price changes against competitor moves, inventory pressure, and revenue impact.",
+  "description": "Use this blueprint to compare pricing moves against demand, inventory, margin, and competitors before you change prices in the real world.",
   "edges": [
     {
       "edge_id": "simulation_to_report",
@@ -23,6 +23,8 @@
     ]
   },
   "job_name": "business-dynamic-pricing-profit-optimizer",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -54,11 +56,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Retail, travel, marketplaces, subscriptions, manufacturing quotes.",
-    "description": "Evaluate price changes against competitor moves, inventory pressure, and revenue impact.",
+    "description": "Use this blueprint to compare pricing moves against demand, inventory, margin, and competitors before you change prices in the real world.",
     "init_config_review": {
       "checks": [
         "identity",

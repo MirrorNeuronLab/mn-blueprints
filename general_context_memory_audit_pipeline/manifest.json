@@ -1,5 +1,5 @@
 {
-  "description": "Run role-scoped context packets through a multi-agent audit decision workflow.",
+  "description": "Use this blueprint to audit how role-specific context packets move through a multi-agent decision process and affect the final recommendation.",
   "edges": [
     {
       "from_node": "initializer",
@@ -45,6 +45,8 @@
     ]
   },
   "job_name": "general-context-memory-audit-pipeline",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
   "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
@@ -96,11 +98,13 @@
         "README.md",
         "SPEC.md",
         "config/default.json",
-        "payloads/"
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
       ]
     },
     "customizable_for": "Compliance review, legal intake, regulated operations, internal controls.",
-    "description": "Run role-scoped context packets through a multi-agent audit decision workflow.",
+    "description": "Use this blueprint to audit how role-specific context packets move through a multi-agent decision process and affect the final recommendation.",
     "init_config_review": {
       "checks": [
         "identity",

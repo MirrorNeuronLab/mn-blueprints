@@ -334,36 +334,36 @@
             "target": "config"
           },
           {
-            "source": "mn-skills/blueprint_support_skill",
-            "target": "mn-skills/blueprint_support_skill"
+            "source": "mn-skills/blueprint-support-skill",
+            "target": "mn-skills/blueprint-support-skill"
           },
           {
-            "source": "mn-skills/vendor_comparison_skill",
-            "target": "mn-skills/vendor_comparison_skill"
+            "source": "mn-skills/vendor-comparison-skill",
+            "target": "mn-skills/vendor-comparison-skill"
           },
           {
-            "source": "mn-skills/spreadsheet_analysis_skill",
-            "target": "mn-skills/spreadsheet_analysis_skill"
+            "source": "mn-skills/spreadsheet-analysis-skill",
+            "target": "mn-skills/spreadsheet-analysis-skill"
           },
           {
-            "source": "mn-skills/implementation_plan_skill",
-            "target": "mn-skills/implementation_plan_skill"
+            "source": "mn-skills/implementation-plan-skill",
+            "target": "mn-skills/implementation-plan-skill"
           },
           {
-            "source": "mn-skills/process_map_skill",
-            "target": "mn-skills/process_map_skill"
+            "source": "mn-skills/process-map-skill",
+            "target": "mn-skills/process-map-skill"
           },
           {
-            "source": "mn-skills/code_generation_skill",
-            "target": "mn-skills/code_generation_skill"
+            "source": "mn-skills/code-generation-skill",
+            "target": "mn-skills/code-generation-skill"
           },
           {
-            "source": "mn-skills/first_draft_slides_skill",
-            "target": "mn-skills/first_draft_slides_skill"
+            "source": "mn-skills/first-draft-slides-skill",
+            "target": "mn-skills/first-draft-slides-skill"
           },
           {
-            "source": "mn-skills/client_report_skill",
-            "target": "mn-skills/client_report_skill"
+            "source": "mn-skills/client-report-skill",
+            "target": "mn-skills/client-report-skill"
           }
         ],
         "workdir": "/sandbox/job/vendor_workflow"
@@ -389,36 +389,36 @@
             "target": "config"
           },
           {
-            "source": "mn-skills/blueprint_support_skill",
-            "target": "mn-skills/blueprint_support_skill"
+            "source": "mn-skills/blueprint-support-skill",
+            "target": "mn-skills/blueprint-support-skill"
           },
           {
-            "source": "mn-skills/vendor_comparison_skill",
-            "target": "mn-skills/vendor_comparison_skill"
+            "source": "mn-skills/vendor-comparison-skill",
+            "target": "mn-skills/vendor-comparison-skill"
           },
           {
-            "source": "mn-skills/spreadsheet_analysis_skill",
-            "target": "mn-skills/spreadsheet_analysis_skill"
+            "source": "mn-skills/spreadsheet-analysis-skill",
+            "target": "mn-skills/spreadsheet-analysis-skill"
           },
           {
-            "source": "mn-skills/implementation_plan_skill",
-            "target": "mn-skills/implementation_plan_skill"
+            "source": "mn-skills/implementation-plan-skill",
+            "target": "mn-skills/implementation-plan-skill"
           },
           {
-            "source": "mn-skills/process_map_skill",
-            "target": "mn-skills/process_map_skill"
+            "source": "mn-skills/process-map-skill",
+            "target": "mn-skills/process-map-skill"
           },
           {
-            "source": "mn-skills/code_generation_skill",
-            "target": "mn-skills/code_generation_skill"
+            "source": "mn-skills/code-generation-skill",
+            "target": "mn-skills/code-generation-skill"
           },
           {
-            "source": "mn-skills/first_draft_slides_skill",
-            "target": "mn-skills/first_draft_slides_skill"
+            "source": "mn-skills/first-draft-slides-skill",
+            "target": "mn-skills/first-draft-slides-skill"
           },
           {
-            "source": "mn-skills/client_report_skill",
-            "target": "mn-skills/client_report_skill"
+            "source": "mn-skills/client-report-skill",
+            "target": "mn-skills/client-report-skill"
           }
         ]
       }

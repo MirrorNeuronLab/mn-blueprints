@@ -376,8 +376,8 @@
             "target": "config"
           },
           {
-            "source": "mn-skills/blueprint_support_skill",
-            "target": "mn-skills/blueprint_support_skill"
+            "source": "mn-skills/blueprint-support-skill",
+            "target": "mn-skills/blueprint-support-skill"
           }
         ],
         "workdir": "/sandbox/job/simulation_loop"
@@ -423,8 +423,8 @@
             "target": "config"
           },
           {
-            "source": "mn-skills/blueprint_support_skill",
-            "target": "mn-skills/blueprint_support_skill"
+            "source": "mn-skills/blueprint-support-skill",
+            "target": "mn-skills/blueprint-support-skill"
           }
         ]
       }

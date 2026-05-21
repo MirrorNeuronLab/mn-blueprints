@@ -335,24 +335,24 @@
             "target": "config"
           },
           {
-            "source": "mn-skills/blueprint_support_skill",
-            "target": "mn-skills/blueprint_support_skill"
+            "source": "mn-skills/blueprint-support-skill",
+            "target": "mn-skills/blueprint-support-skill"
           },
           {
-            "source": "mn-skills/document_reading_skill",
-            "target": "mn-skills/document_reading_skill"
+            "source": "mn-skills/document-reading-skill",
+            "target": "mn-skills/document-reading-skill"
           },
           {
-            "source": "mn-skills/implementation_plan_skill",
-            "target": "mn-skills/implementation_plan_skill"
+            "source": "mn-skills/implementation-plan-skill",
+            "target": "mn-skills/implementation-plan-skill"
           },
           {
-            "source": "mn-skills/process_map_skill",
-            "target": "mn-skills/process_map_skill"
+            "source": "mn-skills/process-map-skill",
+            "target": "mn-skills/process-map-skill"
           },
           {
-            "source": "mn-skills/client_report_skill",
-            "target": "mn-skills/client_report_skill"
+            "source": "mn-skills/client-report-skill",
+            "target": "mn-skills/client-report-skill"
           }
         ],
         "workdir": "/sandbox/job/readiness_workflow"
@@ -378,24 +378,24 @@
             "target": "config"
           },
           {
-            "source": "mn-skills/blueprint_support_skill",
-            "target": "mn-skills/blueprint_support_skill"
+            "source": "mn-skills/blueprint-support-skill",
+            "target": "mn-skills/blueprint-support-skill"
           },
           {
-            "source": "mn-skills/document_reading_skill",
-            "target": "mn-skills/document_reading_skill"
+            "source": "mn-skills/document-reading-skill",
+            "target": "mn-skills/document-reading-skill"
           },
           {
-            "source": "mn-skills/implementation_plan_skill",
-            "target": "mn-skills/implementation_plan_skill"
+            "source": "mn-skills/implementation-plan-skill",
+            "target": "mn-skills/implementation-plan-skill"
           },
           {
-            "source": "mn-skills/process_map_skill",
-            "target": "mn-skills/process_map_skill"
+            "source": "mn-skills/process-map-skill",
+            "target": "mn-skills/process-map-skill"
           },
           {
-            "source": "mn-skills/client_report_skill",
-            "target": "mn-skills/client_report_skill"
+            "source": "mn-skills/client-report-skill",
+            "target": "mn-skills/client-report-skill"
           }
         ]
       }

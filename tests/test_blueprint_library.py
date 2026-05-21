@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILL_SRC = ROOT.parent / "mn-skills" / "blueprint_support_skill" / "src"
+SKILL_SRC = ROOT.parent / "mn-skills" / "blueprint-support-skill" / "src"
 if SKILL_SRC.exists() and str(SKILL_SRC) not in sys.path:
     sys.path.insert(0, str(SKILL_SRC))
 AGENTS_ROOT = ROOT.parent / "mn-agents"
@@ -263,7 +263,7 @@ def test_python_sdk_source_blueprints_run_directly_and_generate_bundle(
     env["PYTHONPATH"] = os.pathsep.join(
         [
             str(ROOT.parent / "mn-python-sdk"),
-            str(ROOT.parent / "mn-skills" / "blueprint_support_skill" / "src"),
+            str(ROOT.parent / "mn-skills" / "blueprint-support-skill" / "src"),
             env.get("PYTHONPATH", ""),
         ]
     )

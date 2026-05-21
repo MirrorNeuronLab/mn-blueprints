@@ -73,12 +73,12 @@
     {
       "package_name": "mirrorneuron-blueprint-support-skill",
       "reason": "Use standard blueprint config, run-store, and artifact helpers.",
-      "skill_id": "blueprint_support_skill"
+      "skill_id": "blueprint-support-skill"
     },
     {
       "package_name": "mirrorneuron-email-delivery-skill",
       "reason": "Prepare dry-run/live alert delivery helpers.",
-      "skill_id": "email_delivery_skill"
+      "skill_id": "email-delivery-skill"
     }
   ],
   "title": "Monitoring the network traffic and alarm me about suspected spamware",
@@ -105,7 +105,7 @@
       ],
       "name": "reference_match",
       "skills": [
-        "blueprint_support_skill"
+        "blueprint-support-skill"
       ]
     },
     {
@@ -116,8 +116,8 @@
       ],
       "name": "compose",
       "skills": [
-        "blueprint_support_skill",
-        "email_delivery_skill"
+        "blueprint-support-skill",
+        "email-delivery-skill"
       ]
     },
     {
@@ -129,7 +129,7 @@
       ],
       "name": "validate",
       "skills": [
-        "blueprint_support_skill"
+        "blueprint-support-skill"
       ]
     }
   ]

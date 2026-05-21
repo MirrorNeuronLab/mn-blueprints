@@ -39,5 +39,5 @@ This blueprint does not block traffic, isolate hosts, change firewall policy, or
 
 ## Selected Skills
 
-- `blueprint_support_skill`
-- `email_delivery_skill`
+- `blueprint-support-skill`
+- `email-delivery-skill`

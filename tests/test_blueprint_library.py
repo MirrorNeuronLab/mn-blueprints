@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILL_SRC = ROOT.parent / "mn-skills" / "blueprint-support-skill" / "src"
+SKILL_SRC = ROOT.parent / "mn-skills" / "blueprint_support_skill" / "src"
 if SKILL_SRC.exists() and str(SKILL_SRC) not in sys.path:
     sys.path.insert(0, str(SKILL_SRC))
 AGENTS_ROOT = ROOT.parent / "mn-agents"
@@ -153,7 +153,7 @@ def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() ->
     assert manifest["metadata"]["blueprint_id"] == blueprint_id
     assert manifest["entrypoints"] == ["initializer"]
     executable_nodes = [node for node in manifest["nodes"] if node.get("node_id") != "sink"]
-    assert [node["role"] for node in executable_nodes] == [
+    assert [node["with"]["role"] for node in executable_nodes] == [
         "initializer",
         "repo_architect",
         "dependency_mapper",
@@ -161,7 +161,7 @@ def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() ->
         "context_compressor",
         "briefing_author",
     ]
-    initializer_uploads = {item["source"] for item in manifest["nodes"][0]["config"]["upload_paths"]}
+    initializer_uploads = {item["source"] for item in manifest["nodes"][0]["with"]["upload_paths"]}
     assert {"initializer", "_vendor", "repo_fixture"}.issubset(initializer_uploads)
 
     assert fixture["schema_version"] == "mn.code_analysis_fixture.v1"
@@ -263,7 +263,7 @@ def test_python_sdk_source_blueprints_run_directly_and_generate_bundle(
     env["PYTHONPATH"] = os.pathsep.join(
         [
             str(ROOT.parent / "mn-python-sdk"),
-            str(ROOT.parent / "mn-skills" / "blueprint-support-skill" / "src"),
+            str(ROOT.parent / "mn-skills" / "blueprint_support_skill" / "src"),
             env.get("PYTHONPATH", ""),
         ]
     )
@@ -531,6 +531,7 @@ def test_blueprint_nodes_reference_shared_agent_templates_and_render() -> None:
             )
             assert "@" in node["uses"] and not node["uses"].endswith("@latest"), (entry["id"], node.get("node_id"))
             assert isinstance(node.get("with"), dict), (entry["id"], node.get("node_id"))
+            assert not {"agent_type", "type", "role", "config"} & set(node), (entry["id"], node.get("node_id"))
 
         rendered = render_manifest_agent_templates(manifest, AGENTS_ROOT)
         assert len(rendered["nodes"]) == len(manifest["nodes"])
@@ -574,8 +575,9 @@ def test_blueprint_manifest_and_runner_are_loadable(blueprint_id: str) -> None:
     assert manifest["metadata"]["category"] == SCENARIOS[blueprint_id].category
     assert manifest["metadata"]["llm"]["default_model"] == "ollama/nemotron3:33b"
     assert manifest["entrypoints"] == ["simulation_loop"]
-    assert manifest["nodes"][0]["agent_type"] == "executor"
-    assert manifest["nodes"][1]["agent_type"] == "aggregator"
+    rendered = render_manifest_agent_templates(manifest, AGENTS_ROOT)
+    assert rendered["nodes"][0]["agent_type"] == "executor"
+    assert rendered["nodes"][1]["agent_type"] == "aggregator"
     assert manifest["edges"][0]["message_type"] == "blueprint_report"
 
 

@@ -345,39 +345,7 @@
   "name": "Python Sdk Live Research Daemon",
   "nodes": [
     {
-      "agent_type": "executor",
-      "config": {
-        "backpressure": {
-          "high_watermark": 3,
-          "low_watermark": 1,
-          "max_queue_depth": 6,
-          "retry_after_ms": 500
-        },
-        "command": [
-          "python3",
-          "mn_worker.py"
-        ],
-        "environment": {
-          "MN_PY_COMPLETE_FINAL": "0",
-          "MN_PY_FINAL": "0",
-          "MN_PY_METHOD": "ingress",
-          "MN_PY_OUTPUT_TYPE": "daemon_ingress_result",
-          "MN_PY_OWNER_CLASS": "DaemonAgents",
-          "MN_PY_SOURCE_MODULE": "workflow"
-        },
-        "max_attempts": 2,
-        "name_prefix": "py-daemon_ingress",
-        "output_message_type": null,
-        "retry_backoff_ms": 250,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "timeout_seconds": 10,
-        "upload_as": "mn_python_workflow",
-        "upload_path": "mn_python_workflow",
-        "workdir": "/sandbox/job/mn_python_workflow"
-      },
       "node_id": "daemon_ingress",
-      "role": "root_coordinator",
-      "type": "stream",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "backpressure": {
@@ -403,42 +371,17 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "mn_worker.py",
         "timeout_seconds": 10,
-        "upload_path": "mn_python_workflow"
-      }
-    },
-    {
-      "agent_type": "executor",
-      "config": {
-        "backpressure": {
-          "high_watermark": 3,
-          "low_watermark": 1,
-          "max_queue_depth": 6,
-          "retry_after_ms": 500
-        },
+        "upload_path": "mn_python_workflow",
         "command": [
           "python3",
           "mn_worker.py"
         ],
-        "environment": {
-          "MN_PY_COMPLETE_FINAL": "0",
-          "MN_PY_FINAL": "0",
-          "MN_PY_METHOD": "analyzer",
-          "MN_PY_OUTPUT_TYPE": "daemon_analyzer_result",
-          "MN_PY_OWNER_CLASS": "DaemonAgents",
-          "MN_PY_SOURCE_MODULE": "workflow"
-        },
-        "max_attempts": 2,
-        "name_prefix": "py-daemon_analyzer",
-        "output_message_type": null,
-        "retry_backoff_ms": 250,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "timeout_seconds": 10,
         "upload_as": "mn_python_workflow",
-        "upload_path": "mn_python_workflow",
         "workdir": "/sandbox/job/mn_python_workflow"
-      },
+      }
+    },
+    {
       "node_id": "daemon_analyzer",
-      "type": "stream",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "backpressure": {
@@ -463,42 +406,17 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "mn_worker.py",
         "timeout_seconds": 10,
-        "upload_path": "mn_python_workflow"
-      }
-    },
-    {
-      "agent_type": "executor",
-      "config": {
-        "backpressure": {
-          "high_watermark": 3,
-          "low_watermark": 1,
-          "max_queue_depth": 6,
-          "retry_after_ms": 500
-        },
+        "upload_path": "mn_python_workflow",
         "command": [
           "python3",
           "mn_worker.py"
         ],
-        "environment": {
-          "MN_PY_COMPLETE_FINAL": "0",
-          "MN_PY_FINAL": "1",
-          "MN_PY_METHOD": "memory",
-          "MN_PY_OUTPUT_TYPE": "daemon_memory_result",
-          "MN_PY_OWNER_CLASS": "DaemonAgents",
-          "MN_PY_SOURCE_MODULE": "workflow"
-        },
-        "max_attempts": 2,
-        "name_prefix": "py-daemon_memory",
-        "output_message_type": null,
-        "retry_backoff_ms": 250,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "timeout_seconds": 10,
         "upload_as": "mn_python_workflow",
-        "upload_path": "mn_python_workflow",
         "workdir": "/sandbox/job/mn_python_workflow"
-      },
+      }
+    },
+    {
       "node_id": "daemon_memory",
-      "type": "stream",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "backpressure": {
@@ -523,7 +441,13 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "mn_worker.py",
         "timeout_seconds": 10,
-        "upload_path": "mn_python_workflow"
+        "upload_path": "mn_python_workflow",
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "upload_as": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
       }
     }
   ],

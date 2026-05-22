@@ -430,48 +430,7 @@
   "name": "Sandboxed Llm Codegen Review Loop",
   "nodes": [
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/run_llm_step.py",
-          "codegen",
-          "1"
-        ],
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "codegen-r1",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "codegen_round_1_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      },
       "node_id": "codegen_round_1",
-      "role": "root_coordinator",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -504,51 +463,19 @@
         "role": "root_coordinator",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
-        "upload_path": "llm_worker"
+        "upload_path": "llm_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/run_llm_step.py",
-          "review",
-          "1"
-        ],
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "review-r1",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "review_round_1_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      },
       "node_id": "review_round_1",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -580,51 +507,19 @@
         "retry_backoff_ms": 500,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
-        "upload_path": "llm_worker"
+        "upload_path": "llm_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/run_llm_step.py",
-          "codegen",
-          "2"
-        ],
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "codegen-r2",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "codegen_round_2_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      },
       "node_id": "codegen_round_2",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -656,51 +551,19 @@
         "retry_backoff_ms": 500,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
-        "upload_path": "llm_worker"
+        "upload_path": "llm_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/run_llm_step.py",
-          "review",
-          "2"
-        ],
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "review-r2",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "review_round_2_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      },
       "node_id": "review_round_2",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -732,51 +595,19 @@
         "retry_backoff_ms": 500,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
-        "upload_path": "llm_worker"
+        "upload_path": "llm_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/run_llm_step.py",
-          "codegen",
-          "3"
-        ],
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "codegen-r3",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "codegen_round_3_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      },
       "node_id": "codegen_round_3",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -808,49 +639,19 @@
         "retry_backoff_ms": 500,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
-        "upload_path": "llm_worker"
+        "upload_path": "llm_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/validate_candidate.py"
-        ],
-        "complete_job": true,
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "validator",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "validation_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      },
       "node_id": "validator",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "complete_job": true,
@@ -876,7 +677,19 @@
         ],
         "retry_backoff_ms": 500,
         "script": "scripts/validate_candidate.py",
-        "upload_path": "llm_worker"
+        "upload_path": "llm_worker",
+        "command": [
+          "python3",
+          "scripts/validate_candidate.py"
+        ],
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
       }
     }
   ],

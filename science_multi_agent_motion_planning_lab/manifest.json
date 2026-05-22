@@ -378,13 +378,7 @@
   "name": "Multi Agent Motion Planning Lab",
   "nodes": [
     {
-      "agent_type": "router",
-      "config": {
-        "emit_type": "simulation_start"
-      },
       "node_id": "ingress",
-      "role": "root_coordinator",
-      "type": "map",
       "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "simulation_start",
@@ -393,13 +387,7 @@
       }
     },
     {
-      "agent_type": "aggregator",
-      "config": {
-        "complete_after": 1,
-        "output_message_type": "shared_world_collection"
-      },
       "node_id": "collector",
-      "type": "reduce",
       "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_after": 1,
@@ -409,25 +397,7 @@
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/build_shared_world_visualization.py"
-        ],
-        "name_prefix": "mpe-crowd-visualizer",
-        "output_message_type": null,
-        "pass_env": [
-          "PATH"
-        ],
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_as": "visualizer",
-        "upload_path": "visualizer",
-        "workdir": "/sandbox/job/visualizer"
-      },
       "node_id": "visualizer",
-      "type": "reduce",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "name_prefix": "mpe-crowd-visualizer",
@@ -438,44 +408,18 @@
         ],
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/build_shared_world_visualization.py",
-        "upload_path": "visualizer"
+        "upload_path": "visualizer",
+        "command": [
+          "python3",
+          "scripts/build_shared_world_visualization.py"
+        ],
+        "tty": false,
+        "upload_as": "visualizer",
+        "workdir": "/sandbox/job/visualizer"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/run_shared_world.py"
-        ],
-        "environment": {
-          "MAX_CYCLES": "60",
-          "NUM_ADVERSARIES": "75",
-          "NUM_GOOD": "25",
-          "NUM_OBSTACLES": "8",
-          "POLICY_MODE": "swarm",
-          "SIMULATION_SEED": "4200"
-        },
-        "name_prefix": "mpe-crowd-world",
-        "output_message_type": "shared_world_result",
-        "pass_env": [
-          "PATH",
-          "MN_RUN_ID",
-          "MN_RUNS_ROOT",
-          "MN_NO_RUN_STORE",
-          "MN_DISABLE_RUN_STORE",
-          "MN_BLUEPRINT_CONFIG_PATH",
-          "MN_BLUEPRINT_CONFIG_JSON"
-        ],
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_as": "world_worker",
-        "upload_path": "world_worker",
-        "workdir": "/sandbox/job/world_worker"
-      },
       "node_id": "shared_world",
-      "role": "world",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
@@ -501,7 +445,14 @@
         "role": "world",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_shared_world.py",
-        "upload_path": "world_worker"
+        "upload_path": "world_worker",
+        "command": [
+          "python3",
+          "scripts/run_shared_world.py"
+        ],
+        "tty": false,
+        "upload_as": "world_worker",
+        "workdir": "/sandbox/job/world_worker"
       }
     }
   ],

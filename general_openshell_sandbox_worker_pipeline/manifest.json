@@ -320,28 +320,7 @@
   "name": "Openshell Sandbox Worker Pipeline",
   "nodes": [
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "bash",
-          "scripts/collect_metrics.sh"
-        ],
-        "from": "base",
-        "name_prefix": "shell-worker",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "shell_metrics",
-        "policy": "policies/api-egress.yaml",
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "word_count",
-        "upload_path": "word_count",
-        "workdir": "/sandbox/job/word_count"
-      },
       "node_id": "shell_worker",
-      "role": "root_coordinator",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -354,31 +333,19 @@
         "policy": "policies/api-egress.yaml",
         "role": "root_coordinator",
         "script": "scripts/run_blueprint.py",
-        "upload_path": "word_count"
-      }
-    },
-    {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/build_report.py"
-        ],
+        "upload_path": "word_count",
         "from": "base",
-        "name_prefix": "python-worker",
         "no_auto_providers": true,
         "no_keep": true,
-        "output_message_type": "python_report",
-        "policy": "policies/api-egress.yaml",
         "pool": "default",
         "pool_slots": 1,
         "tty": false,
-        "upload_as": "report",
-        "upload_path": "report",
-        "workdir": "/sandbox/job/report"
-      },
+        "upload_as": "word_count",
+        "workdir": "/sandbox/job/word_count"
+      }
+    },
+    {
       "node_id": "python_worker",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "name_prefix": "python-worker",
@@ -386,16 +353,23 @@
         "output_message_type": "python_report",
         "policy": "policies/api-egress.yaml",
         "script": "scripts/build_report.py",
-        "upload_path": "report"
+        "upload_path": "report",
+        "command": [
+          "python3",
+          "scripts/build_report.py"
+        ],
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "report",
+        "workdir": "/sandbox/job/report"
       }
     },
     {
-      "agent_type": "aggregator",
-      "config": {
-        "complete_on_message": true
-      },
       "node_id": "result_sink",
-      "type": "reduce",
       "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_on_message": true,

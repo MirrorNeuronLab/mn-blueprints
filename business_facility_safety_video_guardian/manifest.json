@@ -407,13 +407,7 @@
   "name": "Facility Safety Video Guardian",
   "nodes": [
     {
-      "agent_type": "router",
-      "config": {
-        "emit_type": "video_monitor_start"
-      },
       "node_id": "ingress",
-      "role": "root_coordinator",
-      "type": "map",
       "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "video_monitor_start",
@@ -422,17 +416,7 @@
       }
     },
     {
-      "agent_type": "module",
-      "config": {
-        "camera_id": "front-door",
-        "interval_ms": 10000,
-        "module": "MirrorNeuron.Examples.VideoSafetyDoorMonitor.DoorCameraTickSource",
-        "module_source": "beam_modules/door_camera_tick_source.ex",
-        "target_node": "person_detector"
-      },
       "node_id": "door_camera_tick_source",
-      "role": "door_camera_sampler",
-      "type": "stream",
       "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "camera_id": "front-door",
@@ -445,56 +429,7 @@
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "cleanup_remote_dir": true,
-        "command": [
-          "bash",
-          "scripts/run_detector_in_openshell.sh"
-        ],
-        "custom_openshell_image": "person_detector/openshell_sandbox",
-        "environment": {
-          "FACE_ALERT_COOLDOWN_SECONDS": "60",
-          "FACE_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
-          "FFMPEG_FRAME_TIMEOUT_SECONDS": "8",
-          "FFMPEG_RTSP_TRANSPORT": "tcp",
-          "FRAME_JPEG_MAX_WIDTH": "896",
-          "FRAME_SAMPLE_SECONDS": "10.0",
-          "MN_BLUEPRINT_LOG_LEVEL": "info",
-          "OLLAMA_BASE_URL": "http://192.168.4.173:11434",
-          "OLLAMA_MODEL": "nemotron3:33b",
-          "OLLAMA_THINK": "false",
-          "PERSON_ALERT_COOLDOWN_SECONDS": "60",
-          "PERSON_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
-          "SLACK_ALERT_ENABLED": "true",
-          "SLACK_DEFAULT_CHANNEL": "#safety",
-          "SLACK_MESSAGE_PREFIX": "Door camera human alert",
-          "VIDEO_SOURCE_CODEC": "h264",
-          "VIDEO_SOURCE_TRANSPORT": "rtsp",
-          "VIDEO_SOURCE_URI": "rtsp://host.docker.internal:8554/local-camera",
-          "VL_MODEL_BASE_URL": "http://192.168.4.173:11434",
-          "VL_MODEL_NAME": "nemotron3:33b"
-        },
-        "gpu": false,
-        "name_prefix": "facility-safety-detector",
-        "output_message_type": null,
-        "persistent_workspace": false,
-        "policy": "person_detector/policies/local-video-egress.yaml",
-        "reuse_shared_sandbox": true,
-        "runner_module": "MirrorNeuron.Sandbox.OpenShell",
-        "upload_as": "person_detector",
-        "upload_path": "person_detector",
-        "upload_paths": [
-          {
-            "source": "person_detector",
-            "target": "person_detector"
-          }
-        ],
-        "workdir": "/sandbox/job/person_detector"
-      },
       "node_id": "person_detector",
-      "role": "vl_model_video_safety_detector",
-      "type": "stream",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "cleanup_remote_dir": true,
@@ -541,7 +476,9 @@
             "source": "person_detector",
             "target": "person_detector"
           }
-        ]
+        ],
+        "upload_as": "person_detector",
+        "workdir": "/sandbox/job/person_detector"
       }
     }
   ],

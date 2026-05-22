@@ -309,57 +309,7 @@
   "name": "AI Control Room",
   "nodes": [
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/run_blueprint.py"
-        ],
-        "from": "base",
-        "name_prefix": "business-ai-control-room",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "control_readiness_pack",
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "readiness_workflow",
-        "upload_path": "readiness_workflow",
-        "upload_paths": [
-          {
-            "source": "readiness_workflow",
-            "target": "readiness_workflow"
-          },
-          {
-            "source": "config",
-            "target": "config"
-          },
-          {
-            "source": "mn-skills/blueprint-support-skill",
-            "target": "mn-skills/blueprint-support-skill"
-          },
-          {
-            "source": "mn-skills/document-reading-skill",
-            "target": "mn-skills/document-reading-skill"
-          },
-          {
-            "source": "mn-skills/implementation-plan-skill",
-            "target": "mn-skills/implementation-plan-skill"
-          },
-          {
-            "source": "mn-skills/process-map-skill",
-            "target": "mn-skills/process-map-skill"
-          },
-          {
-            "source": "mn-skills/client-report-skill",
-            "target": "mn-skills/client-report-skill"
-          }
-        ],
-        "workdir": "/sandbox/job/readiness_workflow"
-      },
       "node_id": "readiness_workflow",
-      "role": "root_coordinator",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "name_prefix": "business-ai-control-room",
@@ -378,36 +328,42 @@
             "target": "config"
           },
           {
-            "source": "mn-skills/blueprint-support-skill",
-            "target": "mn-skills/blueprint-support-skill"
+            "source": "mn-skills/blueprint_support_skill",
+            "target": "mn-skills/blueprint_support_skill"
           },
           {
-            "source": "mn-skills/document-reading-skill",
-            "target": "mn-skills/document-reading-skill"
+            "source": "mn-skills/document_reading_skill",
+            "target": "mn-skills/document_reading_skill"
           },
           {
-            "source": "mn-skills/implementation-plan-skill",
-            "target": "mn-skills/implementation-plan-skill"
+            "source": "mn-skills/implementation_plan_skill",
+            "target": "mn-skills/implementation_plan_skill"
           },
           {
-            "source": "mn-skills/process-map-skill",
-            "target": "mn-skills/process-map-skill"
+            "source": "mn-skills/process_map_skill",
+            "target": "mn-skills/process_map_skill"
           },
           {
-            "source": "mn-skills/client-report-skill",
-            "target": "mn-skills/client-report-skill"
+            "source": "mn-skills/client_report_skill",
+            "target": "mn-skills/client_report_skill"
           }
-        ]
+        ],
+        "command": [
+          "python3",
+          "scripts/run_blueprint.py"
+        ],
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "readiness_workflow",
+        "workdir": "/sandbox/job/readiness_workflow"
       }
     },
     {
-      "agent_type": "aggregator",
-      "config": {
-        "complete_on_message": true
-      },
       "node_id": "result_sink",
-      "role": "result_sink",
-      "type": "reduce",
       "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_on_message": true,

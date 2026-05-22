@@ -348,19 +348,7 @@
   "name": "Stream Backpressure Control Loop",
   "nodes": [
     {
-      "agent_type": "router",
-      "config": {
-        "backpressure": {
-          "high_watermark": 8,
-          "low_watermark": 3,
-          "max_queue_depth": 16,
-          "retry_after_ms": 250
-        },
-        "emit_type": "stream_start"
-      },
       "node_id": "ingress",
-      "role": "root_coordinator",
-      "type": "generic",
       "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "backpressure": {
@@ -375,23 +363,7 @@
       }
     },
     {
-      "agent_type": "module",
-      "config": {
-        "backpressure": {
-          "high_watermark": 8,
-          "low_watermark": 3,
-          "max_queue_depth": 16,
-          "retry_after_ms": 250
-        },
-        "interval_ms": 250,
-        "module": "MirrorNeuron.Examples.StreamLiveBackpressure.LiveSource",
-        "module_source": "beam_modules/live_source.ex",
-        "stream_id": "bp-live",
-        "target_node": "slow_enricher"
-      },
       "node_id": "live_source",
-      "role": "source",
-      "type": "stream",
       "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "backpressure": {
@@ -410,30 +382,7 @@
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "backpressure": {
-          "high_watermark": 2,
-          "low_watermark": 1,
-          "max_queue_depth": 4,
-          "retry_after_ms": 750
-        },
-        "command": [
-          "python3",
-          "scripts/slow_enrich.py"
-        ],
-        "environment": {
-          "SLOW_MS": "1200"
-        },
-        "output_message_type": "enriched_event",
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "upload_as": "slow",
-        "upload_path": "slow",
-        "workdir": "/sandbox/job/slow"
-      },
       "node_id": "slow_enricher",
-      "role": "processor",
-      "type": "stream",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "backpressure": {
@@ -450,34 +399,17 @@
         "role": "processor",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/slow_enrich.py",
-        "upload_path": "slow"
+        "upload_path": "slow",
+        "command": [
+          "python3",
+          "scripts/slow_enrich.py"
+        ],
+        "upload_as": "slow",
+        "workdir": "/sandbox/job/slow"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "backpressure": {
-          "high_watermark": 2,
-          "low_watermark": 1,
-          "max_queue_depth": 5,
-          "retry_after_ms": 500
-        },
-        "command": [
-          "python3",
-          "scripts/collect_metrics.py"
-        ],
-        "environment": {
-          "SINK_SLOW_MS": "450"
-        },
-        "output_message_type": null,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "upload_as": "sink",
-        "upload_path": "sink",
-        "workdir": "/sandbox/job/sink"
-      },
       "node_id": "metrics_sink",
-      "role": "sink",
-      "type": "stream",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "backpressure": {
@@ -494,7 +426,13 @@
         "role": "sink",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/collect_metrics.py",
-        "upload_path": "sink"
+        "upload_path": "sink",
+        "command": [
+          "python3",
+          "scripts/collect_metrics.py"
+        ],
+        "upload_as": "sink",
+        "workdir": "/sandbox/job/sink"
       }
     }
   ],

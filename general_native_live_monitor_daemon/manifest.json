@@ -325,20 +325,7 @@
   "name": "Native Live Monitor Daemon",
   "nodes": [
     {
-      "agent_type": "module",
-      "config": {
-        "answer_node": "answer_agent",
-        "interval_ms": 10000,
-        "max_x": 500,
-        "max_y": 25,
-        "min_x": 10,
-        "min_y": 2,
-        "module": "MirrorNeuron.Examples.DivisibilityMonitor.QuestionGenerator",
-        "module_source": "beam_modules/question_generator.ex"
-      },
       "node_id": "question_generator",
-      "role": "question_source",
-      "type": "stream",
       "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "answer_node": "answer_agent",
@@ -354,14 +341,7 @@
       }
     },
     {
-      "agent_type": "module",
-      "config": {
-        "module": "MirrorNeuron.Examples.DivisibilityMonitor.AnswerAgent",
-        "module_source": "beam_modules/answer_agent.ex"
-      },
       "node_id": "answer_agent",
-      "role": "answer_sink",
-      "type": "stream",
       "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "module": "MirrorNeuron.Examples.DivisibilityMonitor.AnswerAgent",

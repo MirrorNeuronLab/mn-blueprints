@@ -319,13 +319,7 @@
   "name": "Message Routing Trace",
   "nodes": [
     {
-      "agent_type": "router",
-      "config": {
-        "emit_type": "test_request"
-      },
       "node_id": "ingress",
-      "role": "root_coordinator",
-      "type": "map",
       "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "test_request",
@@ -334,10 +328,7 @@
       }
     },
     {
-      "agent_type": "router",
       "node_id": "retriever",
-      "role": "researcher",
-      "type": "map",
       "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "node_type": "map",
@@ -345,13 +336,7 @@
       }
     },
     {
-      "agent_type": "aggregator",
-      "config": {
-        "complete_on_message": true
-      },
       "node_id": "reviewer",
-      "role": "result_sink",
-      "type": "reduce",
       "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_on_message": true,

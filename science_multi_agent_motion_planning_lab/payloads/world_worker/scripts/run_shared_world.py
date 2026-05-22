@@ -89,14 +89,14 @@ def install_shared_support_path() -> str | None:
         if parent in seen:
             continue
         seen.add(parent)
-        support_src = parent / "mn-skills" / "blueprint-support-skill" / "src"
+        support_src = parent / "mn-skills" / "blueprint_support_skill" / "src"
         if support_src.exists():
             support_path = str(support_src)
             if support_path not in sys.path:
                 sys.path.insert(0, support_path)
             return support_path
 
-        local_support_src = parent / "blueprint-support-skill" / "src"
+        local_support_src = parent / "blueprint_support_skill" / "src"
         if local_support_src.exists():
             support_path = str(local_support_src)
             if support_path not in sys.path:

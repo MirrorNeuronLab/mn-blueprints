@@ -1,2 +1,2 @@
 ../../mn-python-sdk
-../../mn-skills/blueprint-support-skill
+../../mn-skills/blueprint_support_skill

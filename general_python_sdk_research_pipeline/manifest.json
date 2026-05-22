@@ -329,33 +329,7 @@
   "name": "Python Sdk Research Pipeline",
   "nodes": [
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "mn_worker.py"
-        ],
-        "environment": {
-          "MN_PY_COMPLETE_FINAL": "1",
-          "MN_PY_FINAL": "0",
-          "MN_PY_METHOD": "ingress",
-          "MN_PY_OUTPUT_TYPE": "ingress_result",
-          "MN_PY_OWNER_CLASS": "ResearchAgents",
-          "MN_PY_SOURCE_MODULE": "workflow"
-        },
-        "max_attempts": 2,
-        "name_prefix": "py-ingress",
-        "output_message_type": null,
-        "retry_backoff_ms": 250,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "timeout_seconds": 10,
-        "upload_as": "mn_python_workflow",
-        "upload_path": "mn_python_workflow",
-        "workdir": "/sandbox/job/mn_python_workflow"
-      },
       "node_id": "ingress",
-      "role": "root_coordinator",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
@@ -375,36 +349,17 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "mn_worker.py",
         "timeout_seconds": 10,
-        "upload_path": "mn_python_workflow"
-      }
-    },
-    {
-      "agent_type": "executor",
-      "config": {
+        "upload_path": "mn_python_workflow",
         "command": [
           "python3",
           "mn_worker.py"
         ],
-        "environment": {
-          "MN_PY_COMPLETE_FINAL": "1",
-          "MN_PY_FINAL": "0",
-          "MN_PY_METHOD": "retriever",
-          "MN_PY_OUTPUT_TYPE": "retriever_result",
-          "MN_PY_OWNER_CLASS": "ResearchAgents",
-          "MN_PY_SOURCE_MODULE": "workflow"
-        },
-        "max_attempts": 2,
-        "name_prefix": "py-retriever",
-        "output_message_type": null,
-        "retry_backoff_ms": 250,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "timeout_seconds": 10,
         "upload_as": "mn_python_workflow",
-        "upload_path": "mn_python_workflow",
         "workdir": "/sandbox/job/mn_python_workflow"
-      },
+      }
+    },
+    {
       "node_id": "retriever",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
@@ -423,36 +378,17 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "mn_worker.py",
         "timeout_seconds": 10,
-        "upload_path": "mn_python_workflow"
-      }
-    },
-    {
-      "agent_type": "executor",
-      "config": {
+        "upload_path": "mn_python_workflow",
         "command": [
           "python3",
           "mn_worker.py"
         ],
-        "environment": {
-          "MN_PY_COMPLETE_FINAL": "1",
-          "MN_PY_FINAL": "1",
-          "MN_PY_METHOD": "reviewer",
-          "MN_PY_OUTPUT_TYPE": "reviewer_result",
-          "MN_PY_OWNER_CLASS": "ResearchAgents",
-          "MN_PY_SOURCE_MODULE": "workflow"
-        },
-        "max_attempts": 2,
-        "name_prefix": "py-reviewer",
-        "output_message_type": null,
-        "retry_backoff_ms": 250,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "timeout_seconds": 10,
         "upload_as": "mn_python_workflow",
-        "upload_path": "mn_python_workflow",
         "workdir": "/sandbox/job/mn_python_workflow"
-      },
+      }
+    },
+    {
       "node_id": "reviewer",
-      "type": "reduce",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
@@ -471,7 +407,13 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "mn_worker.py",
         "timeout_seconds": 10,
-        "upload_path": "mn_python_workflow"
+        "upload_path": "mn_python_workflow",
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "upload_as": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
       }
     }
   ],

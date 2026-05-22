@@ -1935,13 +1935,7 @@
   "name": "Parallel Worker Scale Benchmark",
   "nodes": [
     {
-      "agent_type": "router",
-      "config": {
-        "emit_type": "prime_chunk_request"
-      },
       "node_id": "dispatcher",
-      "role": "root_coordinator",
-      "type": "map",
       "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "prime_chunk_request",
@@ -1950,13 +1944,7 @@
       }
     },
     {
-      "agent_type": "aggregator",
-      "config": {
-        "complete_after": 100,
-        "output_message_type": "prime_chunk_collection"
-      },
       "node_id": "collector",
-      "type": "reduce",
       "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_after": 100,
@@ -1966,21 +1954,7 @@
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/summarize_prime_sweep.py"
-        ],
-        "name_prefix": "prime-summary",
-        "output_message_type": null,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "upload_as": "summary_worker",
-        "upload_path": "summary_worker",
-        "workdir": "/sandbox/job/summary_worker"
-      },
       "node_id": "summarizer",
-      "type": "reduce",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "name_prefix": "prime-summary",
@@ -1988,37 +1962,17 @@
         "output_message_type": null,
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/summarize_prime_sweep.py",
-        "upload_path": "summary_worker"
+        "upload_path": "summary_worker",
+        "command": [
+          "python3",
+          "scripts/summarize_prime_sweep.py"
+        ],
+        "upload_as": "summary_worker",
+        "workdir": "/sandbox/job/summary_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0001",
-          "1000003",
-          "1000102"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0001",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0001",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2036,37 +1990,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0002",
-          "1000103",
-          "1000202"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0002",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0002",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2084,37 +2020,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0003",
-          "1000203",
-          "1000302"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0003",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0003",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2132,37 +2050,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0004",
-          "1000303",
-          "1000402"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0004",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0004",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2180,37 +2080,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0005",
-          "1000403",
-          "1000502"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0005",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0005",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2228,37 +2110,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0006",
-          "1000503",
-          "1000602"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0006",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0006",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2276,37 +2140,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0007",
-          "1000603",
-          "1000702"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0007",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0007",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2324,37 +2170,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0008",
-          "1000703",
-          "1000802"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0008",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0008",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2372,37 +2200,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0009",
-          "1000803",
-          "1000902"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0009",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0009",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2420,37 +2230,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0010",
-          "1000903",
-          "1001002"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0010",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0010",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2468,37 +2260,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0011",
-          "1001003",
-          "1001102"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0011",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0011",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2516,37 +2290,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0012",
-          "1001103",
-          "1001202"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0012",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0012",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2564,37 +2320,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0013",
-          "1001203",
-          "1001302"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0013",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0013",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2612,37 +2350,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0014",
-          "1001303",
-          "1001402"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0014",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0014",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2660,37 +2380,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0015",
-          "1001403",
-          "1001502"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0015",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0015",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2708,37 +2410,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0016",
-          "1001503",
-          "1001602"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0016",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0016",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2756,37 +2440,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0017",
-          "1001603",
-          "1001702"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0017",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0017",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2804,37 +2470,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0018",
-          "1001703",
-          "1001802"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0018",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0018",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2852,37 +2500,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0019",
-          "1001803",
-          "1001902"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0019",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0019",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2900,37 +2530,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0020",
-          "1001903",
-          "1002002"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0020",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0020",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2948,37 +2560,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0021",
-          "1002003",
-          "1002102"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0021",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0021",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -2996,37 +2590,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0022",
-          "1002103",
-          "1002202"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0022",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0022",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3044,37 +2620,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0023",
-          "1002203",
-          "1002302"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0023",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0023",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3092,37 +2650,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0024",
-          "1002303",
-          "1002402"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0024",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0024",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3140,37 +2680,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0025",
-          "1002403",
-          "1002502"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0025",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 0,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0025",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3188,37 +2710,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 0,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0026",
-          "1002503",
-          "1002602"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0026",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0026",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3236,37 +2740,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0027",
-          "1002603",
-          "1002702"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0027",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0027",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3284,37 +2770,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0028",
-          "1002703",
-          "1002802"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0028",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0028",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3332,37 +2800,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0029",
-          "1002803",
-          "1002902"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0029",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0029",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3380,37 +2830,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0030",
-          "1002903",
-          "1003002"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0030",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0030",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3428,37 +2860,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0031",
-          "1003003",
-          "1003102"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0031",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0031",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3476,37 +2890,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0032",
-          "1003103",
-          "1003202"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0032",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0032",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3524,37 +2920,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0033",
-          "1003203",
-          "1003302"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0033",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0033",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3572,37 +2950,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0034",
-          "1003303",
-          "1003402"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0034",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0034",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3620,37 +2980,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0035",
-          "1003403",
-          "1003502"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0035",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0035",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3668,37 +3010,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0036",
-          "1003503",
-          "1003602"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0036",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0036",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3716,37 +3040,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0037",
-          "1003603",
-          "1003702"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0037",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0037",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3764,37 +3070,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0038",
-          "1003703",
-          "1003802"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0038",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0038",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3812,37 +3100,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0039",
-          "1003803",
-          "1003902"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0039",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0039",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3860,37 +3130,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0040",
-          "1003903",
-          "1004002"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0040",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0040",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3908,37 +3160,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0041",
-          "1004003",
-          "1004102"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0041",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0041",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -3956,37 +3190,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0042",
-          "1004103",
-          "1004202"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0042",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0042",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4004,37 +3220,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0043",
-          "1004203",
-          "1004302"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0043",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0043",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4052,37 +3250,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0044",
-          "1004303",
-          "1004402"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0044",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0044",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4100,37 +3280,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0045",
-          "1004403",
-          "1004502"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0045",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0045",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4148,37 +3310,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0046",
-          "1004503",
-          "1004602"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0046",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0046",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4196,37 +3340,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0047",
-          "1004603",
-          "1004702"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0047",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0047",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4244,37 +3370,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0048",
-          "1004703",
-          "1004802"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0048",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0048",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4292,37 +3400,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0049",
-          "1004803",
-          "1004902"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0049",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0049",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4340,37 +3430,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0050",
-          "1004903",
-          "1005002"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0050",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 250,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0050",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4388,37 +3460,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 250,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0051",
-          "1005003",
-          "1005102"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0051",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0051",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4436,37 +3490,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0052",
-          "1005103",
-          "1005202"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0052",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0052",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4484,37 +3520,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0053",
-          "1005203",
-          "1005302"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0053",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0053",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4532,37 +3550,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0054",
-          "1005303",
-          "1005402"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0054",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0054",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4580,37 +3580,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0055",
-          "1005403",
-          "1005502"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0055",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0055",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4628,37 +3610,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0056",
-          "1005503",
-          "1005602"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0056",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0056",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4676,37 +3640,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0057",
-          "1005603",
-          "1005702"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0057",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0057",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4724,37 +3670,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0058",
-          "1005703",
-          "1005802"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0058",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0058",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4772,37 +3700,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0059",
-          "1005803",
-          "1005902"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0059",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0059",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4820,37 +3730,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0060",
-          "1005903",
-          "1006002"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0060",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0060",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4868,37 +3760,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0061",
-          "1006003",
-          "1006102"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0061",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0061",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4916,37 +3790,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0062",
-          "1006103",
-          "1006202"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0062",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0062",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -4964,37 +3820,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0063",
-          "1006203",
-          "1006302"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0063",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0063",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5012,37 +3850,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0064",
-          "1006303",
-          "1006402"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0064",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0064",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5060,37 +3880,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0065",
-          "1006403",
-          "1006502"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0065",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0065",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5108,37 +3910,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0066",
-          "1006503",
-          "1006602"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0066",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0066",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5156,37 +3940,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0067",
-          "1006603",
-          "1006702"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0067",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0067",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5204,37 +3970,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0068",
-          "1006703",
-          "1006802"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0068",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0068",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5252,37 +4000,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0069",
-          "1006803",
-          "1006902"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0069",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0069",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5300,37 +4030,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0070",
-          "1006903",
-          "1007002"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0070",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0070",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5348,37 +4060,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0071",
-          "1007003",
-          "1007102"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0071",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0071",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5396,37 +4090,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0072",
-          "1007103",
-          "1007202"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0072",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0072",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5444,37 +4120,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0073",
-          "1007203",
-          "1007302"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0073",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0073",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5492,37 +4150,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0074",
-          "1007303",
-          "1007402"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0074",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0074",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5540,37 +4180,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0075",
-          "1007403",
-          "1007502"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0075",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 500,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0075",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5588,37 +4210,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 500,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0076",
-          "1007503",
-          "1007602"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0076",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0076",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5636,37 +4240,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0077",
-          "1007603",
-          "1007702"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0077",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0077",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5684,37 +4270,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0078",
-          "1007703",
-          "1007802"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0078",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0078",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5732,37 +4300,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0079",
-          "1007803",
-          "1007902"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0079",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0079",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5780,37 +4330,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0080",
-          "1007903",
-          "1008002"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0080",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0080",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5828,37 +4360,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0081",
-          "1008003",
-          "1008102"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0081",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0081",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5876,37 +4390,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0082",
-          "1008103",
-          "1008202"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0082",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0082",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5924,37 +4420,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0083",
-          "1008203",
-          "1008302"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0083",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0083",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -5972,37 +4450,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0084",
-          "1008303",
-          "1008402"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0084",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0084",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6020,37 +4480,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0085",
-          "1008403",
-          "1008502"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0085",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0085",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6068,37 +4510,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0086",
-          "1008503",
-          "1008602"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0086",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0086",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6116,37 +4540,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0087",
-          "1008603",
-          "1008702"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0087",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0087",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6164,37 +4570,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0088",
-          "1008703",
-          "1008802"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0088",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0088",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6212,37 +4600,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0089",
-          "1008803",
-          "1008902"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0089",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0089",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6260,37 +4630,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0090",
-          "1008903",
-          "1009002"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0090",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0090",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6308,37 +4660,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0091",
-          "1009003",
-          "1009102"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0091",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0091",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6356,37 +4690,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0092",
-          "1009103",
-          "1009202"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0092",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0092",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6404,37 +4720,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0093",
-          "1009203",
-          "1009302"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0093",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0093",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6452,37 +4750,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0094",
-          "1009303",
-          "1009402"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0094",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0094",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6500,37 +4780,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0095",
-          "1009403",
-          "1009502"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0095",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0095",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6548,37 +4810,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0096",
-          "1009503",
-          "1009602"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0096",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0096",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6596,37 +4840,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0097",
-          "1009603",
-          "1009702"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0097",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0097",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6644,37 +4870,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0098",
-          "1009703",
-          "1009802"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0098",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0098",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6692,37 +4900,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0099",
-          "1009803",
-          "1009902"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0099",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0099",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6740,37 +4930,19 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/check_prime_range.py",
-          "prime_worker_0100",
-          "1009903",
-          "1010002"
-        ],
-        "from": "base",
-        "max_attempts": 4,
-        "name_prefix": "prime-worker-0100",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "prime_chunk_result",
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "startup_delay_ms": 750,
-        "tty": false,
-        "upload_as": "prime_worker",
-        "upload_path": "prime_worker",
-        "workdir": "/sandbox/job/prime_worker"
-      },
       "node_id": "prime_worker_0100",
-      "type": "map",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -6788,7 +4960,15 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
         "startup_delay_ms": 750,
-        "upload_path": "prime_worker"
+        "upload_path": "prime_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "prime_worker",
+        "workdir": "/sandbox/job/prime_worker"
       }
     }
   ],

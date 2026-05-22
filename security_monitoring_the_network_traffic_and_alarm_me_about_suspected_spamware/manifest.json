@@ -115,36 +115,36 @@
       {
         "package_name": "mirrorneuron-blueprint-support-skill",
         "reason": "Use standard blueprint config, run-store, and artifact helpers.",
-        "skill_id": "blueprint-support-skill"
+        "skill_id": "blueprint_support_skill"
       },
       {
         "package_name": "mirrorneuron-email-delivery-skill",
         "reason": "Prepare dry-run/live alert delivery helpers.",
-        "skill_id": "email-delivery-skill"
+        "skill_id": "email_delivery_skill"
       }
     ]
   },
   "name": "Monitoring the network traffic and alarm me about suspected spamware",
   "nodes": [
     {
-      "agent_type": "router",
-      "config": {
-        "emit_type": "network_events",
-        "input_path": "inputs/sample_network_events.jsonl"
-      },
       "node_id": "ingress",
-      "role": "network_event_ingress",
-      "type": "map",
       "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "network_events",
         "node_type": "map",
-        "role": "network_event_ingress"
+        "role": "network_event_ingress",
+        "input_path": "inputs/sample_network_events.jsonl"
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
+      "node_id": "network_monitor",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "node_type": "generic",
+        "output_message_type": "security_alarm",
+        "role": "network_security_monitor",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "network_monitor",
         "command": [
           "python3",
           "scripts/run_blueprint.py"
@@ -153,54 +153,31 @@
           "MN_BLUEPRINT_ID": "security_monitoring_the_network_traffic_and_alarm_me_about_suspected_spamware",
           "MN_RUN_MODE": "dry_run"
         },
-        "output_message_type": "security_alarm",
         "pool": "default",
         "pool_slots": 1,
         "upload_as": "network_monitor",
-        "upload_path": "network_monitor",
         "workdir": "/sandbox/job/network_monitor"
-      },
-      "node_id": "network_monitor",
-      "role": "network_security_monitor",
-      "type": "generic",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "node_type": "generic",
-        "output_message_type": "security_alarm",
-        "role": "network_security_monitor",
-        "script": "scripts/run_blueprint.py",
-        "upload_path": "network_monitor"
       }
     },
     {
-      "agent_type": "router",
-      "config": {
+      "node_id": "approval_gate",
+      "uses": "mn-agents.control_approval_gate@1.0.0",
+      "with": {
+        "approval_mode": "manual",
         "approval_required": true,
+        "node_type": "map",
+        "output_message_type": "approval_required",
+        "role": "human_review_gate",
         "blocked_actions": [
           "isolate_host",
           "block_domain",
           "change_firewall_policy"
         ],
         "default_decision": "dry_run_alert_only"
-      },
-      "node_id": "approval_gate",
-      "role": "human_review_gate",
-      "type": "map",
-      "uses": "mn-agents.control_approval_gate@1.0.0",
-      "with": {
-        "approval_required": true,
-        "node_type": "map",
-        "role": "human_review_gate"
       }
     },
     {
-      "agent_type": "aggregator",
-      "config": {
-        "complete_on_message": true
-      },
       "node_id": "alert_sink",
-      "role": "alert_artifact_sink",
-      "type": "reduce",
       "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_on_message": true,

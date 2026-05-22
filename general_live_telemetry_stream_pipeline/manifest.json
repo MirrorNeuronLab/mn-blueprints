@@ -372,13 +372,7 @@
   "name": "Live Telemetry Stream Pipeline",
   "nodes": [
     {
-      "agent_type": "router",
-      "config": {
-        "emit_type": "stream_start"
-      },
       "node_id": "ingress",
-      "role": "root_coordinator",
-      "type": "map",
       "uses": "mn-agents.control_router@1.0.0",
       "with": {
         "emit_type": "stream_start",
@@ -387,23 +381,7 @@
       }
     },
     {
-      "agent_type": "module",
-      "config": {
-        "baseline": 24,
-        "chunk_size": 6,
-        "content_encoding": "gzip",
-        "device_id": "sensor-alpha",
-        "interval_ms": 1000,
-        "jitter": 4,
-        "module": "MirrorNeuron.Examples.StreamBasicDaemon.TelemetrySource",
-        "module_source": "beam_modules/telemetry_source.ex",
-        "peak_every": 20,
-        "peak_height": 55,
-        "target_node": "peak_detector"
-      },
       "node_id": "telemetry_source",
-      "role": "producer",
-      "type": "stream",
       "uses": "mn-agents.data_module@1.0.0",
       "with": {
         "baseline": 24,
@@ -422,27 +400,7 @@
       }
     },
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/detect_stream_peaks.py"
-        ],
-        "environment": {
-          "MIN_SPIKE_DELTA": "20.0",
-          "SPIKE_MULTIPLIER": "2.4",
-          "WARMUP_POINTS": "5",
-          "WINDOW_SIZE": "8"
-        },
-        "output_message_type": null,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "upload_as": "stream_worker",
-        "upload_path": "stream_worker",
-        "workdir": "/sandbox/job/stream_worker"
-      },
       "node_id": "peak_detector",
-      "role": "consumer",
-      "type": "stream",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "environment": {
@@ -456,7 +414,13 @@
         "role": "consumer",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/detect_stream_peaks.py",
-        "upload_path": "stream_worker"
+        "upload_path": "stream_worker",
+        "command": [
+          "python3",
+          "scripts/detect_stream_peaks.py"
+        ],
+        "upload_as": "stream_worker",
+        "workdir": "/sandbox/job/stream_worker"
       }
     }
   ],

@@ -37,10 +37,10 @@ def main():
     default_resend_from = ""
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
     resend_env = read_env_file(
-        os.path.join(repo_root, "mn-skills", "email-send-resend-skill", ".env")
+        os.path.join(repo_root, "mn-skills", "email_send_resend_skill", ".env")
     )
     agentmail_env = read_env_file(
-        os.path.join(repo_root, "mn-skills", "email-receive-agentmail-skill", ".env")
+        os.path.join(repo_root, "mn-skills", "email_receive_agentmail_skill", ".env")
     )
     default_agentmail_inbox = agentmail_env.get("AGENTMAIL_INBOX", default_agentmail_inbox)
     default_agentmail_api = agentmail_env.get("AGENTMAIL_API_KEY", default_agentmail_api)

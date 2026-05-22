@@ -27,8 +27,8 @@ Monitoring the network traffic and alarm me about suspected spamware or hack beh
 
 ## Selected Skills
 
-- `blueprint-support-skill` (`mirrorneuron-blueprint-support-skill`): Use standard blueprint config, run-store, and artifact helpers.
-- `email-delivery-skill` (`mirrorneuron-email-delivery-skill`): Prepare dry-run/live alert delivery helpers.
+- `blueprint_support_skill` (`mirrorneuron-blueprint-support-skill`): Use standard blueprint config, run-store, and artifact helpers.
+- `email_delivery_skill` (`mirrorneuron-email-delivery-skill`): Prepare dry-run/live alert delivery helpers.
 
 ## Workflow Stages
 

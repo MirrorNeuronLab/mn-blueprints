@@ -353,77 +353,7 @@
   "name": "Context Memory Compression Lab",
   "nodes": [
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "bash",
-          "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/init.py"
-        ],
-        "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_TIMEOUT_SECONDS": "120"
-        },
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "init_done",
-        "pass_env": [
-          "MN_CONTEXT_ADDR",
-          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
-          "MN_CONTEXT_REDIS_URL",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION",
-          "CONTEXT_ENGINE_ADDR",
-          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
-          "CONTEXT_REDIS_URL",
-          "MN_BLUEPRINT_QUICK_TEST",
-          "MN_CONTEXT_VIEW_LOG",
-          "MN_CONTEXT_VIEW_LOG_DEST",
-          "MN_CONTEXT_VIEW_LOG_FILE",
-          "MN_CONTEXT_VIEW_LOG_LEVEL",
-          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
-          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "LITELLM_TIMEOUT_SECONDS",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY",
-          "MN_LLM_TIMEOUT_SECONDS"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_paths": [
-          {
-            "source": "initializer",
-            "target": "initializer"
-          },
-          {
-            "source": "_vendor",
-            "target": "_vendor"
-          }
-        ],
-        "workdir": "/sandbox/job/initializer"
-      },
       "node_id": "initializer",
-      "role": "initializer",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -488,81 +418,17 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/initializer"
-      }
-    },
-    {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "bash",
-          "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/interpreter.py"
-        ],
-        "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_TIMEOUT_SECONDS": "120"
-        },
+        "workdir": "/sandbox/job/initializer",
         "from": "base",
         "no_auto_providers": true,
         "no_keep": true,
-        "output_message_type": "interpreter_done",
-        "pass_env": [
-          "MN_CONTEXT_ADDR",
-          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
-          "MN_CONTEXT_REDIS_URL",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION",
-          "CONTEXT_ENGINE_ADDR",
-          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
-          "CONTEXT_REDIS_URL",
-          "MN_BLUEPRINT_QUICK_TEST",
-          "MN_CONTEXT_VIEW_LOG",
-          "MN_CONTEXT_VIEW_LOG_DEST",
-          "MN_CONTEXT_VIEW_LOG_FILE",
-          "MN_CONTEXT_VIEW_LOG_LEVEL",
-          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
-          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "LITELLM_TIMEOUT_SECONDS",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY",
-          "MN_LLM_TIMEOUT_SECONDS"
-        ],
         "pool": "default",
         "pool_slots": 1,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_paths": [
-          {
-            "source": "interpreter",
-            "target": "interpreter"
-          },
-          {
-            "source": "_vendor",
-            "target": "_vendor"
-          }
-        ],
-        "workdir": "/sandbox/job/interpreter"
-      },
+        "tty": false
+      }
+    },
+    {
       "node_id": "interpreter",
-      "role": "context_researcher",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -627,81 +493,17 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/interpreter"
-      }
-    },
-    {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "bash",
-          "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/extractor.py"
-        ],
-        "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_TIMEOUT_SECONDS": "120"
-        },
+        "workdir": "/sandbox/job/interpreter",
         "from": "base",
         "no_auto_providers": true,
         "no_keep": true,
-        "output_message_type": "extractor_done",
-        "pass_env": [
-          "MN_CONTEXT_ADDR",
-          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
-          "MN_CONTEXT_REDIS_URL",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION",
-          "CONTEXT_ENGINE_ADDR",
-          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
-          "CONTEXT_REDIS_URL",
-          "MN_BLUEPRINT_QUICK_TEST",
-          "MN_CONTEXT_VIEW_LOG",
-          "MN_CONTEXT_VIEW_LOG_DEST",
-          "MN_CONTEXT_VIEW_LOG_FILE",
-          "MN_CONTEXT_VIEW_LOG_LEVEL",
-          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
-          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "LITELLM_TIMEOUT_SECONDS",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY",
-          "MN_LLM_TIMEOUT_SECONDS"
-        ],
         "pool": "default",
         "pool_slots": 1,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_paths": [
-          {
-            "source": "extractor",
-            "target": "extractor"
-          },
-          {
-            "source": "_vendor",
-            "target": "_vendor"
-          }
-        ],
-        "workdir": "/sandbox/job/extractor"
-      },
+        "tty": false
+      }
+    },
+    {
       "node_id": "extractor",
-      "role": "context_expander",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -766,81 +568,17 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/extractor"
-      }
-    },
-    {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "bash",
-          "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/classifier.py"
-        ],
-        "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_TIMEOUT_SECONDS": "120"
-        },
+        "workdir": "/sandbox/job/extractor",
         "from": "base",
         "no_auto_providers": true,
         "no_keep": true,
-        "output_message_type": "classifier_done",
-        "pass_env": [
-          "MN_CONTEXT_ADDR",
-          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
-          "MN_CONTEXT_REDIS_URL",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION",
-          "CONTEXT_ENGINE_ADDR",
-          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
-          "CONTEXT_REDIS_URL",
-          "MN_BLUEPRINT_QUICK_TEST",
-          "MN_CONTEXT_VIEW_LOG",
-          "MN_CONTEXT_VIEW_LOG_DEST",
-          "MN_CONTEXT_VIEW_LOG_FILE",
-          "MN_CONTEXT_VIEW_LOG_LEVEL",
-          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
-          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "LITELLM_TIMEOUT_SECONDS",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY",
-          "MN_LLM_TIMEOUT_SECONDS"
-        ],
         "pool": "default",
         "pool_slots": 1,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_paths": [
-          {
-            "source": "classifier",
-            "target": "classifier"
-          },
-          {
-            "source": "_vendor",
-            "target": "_vendor"
-          }
-        ],
-        "workdir": "/sandbox/job/classifier"
-      },
+        "tty": false
+      }
+    },
+    {
       "node_id": "classifier",
-      "role": "constraint_challenger",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -905,81 +643,17 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/classifier"
-      }
-    },
-    {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "bash",
-          "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/decision.py"
-        ],
-        "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_TIMEOUT_SECONDS": "120"
-        },
+        "workdir": "/sandbox/job/classifier",
         "from": "base",
         "no_auto_providers": true,
         "no_keep": true,
-        "output_message_type": "decision_done",
-        "pass_env": [
-          "MN_CONTEXT_ADDR",
-          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
-          "MN_CONTEXT_REDIS_URL",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION",
-          "CONTEXT_ENGINE_ADDR",
-          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
-          "CONTEXT_REDIS_URL",
-          "MN_BLUEPRINT_QUICK_TEST",
-          "MN_CONTEXT_VIEW_LOG",
-          "MN_CONTEXT_VIEW_LOG_DEST",
-          "MN_CONTEXT_VIEW_LOG_FILE",
-          "MN_CONTEXT_VIEW_LOG_LEVEL",
-          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
-          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "LITELLM_TIMEOUT_SECONDS",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY",
-          "MN_LLM_TIMEOUT_SECONDS"
-        ],
         "pool": "default",
         "pool_slots": 1,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_paths": [
-          {
-            "source": "decision",
-            "target": "decision"
-          },
-          {
-            "source": "_vendor",
-            "target": "_vendor"
-          }
-        ],
-        "workdir": "/sandbox/job/decision"
-      },
+        "tty": false
+      }
+    },
+    {
       "node_id": "decision",
-      "role": "context_compressor",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -1044,81 +718,17 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/decision"
-      }
-    },
-    {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "bash",
-          "-c",
-          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/critic.py"
-        ],
-        "environment": {
-          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_TIMEOUT_SECONDS": "120"
-        },
+        "workdir": "/sandbox/job/decision",
         "from": "base",
         "no_auto_providers": true,
         "no_keep": true,
-        "output_message_type": "critic_done",
-        "pass_env": [
-          "MN_CONTEXT_ADDR",
-          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
-          "MN_CONTEXT_REDIS_URL",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION",
-          "CONTEXT_ENGINE_ADDR",
-          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
-          "CONTEXT_REDIS_URL",
-          "MN_BLUEPRINT_QUICK_TEST",
-          "MN_CONTEXT_VIEW_LOG",
-          "MN_CONTEXT_VIEW_LOG_DEST",
-          "MN_CONTEXT_VIEW_LOG_FILE",
-          "MN_CONTEXT_VIEW_LOG_LEVEL",
-          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
-          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "LITELLM_TIMEOUT_SECONDS",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY",
-          "MN_LLM_TIMEOUT_SECONDS"
-        ],
         "pool": "default",
         "pool_slots": 1,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "tty": false,
-        "upload_paths": [
-          {
-            "source": "critic",
-            "target": "critic"
-          },
-          {
-            "source": "_vendor",
-            "target": "_vendor"
-          }
-        ],
-        "workdir": "/sandbox/job/critic"
-      },
+        "tty": false
+      }
+    },
+    {
       "node_id": "critic",
-      "role": "briefing_author",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "command": [
@@ -1183,29 +793,17 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/critic"
+        "workdir": "/sandbox/job/critic",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false
       }
     },
     {
-      "agent_type": "aggregator",
-      "config": {
-        "complete_on_message": true,
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "LITELLM_TIMEOUT_SECONDS": "120",
-          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
-          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
-          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_TIMEOUT_SECONDS": "120"
-        }
-      },
       "node_id": "sink",
-      "type": "reduce",
       "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_on_message": true,

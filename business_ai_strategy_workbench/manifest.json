@@ -309,73 +309,7 @@
   "name": "AI Strategy Workbench",
   "nodes": [
     {
-      "agent_type": "executor",
-      "config": {
-        "command": [
-          "python3",
-          "scripts/run_blueprint.py"
-        ],
-        "from": "base",
-        "name_prefix": "business-ai-strategy-workbench",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "output_message_type": "strategy_recommendation_pack",
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "advisory_workflow",
-        "upload_path": "advisory_workflow",
-        "upload_paths": [
-          {
-            "source": "advisory_workflow",
-            "target": "advisory_workflow"
-          },
-          {
-            "source": "config",
-            "target": "config"
-          },
-          {
-            "source": "mn-skills/blueprint-support-skill",
-            "target": "mn-skills/blueprint-support-skill"
-          },
-          {
-            "source": "mn-skills/document-reading-skill",
-            "target": "mn-skills/document-reading-skill"
-          },
-          {
-            "source": "mn-skills/meeting-summary-skill",
-            "target": "mn-skills/meeting-summary-skill"
-          },
-          {
-            "source": "mn-skills/first-draft-slides-skill",
-            "target": "mn-skills/first-draft-slides-skill"
-          },
-          {
-            "source": "mn-skills/market-research-skill",
-            "target": "mn-skills/market-research-skill"
-          },
-          {
-            "source": "mn-skills/spreadsheet-analysis-skill",
-            "target": "mn-skills/spreadsheet-analysis-skill"
-          },
-          {
-            "source": "mn-skills/implementation-plan-skill",
-            "target": "mn-skills/implementation-plan-skill"
-          },
-          {
-            "source": "mn-skills/process-map-skill",
-            "target": "mn-skills/process-map-skill"
-          },
-          {
-            "source": "mn-skills/client-report-skill",
-            "target": "mn-skills/client-report-skill"
-          }
-        ],
-        "workdir": "/sandbox/job/advisory_workflow"
-      },
       "node_id": "advisory_workflow",
-      "role": "root_coordinator",
-      "type": "generic",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
         "name_prefix": "business-ai-strategy-workbench",
@@ -394,52 +328,58 @@
             "target": "config"
           },
           {
-            "source": "mn-skills/blueprint-support-skill",
-            "target": "mn-skills/blueprint-support-skill"
+            "source": "mn-skills/blueprint_support_skill",
+            "target": "mn-skills/blueprint_support_skill"
           },
           {
-            "source": "mn-skills/document-reading-skill",
-            "target": "mn-skills/document-reading-skill"
+            "source": "mn-skills/document_reading_skill",
+            "target": "mn-skills/document_reading_skill"
           },
           {
-            "source": "mn-skills/meeting-summary-skill",
-            "target": "mn-skills/meeting-summary-skill"
+            "source": "mn-skills/meeting_summary_skill",
+            "target": "mn-skills/meeting_summary_skill"
           },
           {
-            "source": "mn-skills/first-draft-slides-skill",
-            "target": "mn-skills/first-draft-slides-skill"
+            "source": "mn-skills/first_draft_slides_skill",
+            "target": "mn-skills/first_draft_slides_skill"
           },
           {
-            "source": "mn-skills/market-research-skill",
-            "target": "mn-skills/market-research-skill"
+            "source": "mn-skills/market_research_skill",
+            "target": "mn-skills/market_research_skill"
           },
           {
-            "source": "mn-skills/spreadsheet-analysis-skill",
-            "target": "mn-skills/spreadsheet-analysis-skill"
+            "source": "mn-skills/spreadsheet_analysis_skill",
+            "target": "mn-skills/spreadsheet_analysis_skill"
           },
           {
-            "source": "mn-skills/implementation-plan-skill",
-            "target": "mn-skills/implementation-plan-skill"
+            "source": "mn-skills/implementation_plan_skill",
+            "target": "mn-skills/implementation_plan_skill"
           },
           {
-            "source": "mn-skills/process-map-skill",
-            "target": "mn-skills/process-map-skill"
+            "source": "mn-skills/process_map_skill",
+            "target": "mn-skills/process_map_skill"
           },
           {
-            "source": "mn-skills/client-report-skill",
-            "target": "mn-skills/client-report-skill"
+            "source": "mn-skills/client_report_skill",
+            "target": "mn-skills/client_report_skill"
           }
-        ]
+        ],
+        "command": [
+          "python3",
+          "scripts/run_blueprint.py"
+        ],
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "advisory_workflow",
+        "workdir": "/sandbox/job/advisory_workflow"
       }
     },
     {
-      "agent_type": "aggregator",
-      "config": {
-        "complete_on_message": true
-      },
       "node_id": "result_sink",
-      "role": "result_sink",
-      "type": "reduce",
       "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_on_message": true,

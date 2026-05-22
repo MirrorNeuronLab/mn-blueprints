@@ -171,7 +171,7 @@ Most blueprint folders contain:
 
 | Path | Purpose |
 | --- | --- |
-| `manifest.json` | Graph topology, metadata, entrypoints, workers, and output contracts. |
+| `manifest.json` | Graph topology, metadata, entrypoints, workers, runtime requirements, input validation, and output contracts. |
 | `config/default.json` | Default inputs, simulation settings, LLM settings, output adapters, and logging config. |
 | `config/overwrite.json` | Local customer-specific overwrite values layered on top of `config/default.json` before launch. |
 | `scenario.json` | Data-driven simulation metadata, when applicable. |

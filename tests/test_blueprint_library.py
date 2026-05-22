@@ -120,6 +120,8 @@ def test_index_entries_point_to_loadable_blueprint_folders() -> None:
         assert manifest["metadata"]["name"] == entry["name"]
         assert manifest["metadata"]["description"] == entry["description"]
         assert manifest["description"] == entry["description"]
+        assert set(manifest["requirements"]) == {"cpu", "gpu", "memory", "disk"}
+        assert isinstance(manifest["input_validation"].get("rules"), list)
 
 
 def test_optional_knowledge_folder_contract() -> None:

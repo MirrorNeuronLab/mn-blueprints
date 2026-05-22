@@ -1049,6 +1049,8 @@ Domain-specific steps should preserve the shared lifecycle ordering around confi
 - `nodes`
 - `edges`
 - `initial_inputs`
+- `requirements` with minimum `cpu`, `gpu`, `memory`, and `disk`
+- `input_validation` with a `rules` list, even when no custom rules are needed yet
 - `license`
 - `term`
 

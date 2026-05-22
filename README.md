@@ -176,6 +176,7 @@ Most blueprint folders contain:
 | `config/overwrite.json` | Local customer-specific overwrite values layered on top of `config/default.json` before launch. |
 | `scenario.json` | Data-driven simulation metadata, when applicable. |
 | `payloads/` | Worker scripts, generated runners, policies, fixtures, and domain assets. |
+| `scripts/pre-launch.sh` | Optional host-side setup hook started before run validation/submission for long-lived services required by the run. |
 | `README.md` | Blueprint-specific usage notes and developer/evaluator quickstart. |
 | `SPEC.md` | Customer-facing problem statement, outcome definition, evaluation criteria, prototype limits, and upgrade path. |
 | `tests/` | Smoke tests or package-specific tests. |

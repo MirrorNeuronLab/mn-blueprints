@@ -310,8 +310,8 @@
     "default_context_addr": "localhost:50052",
     "default_qdrant_url": "http://localhost:6333",
     "namespace": "business_code_analysis_memory",
-    "project_path": "/Users/homer/Projects/Membrane",
-    "python_sdk_path": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+    "project_path": "${MN_MEMBRANE_PROJECT_PATH}",
+    "python_sdk_path": "${MN_MEMBRANE_SDK_PATH}",
     "qdrant_url_env": "MN_QDRANT_URL",
     "sdk_distribution": "mirrorneuron-membrane-python-sdk",
     "sdk_import_package": "mn_context_engine_sdk"

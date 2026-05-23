@@ -3,7 +3,7 @@
 `Blueprint ID:` `business_context_memory_compression_code_analsysis`  
 `Category:` business - Business Runtime Pattern  
 `Default LLM:` Ollama `nemotron3:33b` with deterministic fake LLM support for tests  
-`Memory layer:` Membrane Python SDK from `/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src`
+`Memory layer:` Membrane Python SDK from `${MN_MEMBRANE_SDK_PATH}`
 
 ## One-line value proposition
 
@@ -74,14 +74,14 @@ Key benchmark fields:
 
 ## How to run
 
-This blueprint assumes your Membrane Docker containers are already running. It does not start Docker. Workers use the updated Python SDK from `/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src` by default; override `MN_MEMBRANE_SDK_PATH` if you want a different checkout or an installed wheel.
+This blueprint assumes your Membrane Docker containers are already running. It does not start Docker. Workers use the updated Python SDK from `${MN_MEMBRANE_SDK_PATH}` by default; override `MN_MEMBRANE_SDK_PATH` if you want a different checkout or an installed wheel.
 
 Run through a registered MirrorNeuron blueprint checkout:
 
 ```bash
-cd /Users/homer/Projects/mirror-neuron-set
+cd ${MN_WORKSPACE_ROOT}
 mn blueprint update
-MN_MEMBRANE_SDK_PATH=/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src \
+MN_MEMBRANE_SDK_PATH=${MN_MEMBRANE_SDK_PATH} \
 MN_CONTEXT_ADDR=localhost:50052 \
 MN_QDRANT_URL=http://localhost:6333 \
 MN_BLUEPRINT_QUICK_TEST=1 \
@@ -91,8 +91,8 @@ mn blueprint run business_context_memory_compression_code_analsysis
 Run directly from the local folder before refreshing the cached catalog:
 
 ```bash
-cd /Users/homer/Projects/mirror-neuron-set
-MN_MEMBRANE_SDK_PATH=/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src \
+cd ${MN_WORKSPACE_ROOT}
+MN_MEMBRANE_SDK_PATH=${MN_MEMBRANE_SDK_PATH} \
 MN_CONTEXT_ADDR=localhost:50052 \
 MN_QDRANT_URL=http://localhost:6333 \
 MN_BLUEPRINT_QUICK_TEST=1 \
@@ -102,8 +102,8 @@ mn blueprint run ./mn-blueprints/business_context_memory_compression_code_analsy
 Run a larger benchmark by increasing the fixture scale:
 
 ```bash
-cd /Users/homer/Projects/mirror-neuron-set
-MN_MEMBRANE_SDK_PATH=/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src \
+cd ${MN_WORKSPACE_ROOT}
+MN_MEMBRANE_SDK_PATH=${MN_MEMBRANE_SDK_PATH} \
 MN_CONTEXT_ADDR=localhost:50052 \
 MN_QDRANT_URL=http://localhost:6333 \
 MN_CODE_ANALYSIS_FIXTURE_MAX_FILES=900 \
@@ -125,7 +125,7 @@ The SDK distribution name is `mirrorneuron-membrane-python-sdk`; the import pack
 Run the shared repository tests:
 
 ```bash
-cd /Users/homer/Projects/mirror-neuron-set/mn-blueprints
+cd ${MN_WORKSPACE_ROOT}/mn-blueprints
 python3 -m pytest -q
 ```
 

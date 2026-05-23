@@ -315,8 +315,8 @@
         "namespace_env": "MN_QDRANT_NAMESPACE",
         "qdrant_url_env": "MN_QDRANT_URL"
       },
-      "project_path": "/Users/homer/Projects/Membrane",
-      "python_sdk_path": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+      "project_path": "${MN_MEMBRANE_PROJECT_PATH}",
+      "python_sdk_path": "${MN_MEMBRANE_SDK_PATH}",
       "runtime": "Use the already-running Membrane Docker containers; workers connect through MN_CONTEXT_ADDR and import the Python SDK for memory item validation and helpers.",
       "sdk_distribution": "mirrorneuron-membrane-python-sdk",
       "sdk_import_package": "mn_context_engine_sdk"
@@ -395,7 +395,7 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/init.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH}:../_vendor\" /usr/bin/python3 scripts/init.py"
         ],
         "environment": {
           "CONTEXT_ENGINE_ADDR": "localhost:50052",
@@ -414,7 +414,7 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_MEMBRANE_SDK_PATH": "${MN_MEMBRANE_SDK_PATH}",
           "MN_QDRANT_COLLECTION": "mn_memory",
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
@@ -492,7 +492,7 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/interpreter.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH}:../_vendor\" /usr/bin/python3 scripts/interpreter.py"
         ],
         "environment": {
           "CONTEXT_ENGINE_ADDR": "localhost:50052",
@@ -511,7 +511,7 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_MEMBRANE_SDK_PATH": "${MN_MEMBRANE_SDK_PATH}",
           "MN_QDRANT_COLLECTION": "mn_memory",
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
@@ -585,7 +585,7 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/extractor.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH}:../_vendor\" /usr/bin/python3 scripts/extractor.py"
         ],
         "environment": {
           "CONTEXT_ENGINE_ADDR": "localhost:50052",
@@ -604,7 +604,7 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_MEMBRANE_SDK_PATH": "${MN_MEMBRANE_SDK_PATH}",
           "MN_QDRANT_COLLECTION": "mn_memory",
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
@@ -678,7 +678,7 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/classifier.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH}:../_vendor\" /usr/bin/python3 scripts/classifier.py"
         ],
         "environment": {
           "CONTEXT_ENGINE_ADDR": "localhost:50052",
@@ -697,7 +697,7 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_MEMBRANE_SDK_PATH": "${MN_MEMBRANE_SDK_PATH}",
           "MN_QDRANT_COLLECTION": "mn_memory",
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
@@ -771,7 +771,7 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/decision.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH}:../_vendor\" /usr/bin/python3 scripts/decision.py"
         ],
         "environment": {
           "CONTEXT_ENGINE_ADDR": "localhost:50052",
@@ -790,7 +790,7 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_MEMBRANE_SDK_PATH": "${MN_MEMBRANE_SDK_PATH}",
           "MN_QDRANT_COLLECTION": "mn_memory",
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
@@ -864,7 +864,7 @@
         "command": [
           "bash",
           "-c",
-          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH:-/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src}:../_vendor\" /usr/bin/python3 scripts/critic.py"
+          "PYTHONPATH=\"${MN_MEMBRANE_SDK_PATH}:../_vendor\" /usr/bin/python3 scripts/critic.py"
         ],
         "environment": {
           "CONTEXT_ENGINE_ADDR": "localhost:50052",
@@ -883,7 +883,7 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_MEMBRANE_SDK_PATH": "${MN_MEMBRANE_SDK_PATH}",
           "MN_QDRANT_COLLECTION": "mn_memory",
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
@@ -969,7 +969,7 @@
           "MN_LLM_API_KEY": "",
           "MN_LLM_MODEL": "ollama/nemotron3:33b",
           "MN_LLM_TIMEOUT_SECONDS": "120",
-          "MN_MEMBRANE_SDK_PATH": "/Users/homer/Projects/Membrane/mn-context-engine-python-sdk/src",
+          "MN_MEMBRANE_SDK_PATH": "${MN_MEMBRANE_SDK_PATH}",
           "MN_QDRANT_COLLECTION": "mn_memory",
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"

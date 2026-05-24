@@ -1965,7 +1965,7 @@
       "uses": "mn-agents.control_join@1.0.0",
       "with": {
         "complete_after": 100,
-        "complete_on_message": true,
+        "complete_on_message": false,
         "node_type": "reduce",
         "output_message_type": "prime_chunk_collection"
       }

@@ -26,9 +26,9 @@ STREAM_BACKPRESSURE = BackpressurePolicy(
 )
 
 
-class DaemonAgents:
+class ServiceAgents:
     @agent.defn(
-        name="daemon_ingress",
+        name="service_ingress",
         type="stream",
         runner=RUNNER,
         retries=RETRY,
@@ -39,7 +39,7 @@ class DaemonAgents:
         return build_probe(service)
 
     @agent.defn(
-        name="daemon_analyzer",
+        name="service_analyzer",
         type="stream",
         runner=RUNNER,
         retries=RETRY,
@@ -50,7 +50,7 @@ class DaemonAgents:
         return evaluate_probe(probe)
 
     @agent.defn(
-        name="daemon_memory",
+        name="service_memory",
         type="stream",
         runner=RUNNER,
         retries=RETRY,
@@ -62,15 +62,15 @@ class DaemonAgents:
 
 
 @workflow.defn(
-    name="general_python_sdk_live_research_daemon_v1",
-    daemon=True,
+    name="general_python_sdk_live_research_service_v1",
+    type="service",
     stream_mode="live",
     recovery_mode="cluster_recover",
     backpressure=JOB_BACKPRESSURE,
 )
-class GeneralPythonDefinedAdvancedDeamon:
+class GeneralPythonSdkLiveResearchService:
     def __init__(self):
-        self.agents = DaemonAgents()
+        self.agents = ServiceAgents()
 
     @workflow.run
     def run(self):
@@ -80,9 +80,9 @@ class GeneralPythonDefinedAdvancedDeamon:
 
 
 def run_local(service: str = SERVICE) -> dict:
-    """Run one daemon tick directly for local venv smoke tests."""
+    """Run one service tick directly for local venv smoke tests."""
 
-    agents = DaemonAgents()
+    agents = ServiceAgents()
     probe = agents.ingress(service)
     decision = agents.analyzer(probe)
     return agents.memory(decision)

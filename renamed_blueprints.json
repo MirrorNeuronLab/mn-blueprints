@@ -37,7 +37,7 @@
   ],
   "financial_market_realtime_advisor_deamon": [
     "finance_liquidity_microstructure_radar",
-    "Repositions the market daemon around liquidity and microstructure risk."
+    "Repositions the market watcher around liquidity and microstructure risk."
   ],
   "general_agent_loop_demo": [
     "general_closed_loop_agent_runtime",
@@ -72,8 +72,8 @@
     "Makes the multi-agent negotiation outcome concrete."
   ],
   "general_native_live_deamon": [
-    "general_native_live_monitor_daemon",
-    "Fixes the daemon typo and names the live native-agent monitoring value."
+    "general_native_live_monitor_service",
+    "Fixes the old service-name typo and names the live native-agent monitoring value."
   ],
   "general_openshell_llm_codegen": [
     "general_sandboxed_llm_codegen_review_loop",
@@ -92,8 +92,8 @@
     "Frames the blueprint around parallel runtime scale rather than prime numbers."
   ],
   "general_python_defined_advanced_deamon": [
-    "general_python_sdk_live_research_daemon",
-    "Fixes the daemon typo and emphasizes the live Python workflow loop."
+    "general_python_sdk_live_research_service",
+    "Fixes the old service-name typo and emphasizes the live Python workflow loop."
   ],
   "general_python_defined_basic": [
     "general_python_sdk_research_pipeline",
@@ -109,7 +109,7 @@
   ],
   "general_stream_live_backpressure_deamon": [
     "general_stream_backpressure_control_loop",
-    "Fixes daemon wording and makes backpressure control the value."
+    "Fixes old service wording and makes backpressure control the value."
   ],
   "general_test_message_flow": [
     "general_message_routing_trace",
@@ -121,7 +121,7 @@
   ],
   "science_drug_discovery_deamon": [
     "science_drug_discovery_closed_loop_lab",
-    "Fixes daemon wording and names the closed-loop scientific workflow."
+    "Fixes old service wording and names the closed-loop scientific workflow."
   ],
   "science_ecosystem_simulation": [
     "science_ecosystem_intervention_sandbox",
@@ -146,5 +146,13 @@
   "video_safety_door_monitor_deamon": [
     "business_facility_safety_video_guardian",
     "Moves the video safety workflow into a business operations category."
+  ],
+  "general_native_live_monitor_daemon": [
+    "general_native_live_monitor_service",
+    "Renames the long-running blueprint suffix to service."
+  ],
+  "general_python_sdk_live_research_daemon": [
+    "general_python_sdk_live_research_service",
+    "Renames the long-running blueprint suffix to service."
   ]
 }

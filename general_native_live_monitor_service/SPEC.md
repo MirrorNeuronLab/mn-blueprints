@@ -1,20 +1,20 @@
-# Python Sdk Live Research Daemon SPEC
+# Native Live Monitor Service SPEC
 
 ## What We Want To Achieve
 
-Build a reviewable runtime evaluation workflow that helps Developers building live monitors, scheduled analysis loops, or long-running research agents move from raw signals to an explainable recommendation. Run a Python-defined workflow as a long-lived daemon with repeated stateful turns. The target customer should understand what changed, why the system recommended an action, and what evidence a human should review before acting.
+Build a reviewable runtime evaluation workflow that helps Runtime evaluators comparing native BEAM agents with external worker processes move from raw signals to an explainable recommendation. Observe a fast native-agent live monitor that keeps producing decisions until stopped. The target customer should understand what changed, why the system recommended an action, and what evidence a human should review before acting.
 
 ## Customer Problem
 
-Many agent workflows need to keep running, react to new events, and maintain operational state rather than finish after one request. In a real customer environment, the pain is not only producing an answer; it is preserving context across changing inputs, exposing tradeoffs, and creating an audit trail that business, technical, or governance stakeholders can trust.
+Some simulations and monitors need low-overhead native agents that can run continuously and emit structured updates. In a real customer environment, the pain is not only producing an answer; it is preserving context across changing inputs, exposing tradeoffs, and creating an audit trail that business, technical, or governance stakeholders can trust.
 
 ## Design Details
 
-The blueprint is organized as a MirrorNeuron workflow with stable identity, configurable inputs, structured events, and a final artifact. The main agent role is Python daemon coordinator. The workflow uses live daemon loop with repeated inputs and demonstrates Python SDK, daemon execution, live loop, and runtime events.
+The blueprint is organized as a MirrorNeuron workflow with stable identity, configurable inputs, structured events, and a final artifact. The main agent role is Native BEAM monitoring agents. The workflow uses live native signal monitor and demonstrates native agents, service mode, streaming events, and low-overhead simulation.
 
 The design is intentionally adapter-friendly. The prototype can run with bundled, mock, or synthetic data even when the current code has not implemented every production integration. The customer-facing contract stays centered on the same concepts: load inputs, observe current state, choose or score an action, emit traceable events, and write an artifact a reviewer can inspect.
 
-A representative scenario is: A daemon periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.
+A representative scenario is: A divisibility monitor streams generated values, evaluates conditions, and reports live state through native runtime agents.
 
 ## Input
 
@@ -24,7 +24,7 @@ Important state inputs include the configured state metrics. Where the blueprint
 
 ## Output: Expected Customer Outcome
 
-The expected customer outcome is ongoing events and final cancellation-safe state. A useful run should show the starting context, the observations made during the workflow, the action or recommendation rationale, and the final artifact that a domain owner can review.
+The expected customer outcome is streaming monitor events and summaries. A useful run should show the starting context, the observations made during the workflow, the action or recommendation rationale, and the final artifact that a domain owner can review.
 
 The customer should be able to answer: what happened, which inputs mattered, what the system recommended, what changed over time, what risks or exceptions remain, and what a human team should do next.
 
@@ -52,8 +52,8 @@ Outputs are decision-support artifacts. They should not be treated as final fina
 
 ## Upgrade Path To Real Customer Use
 
-Adjust daemon cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop. Add customer-specific policies, review gates, exception handling, retention rules, and monitoring dashboards. Calibrate the workflow against historical data and expert judgment, then track acceptance rate, correction rate, latency, incident reduction, cost impact, and other outcome metrics that prove whether the workflow is helping.
+Replace the divisibility rule with your own fast rule engine, alert threshold, or lightweight simulation process. Add customer-specific policies, review gates, exception handling, retention rules, and monitoring dashboards. Calibrate the workflow against historical data and expert judgment, then track acceptance rate, correction rate, latency, incident reduction, cost impact, and other outcome metrics that prove whether the workflow is helping.
 
 ## Product Narrative
 
-Long-lived loops are a key difference between agent runtimes and chat interfaces; this blueprint shows that operating model directly.
+The runtime is not limited to slow external calls; native agents can run high-frequency loops alongside LLM workflows.

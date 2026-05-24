@@ -112,5 +112,5 @@ The included tests cover event normalization with missing optional fields, risk 
 - Connect a real activity source such as Okta, Auth0, Microsoft Entra ID, GitHub audit logs, or AWS CloudTrail.
 - Add human approval gates for high-impact response actions.
 - Add specific NIST SP 800-53 or SP 800-171 control mappings after compliance review.
-- Run continuously through a daemon or scheduler once the event source and output review workflow are validated.
+- Run continuously through a service or scheduler once the event source and output review workflow are validated.
 

@@ -252,7 +252,7 @@ def test_finance_property_alpha_memory_benchmark_contract(tmp_path: Path) -> Non
 @pytest.mark.parametrize(
     "blueprint_id",
     [
-        "general_python_sdk_live_research_daemon",
+        "general_python_sdk_live_research_service",
         "general_python_sdk_research_pipeline",
     ],
 )

@@ -1,5 +1,4 @@
 {
-  "daemon": true,
   "description": "Use this blueprint to observe bounded queues, slow workers, and retry-later behavior before building live stream workflows.",
   "edges": [
     {
@@ -38,6 +37,7 @@
   "license": "LICENSE.md",
   "term": "TERM.md",
   "manifest_version": "1.0",
+  "type": "service",
   "requirements": {
     "cpu": {
       "min_cores": 1
@@ -205,6 +205,7 @@
         "llm",
         "outputs",
         "logging",
+        "resources",
         "real_adapters",
         "streams",
         "input_skills",
@@ -239,7 +240,10 @@
         "web_ui.json",
         "ui.json",
         "web/index.html",
-        "logs.jsonl"
+        "logs.jsonl",
+        "logs.index.json",
+        "human.jsonl",
+        "resources.jsonl"
       ],
       "output_adapters": [
         "local_run_store"
@@ -299,7 +303,7 @@
     },
     "problem_solved": "Real event streams overload workers; agent runtimes need visible backpressure and safe rejection semantics.",
     "quick_test": {
-      "description": "The daemon uses a local generated telemetry stream and local slow worker; no third-party APIs are called.",
+      "description": "The service uses a local generated telemetry stream and local slow worker; no third-party APIs are called.",
       "enabled": false,
       "env": "MN_BLUEPRINT_QUICK_TEST=1"
     },

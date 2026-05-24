@@ -10,7 +10,7 @@ Streaming systems require backpressure-aware routing, stateful workers, and outp
 
 ## Design Details
 
-The blueprint is organized as a MirrorNeuron workflow with stable identity, configurable inputs, structured events, and a final artifact. The main agent role is Stream processor and summarizer. The workflow uses live telemetry stream and demonstrates stream agents, live events, stateful summarization, and daemon mode.
+The blueprint is organized as a MirrorNeuron workflow with stable identity, configurable inputs, structured events, and a final artifact. The main agent role is Stream processor and summarizer. The workflow uses live telemetry stream and demonstrates stream agents, live events, stateful summarization, and service mode.
 
 The design is intentionally adapter-friendly. The prototype can run with bundled, mock, or synthetic data even when the current code has not implemented every production integration. The customer-facing contract stays centered on the same concepts: load inputs, observe current state, choose or score an action, emit traceable events, and write an artifact a reviewer can inspect.
 

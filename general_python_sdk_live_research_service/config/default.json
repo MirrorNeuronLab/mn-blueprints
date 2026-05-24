@@ -73,11 +73,11 @@
     "fan_out_output_skills"
   ],
   "identity": {
-    "blueprint_id": "general_native_live_monitor_daemon",
-    "name": "Native Live Monitor Daemon"
+    "blueprint_id": "general_python_sdk_live_research_service",
+    "name": "Python SDK Live Research Service"
   },
   "input_skills": {
-    "monitor_ingress": {
+    "research_updates": {
       "connector": "websocket",
       "direction": "input",
       "enabled": false,
@@ -89,7 +89,7 @@
       "required": false,
       "skill": "websocket_stream",
       "transport": "websocket",
-      "url": "${MN_MONITOR_WS_URL}"
+      "url": "${MN_RESEARCH_WS_URL}"
     }
   },
   "inputs": {
@@ -223,7 +223,10 @@
       "web_ui.json",
       "ui.json",
       "web/index.html",
-      "logs.jsonl"
+      "logs.jsonl",
+      "logs.index.json",
+      "human.jsonl",
+      "resources.jsonl"
     ],
     "output_adapters": [
       "local_run_store"
@@ -267,12 +270,12 @@
     ]
   },
   "llm": {
-    "agent_role": "Native BEAM monitoring agents.",
+    "agent_role": "Python service coordinator.",
     "agents": {
       "default": {
         "llm_config": "primary",
         "responsibilities": [],
-        "role": "Native BEAM monitoring agents."
+        "role": "Python service coordinator."
       }
     },
     "api_base": "http://192.168.4.173:11434",
@@ -320,10 +323,10 @@
   "metadata": {
     "blueprint_revision": "v1",
     "category": "general",
-    "customizable_for": "Operations telemetry, rules engines, high-frequency synthetic simulations.",
-    "problem_solved": "Some simulations and monitors need low-overhead native agents that can run continuously and emit structured updates.",
+    "customizable_for": "Incident monitors, market watchers, research crawlers.",
+    "problem_solved": "Many agent workflows need to keep running, react to new events, and maintain operational state rather than finish after one request.",
     "standard_version": "1.0",
-    "target_users": "Runtime evaluators comparing native BEAM agents with external worker processes."
+    "target_users": "Developers building live monitors, scheduled analysis loops, or long-running research agents."
   },
   "mode": "mock",
   "output_skills": {
@@ -341,7 +344,7 @@
   },
   "outputs": {
     "adapter": "local_run_store",
-    "artifact_contract": "Streaming monitor events and summaries.",
+    "artifact_contract": "Ongoing events and final cancellation-safe state.",
     "run_root": "~/.mn/runs",
     "skills": {
       "websocket_events": {
@@ -411,7 +414,7 @@
     "deterministic": true,
     "enabled": true,
     "seed_field": "seed",
-    "type": "Live native signal monitor."
+    "type": "Live service loop with repeated inputs."
   },
   "standard_version": "1.0",
   "state": {
@@ -427,21 +430,20 @@
     "resume_mode": "checkpoint"
   },
   "streams": {
-    "monitor_ingress": {
+    "research_updates": {
       "codec": "jsonl",
       "enabled": false,
       "kind": "data",
       "transport": "websocket",
-      "url": "${MN_MONITOR_WS_URL}"
+      "url": "${MN_RESEARCH_WS_URL}"
     }
   },
   "triggers": {
-    "daemon": true,
     "schedule": null,
     "sources": [
-      "monitor_ingress"
+      "research_updates"
     ],
-    "type": "daemon"
+    "type": "service"
   },
   "web_ui": {
     "enabled": true,

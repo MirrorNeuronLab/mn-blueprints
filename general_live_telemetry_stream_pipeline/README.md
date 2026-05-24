@@ -100,7 +100,7 @@ Stream processing is where static prompts fail; this blueprint shows agents embe
 - stream agents
 - live events
 - stateful summarization
-- daemon mode
+- service mode
 
 ## Test coverage
 

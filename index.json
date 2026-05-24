@@ -67,6 +67,7 @@
     "job_name": "business-facility-safety-video-guardian",
     "name": "Facility Safety Video Guardian",
     "path": "business_facility_safety_video_guardian",
+    "type": "service",
     "product": {
       "agent_role": "Safety observation and escalation agent.",
       "benefit": "This illustrates vertical AI for physical operations: agents reason over evolving sensor state, preserve event trails, and trigger controlled review workflows.",
@@ -378,6 +379,7 @@
     "job_name": "finance-liquidity-microstructure-radar",
     "name": "Liquidity Microstructure Radar",
     "path": "finance_liquidity_microstructure_radar",
+    "type": "service",
     "product": {
       "agent_role": "Signal analyzer, market explainer, advisor agent.",
       "benefit": "The blueprint is a credible wedge for trading-risk copilots because it combines streaming data, simulation, and explainable agent decisions.",
@@ -710,6 +712,7 @@
     "job_name": "general-live-telemetry-stream-pipeline",
     "name": "Live Telemetry Stream Pipeline",
     "path": "general_live_telemetry_stream_pipeline",
+    "type": "service",
     "product": {
       "agent_role": "Stream processor and summarizer.",
       "benefit": "Stream processing is where static prompts fail; this blueprint shows agents embedded in live data movement.",
@@ -726,7 +729,7 @@
         "stream agents",
         "live events",
         "stateful summarization",
-        "daemon mode"
+        "service mode"
       ],
       "simulation_type": "Live telemetry stream.",
       "target_users": "Developers building event-stream workflows and runtime observability paths."
@@ -825,11 +828,12 @@
   {
     "category": "Engineering",
     "description": "Use this blueprint to run a lightweight native monitor that keeps producing decisions over live state until you stop it.",
-    "graph_id": "general_native_live_monitor_daemon_v1",
-    "id": "general_native_live_monitor_daemon",
-    "job_name": "general-native-live-monitor-daemon",
-    "name": "Native Live Monitor Daemon",
-    "path": "general_native_live_monitor_daemon",
+    "graph_id": "general_native_live_monitor_service_v1",
+    "id": "general_native_live_monitor_service",
+    "job_name": "general-native-live-monitor-service",
+    "name": "Native Live Monitor Service",
+    "path": "general_native_live_monitor_service",
+    "type": "service",
     "product": {
       "agent_role": "Native BEAM monitoring agents.",
       "benefit": "The runtime is not limited to slow external calls; native agents can run high-frequency loops alongside LLM workflows.",
@@ -844,7 +848,7 @@
       "problem": "Some simulations and monitors need low-overhead native agents that can run continuously and emit structured updates.",
       "runtime_features": [
         "native agents",
-        "daemon mode",
+        "service mode",
         "streaming events",
         "low-overhead simulation"
       ],
@@ -944,31 +948,32 @@
   },
   {
     "category": "Engineering",
-    "description": "Use this blueprint to run a Python-defined workflow as a long-lived research daemon with repeated stateful turns.",
-    "graph_id": "general_python_sdk_live_research_daemon_v1",
-    "id": "general_python_sdk_live_research_daemon",
-    "job_name": "general-python-sdk-live-research-daemon",
-    "name": "Python Sdk Live Research Daemon",
-    "path": "general_python_sdk_live_research_daemon",
+    "description": "Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns.",
+    "graph_id": "general_python_sdk_live_research_service_v1",
+    "id": "general_python_sdk_live_research_service",
+    "job_name": "general-python-sdk-live-research-service",
+    "name": "Python SDK Live Research Service",
+    "path": "general_python_sdk_live_research_service",
+    "type": "service",
     "product": {
-      "agent_role": "Python daemon coordinator.",
+      "agent_role": "Python service coordinator.",
       "benefit": "Long-lived loops are a key difference between agent runtimes and chat interfaces; this blueprint shows that operating model directly.",
       "customizable_for": "Incident monitors, market watchers, research crawlers.",
-      "customize": "Adjust daemon cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop.",
-      "example": "A daemon periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.",
-      "how_it_works": "A daemon periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.",
-      "input": "Adjust daemon cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop.",
+      "customize": "Adjust service cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop.",
+      "example": "A service periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.",
+      "how_it_works": "A service periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.",
+      "input": "Adjust service cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop.",
       "investor": "Long-lived loops are a key difference between agent runtimes and chat interfaces; this blueprint shows that operating model directly.",
-      "one_line": "Use this blueprint to run a Python-defined workflow as a long-lived research daemon with repeated stateful turns.",
+      "one_line": "Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns.",
       "output": "Ongoing events and final cancellation-safe state.",
       "problem": "Many agent workflows need to keep running, react to new events, and maintain operational state rather than finish after one request.",
       "runtime_features": [
         "Python SDK",
-        "daemon execution",
+        "service execution",
         "live loop",
         "runtime events"
       ],
-      "simulation_type": "Live daemon loop with repeated inputs.",
+      "simulation_type": "Live service loop with repeated inputs.",
       "target_users": "Developers building live monitors, scheduled analysis loops, or long-running research agents."
     }
   },
@@ -1070,6 +1075,7 @@
     "job_name": "general-stream-backpressure-control-loop",
     "name": "Stream Backpressure Control Loop",
     "path": "general_stream_backpressure_control_loop",
+    "type": "service",
     "product": {
       "agent_role": "Live source, slow processor, metrics sink.",
       "benefit": "Backpressure is production plumbing, not a demo flourish; this blueprint proves the runtime is built for real systems.",

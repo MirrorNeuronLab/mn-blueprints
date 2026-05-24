@@ -189,7 +189,7 @@ def call_explainer(context: dict[str, Any]) -> dict[str, Any]:
         "Never claim this is real market data."
     )
     user_prompt = (
-        "Explain what matters in this MirrorNeuron financial market daemon state. "
+        "Explain what matters in this MirrorNeuron financial market service state. "
         "Use both exchange/trader activity and stock technical signals.\n"
         f"{json.dumps(context, sort_keys=True)}"
     )

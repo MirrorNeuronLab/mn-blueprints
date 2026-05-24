@@ -1,5 +1,4 @@
 {
-  "daemon": true,
   "description": "Use this blueprint to process live telemetry chunks, detect changing signal patterns, and summarize what operators need to notice.",
   "edges": [
     {
@@ -67,6 +66,7 @@
   "license": "LICENSE.md",
   "term": "TERM.md",
   "manifest_version": "1.0",
+  "type": "service",
   "requirements": {
     "cpu": {
       "min_cores": 1
@@ -230,6 +230,7 @@
         "llm",
         "outputs",
         "logging",
+        "resources",
         "real_adapters",
         "streams",
         "input_skills",
@@ -264,7 +265,10 @@
         "web_ui.json",
         "ui.json",
         "web/index.html",
-        "logs.jsonl"
+        "logs.jsonl",
+        "logs.index.json",
+        "human.jsonl",
+        "resources.jsonl"
       ],
       "output_adapters": [
         "local_run_store"
@@ -332,7 +336,7 @@
       "stream agents",
       "live events",
       "stateful summarization",
-      "daemon mode"
+      "service mode"
     ],
     "simulation_type": "Live telemetry stream.",
     "standard": {
@@ -407,7 +411,7 @@
         "device_id": "sensor-alpha",
         "interval_ms": 1000,
         "jitter": 4,
-        "module": "MirrorNeuron.Examples.StreamBasicDaemon.TelemetrySource",
+        "module": "MirrorNeuron.Examples.StreamBasicService.TelemetrySource",
         "module_source": "beam_modules/telemetry_source.ex",
         "node_type": "stream",
         "peak_every": 20,

@@ -194,6 +194,7 @@
         "llm",
         "outputs",
         "logging",
+        "resources",
         "real_adapters",
         "streams",
         "input_skills",
@@ -228,7 +229,10 @@
         "web_ui.json",
         "ui.json",
         "web/index.html",
-        "logs.jsonl"
+        "logs.jsonl",
+        "logs.index.json",
+        "human.jsonl",
+        "resources.jsonl"
       ],
       "output_adapters": [
         "local_run_store"

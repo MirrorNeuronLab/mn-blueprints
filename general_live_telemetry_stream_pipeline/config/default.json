@@ -223,7 +223,10 @@
       "web_ui.json",
       "ui.json",
       "web/index.html",
-      "logs.jsonl"
+      "logs.jsonl",
+      "logs.index.json",
+      "human.jsonl",
+      "resources.jsonl"
     ],
     "output_adapters": [
       "local_run_store"
@@ -506,7 +509,6 @@
     "peak_height": 55
   },
   "triggers": {
-    "daemon": false,
     "schedule": null,
     "sources": [
       "telemetry_ingress"

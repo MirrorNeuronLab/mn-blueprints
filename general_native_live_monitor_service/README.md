@@ -1,12 +1,12 @@
-# Python Sdk Live Research Daemon
+# Native Live Monitor Service
 
-`Blueprint ID:` `general_python_sdk_live_research_daemon`  
+`Blueprint ID:` `general_native_live_monitor_service`  
 `Category:` general - General Runtime Pattern  
 `Default LLM:` Ollama `nemotron3:33b` with deterministic fake LLM support for tests
 
 ## One-line value proposition
 
-Run a Python-defined workflow as a long-lived daemon with repeated stateful turns.
+Observe a fast native-agent live monitor that keeps producing decisions until stopped.
 
 ## What it is
 
@@ -14,11 +14,11 @@ This blueprint is a reusable MirrorNeuron solution template for a reusable runti
 
 ## Who this is for
 
-Developers building live monitors, scheduled analysis loops, or long-running research agents.
+Runtime evaluators comparing native BEAM agents with external worker processes.
 
 ## Why it matters
 
-Many agent workflows need to keep running, react to new events, and maintain operational state rather than finish after one request. A static dashboard can show the current state, and a one-shot LLM prompt can summarize it, but neither tests what happens after a decision is applied. This blueprint makes the feedback loop visible: state changes, the agent observes it, the agent chooses an action, and the system evolves again.
+Some simulations and monitors need low-overhead native agents that can run continuously and emit structured updates. A static dashboard can show the current state, and a one-shot LLM prompt can summarize it, but neither tests what happens after a decision is applied. This blueprint makes the feedback loop visible: state changes, the agent observes it, the agent chooses an action, and the system evolves again.
 
 ## Why this runtime is useful here
 
@@ -26,21 +26,21 @@ MirrorNeuron is useful here because it combines LLM reasoning with dynamic syste
 
 ## How it works
 
-1. Load the graph in `manifest.json` and start `daemon_ingress` with bundled mock inputs.
-2. Route work through the agents described by the manifest, using live daemon loop with repeated inputs as the evolving system.
-3. Let the `Python daemon coordinator` observe intermediate state, produce decisions or artifacts, and emit typed messages.
+1. Load the graph in `manifest.json` and start `question_generator` with bundled mock inputs.
+2. Route work through the agents described by the manifest, using live native signal monitor as the evolving system.
+3. Let the `Native BEAM monitoring agents` observe intermediate state, produce decisions or artifacts, and emit typed messages.
 4. Preserve execution metadata, logs, and generated artifacts so users can audit what happened.
-5. Return ongoing events and final cancellation-safe state for review, customization, or downstream workflow integration.
+5. Return streaming monitor events and summaries for review, customization, or downstream workflow integration.
 
 ## Example scenario
 
-A daemon periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.
+A divisibility monitor streams generated values, evaluates conditions, and reports live state through native runtime agents.
 
 ## Inputs
 
 | Input | What it controls | Example | Can customize? |
 |---|---|---|---|
-| `manifest.json` initial inputs | Sample payloads routed into daemon_ingress. | `initial_inputs` | Yes |
+| `manifest.json` initial inputs | Sample payloads routed into question_generator. | `initial_inputs` | Yes |
 | `config/default.json` | Standard identity, mock input, LLM, output, logging, and adapter settings. | `outputs.run_root` | Yes |
 | `config/overwrite.json` | Local overwrite values layered on top of defaults before launch. | `llm.model`, `outputs.run_root` | Yes |
 | Payload fixtures | Bundled synthetic data, policies, scripts, templates, or media used by workers. | `payloads/` or `input/` | Yes |
@@ -51,35 +51,24 @@ A daemon periodically collects signals, decides whether more work is needed, and
 | Output | What it means | Where to look |
 |---|---|---|
 | Runtime events | Typed messages and worker events emitted through the manifest graph. | `blueprint_report`, worker-specific events |
-| Final artifact | The user-facing ongoing events and final cancellation-safe state. | `result.json`, report, alert, or generated artifact |
+| Final artifact | The user-facing streaming monitor events and summaries. | `result.json`, report, alert, or generated artifact |
 | Operational logs | Status lines and worker logs for debugging and audit. | `events.jsonl`, runtime logs, worker stderr |
 | Generated bundle or payload output | Files produced by bundle generation or specialized workers. | `bundle_summary.json`, `payloads/`, visual artifacts |
 
 ## How to run
 
-Run one daemon tick directly in a local virtual environment:
+Run through a registered MirrorNeuron blueprint checkout:
 
 ```bash
-cd general_python_sdk_live_research_daemon
-python3 -m venv .venv
-. .venv/bin/activate
-pip install -r requirements.txt
-python workflow.py
+mn blueprint run general_native_live_monitor_service
 ```
 
-Generate a quick deterministic bundle for local review with the shared support generator:
+Inspect registered blueprints and recent run artifacts through the unified CLI:
 
 ```bash
-cd general_python_sdk_live_research_daemon
-python -m mn_blueprint_support.python_workflow_bundle_cli \
-  --blueprint-dir . \
-  --quick-test \
-  --output-dir /tmp/mirror-neuron-bundles
+mn blueprint list
+mn blueprint monitor
 ```
-
-This blueprint is source-first: generated payload copies are not checked in. `mn_blueprint_support.python_workflow_bundle_cli` reads the `metadata.python_workflow` block in `manifest.json`, handles quick-test metadata and status logging, and calls the Python SDK compiler to produce `manifest.json` plus `payloads/mn_python_workflow/` in the output directory. Local domain helpers such as `service_health_simulation.py` stay in the blueprint and are copied into generated bundles through `metadata.python_workflow.includes`, keeping each bundle self-contained without pushing product-specific simulation logic into `mn_blueprint_support`.
-
-Then run the generated bundle with your MirrorNeuron runtime entrypoint. Use `config/default.json` and `manifest.json` as the stable contract while replacing bundled fixtures with real data.
 
 Run the shared repository tests:
 
@@ -90,7 +79,7 @@ python3 -m pytest -q
 
 ## How to customize it
 
-Adjust daemon cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop. For a new Python-defined daemon blueprint, add a `metadata.python_workflow` block to `manifest.json` instead of copying custom generation logic.
+Replace the divisibility rule with your own fast rule engine, alert threshold, or lightweight simulation process.
 
 A practical customization path is:
 
@@ -108,14 +97,14 @@ The strongest signal is not only the final recommendation. Look for whether the 
 
 ## Investor and evaluator narrative
 
-Long-lived loops are a key difference between agent runtimes and chat interfaces; this blueprint shows that operating model directly. The product lesson is that this is not just a chatbot around data. It is a repeatable pattern for vertical workflows where simulation, state, and agent decisions create a more defensible user experience than static analytics alone.
+The runtime is not limited to slow external calls; native agents can run high-frequency loops alongside LLM workflows. The product lesson is that this is not just a chatbot around data. It is a repeatable pattern for vertical workflows where simulation, state, and agent decisions create a more defensible user experience than static analytics alone.
 
 ## Runtime features demonstrated
 
-- Python SDK
-- daemon execution
-- live loop
-- runtime events
+- native agents
+- service mode
+- streaming events
+- low-overhead simulation
 
 ## Test coverage
 

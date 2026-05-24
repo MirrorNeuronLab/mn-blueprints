@@ -25,5 +25,5 @@ def remember_decision(decision: dict) -> dict:
     return {
         "last_decision": decision,
         "heartbeat_count": 1,
-        "status": "daemon_observed",
+        "status": "service_observed",
     }

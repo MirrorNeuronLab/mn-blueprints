@@ -1,29 +1,38 @@
 {
-  "daemon": true,
-  "description": "Use this blueprint to run a lightweight native monitor that keeps producing decisions over live state until you stop it.",
+  "description": "Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns.",
   "edges": [
     {
-      "edge_id": "generator_to_answer",
-      "from_node": "question_generator",
-      "message_type": "division_question",
-      "to_node": "answer_agent"
+      "edge_id": "service_ingress_to_service_analyzer",
+      "from_node": "service_ingress",
+      "message_type": "service_ingress_result",
+      "to_node": "service_analyzer"
+    },
+    {
+      "edge_id": "service_analyzer_to_service_memory",
+      "from_node": "service_analyzer",
+      "message_type": "service_analyzer_result",
+      "to_node": "service_memory"
     }
   ],
   "entrypoints": [
-    "question_generator"
+    "service_ingress"
   ],
-  "graph_id": "general_native_live_monitor_daemon_v1",
+  "graph_id": "general_python_sdk_live_research_service_v1",
   "initial_inputs": {
-    "question_generator": [
+    "service_ingress": [
       {
-        "tick": 0
+        "args": [
+          "charging-station-health"
+        ],
+        "kwargs": {}
       }
     ]
   },
-  "job_name": "general-native-live-monitor-daemon",
+  "job_name": "general-python-sdk-live-research-service",
   "license": "LICENSE.md",
   "term": "TERM.md",
   "manifest_version": "1.0",
+  "type": "service",
   "requirements": {
     "cpu": {
       "min_cores": 1
@@ -46,20 +55,25 @@
       "library": "../mn-agents/index.json",
       "nodes": [
         {
-          "node_id": "question_generator",
-          "uses": "mn-agents.data_module@1.0.0"
+          "node_id": "service_ingress",
+          "uses": "mn-agents.data_python_executor@1.0.0"
         },
         {
-          "node_id": "answer_agent",
-          "uses": "mn-agents.data_module@1.0.0"
+          "node_id": "service_analyzer",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "service_memory",
+          "uses": "mn-agents.data_python_executor@1.0.0"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
       "rendered_output": "manifest.rendered.json or runtime metadata",
       "renderer": "mn_blueprint_support.render_manifest_agent_templates"
     },
-    "blueprint_id": "general_native_live_monitor_daemon",
+    "blueprint_id": "general_python_sdk_live_research_service",
     "category": "general",
+    "compiler_version": "0.2.0",
     "configuration_contract": {
       "optional_files": [
         "scenario.json",
@@ -76,8 +90,10 @@
         "TERM.md"
       ]
     },
-    "customizable_for": "Operations telemetry, rules engines, high-frequency synthetic simulations.",
-    "description": "Use this blueprint to run a lightweight native monitor that keeps producing decisions over live state until you stop it.",
+    "customizable_for": "Incident monitors, market watchers, research crawlers.",
+    "description": "Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns.",
+    "generated_at": "2026-04-30T11:17:52+00:00",
+    "generated_by": "mn-python-sdk",
     "init_config_review": {
       "checks": [
         "identity",
@@ -183,6 +199,7 @@
         "llm",
         "outputs",
         "logging",
+        "resources",
         "real_adapters",
         "streams",
         "input_skills",
@@ -217,7 +234,10 @@
         "web_ui.json",
         "ui.json",
         "web/index.html",
-        "logs.jsonl"
+        "logs.jsonl",
+        "logs.index.json",
+        "human.jsonl",
+        "resources.jsonl"
       ],
       "output_adapters": [
         "local_run_store"
@@ -261,33 +281,42 @@
       ]
     },
     "llm": {},
-    "llm_agent_role": "Native BEAM monitoring agents.",
-    "name": "Native Live Monitor Daemon",
-    "output": "Streaming monitor events and summaries.",
+    "llm_agent_role": "Python service coordinator.",
+    "manifest_schema": "1.0",
+    "name": "Python SDK Live Research Service",
+    "output": "Ongoing events and final cancellation-safe state.",
     "output_contract": {
-      "events": "typed event objects with payload",
+      "events": "blueprint_report",
       "events_jsonl": "events.jsonl",
       "final_artifact_json": "final_artifact.json",
       "local_run_store": "~/.mn/runs/<run_id>/",
       "logs_jsonl": "logs.jsonl",
       "response_schema": "mn.blueprint.response.v1",
       "result_json": "result.json",
-      "status": "JSON lines on stderr",
-      "stdout": "single JSON object, event envelope, or bundle path"
+      "stdout": "JSON result with final_artifact and run-store metadata"
     },
-    "problem_solved": "Some simulations and monitors need low-overhead native agents that can run continuously and emit structured updates.",
+    "problem_solved": "Many agent workflows need to keep running, react to new events, and maintain operational state rather than finish after one request.",
+    "python_source_mode": true,
+    "python_workflow": {
+      "class": "GeneralPythonSdkLiveResearchService",
+      "description": "Generate the Python SDK-defined live research service bundle.",
+      "includes": [
+        "service_health_simulation.py"
+      ],
+      "module": "workflow",
+      "status_message": "generating Python SDK live research service bundle"
+    },
     "quick_test": {
-      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs.",
-      "enabled": false,
-      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+      "enabled": true
     },
     "runtime_features": [
-      "native agents",
-      "daemon mode",
-      "streaming events",
-      "low-overhead simulation"
+      "Python SDK",
+      "service execution",
+      "live loop",
+      "runtime events"
     ],
-    "simulation_type": "Live native signal monitor.",
+    "simulation_type": "Live service loop with repeated inputs.",
+    "source_hash": "88528011c2a28c55dbfb3bc2c966feb0371316baf8beac8f415bd6f5caaad198",
     "standard": {
       "config_path": "config/default.json",
       "default_input_adapter": "mock",
@@ -316,11 +345,6 @@
       "run_store": "~/.mn/runs/<run_id>/",
       "version": "1.0"
     },
-    "status_logging": {
-      "env": "MN_BLUEPRINT_LOG_LEVEL",
-      "format": "jsonl",
-      "stream": "stderr"
-    },
     "streaming": {
       "backpressure": {
         "drop_policy": "skip_with_error",
@@ -333,43 +357,128 @@
         "queue_size": 1000
       },
       "kind": "data",
-      "primary_stream": "monitor_ingress",
+      "primary_stream": "research_updates",
       "transport": "websocket",
       "websocket_skill": true
     },
-    "target_user": "Runtime evaluators comparing native BEAM agents with external worker processes."
+    "target_user": "Developers building live monitors, scheduled analysis loops, or long-running research agents."
   },
-  "name": "Native Live Monitor Daemon",
+  "name": "Python SDK Live Research Service",
   "nodes": [
     {
-      "node_id": "question_generator",
-      "uses": "mn-agents.data_module@1.0.0",
+      "node_id": "service_ingress",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
-        "answer_node": "answer_agent",
-        "interval_ms": 10000,
-        "max_x": 500,
-        "max_y": 25,
-        "min_x": 10,
-        "min_y": 2,
-        "module": "MirrorNeuron.Examples.DivisibilityMonitor.QuestionGenerator",
-        "module_source": "beam_modules/question_generator.ex",
+        "backpressure": {
+          "high_watermark": 3,
+          "low_watermark": 1,
+          "max_queue_depth": 6,
+          "retry_after_ms": 500
+        },
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "0",
+          "MN_PY_FINAL": "0",
+          "MN_PY_METHOD": "ingress",
+          "MN_PY_OUTPUT_TYPE": "service_ingress_result",
+          "MN_PY_OWNER_CLASS": "ServiceAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-service_ingress",
         "node_type": "stream",
-        "role": "question_source"
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "role": "root_coordinator",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "mn_worker.py",
+        "timeout_seconds": 10,
+        "upload_path": "mn_python_workflow",
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "upload_as": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
       }
     },
     {
-      "node_id": "answer_agent",
-      "uses": "mn-agents.data_module@1.0.0",
+      "node_id": "service_analyzer",
+      "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
-        "module": "MirrorNeuron.Examples.DivisibilityMonitor.AnswerAgent",
-        "module_source": "beam_modules/answer_agent.ex",
+        "backpressure": {
+          "high_watermark": 3,
+          "low_watermark": 1,
+          "max_queue_depth": 6,
+          "retry_after_ms": 500
+        },
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "0",
+          "MN_PY_FINAL": "0",
+          "MN_PY_METHOD": "analyzer",
+          "MN_PY_OUTPUT_TYPE": "service_analyzer_result",
+          "MN_PY_OWNER_CLASS": "ServiceAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-service_analyzer",
         "node_type": "stream",
-        "role": "answer_sink"
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "mn_worker.py",
+        "timeout_seconds": 10,
+        "upload_path": "mn_python_workflow",
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "upload_as": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
+      }
+    },
+    {
+      "node_id": "service_memory",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "backpressure": {
+          "high_watermark": 3,
+          "low_watermark": 1,
+          "max_queue_depth": 6,
+          "retry_after_ms": 500
+        },
+        "environment": {
+          "MN_PY_COMPLETE_FINAL": "0",
+          "MN_PY_FINAL": "1",
+          "MN_PY_METHOD": "memory",
+          "MN_PY_OUTPUT_TYPE": "service_memory_result",
+          "MN_PY_OWNER_CLASS": "ServiceAgents",
+          "MN_PY_SOURCE_MODULE": "workflow"
+        },
+        "max_attempts": 2,
+        "name_prefix": "py-service_memory",
+        "node_type": "stream",
+        "output_message_type": null,
+        "retry_backoff_ms": 250,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "mn_worker.py",
+        "timeout_seconds": 10,
+        "upload_path": "mn_python_workflow",
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
+        "upload_as": "mn_python_workflow",
+        "workdir": "/sandbox/job/mn_python_workflow"
       }
     }
   ],
   "policies": {
-    "recovery_mode": "local_restart"
-  },
-  "requiredContextEngine": false
+    "backpressure": {
+      "external_input": "retry_later",
+      "propagation": "downstream_to_upstream",
+      "strategy": "bounded_queue"
+    },
+    "recovery_mode": "cluster_recover",
+    "stream_mode": "live"
+  }
 }

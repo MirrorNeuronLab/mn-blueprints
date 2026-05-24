@@ -1,5 +1,4 @@
 {
-  "daemon": false,
   "description": "Use this blueprint to model buyer-supplier negotiation rounds and compare offers as demand, price, and capacity change.",
   "edges": [
     {
@@ -185,6 +184,7 @@
         "llm",
         "outputs",
         "logging",
+        "resources",
         "real_adapters",
         "streams",
         "input_skills",
@@ -219,7 +219,10 @@
         "web_ui.json",
         "ui.json",
         "web/index.html",
-        "logs.jsonl"
+        "logs.jsonl",
+        "logs.index.json",
+        "human.jsonl",
+        "resources.jsonl"
       ],
       "output_adapters": [
         "local_run_store"

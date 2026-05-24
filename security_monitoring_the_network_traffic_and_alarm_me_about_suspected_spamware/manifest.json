@@ -1,5 +1,4 @@
 {
-  "daemon": false,
   "description": "Use this blueprint to monitor network events for suspected spyware or hacking behavior and raise evidence-backed alerts for security review.",
   "edges": [
     {

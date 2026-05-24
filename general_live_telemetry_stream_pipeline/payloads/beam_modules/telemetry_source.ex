@@ -1,4 +1,4 @@
-defmodule MirrorNeuron.Examples.StreamBasicDaemon.TelemetrySource do
+defmodule MirrorNeuron.Examples.StreamBasicService.TelemetrySource do
   use MirrorNeuron.AgentTemplate
 
   alias MirrorNeuron.Message

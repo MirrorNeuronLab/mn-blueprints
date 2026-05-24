@@ -117,13 +117,13 @@ def test_host_local_uploads_shared_skills_with_each_executor():
     executor_nodes = [
         node
         for node in manifest["nodes"]
-        if node.get("agent_type") == "executor"
-        and node.get("config", {}).get("runner_module") == "MirrorNeuron.Runner.HostLocal"
+        if (node.get("with") or node.get("config") or {}).get("runner_module") == "MirrorNeuron.Runner.HostLocal"
     ]
 
     assert executor_nodes
     for node in executor_nodes:
-        upload_paths = node["config"].get("upload_paths", [])
+        node_config = node.get("with") or node.get("config") or {}
+        upload_paths = node_config.get("upload_paths", [])
         sources = {entry["source"] for entry in upload_paths}
         assert "_shared_skills/business_email_campaign_skill" in sources
         assert "_shared_skills/mn_email_delivery_skill" in sources

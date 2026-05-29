@@ -70,7 +70,7 @@ def test_category_metadata_covers_filterable_index_categories() -> None:
         if _category_slug(entry["category"]) == "finance"
     ]
     assert finance_blueprints
-    assert all(blueprint_id.startswith("finance_") for blueprint_id in finance_blueprints)
+    assert all(not blueprint_id.startswith(("general_", "business_", "finance_", "science_")) for blueprint_id in finance_blueprints)
 
 
 def test_index_entries_point_to_loadable_blueprint_folders() -> None:
@@ -115,7 +115,7 @@ def test_index_entries_point_to_loadable_blueprint_folders() -> None:
         assert manifest["manifest_version"] == "1.0"
         assert manifest["graph_id"] == entry["graph_id"]
         assert manifest["job_name"] == entry["job_name"]
-        assert entry["id"].startswith(("general_", "business_", "finance_", "science_"))
+        assert not entry["id"].startswith(("general_", "business_", "finance_", "science_"))
         assert manifest["metadata"]["blueprint_id"] == entry["id"]
         assert manifest["metadata"]["name"] == entry["name"]
         assert manifest["metadata"]["description"] == entry["description"]
@@ -140,14 +140,14 @@ def test_optional_knowledge_folder_contract() -> None:
         actual_subdirs = {path.name for path in knowledge_dir.iterdir() if path.is_dir()}
         assert actual_subdirs == expected_subdirs, blueprint_dir
 
-    lifecycle_root = ROOT / "business_customer_lifecycle_email_copilot"
+    lifecycle_root = ROOT / "customer_lifecycle_email_auto"
     assert (lifecycle_root / "knowledge" / "init" / "knowledge.json").exists()
     assert not (lifecycle_root / "input" / "knowledge.json").exists()
     assert not list((lifecycle_root / "payloads").glob("*/input/knowledge.json"))
 
 
 def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() -> None:
-    blueprint_id = "business_context_memory_compression_code_analsysis"
+    blueprint_id = "codebase_memory_compression_analysis"
     blueprint_dir = ROOT / blueprint_id
     manifest = json.loads((blueprint_dir / "manifest.json").read_text())
     fixture = json.loads((blueprint_dir / "payloads" / "repo_fixture" / "django_tree_fixture.json").read_text())
@@ -196,7 +196,7 @@ def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() ->
 
 
 def test_finance_property_alpha_memory_benchmark_contract(tmp_path: Path) -> None:
-    blueprint_id = "finance_zip_code_property_alpha_engine_with_memory"
+    blueprint_id = "zip_code_property_memory_ranking"
     blueprint_dir = ROOT / blueprint_id
     manifest = json.loads((blueprint_dir / "manifest.json").read_text())
     config = json.loads((blueprint_dir / "config" / "default.json").read_text())
@@ -252,8 +252,8 @@ def test_finance_property_alpha_memory_benchmark_contract(tmp_path: Path) -> Non
 @pytest.mark.parametrize(
     "blueprint_id",
     [
-        "general_python_sdk_live_research_service",
-        "general_python_sdk_research_pipeline",
+        "python_sdk_research_service",
+        "python_sdk_research_pipeline",
     ],
 )
 def test_python_sdk_source_blueprints_run_directly_and_generate_bundle(
@@ -480,7 +480,7 @@ def test_blueprint_standard_imports_shared_mn_skill_implementation() -> None:
     )
     scenarios_text = (SKILL_SRC / "mn_blueprint_support" / "scenarios.py").read_text()
     assert "load_blueprint_json_files(\"scenario.json\")" in scenarios_text
-    assert "general_closed_loop_agent_runtime" not in scenarios_text
+    assert "closed_loop_agent_runtime" not in scenarios_text
 
 
 def test_blueprint_repo_does_not_carry_support_code() -> None:
@@ -648,7 +648,7 @@ def test_blueprint_cli_runs_with_mock_llm(blueprint_id: str, tmp_path: Path) -> 
 def test_required_category_counts_and_prefixes() -> None:
     categories = {}
     for blueprint_id, spec in SCENARIOS.items():
-        assert blueprint_id.startswith(("general_", "business_", "finance_", "science_"))
+        assert not blueprint_id.startswith(("general_", "business_", "finance_", "science_"))
         assert not blueprint_id.startswith("financial_")
         categories.setdefault(spec.category, []).append(blueprint_id)
 
@@ -661,7 +661,7 @@ def test_required_category_counts_and_prefixes() -> None:
 
 def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> None:
     human_result = run_blueprint(
-        "general_human_approval_decision_gate",
+        "human_approval_gate",
         inputs={"steps": 2, "human_approval": "approve_high_confidence"},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -670,7 +670,7 @@ def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> 
     assert all(step["human_gate"]["request"]["request_id"] for step in human_result["timeline"])
 
     human_loop_result = run_blueprint(
-        "general_human_in_the_loop_workflow",
+        "human_review_workflow",
         inputs={"steps": 2, "human_response": {"decision": "revise", "approved": False, "action": "hold_policy"}},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -679,7 +679,7 @@ def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> 
     assert all(step["route_decisions"] for step in human_loop_result["timeline"])
 
     tool_result = run_blueprint(
-        "general_llm_tool_orchestration_loop",
+        "llm_tool_orchestration",
         inputs={"steps": 2},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -687,7 +687,7 @@ def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> 
     assert all("tool_result" in step["observation"] for step in tool_result["timeline"])
 
     negotiation_result = run_blueprint(
-        "general_multi_agent_contract_negotiation_loop",
+        "contract_negotiation_simulation",
         inputs={"steps": 2},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -698,7 +698,7 @@ def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> 
 def test_run_store_writes_global_execution_artifacts(tmp_path: Path) -> None:
     run_id = "test-run-store-contract"
     result = run_blueprint(
-        "business_supply_chain_resilience_war_room",
+        "supply_chain_resilience_simulation",
         inputs={"steps": 2, "seed": 99},
         llm_client=FakeLLMClient(),
         run_id=run_id,
@@ -738,7 +738,7 @@ def test_run_store_writes_global_execution_artifacts(tmp_path: Path) -> None:
 
 def test_supply_chain_blueprint_reports_pyomo_optimization_plan(tmp_path: Path) -> None:
     result = run_blueprint(
-        "business_supply_chain_resilience_war_room",
+        "supply_chain_resilience_simulation",
         inputs={
             "steps": 2,
             "seed": 17,
@@ -770,7 +770,7 @@ def test_file_input_adapter_can_replace_mock_payload(tmp_path: Path) -> None:
     input_path.write_text(json.dumps({"steps": 3, "seed": 321, "initial_backlog": 41}) + "\n")
 
     result = run_blueprint(
-        "general_closed_loop_agent_runtime",
+        "closed_loop_agent_runtime",
         input_file=input_path,
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -784,7 +784,7 @@ def test_file_input_adapter_can_replace_mock_payload(tmp_path: Path) -> None:
 
 def test_run_store_can_be_disabled(tmp_path: Path) -> None:
     result = run_blueprint(
-        "general_closed_loop_agent_runtime",
+        "closed_loop_agent_runtime",
         inputs={"steps": 1},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -796,7 +796,7 @@ def test_run_store_can_be_disabled(tmp_path: Path) -> None:
 
 
 def test_specialized_motion_worker_uses_shared_run_contract(tmp_path: Path, monkeypatch, capsys) -> None:
-    worker_path = ROOT / "science_multi_agent_motion_planning_lab" / "payloads" / "world_worker" / "scripts" / "run_shared_world.py"
+    worker_path = ROOT / "motion_planning_simulation" / "payloads" / "world_worker" / "scripts" / "run_shared_world.py"
     spec = importlib.util.spec_from_file_location("motion_worker_contract_test", worker_path)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
@@ -896,7 +896,7 @@ def test_specialized_motion_worker_uses_shared_run_contract(tmp_path: Path, monk
 
     result = json.loads(capsys.readouterr().out)
     run_dir = runs_root / "motion-worker-contract-run"
-    assert result["identity"]["blueprint_id"] == "science_multi_agent_motion_planning_lab"
+    assert result["identity"]["blueprint_id"] == "motion_planning_simulation"
     assert result["identity"]["run_id"] == "motion-worker-contract-run"
     assert result["seed"] == 33
     assert result["max_cycles"] == 2
@@ -929,7 +929,7 @@ def test_specialized_motion_worker_uses_shared_run_contract(tmp_path: Path, monk
 
 def test_invalid_step_count_is_rejected() -> None:
     with pytest.raises(ValueError, match="steps"):
-        run_blueprint("business_supply_chain_resilience_war_room", inputs={"steps": 0}, llm_client=FakeLLMClient())
+        run_blueprint("supply_chain_resilience_simulation", inputs={"steps": 0}, llm_client=FakeLLMClient())
 
 
 @pytest.mark.ollama
@@ -943,7 +943,7 @@ def test_optional_ollama_integration_smoke(tmp_path: Path) -> None:
         pytest.skip(f"Ollama model {model} is not available at {api_base}")
 
     client = OllamaLLMClient.from_env(strict=True, prefer_shared_skill=False)
-    result = run_blueprint("general_closed_loop_agent_runtime", inputs={"steps": 1, "seed": 11}, llm_client=client, runs_root=tmp_path)
+    result = run_blueprint("closed_loop_agent_runtime", inputs={"steps": 1, "seed": 11}, llm_client=client, runs_root=tmp_path)
 
     assert result["llm"]["provider"] == "ollama"
     assert result["llm"]["calls"] == 1

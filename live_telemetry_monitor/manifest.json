@@ -1,0 +1,453 @@
+{
+  "description": "Use this blueprint to process live telemetry chunks, detect changing signal patterns, and summarize what operators need to notice.",
+  "edges": [
+    {
+      "edge_id": "ingress_to_source",
+      "from_node": "ingress",
+      "message_type": "stream_start",
+      "to_node": "telemetry_source"
+    },
+    {
+      "edge_id": "source_to_detector",
+      "from_node": "telemetry_source",
+      "message_type": "telemetry_chunk",
+      "to_node": "peak_detector"
+    }
+  ],
+  "entrypoints": [
+    "ingress"
+  ],
+  "graph_id": "live_telemetry_monitor_v1",
+  "init_config_review": {
+    "fields": [
+      {
+        "default": "sensor-alpha",
+        "description": "Telemetry source identifier.",
+        "label": "Device ID",
+        "path": "telemetry.device_id"
+      },
+      {
+        "default": 1000,
+        "description": "Milliseconds between telemetry chunks.",
+        "label": "Interval ms",
+        "path": "telemetry.interval_ms"
+      },
+      {
+        "default": "gzip",
+        "description": "Telemetry chunk encoding: gzip or identity.",
+        "label": "Content encoding",
+        "path": "telemetry.content_encoding"
+      },
+      {
+        "default": 2.4,
+        "description": "Sensitivity multiplier for peak detection.",
+        "label": "Spike multiplier",
+        "path": "peak_detection.spike_multiplier"
+      },
+      {
+        "default": 20.0,
+        "description": "Minimum absolute signal jump to count as a spike.",
+        "label": "Min spike delta",
+        "path": "peak_detection.min_spike_delta"
+      }
+    ],
+    "instruction": "Review telemetry source and peak detection settings before launching the stream pipeline.",
+    "required": false
+  },
+  "initial_inputs": {
+    "ingress": [
+      {
+        "description": "Continuously produce gzipped NDJSON telemetry chunks between stream agents until manually cancelled.",
+        "scenario": "telemetry_stream"
+      }
+    ]
+  },
+  "job_name": "live-telemetry-monitor",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
+  "manifest_version": "1.0",
+  "type": "service",
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    },
+    "disk": {
+      "min_gb": 1
+    }
+  },
+  "input_validation": {
+    "rules": []
+  },
+  "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "ingress",
+          "uses": "mn-agents.control_router@1.0.0"
+        },
+        {
+          "node_id": "telemetry_source",
+          "uses": "mn-agents.data_module@1.0.0"
+        },
+        {
+          "node_id": "peak_detector",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
+    "blueprint_id": "live_telemetry_monitor",
+    "category": "general",
+    "configuration_contract": {
+      "optional_files": [
+        "scenario.json",
+        "config/overwrite.json",
+        "knowledge/"
+      ],
+      "required_files": [
+        "manifest.json",
+        "README.md",
+        "SPEC.md",
+        "config/default.json",
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
+      ]
+    },
+    "customizable_for": "IoT telemetry, application logs, market data, operational sensors.",
+    "description": "Use this blueprint to process live telemetry chunks, detect changing signal patterns, and summarize what operators need to notice.",
+    "init_config_review": {
+      "checks": [
+        "identity",
+        "mode",
+        "inputs",
+        "streams",
+        "input_skills",
+        "outputs",
+        "privacy",
+        "budgets"
+      ],
+      "required": true
+    },
+    "interfaces": {
+      "channels": {
+        "artifacts": {
+          "artifacts": [
+            "run.json",
+            "config.json",
+            "inputs.json",
+            "events.jsonl",
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Stable run-store files and domain-specific outputs.",
+          "optional_artifacts": [
+            "job.json",
+            "web_ui.json",
+            "ui.json",
+            "web/index.html",
+            "logs.jsonl"
+          ]
+        },
+        "events": {
+          "artifact": "events.jsonl",
+          "description": "Append-only workflow events."
+        },
+        "input_skills": {
+          "description": "Connector-backed or reusable skill-backed input sources."
+        },
+        "inputs": {
+          "artifact": "inputs.json",
+          "description": "Resolved runtime inputs and adapter provenance."
+        },
+        "logs": {
+          "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "stream": "stdout/stderr"
+        },
+        "output_skills": {
+          "description": "Optional fan-out destinations after local run-store writes."
+        },
+        "outputs": {
+          "artifacts": [
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Primary result and final user-facing artifact."
+        },
+        "streams": {
+          "default": [
+            "events"
+          ],
+          "description": "Named data or event streams exposed by the blueprint.",
+          "kinds": [
+            "audio",
+            "video",
+            "data",
+            "multimodal"
+          ],
+          "transports": [
+            "file",
+            "http",
+            "https",
+            "rtsp",
+            "rtmp",
+            "webrtc",
+            "websocket",
+            "socketio",
+            "tcp",
+            "udp",
+            "sse",
+            "kafka",
+            "mqtt",
+            "custom"
+          ]
+        },
+        "web_ui": {
+          "artifacts": [
+            "web_ui.json",
+            "ui.json",
+            "web/index.html"
+          ],
+          "description": "Optional web input/output handles."
+        }
+      },
+      "config": [
+        "standard_version",
+        "identity",
+        "mode",
+        "metadata",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "resources",
+        "real_adapters",
+        "streams",
+        "input_skills",
+        "output_skills",
+        "error_handling",
+        "state",
+        "capabilities",
+        "privacy",
+        "triggers",
+        "backpressure",
+        "determinism",
+        "schemas",
+        "budgets",
+        "agent_handoffs",
+        "web_ui",
+        "interfaces",
+        "execution_model"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "optional_outputs": [
+        "job.json",
+        "web_ui.json",
+        "ui.json",
+        "web/index.html",
+        "logs.jsonl",
+        "logs.index.json",
+        "human.jsonl",
+        "resources.jsonl"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "response_schema": "mn.blueprint.response.v1",
+      "stream_kinds": [
+        "audio",
+        "video",
+        "data",
+        "multimodal"
+      ],
+      "stream_transports": [
+        "file",
+        "http",
+        "https",
+        "rtsp",
+        "rtmp",
+        "webrtc",
+        "websocket",
+        "socketio",
+        "tcp",
+        "udp",
+        "sse",
+        "kafka",
+        "mqtt",
+        "custom"
+      ],
+      "web_ui_adapters": [
+        "none",
+        "static_html",
+        "gradio",
+        "custom"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Stream processor and summarizer.",
+    "name": "Live Telemetry Monitor",
+    "output": "Signal summary and stream result artifacts.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "events_jsonl": "events.jsonl",
+      "final_artifact_json": "final_artifact.json",
+      "local_run_store": "~/.mn/runs/<run_id>/",
+      "logs_jsonl": "logs.jsonl",
+      "response_schema": "mn.blueprint.response.v1",
+      "result_json": "result.json",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object, event envelope, or bundle path"
+    },
+    "problem_solved": "Streaming systems require backpressure-aware routing, stateful workers, and outputs that remain interpretable as events arrive.",
+    "quick_test": {
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "stream agents",
+      "live events",
+      "stateful summarization",
+      "service mode"
+    ],
+    "simulation_type": "Live telemetry stream.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load_metadata -> resolve_config -> load_inputs -> start_run_store -> observe_simulation_state -> call_llm_agent -> evaluate_workflow_state -> route_by_context -> request_human_input -> apply_decision_to_simulation -> emit_events -> write_final_artifact -> fan_out_output_skills",
+      "execution_steps": [
+        "load_metadata",
+        "resolve_config",
+        "load_inputs",
+        "start_run_store",
+        "observe_simulation_state",
+        "call_llm_agent",
+        "evaluate_workflow_state",
+        "route_by_context",
+        "request_human_input",
+        "apply_decision_to_simulation",
+        "emit_events",
+        "write_final_artifact",
+        "fan_out_output_skills"
+      ],
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "streaming": {
+      "backpressure": {
+        "drop_policy": "skip_with_error",
+        "llm": {
+          "max_calls_per_minute": 30,
+          "max_concurrent_calls": 2
+        },
+        "max_concurrency": 4,
+        "max_events_per_second": 25,
+        "queue_size": 1000
+      },
+      "kind": "data",
+      "primary_stream": "telemetry_ingress",
+      "transport": "websocket",
+      "websocket_skill": true
+    },
+    "target_user": "Developers building event-stream workflows and runtime observability paths."
+  },
+  "name": "Live Telemetry Monitor",
+  "nodes": [
+    {
+      "node_id": "ingress",
+      "uses": "mn-agents.control_router@1.0.0",
+      "with": {
+        "emit_type": "stream_start",
+        "node_type": "map",
+        "role": "root_coordinator"
+      }
+    },
+    {
+      "node_id": "telemetry_source",
+      "uses": "mn-agents.data_module@1.0.0",
+      "with": {
+        "baseline": 24,
+        "chunk_size": 6,
+        "content_encoding": "gzip",
+        "device_id": "sensor-alpha",
+        "interval_ms": 1000,
+        "jitter": 4,
+        "module": "MirrorNeuron.Examples.StreamBasicService.TelemetrySource",
+        "module_source": "beam_modules/telemetry_source.ex",
+        "node_type": "stream",
+        "peak_every": 20,
+        "peak_height": 55,
+        "role": "producer",
+        "target_node": "peak_detector"
+      }
+    },
+    {
+      "node_id": "peak_detector",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "environment": {
+          "MIN_SPIKE_DELTA": "20.0",
+          "SPIKE_MULTIPLIER": "2.4",
+          "WARMUP_POINTS": "5",
+          "WINDOW_SIZE": "8"
+        },
+        "node_type": "stream",
+        "output_message_type": null,
+        "role": "consumer",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/detect_stream_peaks.py",
+        "upload_path": "stream_worker",
+        "command": [
+          "python3",
+          "scripts/detect_stream_peaks.py"
+        ],
+        "upload_as": "stream_worker",
+        "workdir": "/sandbox/job/stream_worker"
+      }
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover",
+    "stream_mode": "live"
+  },
+  "requiredContextEngine": false
+}

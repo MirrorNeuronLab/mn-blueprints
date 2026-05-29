@@ -1,0 +1,720 @@
+{
+  "description": "Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result.",
+  "edges": [
+    {
+      "edge_id": "codegen_r1_to_review_r1",
+      "from_node": "codegen_round_1",
+      "message_type": "codegen_round_1_result",
+      "to_node": "review_round_1"
+    },
+    {
+      "edge_id": "review_r1_to_codegen_r2",
+      "from_node": "review_round_1",
+      "message_type": "review_round_1_result",
+      "to_node": "codegen_round_2"
+    },
+    {
+      "edge_id": "codegen_r2_to_review_r2",
+      "from_node": "codegen_round_2",
+      "message_type": "codegen_round_2_result",
+      "to_node": "review_round_2"
+    },
+    {
+      "edge_id": "review_r2_to_codegen_r3",
+      "from_node": "review_round_2",
+      "message_type": "review_round_2_result",
+      "to_node": "codegen_round_3"
+    },
+    {
+      "edge_id": "codegen_r3_to_validator",
+      "from_node": "codegen_round_3",
+      "message_type": "codegen_round_3_result",
+      "to_node": "validator"
+    }
+  ],
+  "entrypoints": [
+    "codegen_round_1"
+  ],
+  "graph_id": "sandboxed_codegen_review_v1",
+  "init_config_review": {
+    "fields": [
+      {
+        "default": "ollama/nemotron3:33b",
+        "description": "Model used by codegen and review workers.",
+        "label": "LLM model",
+        "path": "llm.model"
+      },
+      {
+        "default": "http://192.168.4.173:11434",
+        "description": "LiteLLM/Ollama-compatible API base URL.",
+        "label": "LLM API base",
+        "path": "llm.api_base"
+      },
+      {
+        "default": 2,
+        "description": "Retry attempts per sandboxed worker.",
+        "label": "Max attempts",
+        "path": "sandbox.max_attempts"
+      },
+      {
+        "default": "Inventory report CLI",
+        "description": "Human-readable coding task title.",
+        "label": "Task title",
+        "path": "task.title"
+      }
+    ],
+    "instruction": "Review model, sandbox retry, and task settings before launching the codegen loop.",
+    "required": false
+  },
+  "initial_inputs": {
+    "codegen_round_1": [
+      {
+        "description": "Create a Python 3 script named inventory_report.py. The script must read a JSON array of inventory records from a file passed with --input or from stdin when --input is omitted. Each record has sku, category, quantity, and price. The CLI must support --format text|json and --low-stock-threshold (default 5).",
+        "requirements": [
+          "Use only the Python standard library.",
+          "Include a pure function build_report(records, low_stock_threshold=5).",
+          "The JSON output must include total_quantity, total_value, category_totals, and low_stock_skus.",
+          "Category totals must be sorted alphabetically by category name.",
+          "low_stock_skus must be sorted alphabetically.",
+          "Round total_value to two decimal places.",
+          "Expose a main() entrypoint and guard it with if __name__ == '__main__'."
+        ],
+        "sample_records": [
+          {
+            "category": "books",
+            "price": 12.5,
+            "quantity": 3,
+            "sku": "A-100"
+          },
+          {
+            "category": "books",
+            "price": 8.0,
+            "quantity": 7,
+            "sku": "B-200"
+          },
+          {
+            "category": "games",
+            "price": 59.99,
+            "quantity": 2,
+            "sku": "C-300"
+          }
+        ],
+        "task_id": "inventory-report-cli",
+        "title": "Inventory report CLI",
+        "validation": {
+          "expected": {
+            "category_totals": [
+              {
+                "category": "books",
+                "quantity": 10
+              },
+              {
+                "category": "games",
+                "quantity": 2
+              }
+            ],
+            "low_stock_skus": [
+              "A-100",
+              "C-300"
+            ],
+            "total_quantity": 12,
+            "total_value": 213.48
+          },
+          "low_stock_threshold": 4
+        }
+      }
+    ]
+  },
+  "job_name": "sandboxed-codegen-review",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
+  "manifest_version": "1.0",
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    },
+    "disk": {
+      "min_gb": 1
+    }
+  },
+  "input_validation": {
+    "rules": []
+  },
+  "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "codegen_round_1",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "review_round_1",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "codegen_round_2",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "review_round_2",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "codegen_round_3",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "validator",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
+    "blueprint_id": "sandboxed_codegen_review",
+    "category": "general",
+    "configuration_contract": {
+      "optional_files": [
+        "scenario.json",
+        "config/overwrite.json",
+        "knowledge/"
+      ],
+      "required_files": [
+        "manifest.json",
+        "README.md",
+        "SPEC.md",
+        "config/default.json",
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
+      ]
+    },
+    "customizable_for": "Internal developer tools, data scripts, code repair, controlled automation.",
+    "description": "Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result.",
+    "init_config_review": {
+      "checks": [
+        "identity",
+        "mode",
+        "inputs",
+        "streams",
+        "input_skills",
+        "outputs",
+        "privacy",
+        "budgets"
+      ],
+      "required": true
+    },
+    "interfaces": {
+      "channels": {
+        "artifacts": {
+          "artifacts": [
+            "run.json",
+            "config.json",
+            "inputs.json",
+            "events.jsonl",
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Stable run-store files and domain-specific outputs.",
+          "optional_artifacts": [
+            "job.json",
+            "web_ui.json",
+            "ui.json",
+            "web/index.html",
+            "logs.jsonl"
+          ]
+        },
+        "events": {
+          "artifact": "events.jsonl",
+          "description": "Append-only workflow events."
+        },
+        "input_skills": {
+          "description": "Connector-backed or reusable skill-backed input sources."
+        },
+        "inputs": {
+          "artifact": "inputs.json",
+          "description": "Resolved runtime inputs and adapter provenance."
+        },
+        "logs": {
+          "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "stream": "stdout/stderr"
+        },
+        "output_skills": {
+          "description": "Optional fan-out destinations after local run-store writes."
+        },
+        "outputs": {
+          "artifacts": [
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Primary result and final user-facing artifact."
+        },
+        "streams": {
+          "default": [
+            "events"
+          ],
+          "description": "Named data or event streams exposed by the blueprint.",
+          "kinds": [
+            "audio",
+            "video",
+            "data",
+            "multimodal"
+          ],
+          "transports": [
+            "file",
+            "http",
+            "https",
+            "rtsp",
+            "rtmp",
+            "webrtc",
+            "websocket",
+            "socketio",
+            "tcp",
+            "udp",
+            "sse",
+            "kafka",
+            "mqtt",
+            "custom"
+          ]
+        },
+        "web_ui": {
+          "artifacts": [
+            "web_ui.json",
+            "ui.json",
+            "web/index.html"
+          ],
+          "description": "Optional web input/output handles."
+        }
+      },
+      "config": [
+        "standard_version",
+        "identity",
+        "mode",
+        "metadata",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "resources",
+        "real_adapters",
+        "streams",
+        "input_skills",
+        "output_skills",
+        "error_handling",
+        "state",
+        "capabilities",
+        "privacy",
+        "triggers",
+        "backpressure",
+        "determinism",
+        "schemas",
+        "budgets",
+        "agent_handoffs",
+        "web_ui",
+        "interfaces",
+        "execution_model"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "optional_outputs": [
+        "job.json",
+        "web_ui.json",
+        "ui.json",
+        "web/index.html",
+        "logs.jsonl",
+        "logs.index.json",
+        "human.jsonl",
+        "resources.jsonl"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "response_schema": "mn.blueprint.response.v1",
+      "stream_kinds": [
+        "audio",
+        "video",
+        "data",
+        "multimodal"
+      ],
+      "stream_transports": [
+        "file",
+        "http",
+        "https",
+        "rtsp",
+        "rtmp",
+        "webrtc",
+        "websocket",
+        "socketio",
+        "tcp",
+        "udp",
+        "sse",
+        "kafka",
+        "mqtt",
+        "custom"
+      ],
+      "web_ui_adapters": [
+        "none",
+        "static_html",
+        "gradio",
+        "custom"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Codegen agent, review agent, validator.",
+    "name": "Sandboxed Codegen Review",
+    "output": "Generated code, review history, and validation result.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "events_jsonl": "events.jsonl",
+      "final_artifact_json": "final_artifact.json",
+      "local_run_store": "~/.mn/runs/<run_id>/",
+      "logs_jsonl": "logs.jsonl",
+      "response_schema": "mn.blueprint.response.v1",
+      "result_json": "result.json",
+      "status": "sent to stderr as JSON lines",
+      "stdout": "single JSON object or bundle path"
+    },
+    "problem_solved": "One-shot code generation is risky; production teams need review, validation, isolation, and iterative improvement before executing generated code.",
+    "quick_test": {
+      "description": "Uses smaller deterministic inputs and local mock providers where external resources are optional.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "LLM agents",
+      "sandbox validation",
+      "multi-round loop",
+      "tool creation"
+    ],
+    "simulation_type": "Iterative code-review decision loop.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load_metadata -> resolve_config -> load_inputs -> start_run_store -> observe_simulation_state -> call_llm_agent -> evaluate_workflow_state -> route_by_context -> request_human_input -> apply_decision_to_simulation -> emit_events -> write_final_artifact -> fan_out_output_skills",
+      "execution_steps": [
+        "load_metadata",
+        "resolve_config",
+        "load_inputs",
+        "start_run_store",
+        "observe_simulation_state",
+        "call_llm_agent",
+        "evaluate_workflow_state",
+        "route_by_context",
+        "request_human_input",
+        "apply_decision_to_simulation",
+        "emit_events",
+        "write_final_artifact",
+        "fan_out_output_skills"
+      ],
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Engineering teams evaluating safe LLM coding workflows."
+  },
+  "name": "Sandboxed Codegen Review",
+  "nodes": [
+    {
+      "node_id": "codegen_round_1",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/run_llm_step.py",
+          "codegen",
+          "1"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "max_attempts": 2,
+        "name_prefix": "codegen-r1",
+        "node_type": "generic",
+        "output_message_type": "codegen_round_1_result",
+        "pass_env": [
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "retry_backoff_ms": 500,
+        "role": "root_coordinator",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "llm_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
+      }
+    },
+    {
+      "node_id": "review_round_1",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/run_llm_step.py",
+          "review",
+          "1"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "max_attempts": 2,
+        "name_prefix": "review-r1",
+        "node_type": "generic",
+        "output_message_type": "review_round_1_result",
+        "pass_env": [
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "llm_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
+      }
+    },
+    {
+      "node_id": "codegen_round_2",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/run_llm_step.py",
+          "codegen",
+          "2"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "max_attempts": 2,
+        "name_prefix": "codegen-r2",
+        "node_type": "generic",
+        "output_message_type": "codegen_round_2_result",
+        "pass_env": [
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "llm_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
+      }
+    },
+    {
+      "node_id": "review_round_2",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/run_llm_step.py",
+          "review",
+          "2"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "max_attempts": 2,
+        "name_prefix": "review-r2",
+        "node_type": "generic",
+        "output_message_type": "review_round_2_result",
+        "pass_env": [
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "llm_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
+      }
+    },
+    {
+      "node_id": "codegen_round_3",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "python3",
+          "scripts/run_llm_step.py",
+          "codegen",
+          "3"
+        ],
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "max_attempts": 2,
+        "name_prefix": "codegen-r3",
+        "node_type": "generic",
+        "output_message_type": "codegen_round_3_result",
+        "pass_env": [
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "retry_backoff_ms": 500,
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "llm_worker",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
+      }
+    },
+    {
+      "node_id": "validator",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "complete_job": true,
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b"
+        },
+        "max_attempts": 2,
+        "name_prefix": "validator",
+        "node_type": "generic",
+        "output_message_type": "validation_result",
+        "pass_env": [
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY"
+        ],
+        "retry_backoff_ms": 500,
+        "script": "scripts/validate_candidate.py",
+        "upload_path": "llm_worker",
+        "command": [
+          "python3",
+          "scripts/validate_candidate.py"
+        ],
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false,
+        "upload_as": "llm_worker",
+        "workdir": "/sandbox/job/llm_worker"
+      }
+    }
+  ],
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  }
+}

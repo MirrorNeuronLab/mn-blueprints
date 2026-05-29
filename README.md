@@ -10,16 +10,16 @@ Shared entries in `mn-agents` are generic agent templates. A blueprint actualize
 
 ## Categories
 
-Use these prefixes for new blueprints:
+Use descriptive blueprint IDs that tell end users what the workflow does. Do not prefix IDs with the category; category filtering comes from metadata and `index.json`.
 
-| Prefix | Naming family | Use for |
-| --- | --- | --- |
-| `general_` | General | Runtime patterns, reusable workflow capabilities, and developer examples. |
-| `business_` | Business | Operations, revenue, service, supply chain, safety, and workflow decisions. |
-| `finance_` | Finance | Market, portfolio, credit, claims, property, and investment workflows. |
-| `science_` | Science | Public health, traffic, climate, lab, ecosystem, and research simulations. |
+| Category | Use for |
+| --- | --- |
+| General | Runtime patterns, reusable workflow capabilities, and developer examples. |
+| Business | Operations, revenue, service, supply chain, safety, and workflow decisions. |
+| Finance | Market, portfolio, credit, claims, property, and investment workflows. |
+| Science | Public health, traffic, climate, lab, ecosystem, and research simulations. |
 
-New finance blueprints should use `finance_`, not `financial_`. Historical aliases remain only for migration.
+Simulation-oriented blueprint IDs should end with `_simulation`; document or email automation blueprint IDs should end with `_auto`.
 
 Category filtering uses the `category` value in `index.json`; `category.json` lists the canonical display names and slugs exposed to clients.
 
@@ -43,50 +43,50 @@ jq -r '.[] | select((.category | ascii_downcase) == "finance") | .id' index.json
 
 | Blueprint | Spec | Category | Summary |
 | --- | --- | --- | --- |
-| [`business_context_memory_compression_code_analsysis`](business_context_memory_compression_code_analsysis/README.md) | [SPEC](business_context_memory_compression_code_analsysis/SPEC.md) | Engineering | Large-repo code analysis memory benchmark with bounded context packets. |
-| [`business_customer_lifecycle_email_copilot`](business_customer_lifecycle_email_copilot/README.md) | [SPEC](business_customer_lifecycle_email_copilot/SPEC.md) | Business | Lifecycle email workflow with campaign, delivery, reply, and policy state. |
-| [`business_dynamic_pricing_profit_optimizer`](business_dynamic_pricing_profit_optimizer/README.md) | [SPEC](business_dynamic_pricing_profit_optimizer/SPEC.md) | Business | Pricing workflow with demand, competitor price, inventory, and revenue state. |
-| [`business_facility_safety_video_guardian`](business_facility_safety_video_guardian/README.md) | [SPEC](business_facility_safety_video_guardian/SPEC.md) | Security | Video sampling workflow with alert state and escalation decisions. |
-| [`business_revenue_retention_copilot`](business_revenue_retention_copilot/README.md) | [SPEC](business_revenue_retention_copilot/SPEC.md) | Business | Customer health and churn-risk workflow with intervention planning. |
-| [`business_service_capacity_command_center`](business_service_capacity_command_center/README.md) | [SPEC](business_service_capacity_command_center/SPEC.md) | Business | Queue, staffing, and SLA workflow for service-capacity decisions. |
-| [`business_supply_chain_resilience_war_room`](business_supply_chain_resilience_war_room/README.md) | [SPEC](business_supply_chain_resilience_war_room/SPEC.md) | Business | Inventory, demand, and supplier-delay workflow with mitigation planning. |
-| [`business_ai_strategy_workbench`](business_ai_strategy_workbench/README.md) | [SPEC](business_ai_strategy_workbench/SPEC.md) | Business | Enterprise discovery workflow that produces board-ready recommendation artifacts. |
-| [`business_ai_control_room`](business_ai_control_room/README.md) | [SPEC](business_ai_control_room/SPEC.md) | Security | AI, cyber, and control readiness workflow with evidence mapping and remediation planning. |
-| [`business_vendor_decision_agent`](business_vendor_decision_agent/README.md) | [SPEC](business_vendor_decision_agent/SPEC.md) | Business | Vendor comparison, RFP, scoring, roadmap, and negotiation workflow. |
-| [`finance_claim_risk_triage_copilot`](finance_claim_risk_triage_copilot/README.md) | [SPEC](finance_claim_risk_triage_copilot/SPEC.md) | Finance | Claim queue and fraud-signal workflow with triage recommendations. |
-| [`finance_credit_default_early_warning_system`](finance_credit_default_early_warning_system/README.md) | [SPEC](finance_credit_default_early_warning_system/SPEC.md) | Finance | Borrower default and credit-policy workflow. |
-| [`finance_liquidity_microstructure_radar`](finance_liquidity_microstructure_radar/README.md) | [SPEC](finance_liquidity_microstructure_radar/SPEC.md) | Finance | Market stream workflow with signals, explanations, advice events, and optional Slack alerts. |
-| [`finance_portfolio_crash_stress_lab`](finance_portfolio_crash_stress_lab/README.md) | [SPEC](finance_portfolio_crash_stress_lab/SPEC.md) | Finance | Macro shock and portfolio-risk workflow with rebalance recommendations. |
-| [`finance_zip_code_property_alpha_engine`](finance_zip_code_property_alpha_engine/README.md) | [SPEC](finance_zip_code_property_alpha_engine/SPEC.md) | Finance | ZIP-code property-market workflow with ranked opportunities. |
-| [`finance_zip_code_property_alpha_engine_with_memory`](finance_zip_code_property_alpha_engine_with_memory/README.md) | [SPEC](finance_zip_code_property_alpha_engine_with_memory/SPEC.md) | Finance | Large-context property acquisition workflow with working memory and decision-quality benchmarks. |
-| [`general_closed_loop_agent_runtime`](general_closed_loop_agent_runtime/README.md) | [SPEC](general_closed_loop_agent_runtime/SPEC.md) | Engineering | Time-stepped operations queue workflow. |
-| [`general_cluster_reliability_management_lab`](general_cluster_reliability_management_lab/README.md) | [SPEC](general_cluster_reliability_management_lab/SPEC.md) | Engineering | Combined-cluster reliability management demo for scheduling, recovery, drain, and maintenance. |
-| [`general_context_memory_audit_pipeline`](general_context_memory_audit_pipeline/README.md) | [SPEC](general_context_memory_audit_pipeline/SPEC.md) | Engineering | Multi-agent context handoff workflow with scoped memory and audit output. |
-| [`general_context_memory_compression_lab`](general_context_memory_compression_lab/README.md) | [SPEC](general_context_memory_compression_lab/SPEC.md) | Engineering | Memory compression workflow for bounded prompt budgets. |
-| [`general_dynamic_environment_control_loop`](general_dynamic_environment_control_loop/README.md) | [SPEC](general_dynamic_environment_control_loop/SPEC.md) | Engineering | Control-loop workflow over changing metrics and actions. |
-| [`general_event_stream_triage_state_machine`](general_event_stream_triage_state_machine/README.md) | [SPEC](general_event_stream_triage_state_machine/SPEC.md) | Engineering | Stateful event stream triage workflow. |
-| [`general_human_approval_decision_gate`](general_human_approval_decision_gate/README.md) | [SPEC](general_human_approval_decision_gate/SPEC.md) | Security | Approval-gated decision workflow. |
-| [`general_live_telemetry_stream_pipeline`](general_live_telemetry_stream_pipeline/README.md) | [SPEC](general_live_telemetry_stream_pipeline/SPEC.md) | Engineering | Live telemetry stream workflow. |
-| [`general_llm_tool_orchestration_loop`](general_llm_tool_orchestration_loop/README.md) | [SPEC](general_llm_tool_orchestration_loop/SPEC.md) | Engineering | Tool-informed planning workflow. |
-| [`general_message_routing_trace`](general_message_routing_trace/README.md) | [SPEC](general_message_routing_trace/SPEC.md) | Engineering | Deterministic message-flow trace for the runtime message model. |
-| [`general_multi_agent_contract_negotiation_loop`](general_multi_agent_contract_negotiation_loop/README.md) | [SPEC](general_multi_agent_contract_negotiation_loop/SPEC.md) | Engineering | Multi-agent negotiation state workflow. |
-| [`general_native_live_monitor_service`](general_native_live_monitor_service/README.md) | [SPEC](general_native_live_monitor_service/SPEC.md) | Engineering | Native BEAM live monitor workflow. |
-| [`general_openshell_sandbox_worker_pipeline`](general_openshell_sandbox_worker_pipeline/README.md) | [SPEC](general_openshell_sandbox_worker_pipeline/SPEC.md) | Engineering | Sandboxed worker execution and artifact handoff workflow. |
-| [`general_parallel_worker_scale_benchmark`](general_parallel_worker_scale_benchmark/README.md) | [SPEC](general_parallel_worker_scale_benchmark/SPEC.md) | Engineering | Parallel synthetic workload benchmark. |
-| [`general_policy_feedback_optimization_loop`](general_policy_feedback_optimization_loop/README.md) | [SPEC](general_policy_feedback_optimization_loop/SPEC.md) | Engineering | Policy adjustment workflow with feedback over time. |
-| [`general_python_sdk_live_research_service`](general_python_sdk_live_research_service/README.md) | [SPEC](general_python_sdk_live_research_service/SPEC.md) | Engineering | Long-running Python SDK research workflow. |
-| [`general_python_sdk_research_pipeline`](general_python_sdk_research_pipeline/README.md) | [SPEC](general_python_sdk_research_pipeline/SPEC.md) | Engineering | Python-defined staged research workflow. |
-| [`general_sandboxed_llm_codegen_review_loop`](general_sandboxed_llm_codegen_review_loop/README.md) | [SPEC](general_sandboxed_llm_codegen_review_loop/SPEC.md) | Security | Sandboxed code generation, review, and validation workflow. |
-| [`general_simulation_state_audit_trail`](general_simulation_state_audit_trail/README.md) | [SPEC](general_simulation_state_audit_trail/SPEC.md) | Engineering | State tracking workflow with inspectable transitions. |
-| [`general_stream_backpressure_control_loop`](general_stream_backpressure_control_loop/README.md) | [SPEC](general_stream_backpressure_control_loop/SPEC.md) | Engineering | Live stream workflow with bounded queues and backpressure behavior. |
-| [`science_adaptive_experiment_discovery_agent`](science_adaptive_experiment_discovery_agent/README.md) | [SPEC](science_adaptive_experiment_discovery_agent/SPEC.md) | Science | Iterative experiment selection workflow. |
-| [`science_climate_resilience_planning_engine`](science_climate_resilience_planning_engine/README.md) | [SPEC](science_climate_resilience_planning_engine/SPEC.md) | Science | Weather, flooding, and infrastructure-risk workflow. |
-| [`science_drug_discovery_closed_loop_lab`](science_drug_discovery_closed_loop_lab/README.md) | [SPEC](science_drug_discovery_closed_loop_lab/SPEC.md) | Science | Long-running staged discovery workflow. |
-| [`science_ecosystem_intervention_sandbox`](science_ecosystem_intervention_sandbox/README.md) | [SPEC](science_ecosystem_intervention_sandbox/SPEC.md) | Science | Multi-region population dynamics workflow. |
-| [`science_multi_agent_motion_planning_lab`](science_multi_agent_motion_planning_lab/README.md) | [SPEC](science_multi_agent_motion_planning_lab/SPEC.md) | Science | Multi-agent particle simulation and visualization workflow. |
-| [`science_outbreak_response_policy_simulator`](science_outbreak_response_policy_simulator/README.md) | [SPEC](science_outbreak_response_policy_simulator/SPEC.md) | Science | Disease spread and intervention workflow. |
-| [`science_urban_traffic_control_lab`](science_urban_traffic_control_lab/README.md) | [SPEC](science_urban_traffic_control_lab/SPEC.md) | Science | Traffic network and incident-control workflow. |
-| [`secuirty_rmf_user_activity`](secuirty_rmf_user_activity/README.md) | [SPEC](secuirty_rmf_user_activity/SPEC.md) | Security | User activity stream triage workflow with RMF evidence artifacts and safe response recommendations. |
+| [`codebase_memory_compression_analysis`](codebase_memory_compression_analysis/README.md) | [SPEC](codebase_memory_compression_analysis/SPEC.md) | Engineering | Large-repo code analysis memory benchmark with bounded context packets. |
+| [`customer_lifecycle_email_auto`](customer_lifecycle_email_auto/README.md) | [SPEC](customer_lifecycle_email_auto/SPEC.md) | Business | Lifecycle email workflow with campaign, delivery, reply, and policy state. |
+| [`pricing_profit_simulation`](pricing_profit_simulation/README.md) | [SPEC](pricing_profit_simulation/SPEC.md) | Business | Pricing workflow with demand, competitor price, inventory, and revenue state. |
+| [`facility_safety_video_monitor`](facility_safety_video_monitor/README.md) | [SPEC](facility_safety_video_monitor/SPEC.md) | Security | Video sampling workflow with alert state and escalation decisions. |
+| [`revenue_retention_simulation`](revenue_retention_simulation/README.md) | [SPEC](revenue_retention_simulation/SPEC.md) | Business | Customer health and churn-risk workflow with intervention planning. |
+| [`service_capacity_simulation`](service_capacity_simulation/README.md) | [SPEC](service_capacity_simulation/SPEC.md) | Business | Queue, staffing, and SLA workflow for service-capacity decisions. |
+| [`supply_chain_resilience_simulation`](supply_chain_resilience_simulation/README.md) | [SPEC](supply_chain_resilience_simulation/SPEC.md) | Business | Inventory, demand, and supplier-delay workflow with mitigation planning. |
+| [`ai_strategy_planning`](ai_strategy_planning/README.md) | [SPEC](ai_strategy_planning/SPEC.md) | Business | Enterprise discovery workflow that produces board-ready recommendation artifacts. |
+| [`ai_audit_readiness`](ai_audit_readiness/README.md) | [SPEC](ai_audit_readiness/SPEC.md) | Security | AI, cyber, and control readiness workflow with evidence mapping and remediation planning. |
+| [`vendor_selection_decision`](vendor_selection_decision/README.md) | [SPEC](vendor_selection_decision/SPEC.md) | Business | Vendor comparison, RFP, scoring, roadmap, and negotiation workflow. |
+| [`claim_risk_triage`](claim_risk_triage/README.md) | [SPEC](claim_risk_triage/SPEC.md) | Finance | Claim queue and fraud-signal workflow with triage recommendations. |
+| [`credit_default_warning`](credit_default_warning/README.md) | [SPEC](credit_default_warning/SPEC.md) | Finance | Borrower default and credit-policy workflow. |
+| [`liquidity_risk_monitor`](liquidity_risk_monitor/README.md) | [SPEC](liquidity_risk_monitor/SPEC.md) | Finance | Market stream workflow with signals, explanations, advice events, and optional Slack alerts. |
+| [`portfolio_crash_stress_simulation`](portfolio_crash_stress_simulation/README.md) | [SPEC](portfolio_crash_stress_simulation/SPEC.md) | Finance | Macro shock and portfolio-risk workflow with rebalance recommendations. |
+| [`zip_code_property_ranking`](zip_code_property_ranking/README.md) | [SPEC](zip_code_property_ranking/SPEC.md) | Finance | ZIP-code property-market workflow with ranked opportunities. |
+| [`zip_code_property_memory_ranking`](zip_code_property_memory_ranking/README.md) | [SPEC](zip_code_property_memory_ranking/SPEC.md) | Finance | Large-context property acquisition workflow with working memory and decision-quality benchmarks. |
+| [`closed_loop_agent_runtime`](closed_loop_agent_runtime/README.md) | [SPEC](closed_loop_agent_runtime/SPEC.md) | Engineering | Time-stepped operations queue workflow. |
+| [`cluster_reliability_simulation`](cluster_reliability_simulation/README.md) | [SPEC](cluster_reliability_simulation/SPEC.md) | Engineering | Combined-cluster reliability management demo for scheduling, recovery, drain, and maintenance. |
+| [`context_memory_audit`](context_memory_audit/README.md) | [SPEC](context_memory_audit/SPEC.md) | Engineering | Multi-agent context handoff workflow with scoped memory and audit output. |
+| [`context_memory_compression`](context_memory_compression/README.md) | [SPEC](context_memory_compression/SPEC.md) | Engineering | Memory compression workflow for bounded prompt budgets. |
+| [`environment_control_simulation`](environment_control_simulation/README.md) | [SPEC](environment_control_simulation/SPEC.md) | Engineering | Control-loop workflow over changing metrics and actions. |
+| [`event_stream_triage`](event_stream_triage/README.md) | [SPEC](event_stream_triage/SPEC.md) | Engineering | Stateful event stream triage workflow. |
+| [`human_approval_gate`](human_approval_gate/README.md) | [SPEC](human_approval_gate/SPEC.md) | Security | Approval-gated decision workflow. |
+| [`live_telemetry_monitor`](live_telemetry_monitor/README.md) | [SPEC](live_telemetry_monitor/SPEC.md) | Engineering | Live telemetry stream workflow. |
+| [`llm_tool_orchestration`](llm_tool_orchestration/README.md) | [SPEC](llm_tool_orchestration/SPEC.md) | Engineering | Tool-informed planning workflow. |
+| [`message_routing_trace`](message_routing_trace/README.md) | [SPEC](message_routing_trace/SPEC.md) | Engineering | Deterministic message-flow trace for the runtime message model. |
+| [`contract_negotiation_simulation`](contract_negotiation_simulation/README.md) | [SPEC](contract_negotiation_simulation/SPEC.md) | Engineering | Multi-agent negotiation state workflow. |
+| [`native_live_monitor_service`](native_live_monitor_service/README.md) | [SPEC](native_live_monitor_service/SPEC.md) | Engineering | Native BEAM live monitor workflow. |
+| [`openshell_sandbox_worker_pipeline`](openshell_sandbox_worker_pipeline/README.md) | [SPEC](openshell_sandbox_worker_pipeline/SPEC.md) | Engineering | Sandboxed worker execution and artifact handoff workflow. |
+| [`parallel_worker_benchmark`](parallel_worker_benchmark/README.md) | [SPEC](parallel_worker_benchmark/SPEC.md) | Engineering | Parallel synthetic workload benchmark. |
+| [`policy_feedback_optimization_simulation`](policy_feedback_optimization_simulation/README.md) | [SPEC](policy_feedback_optimization_simulation/SPEC.md) | Engineering | Policy adjustment workflow with feedback over time. |
+| [`python_sdk_research_service`](python_sdk_research_service/README.md) | [SPEC](python_sdk_research_service/SPEC.md) | Engineering | Long-running Python SDK research workflow. |
+| [`python_sdk_research_pipeline`](python_sdk_research_pipeline/README.md) | [SPEC](python_sdk_research_pipeline/SPEC.md) | Engineering | Python-defined staged research workflow. |
+| [`sandboxed_codegen_review`](sandboxed_codegen_review/README.md) | [SPEC](sandboxed_codegen_review/SPEC.md) | Security | Sandboxed code generation, review, and validation workflow. |
+| [`state_audit_simulation`](state_audit_simulation/README.md) | [SPEC](state_audit_simulation/SPEC.md) | Engineering | State tracking workflow with inspectable transitions. |
+| [`stream_backpressure_simulation`](stream_backpressure_simulation/README.md) | [SPEC](stream_backpressure_simulation/SPEC.md) | Engineering | Live stream workflow with bounded queues and backpressure behavior. |
+| [`adaptive_experiment_planning`](adaptive_experiment_planning/README.md) | [SPEC](adaptive_experiment_planning/SPEC.md) | Science | Iterative experiment selection workflow. |
+| [`climate_resilience_planning_simulation`](climate_resilience_planning_simulation/README.md) | [SPEC](climate_resilience_planning_simulation/SPEC.md) | Science | Weather, flooding, and infrastructure-risk workflow. |
+| [`drug_discovery_simulation`](drug_discovery_simulation/README.md) | [SPEC](drug_discovery_simulation/SPEC.md) | Science | Long-running staged discovery workflow. |
+| [`ecosystem_simulation`](ecosystem_simulation/README.md) | [SPEC](ecosystem_simulation/SPEC.md) | Science | Multi-region population dynamics workflow. |
+| [`motion_planning_simulation`](motion_planning_simulation/README.md) | [SPEC](motion_planning_simulation/SPEC.md) | Science | Multi-agent particle simulation and visualization workflow. |
+| [`outbreak_response_simulation`](outbreak_response_simulation/README.md) | [SPEC](outbreak_response_simulation/SPEC.md) | Science | Disease spread and intervention workflow. |
+| [`traffic_control_simulation`](traffic_control_simulation/README.md) | [SPEC](traffic_control_simulation/SPEC.md) | Science | Traffic network and incident-control workflow. |
+| [`user_activity_rmf_triage`](user_activity_rmf_triage/README.md) | [SPEC](user_activity_rmf_triage/SPEC.md) | Security | User activity stream triage workflow with RMF evidence artifacts and safe response recommendations. |
 
 ## Prerequisites
 
@@ -100,20 +100,20 @@ jq -r '.[] | select((.category | ascii_downcase) == "finance") | .id' index.json
 Run a catalog blueprint through the CLI:
 
 ```bash
-mn blueprint run general_message_routing_trace
+mn blueprint run message_routing_trace
 mn blueprint monitor --follow
 ```
 
 Run a local blueprint folder:
 
 ```bash
-mn blueprint run ./general_message_routing_trace
+mn blueprint run ./message_routing_trace
 ```
 
 Run a shared simulation blueprint directly from its folder:
 
 ```bash
-cd business_supply_chain_resilience_war_room
+cd supply_chain_resilience_simulation
 python3 payloads/simulation_loop/scripts/run_blueprint.py --mock-llm --steps 3
 ```
 

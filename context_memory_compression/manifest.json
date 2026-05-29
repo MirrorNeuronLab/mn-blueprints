@@ -1,0 +1,852 @@
+{
+  "description": "Use this blueprint to test whether compressed working memory keeps a growing LLM workflow useful while reducing context load and cost.",
+  "edges": [
+    {
+      "from_node": "initializer",
+      "message_type": "init_done",
+      "to_node": "interpreter"
+    },
+    {
+      "from_node": "interpreter",
+      "message_type": "interpreter_done",
+      "to_node": "extractor"
+    },
+    {
+      "from_node": "extractor",
+      "message_type": "extractor_done",
+      "to_node": "classifier"
+    },
+    {
+      "from_node": "classifier",
+      "message_type": "classifier_done",
+      "to_node": "decision"
+    },
+    {
+      "from_node": "decision",
+      "message_type": "decision_done",
+      "to_node": "critic"
+    },
+    {
+      "from_node": "critic",
+      "message_type": "critic_done",
+      "to_node": "sink"
+    }
+  ],
+  "entrypoints": [
+    "initializer"
+  ],
+  "graph_id": "context_memory_compression_v1",
+  "initial_inputs": {
+    "initializer": [
+      {
+        "focus_id": "context_memory_demo_task",
+        "job_id": "context_memory_advanced_job_001"
+      }
+    ]
+  },
+  "job_name": "context-memory-compression",
+  "license": "LICENSE.md",
+  "term": "TERM.md",
+  "manifest_version": "1.0",
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    },
+    "disk": {
+      "min_gb": 1
+    }
+  },
+  "input_validation": {
+    "rules": []
+  },
+  "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "initializer",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "interpreter",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "extractor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "classifier",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "decision",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "critic",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "sink",
+          "uses": "mn-agents.control_join@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
+    "blueprint_id": "context_memory_compression",
+    "category": "general",
+    "configuration_contract": {
+      "optional_files": [
+        "scenario.json",
+        "config/overwrite.json",
+        "knowledge/"
+      ],
+      "required_files": [
+        "manifest.json",
+        "README.md",
+        "SPEC.md",
+        "config/default.json",
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
+      ]
+    },
+    "customizable_for": "Research copilots, investigation workflows, case management, long-running planning agents.",
+    "description": "Use this blueprint to test whether compressed working memory keeps a growing LLM workflow useful while reducing context load and cost.",
+    "init_config_review": {
+      "checks": [
+        "identity",
+        "mode",
+        "inputs",
+        "streams",
+        "input_skills",
+        "outputs",
+        "privacy",
+        "budgets"
+      ],
+      "required": true
+    },
+    "interfaces": {
+      "channels": {
+        "artifacts": {
+          "artifacts": [
+            "run.json",
+            "config.json",
+            "inputs.json",
+            "events.jsonl",
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Stable run-store files and domain-specific outputs.",
+          "optional_artifacts": [
+            "job.json",
+            "web_ui.json",
+            "ui.json",
+            "web/index.html",
+            "logs.jsonl"
+          ]
+        },
+        "events": {
+          "artifact": "events.jsonl",
+          "description": "Append-only workflow events."
+        },
+        "input_skills": {
+          "description": "Connector-backed or reusable skill-backed input sources."
+        },
+        "inputs": {
+          "artifact": "inputs.json",
+          "description": "Resolved runtime inputs and adapter provenance."
+        },
+        "logs": {
+          "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "stream": "stdout/stderr"
+        },
+        "output_skills": {
+          "description": "Optional fan-out destinations after local run-store writes."
+        },
+        "outputs": {
+          "artifacts": [
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Primary result and final user-facing artifact."
+        },
+        "streams": {
+          "default": [
+            "events"
+          ],
+          "description": "Named data or event streams exposed by the blueprint.",
+          "kinds": [
+            "audio",
+            "video",
+            "data",
+            "multimodal"
+          ],
+          "transports": [
+            "file",
+            "http",
+            "https",
+            "rtsp",
+            "rtmp",
+            "webrtc",
+            "websocket",
+            "socketio",
+            "tcp",
+            "udp",
+            "sse",
+            "kafka",
+            "mqtt",
+            "custom"
+          ]
+        },
+        "web_ui": {
+          "artifacts": [
+            "web_ui.json",
+            "ui.json",
+            "web/index.html"
+          ],
+          "description": "Optional web input/output handles."
+        }
+      },
+      "config": [
+        "standard_version",
+        "identity",
+        "mode",
+        "metadata",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "resources",
+        "real_adapters",
+        "streams",
+        "input_skills",
+        "output_skills",
+        "error_handling",
+        "state",
+        "capabilities",
+        "privacy",
+        "triggers",
+        "backpressure",
+        "determinism",
+        "schemas",
+        "budgets",
+        "agent_handoffs",
+        "web_ui",
+        "interfaces",
+        "execution_model"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "optional_outputs": [
+        "job.json",
+        "web_ui.json",
+        "ui.json",
+        "web/index.html",
+        "logs.jsonl",
+        "logs.index.json",
+        "human.jsonl",
+        "resources.jsonl"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "response_schema": "mn.blueprint.response.v1",
+      "stream_kinds": [
+        "audio",
+        "video",
+        "data",
+        "multimodal"
+      ],
+      "stream_transports": [
+        "file",
+        "http",
+        "https",
+        "rtsp",
+        "rtmp",
+        "webrtc",
+        "websocket",
+        "socketio",
+        "tcp",
+        "udp",
+        "sse",
+        "kafka",
+        "mqtt",
+        "custom"
+      ],
+      "web_ui_adapters": [
+        "none",
+        "static_html",
+        "gradio",
+        "custom"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Context researcher, expander, challenger, compressor, briefing author.",
+    "name": "Context Memory Compression",
+    "output": "Compressed context handoff and final briefing.",
+    "output_contract": {
+      "events": "typed event objects with payload",
+      "events_jsonl": "events.jsonl",
+      "final_artifact_json": "final_artifact.json",
+      "local_run_store": "~/.mn/runs/<run_id>/",
+      "logs_jsonl": "logs.jsonl",
+      "response_schema": "mn.blueprint.response.v1",
+      "result_json": "result.json",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object, event envelope, or bundle path"
+    },
+    "problem_solved": "Long-running agents accumulate more context than a model can safely consume; compression must preserve pinned facts, constraints, and decision traces.",
+    "quick_test": {
+      "description": "Set MN_BLUEPRINT_QUICK_TEST=1 to use deterministic mock LLM JSON while still exercising context memory and CompileContext calls.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "CompileContext",
+      "context compression",
+      "typed memory",
+      "multi-agent LLM relay"
+    ],
+    "simulation_type": "Growing memory graph with compression pressure.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load_metadata -> resolve_config -> load_inputs -> start_run_store -> observe_simulation_state -> call_llm_agent -> evaluate_workflow_state -> route_by_context -> request_human_input -> apply_decision_to_simulation -> emit_events -> write_final_artifact -> fan_out_output_skills",
+      "execution_steps": [
+        "load_metadata",
+        "resolve_config",
+        "load_inputs",
+        "start_run_store",
+        "observe_simulation_state",
+        "call_llm_agent",
+        "evaluate_workflow_state",
+        "route_by_context",
+        "request_human_input",
+        "apply_decision_to_simulation",
+        "emit_events",
+        "write_final_artifact",
+        "fan_out_output_skills"
+      ],
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Developers building long-context agent systems with bounded prompt budgets."
+  },
+  "name": "Context Memory Compression",
+  "nodes": [
+    {
+      "node_id": "initializer",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/init.py"
+        ],
+        "environment": {
+          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_TIMEOUT_SECONDS": "120"
+        },
+        "node_type": "generic",
+        "output_message_type": "init_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "LITELLM_TIMEOUT_SECONDS",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY",
+          "MN_LLM_TIMEOUT_SECONDS"
+        ],
+        "role": "initializer",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "initializer",
+        "upload_paths": [
+          {
+            "source": "initializer",
+            "target": "initializer"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/initializer",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "interpreter",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/interpreter.py"
+        ],
+        "environment": {
+          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_TIMEOUT_SECONDS": "120"
+        },
+        "node_type": "generic",
+        "output_message_type": "interpreter_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "LITELLM_TIMEOUT_SECONDS",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY",
+          "MN_LLM_TIMEOUT_SECONDS"
+        ],
+        "role": "context_researcher",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "interpreter",
+        "upload_paths": [
+          {
+            "source": "interpreter",
+            "target": "interpreter"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/interpreter",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "extractor",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/extractor.py"
+        ],
+        "environment": {
+          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_TIMEOUT_SECONDS": "120"
+        },
+        "node_type": "generic",
+        "output_message_type": "extractor_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "LITELLM_TIMEOUT_SECONDS",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY",
+          "MN_LLM_TIMEOUT_SECONDS"
+        ],
+        "role": "context_expander",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "extractor",
+        "upload_paths": [
+          {
+            "source": "extractor",
+            "target": "extractor"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/extractor",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "classifier",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/classifier.py"
+        ],
+        "environment": {
+          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_TIMEOUT_SECONDS": "120"
+        },
+        "node_type": "generic",
+        "output_message_type": "classifier_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "LITELLM_TIMEOUT_SECONDS",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY",
+          "MN_LLM_TIMEOUT_SECONDS"
+        ],
+        "role": "constraint_challenger",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "classifier",
+        "upload_paths": [
+          {
+            "source": "classifier",
+            "target": "classifier"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/classifier",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "decision",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/decision.py"
+        ],
+        "environment": {
+          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_TIMEOUT_SECONDS": "120"
+        },
+        "node_type": "generic",
+        "output_message_type": "decision_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "LITELLM_TIMEOUT_SECONDS",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY",
+          "MN_LLM_TIMEOUT_SECONDS"
+        ],
+        "role": "context_compressor",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "decision",
+        "upload_paths": [
+          {
+            "source": "decision",
+            "target": "decision"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/decision",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "critic",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "with": {
+        "command": [
+          "bash",
+          "-c",
+          "PYTHONPATH=../_vendor /usr/bin/python3 scripts/critic.py"
+        ],
+        "environment": {
+          "CONTEXT_ENGINE_ADDR": "192.168.4.173:50052",
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_CONTEXT_ADDR": "192.168.4.173:50052",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_TIMEOUT_SECONDS": "120"
+        },
+        "node_type": "generic",
+        "output_message_type": "critic_done",
+        "pass_env": [
+          "MN_CONTEXT_ADDR",
+          "MN_CONTEXT_READY_TIMEOUT_SECONDS",
+          "MN_CONTEXT_REDIS_URL",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION",
+          "CONTEXT_ENGINE_ADDR",
+          "CONTEXT_ENGINE_READY_TIMEOUT_SECONDS",
+          "CONTEXT_REDIS_URL",
+          "MN_BLUEPRINT_QUICK_TEST",
+          "MN_CONTEXT_VIEW_LOG",
+          "MN_CONTEXT_VIEW_LOG_DEST",
+          "MN_CONTEXT_VIEW_LOG_FILE",
+          "MN_CONTEXT_VIEW_LOG_LEVEL",
+          "MN_CONTEXT_VIEW_LOG_MAX_BYTES",
+          "MN_CONTEXT_VIEW_LOG_BACKUP_COUNT",
+          "LITELLM_MODEL",
+          "LITELLM_API_BASE",
+          "LITELLM_API_KEY",
+          "LITELLM_TIMEOUT_SECONDS",
+          "MN_LLM_MODEL",
+          "MN_LLM_API_BASE",
+          "MN_LLM_API_KEY",
+          "MN_LLM_TIMEOUT_SECONDS"
+        ],
+        "role": "briefing_author",
+        "runner_module": "MirrorNeuron.Runner.HostLocal",
+        "script": "scripts/run_blueprint.py",
+        "upload_path": "critic",
+        "upload_paths": [
+          {
+            "source": "critic",
+            "target": "critic"
+          },
+          {
+            "source": "_vendor",
+            "target": "_vendor"
+          }
+        ],
+        "workdir": "/sandbox/job/critic",
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
+        "pool": "default",
+        "pool_slots": 1,
+        "tty": false
+      }
+    },
+    {
+      "node_id": "sink",
+      "uses": "mn-agents.control_join@1.0.0",
+      "with": {
+        "complete_on_message": true,
+        "environment": {
+          "LITELLM_API_BASE": "http://192.168.4.173:11434",
+          "LITELLM_API_KEY": "",
+          "LITELLM_MODEL": "ollama/nemotron3:33b",
+          "LITELLM_TIMEOUT_SECONDS": "120",
+          "MN_CONTEXT_PACKET_TARGET_TOKENS": "600",
+          "MN_CONTEXT_PACKET_TOKEN_BUDGET": "1000",
+          "MN_CONTEXT_USE_MODEL_COMPRESSION": "true",
+          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+          "MN_LLM_API_KEY": "",
+          "MN_LLM_MODEL": "ollama/nemotron3:33b",
+          "MN_LLM_TIMEOUT_SECONDS": "120"
+        },
+        "node_type": "reduce"
+      }
+    }
+  ],
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
+  "requiredContextEngine": false
+}

@@ -1,138 +1,71 @@
 # Ecosystem Simulation
 
 `Blueprint ID:` `ecosystem_simulation`
-`Category:` science - Science Solution Template
-`Default LLM:` Ollama `nemotron3:33b` with deterministic fake LLM support for tests
+`Category:` `Science`
 
-## One-line value proposition
+Use this blueprint to explore ecosystem interventions across regions and compare population effects before making policy or field decisions.
 
-Explore ecosystem interventions across multiple regions with evolving population dynamics.
+## What It Does
 
-## What it is
+This folder is a self-contained MirrorNeuron blueprint. It defines the runtime
+manifest, default configuration, payload code, local documentation, and any
+fixtures needed to review or run the workflow from this checkout.
 
-This blueprint is a reusable MirrorNeuron solution template for a scientific or planning decision where interventions should be tested against an evolving simulated environment. It ships with mock or synthetic inputs so it runs immediately, and it defines a path for replacing those inputs with production data while keeping the same blueprint identity, configuration model, and output contract.
+## Quick Start
 
-## Who this is for
+Run from the catalog:
 
-Ecologists, conservation analysts, simulation researchers, and education teams.
+```bash
+mn run ecosystem_simulation
+```
 
-## Why it matters
+Run directly from this folder:
 
-Ecological systems change through local interactions, migration, resources, and mutation; interventions need scenario testing before field action. A static dashboard can show the current state, and a one-shot LLM prompt can summarize it, but neither tests what happens after a decision is applied. This blueprint makes the feedback loop visible: state changes, the agent observes it, the agent chooses an action, and the system evolves again.
+```bash
+mn run --folder .
+```
 
-## Why this runtime is useful here
+Inspect recent run state:
 
-MirrorNeuron is useful here because it combines LLM reasoning with dynamic system simulation. The agent is placed inside a changing environment instead of outside it as a commentator. Each run has stable identity fields, configurable inputs, structured events, and an auditable final artifact, so teams can compare scenarios, debug decisions, and graduate from mock data to real adapters.
+```bash
+mn blueprint monitor --follow
+```
 
-## How it works
+## Inputs And Configuration
 
-1. Load the graph in `manifest.json` and start `ingress` with bundled mock inputs.
-2. Route work through the agents described by the manifest, using multi-region population dynamics as the evolving system.
-3. Let the `World coordinator, regional agents, leaderboard summarizer` observe intermediate state, produce decisions or artifacts, and emit typed messages.
-4. Preserve execution metadata, logs, and generated artifacts so users can audit what happened.
-5. Return regional outcomes, population rankings, and ecosystem summary for review, customization, or downstream workflow integration.
-
-## Example scenario
-
-A world agent distributes animals across regions, region agents evolve local populations, and a leaderboard summarizes outcomes.
-
-## Inputs
-
-| Input | What it controls | Example | Can customize? |
-|---|---|---|---|
-| `manifest.json` initial inputs | Sample payloads routed into ingress. | `initial_inputs` | Yes |
-| `config/default.json` | Standard identity, mock ecosystem payload, LLM, output, logging, resources, and adapter settings. | `inputs.payload.ecosystem`, `outputs.run_root` | Yes |
-| `config/overwrite.json` | Local overwrite values layered on top of defaults before launch. | `ecosystem.migration_rate`, `outputs.run_root` | Yes |
-| Payload fixtures | Bundled synthetic data, policies, scripts, templates, or media used by workers. | `payloads/` or `input/` | Yes |
-| Environment variables | Runtime and provider settings for local services or optional integrations. | `MN_LLM_MODEL`, `MN_BLUEPRINT_QUICK_TEST` | Yes |
+- `manifest.json`: graph shape, entrypoints, runtime metadata, runners, services, and environment access.
+- `config/default.json`: default launch configuration and mock/sample input settings.
+- `config/overwrite.json`: optional local overrides layered on defaults.
+- `payloads/`: worker scripts, policies, fixtures, prompts, and support files used by this blueprint.
 
 ## Outputs
 
-| Output | What it means | Where to look |
-|---|---|---|
-| Runtime events | Typed messages and worker events emitted through the manifest graph. | `blueprint_report`, worker-specific events |
-| Final artifact | The user-facing regional outcomes, population rankings, and ecosystem summary. | `result.json`, report, alert, or generated artifact |
-| Operational logs | Status lines and worker logs for debugging and audit. | `events.jsonl`, runtime logs, worker stderr |
-| Shared web UI | Runtime-managed Gradio dashboard registered as `blueprint-web-ui` and rendered from Grafana-style dashboard JSON. | `web_ui.json`, `ui.json`, console Web UI URL |
-| Resource and human traces | Resource samples and optional collaboration events. | `resources.jsonl`, `human.jsonl` |
-| Payload output | Files produced by specialized workers. | `payloads/`, reports, visual artifacts |
+Most runs write artifacts under `~/.mn/runs/<run_id>/`. Common files include
+`events.jsonl`, `result.json`, `final_artifact.json`, worker logs, and generated
+reports when the blueprint produces them.
 
-## How to run
+## Safety Checklist
 
-Run the committed blueprint bundle directly:
+- Review `manifest.json` and `payloads/` before running with real data.
+- Check `pass_env`, provider credentials, Slack/email/web adapters, and any shell or OpenShell runners.
+- Start with mock, dry-run, or quick-test configuration before live external integrations.
+- Keep local customer overrides out of committed defaults.
 
-```bash
-cd ecosystem_simulation
-mn blueprint run .
-```
+## Local Documentation
 
-This blueprint declares a shared Gradio output dashboard from `web_ui.dashboard.grafana` in `config/default.json`. During submission the support skill injects a runtime-managed `web_ui_dashboard` node and registers the `blueprint-web-ui` service; the CLI prints the Web UI URL in the submitted and detached run panels when it is available.
+- [SPEC](SPEC.md)
+- [TERM](TERM.md)
+- [License](LICENSE.md)
 
-Use `config/default.json` as the stable default contract and `config/overwrite.json` for local customer-specific values. When a blueprint declares `init_config_review`, the CLI can review those fields before launch and apply the answers as runtime config overrides.
+- [Manifest](manifest.json)
+- [Default config](config/default.json)
 
-Run the shared repository tests:
+## Validation
+
+Run repository-level tests from `mn-blueprints` after changing catalog metadata,
+manifest structure, payload behavior, or shared fixtures:
 
 ```bash
 cd ..
 python3 -m pytest -q
 ```
-
-## How to customize it
-
-Change species traits, resource regeneration, migration rate, region topology, intervention policies, or final scoring.
-
-A practical customization path is:
-
-1. Replace the mock input source with your system of record while preserving the input shape.
-2. Calibrate simulation parameters and action effects with historical data or domain experts.
-3. Update the LLM agent role, responsibilities, and allowed action schema.
-4. Extend `final_artifact` so it matches the report, ticket, plan, or recommendation your team already uses.
-5. Connect outputs to the review, approval, alerting, or execution system where real decisions happen.
-
-## What to look for in results
-
-Inspect the manifest-declared output message, worker logs, and generated artifacts. The important question is whether the workflow preserved enough state and evidence for a user to understand why the final result was produced.
-
-The strongest signal is not only the final recommendation. Look for whether the state trajectory, agent rationale, applied actions, and output artifact tell a coherent story that a domain user could review.
-
-## Investor and evaluator narrative
-
-This demonstrates the runtime's ability to coordinate many local simulators into a global decision view, a pattern relevant beyond ecology. The product lesson is that this is not just a chatbot around data. It is a repeatable pattern for vertical workflows where simulation, state, and agent decisions create a more defensible user experience than static analytics alone.
-
-## Runtime features demonstrated
-
-- native agents
-- multi-region simulation
-- aggregation
-- leaderboard reporting
-- shared Gradio dashboard
-- service registry publication
-
-## Test coverage
-
-The shared test suite verifies manifest loading, standard config sections, mock inputs, deterministic fake LLM execution where applicable, state changes over time, CLI execution for shared runners, run-store artifacts, and structured final outputs. This blueprint is covered by scientific scenario smoke tests, deterministic simulation checks, and structured intervention or experiment output checks. Optional Ollama tests are marked separately so local development stays fast.
-
-## Limitations
-
-- Mock data and simplified dynamics are included for repeatable local runs.
-- Outputs are decision-support artifacts, not production advice.
-- Domain assumptions should be validated before connecting real systems or acting on recommendations.
-- Specialized worker blueprints may require the MirrorNeuron runtime or optional local services to execute the full graph.
-
-## Next steps
-
-- Connect a real data adapter and keep the input contract stable.
-- Add scenario comparison, dashboards, or persisted memory for repeated runs.
-- Add human approval gates for high-impact actions.
-- Track evaluation metrics that compare simulated recommendations against known outcomes.
-- Move operational logs and final artifacts into your team's normal review workflow.
-
-## Documentation map
-
-- [SPEC.md](SPEC.md): behavior contract, customer outcome, input/output contract, evaluation criteria, and upgrade path.
-- [manifest.json](manifest.json): graph, agents, edges, metadata, interface channels, and output contract.
-- [config/default.json](config/default.json): default identity, inputs, simulation, LLM, outputs, logging, resources, web UI, and adapters.
-- [config/overwrite.json](config/overwrite.json): local override template layered on top of the default config.
-- [../BLUEPRINT_STANDARD.md](../BLUEPRINT_STANDARD.md): shared input, output, web UI, logging, resources, and artifact standards.
-- [../README.md](../README.md): root catalog, run instructions, and repository structure.
-- `payloads/`: worker code, fixtures, policies, or support assets used by the blueprint.

@@ -1,128 +1,71 @@
 # AI Audit Readiness
 
 `Blueprint ID:` `ai_audit_readiness`
-`Category:` business - Business Solution Template
-`Default LLM:` Ollama `nemotron3:33b` metadata, deterministic local artifact generation for tests
+`Category:` `Security`
 
-## One-line value proposition
+Use this blueprint to turn AI and cyber control requirements into an evidence-backed readiness pack your team can review before audit or launch.
 
-Map AI and cyber requirements to evidence and produce an audit-ready control readiness pack.
+## What It Does
 
-## What it is
+This folder is a self-contained MirrorNeuron blueprint. It defines the runtime
+manifest, default configuration, payload code, local documentation, and any
+fixtures needed to review or run the workflow from this checkout.
 
-This blueprint supports AI risk, compliance, cyber, cloud, ERP, and operational control readiness work. It ingests policies, control frameworks, audit findings, system architecture, and evidence items, then produces a control matrix, gap report, risk register, remediation plan, audit package, and executive risk summary.
+## Quick Start
 
-## Who this is for
+Run from the catalog:
 
-Financial services, healthcare, aerospace, defense, public sector contractors, enterprise AI teams, cybersecurity teams, and control owners preparing for audit or ATO-style readiness reviews.
+```bash
+mn run ai_audit_readiness
+```
 
-## Why it matters
+Run directly from this folder:
 
-Regulated change programs fail when policy requirements, evidence, and owners are scattered. A static dashboard can list controls, and a one-shot LLM can summarize policies, but neither reliably maps requirements to retained evidence or produces an auditable remediation plan.
+```bash
+mn run --folder .
+```
 
-## Why this runtime is useful here
+Inspect recent run state:
 
-MirrorNeuron provides durable workflow identity, standard input adapters, event logs, and run-store artifacts. That matters for risk work because reviewers need to see what evidence was used, which controls were weak, and when a readiness score was generated.
+```bash
+mn blueprint monitor --follow
+```
 
-## How it works
+## Inputs And Configuration
 
-1. Load a mock or real readiness packet.
-2. Read policies and extract outline metadata.
-3. Map each control requirement to supplied evidence.
-4. Score evidence strength and calculate a readiness score.
-5. Identify missing controls, weak evidence, and policy conflicts.
-6. Generate a risk register and remediation roadmap.
-7. Build an audit evidence package and executive report.
-
-## Example scenario
-
-An enterprise GenAI claims assistant has governance and cloud policies, four control requirements, partial evidence, and audit findings. The blueprint identifies weak access-review evidence, missing human-escalation evidence, incomplete vendor assurance, and a readiness score below target.
-
-## Inputs
-
-| Input | What it controls | Example | Can customize? |
-|---|---|---|---|
-| `program` | Program or system under review. | `Enterprise GenAI Claims Assistant` | Yes |
-| `policies` | Policy documents with `name` and `text`. | AI governance policy | Yes |
-| `control_framework` | Requirement records with `id`, `domain`, and `requirement`. | `AI-01` inventory control | Yes |
-| `evidence_items` | Evidence mapped to control IDs. | Access review export | Yes |
-| `audit_findings` | Known findings or open issues. | Missing escalation evidence | Yes |
-| `system_architecture` | Architecture flow text. | Request -> AI service -> audit log | Yes |
-| `target_readiness_score` | Desired readiness score. | `85` | Yes |
+- `manifest.json`: graph shape, entrypoints, runtime metadata, runners, services, and environment access.
+- `config/default.json`: default launch configuration and mock/sample input settings.
+- `config/overwrite.json`: optional local overrides layered on defaults.
+- `payloads/`: worker scripts, policies, fixtures, prompts, and support files used by this blueprint.
 
 ## Outputs
 
-| Output | What it means | Where to look |
-|---|---|---|
-| `readiness_score` | Evidence-based readiness score. | `final_artifact.readiness_score` |
-| `control_matrix` | Requirement-to-evidence mapping. | `final_artifact.control_matrix` |
-| `compliance_gap_report` | Missing/weak controls and policy conflicts. | `final_artifact.compliance_gap_report` |
-| `risk_register` | Prioritized risks with mitigation. | `final_artifact.risk_register` |
-| `remediation_plan` | Implementation roadmap. | `final_artifact.remediation_plan` |
-| `audit_evidence_package` | Retained evidence summary. | `final_artifact.audit_evidence_package` |
+Most runs write artifacts under `~/.mn/runs/<run_id>/`. Common files include
+`events.jsonl`, `result.json`, `final_artifact.json`, worker logs, and generated
+reports when the blueprint produces them.
 
-## How to run
+## Safety Checklist
+
+- Review `manifest.json` and `payloads/` before running with real data.
+- Check `pass_env`, provider credentials, Slack/email/web adapters, and any shell or OpenShell runners.
+- Start with mock, dry-run, or quick-test configuration before live external integrations.
+- Keep local customer overrides out of committed defaults.
+
+## Local Documentation
+
+- [SPEC](SPEC.md)
+- [TERM](TERM.md)
+- [License](LICENSE.md)
+
+- [Manifest](manifest.json)
+- [Default config](config/default.json)
+
+## Validation
+
+Run repository-level tests from `mn-blueprints` after changing catalog metadata,
+manifest structure, payload behavior, or shared fixtures:
 
 ```bash
-cd ai_audit_readiness
-python3 payloads/readiness_workflow/scripts/run_blueprint.py \
-  --runs-root /tmp/mirror-neuron-runs
+cd ..
+python3 -m pytest -q
 ```
-
-Run with a real readiness packet:
-
-```bash
-python3 payloads/readiness_workflow/scripts/run_blueprint.py \
-  --input-file /path/to/readiness_packet.json \
-  --runs-root /tmp/mirror-neuron-runs
-```
-
-## How to customize it
-
-Replace the mock controls with your AI governance, cyber, cloud, ERP, NIST, ISO, SOC, HIPAA, RMF, or internal framework controls. Replace evidence with GRC exports, IAM reviews, architecture records, vendor packages, audit findings, ticket data, and retained test evidence.
-
-## What to look for in results
-
-Inspect the control matrix first. Then check whether weak or missing evidence becomes a clear risk and whether the remediation plan names owners, phases, and exit criteria. For readiness workflows, traceability matters more than polish.
-
-## Investor and evaluator narrative
-
-This is a strong fit for MirrorNeuron because compliance is a durable evidence workflow: collect artifacts, map controls, score readiness, escalate gaps, and preserve audit trails. The product wedge is TrustOps for AI, cyber, and regulated transformation.
-
-## Runtime features demonstrated
-
-- policy reading
-- requirement-to-evidence mapping
-- readiness scoring
-- risk register generation
-- remediation planning
-- process map generation
-- audit-ready run artifacts
-
-## Test coverage
-
-The worker runs deterministically without provider credentials and writes standard run-store outputs. The blueprint follows the library manifest, config, catalog, README, and artifact conventions.
-
-## Limitations
-
-- Evidence strength is simplified to strong, medium, weak, or missing.
-- It does not replace legal, audit, or compliance judgment.
-- Policy-conflict detection is intentionally conservative.
-- Continuous monitoring adapters are placeholders for production integration.
-
-## Next steps
-
-- Add continuous monitors for access reviews, vendor evidence, and audit findings.
-- Add human-in-the-loop approval gates for high-risk gaps.
-- Connect outputs to GRC, ticketing, SIEM, or model-risk systems.
-- Expand control mappings for specific frameworks and industries.
-
-## Documentation map
-
-- [SPEC.md](SPEC.md): behavior contract, customer outcome, input/output contract, evaluation criteria, and upgrade path.
-- [manifest.json](manifest.json): graph, agents, edges, metadata, interface channels, and output contract.
-- [config/default.json](config/default.json): default identity, inputs, simulation, LLM, outputs, logging, resources, web UI, and adapters.
-- [config/overwrite.json](config/overwrite.json): local override template layered on top of the default config.
-- [../BLUEPRINT_STANDARD.md](../BLUEPRINT_STANDARD.md): shared input, output, web UI, logging, resources, and artifact standards.
-- [../README.md](../README.md): root catalog, run instructions, and repository structure.
-- `payloads/`: worker code, fixtures, policies, or support assets used by the blueprint.

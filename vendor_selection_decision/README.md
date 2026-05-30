@@ -1,127 +1,71 @@
 # Vendor Selection Decision
 
 `Blueprint ID:` `vendor_selection_decision`
-`Category:` business - Business Solution Template
-`Default LLM:` Ollama `nemotron3:33b` metadata, deterministic local artifact generation for tests
+`Category:` `Business`
 
-## One-line value proposition
+Use this blueprint to convert requirements and vendor responses into a scored recommendation, implementation plan, and reviewable decision record.
 
-Turn requirements and vendor responses into a scored recommendation and implementation roadmap.
+## What It Does
 
-## What it is
+This folder is a self-contained MirrorNeuron blueprint. It defines the runtime
+manifest, default configuration, payload code, local documentation, and any
+fixtures needed to review or run the workflow from this checkout.
 
-This blueprint supports RFP/RFI, vendor comparison, pricing analysis, executive recommendation, and implementation planning work. It ingests business requirements, weighted criteria, vendor responses, pricing tables, and stakeholder notes, then produces an RFP package, comparison matrix, recommendation memo, roadmap, process map, cost/risk model, and negotiation questions.
+## Quick Start
 
-## Who this is for
+Run from the catalog:
 
-CIO offices, procurement, transformation offices, private-equity operating teams, enterprise architecture teams, and teams choosing ERP, CRM, cloud, cybersecurity, AI, robotics, outsourcing, or implementation partners.
+```bash
+mn run vendor_selection_decision
+```
 
-## Why it matters
+Run directly from this folder:
 
-Vendor decisions are often expensive, political, and evidence-heavy. A static dashboard can show scores, and a one-shot LLM can summarize vendor prose, but neither reliably normalizes responses, exposes missing answers, connects risks to implementation, and produces executive-ready artifacts.
+```bash
+mn run --folder .
+```
 
-## Why this runtime is useful here
+Inspect recent run state:
 
-MirrorNeuron turns vendor selection into a repeatable workflow with a standard input contract, run ID, event log, and retained final artifact. That makes it easier to compare scenarios, replace mock inputs with real RFP exports, and preserve how the recommendation was reached.
+```bash
+mn blueprint monitor --follow
+```
 
-## How it works
+## Inputs And Configuration
 
-1. Load requirements, weighted criteria, vendor responses, pricing, and stakeholder notes.
-2. Generate an RFP/RFI package and response template.
-3. Normalize vendor scores into a comparison matrix.
-4. Score vendors against weighted criteria.
-5. Detect vague claims, missing answers, pricing risk, and security gaps.
-6. Generate a recommendation memo, roadmap, process map, negotiation questions, and report Markdown.
-
-## Example scenario
-
-A CIO team is choosing an AI-enabled field service platform. BrightOps leads the weighted evaluation because security and implementation scores offset higher cost, while other vendors require clarification on ERP migration estimates and audit-log evidence.
-
-## Inputs
-
-| Input | What it controls | Example | Can customize? |
-|---|---|---|---|
-| `initiative` | Decision context. | AI-enabled field service platform | Yes |
-| `requirements` | Business, security, and implementation needs. | ERP integration, RBAC, offline workflows | Yes |
-| `weighted_criteria` | Scoring criteria and weights. | Functional fit, security, speed, cost | Yes |
-| `vendors` | Vendor response records and scores. | AtlasFlow, BrightOps, CoreRoute | Yes |
-| `pricing_csv` | Cost table for profiling. | Year-one and implementation cost | Yes |
-| `stakeholder_notes` | Qualitative concerns. | Security evidence before award | Yes |
-| `timeline_weeks` | Roadmap duration. | `14` | Yes |
+- `manifest.json`: graph shape, entrypoints, runtime metadata, runners, services, and environment access.
+- `config/default.json`: default launch configuration and mock/sample input settings.
+- `config/overwrite.json`: optional local overrides layered on defaults.
+- `payloads/`: worker scripts, policies, fixtures, prompts, and support files used by this blueprint.
 
 ## Outputs
 
-| Output | What it means | Where to look |
-|---|---|---|
-| `rfp_rfi_package` | Draft package and response template. | `final_artifact.rfp_rfi_package` |
-| `vendor_comparison_matrix` | Weighted scoring and raw matrix. | `final_artifact.vendor_comparison_matrix` |
-| `recommendation_memo` | Recommended vendor and rationale. | `final_artifact.recommendation_memo` |
-| `implementation_roadmap` | Phased plan and milestones. | `final_artifact.implementation_roadmap` |
-| `cost_risk_model` | Pricing profile and risk register. | `final_artifact.cost_risk_model` |
-| `negotiation_questions` | Clarifying questions before award. | `final_artifact.negotiation_questions` |
+Most runs write artifacts under `~/.mn/runs/<run_id>/`. Common files include
+`events.jsonl`, `result.json`, `final_artifact.json`, worker logs, and generated
+reports when the blueprint produces them.
 
-## How to run
+## Safety Checklist
+
+- Review `manifest.json` and `payloads/` before running with real data.
+- Check `pass_env`, provider credentials, Slack/email/web adapters, and any shell or OpenShell runners.
+- Start with mock, dry-run, or quick-test configuration before live external integrations.
+- Keep local customer overrides out of committed defaults.
+
+## Local Documentation
+
+- [SPEC](SPEC.md)
+- [TERM](TERM.md)
+- [License](LICENSE.md)
+
+- [Manifest](manifest.json)
+- [Default config](config/default.json)
+
+## Validation
+
+Run repository-level tests from `mn-blueprints` after changing catalog metadata,
+manifest structure, payload behavior, or shared fixtures:
 
 ```bash
-cd vendor_selection_decision
-python3 payloads/vendor_workflow/scripts/run_blueprint.py \
-  --runs-root /tmp/mirror-neuron-runs
+cd ..
+python3 -m pytest -q
 ```
-
-Run with a real RFP packet:
-
-```bash
-python3 payloads/vendor_workflow/scripts/run_blueprint.py \
-  --input-file /path/to/vendor_packet.json \
-  --runs-root /tmp/mirror-neuron-runs
-```
-
-## How to customize it
-
-Replace mock vendors with RFP exports, security questionnaires, pricing sheets, architecture constraints, stakeholder interview notes, and procurement policies. Adjust criteria, weights, missing-answer rules, risk scoring, and roadmap phases for the decision type.
-
-## What to look for in results
-
-Start with the weighted ranking, then inspect missing answers and risk register before trusting the recommendation. A good run highlights both the best vendor and the unresolved questions that should shape negotiation.
-
-## Investor and evaluator narrative
-
-Vendor selection is a high-value transformation workflow with repeatable artifacts and measurable outcomes. The wedge is an RFP copilot that moves from comparison to implementation readiness rather than stopping at text summarization.
-
-## Runtime features demonstrated
-
-- RFP/RFI package generation
-- vendor comparison matrix
-- weighted scoring
-- spreadsheet cost profiling
-- implementation roadmap
-- process map generation
-- code/script scaffold generation
-
-## Test coverage
-
-The worker is deterministic and runs locally without credentials. It follows the blueprint library standards for manifests, config, catalog metadata, run-store artifacts, and product README sections.
-
-## Limitations
-
-- Vendor scoring depends on the quality of supplied scores and responses.
-- The default missing-answer detection is rule based.
-- Pricing analysis is a first-pass profile, not a complete TCO model.
-- Recommendations require human procurement, legal, security, and business review.
-
-## Next steps
-
-- Add adapters for RFP portals, spreadsheets, security questionnaires, and procurement systems.
-- Add approval gates for finalist selection.
-- Expand TCO and lock-in modeling.
-- Connect outputs to implementation-planning, contract-review, and steering-committee workflows.
-
-## Documentation map
-
-- [SPEC.md](SPEC.md): behavior contract, customer outcome, input/output contract, evaluation criteria, and upgrade path.
-- [manifest.json](manifest.json): graph, agents, edges, metadata, interface channels, and output contract.
-- [config/default.json](config/default.json): default identity, inputs, simulation, LLM, outputs, logging, resources, web UI, and adapters.
-- [config/overwrite.json](config/overwrite.json): local override template layered on top of the default config.
-- [../BLUEPRINT_STANDARD.md](../BLUEPRINT_STANDARD.md): shared input, output, web UI, logging, resources, and artifact standards.
-- [../README.md](../README.md): root catalog, run instructions, and repository structure.
-- `payloads/`: worker code, fixtures, policies, or support assets used by the blueprint.

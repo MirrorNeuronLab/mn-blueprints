@@ -147,7 +147,7 @@ def main():
         json.dump(manifest, f, indent=2)
 
     print("Success! The blueprint is now configured.")
-    print("You can run it using: mn blueprint run customer_lifecycle_email_auto")
+    print("You can run it using: mn run customer_lifecycle_email_auto")
 
 if __name__ == "__main__":
     main()

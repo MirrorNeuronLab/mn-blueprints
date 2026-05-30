@@ -1,130 +1,71 @@
 # AI Strategy Planning
 
 `Blueprint ID:` `ai_strategy_planning`
-`Category:` business - Business Solution Template
-`Default LLM:` Ollama `nemotron3:33b` metadata, deterministic local artifact generation for tests
+`Category:` `Business`
 
-## One-line value proposition
+Use this blueprint to turn messy discovery notes into a board-ready AI strategy recommendation with priorities, risks, and next steps.
 
-Compress enterprise discovery into a board-ready strategy recommendation pack.
+## What It Does
 
-## What it is
+This folder is a self-contained MirrorNeuron blueprint. It defines the runtime
+manifest, default configuration, payload code, local documentation, and any
+fixtures needed to review or run the workflow from this checkout.
 
-This blueprint turns client documents, interview transcripts, financial snapshots, and market notes into a first-draft strategy workbench output: executive summary, issue tree, opportunity map, board-slide outline, roadmap, risk register, and evidence appendix.
+## Quick Start
 
-It uses reusable `mn-skills` for document reading, meeting summarization, market research synthesis, spreadsheet analysis, first-draft slides, process maps, implementation plans, and client reports.
+Run from the catalog:
 
-## Who this is for
+```bash
+mn run ai_strategy_planning
+```
 
-Large enterprise strategy teams, CFO offices, corporate development, private-equity operating teams, and transformation offices.
+Run directly from this folder:
 
-## Why it matters
+```bash
+mn run --folder .
+```
 
-Discovery and synthesis consume weeks of junior-consultant effort. A static dashboard can show documents or metrics, and a one-shot LLM can summarize a packet, but neither maintains a reusable evidence trail from source material to board recommendation. This blueprint keeps the evidence, themes, roadmap, and report artifacts together.
+Inspect recent run state:
 
-## Why this runtime is useful here
+```bash
+mn blueprint monitor --follow
+```
 
-MirrorNeuron makes the work auditable. The worker resolves configuration, loads mock or real input packets, writes run artifacts, emits events, and stores `final_artifact.json` so users can compare discovery runs and inspect how recommendations were assembled.
+## Inputs And Configuration
 
-## How it works
-
-1. Load a synthetic or real client-discovery packet.
-2. Normalize documents and extract outlines/chunks.
-3. Summarize meeting transcripts and action items.
-4. Profile financial CSV inputs.
-5. Synthesize market notes and benchmark claims.
-6. Cluster evidence into strategic themes.
-7. Generate an issue tree, opportunity map, roadmap, slide outline, process map, risk register, and client report Markdown.
-
-## Example scenario
-
-Northstar Industrial has revenue growth, rising SG&A, manual quote approvals, uneven ERP data quality, and fragmented operating processes. The blueprint produces a board-ready recommendation pack focused on margin, growth, operating bottlenecks, risk, and technology gaps.
-
-## Inputs
-
-| Input | What it controls | Example | Can customize? |
-|---|---|---|---|
-| `company` | Client name for report artifacts. | `Northstar Industrial` | Yes |
-| `engagement_goal` | Root question for the issue tree. | `Find board-ready opportunities` | Yes |
-| `documents` | Client documents with `name` and `text`. | Annual report excerpt | Yes |
-| `meeting_transcripts` | Interview or workshop transcripts. | Finance and operations notes | Yes |
-| `financials_csv` | KPI or financial table. | SG&A, cycle time, cloud waste | Yes |
-| `market_notes` | Benchmark/source claims. | Analyst or interview notes | Yes |
-| `roadmap_weeks` | Planning horizon. | `12` | Yes |
+- `manifest.json`: graph shape, entrypoints, runtime metadata, runners, services, and environment access.
+- `config/default.json`: default launch configuration and mock/sample input settings.
+- `config/overwrite.json`: optional local overrides layered on defaults.
+- `payloads/`: worker scripts, policies, fixtures, prompts, and support files used by this blueprint.
 
 ## Outputs
 
-| Output | What it means | Where to look |
-|---|---|---|
-| `executive_summary` | Board-level recommendation bullets. | `final_artifact.executive_summary` |
-| `issue_tree` | Theme branches and evidence examples. | `final_artifact.issue_tree` |
-| `opportunity_map` | Prioritized opportunities with confidence and source refs. | `final_artifact.opportunity_map` |
-| `first_draft_slide_deck` | Slide objects plus Markdown. | `final_artifact.first_draft_slide_deck` |
-| `recommended_roadmap` | Implementation plan and Markdown. | `final_artifact.recommended_roadmap` |
-| `evidence_appendix` | Source-linked findings. | `final_artifact.evidence_appendix` |
+Most runs write artifacts under `~/.mn/runs/<run_id>/`. Common files include
+`events.jsonl`, `result.json`, `final_artifact.json`, worker logs, and generated
+reports when the blueprint produces them.
 
-## How to run
+## Safety Checklist
+
+- Review `manifest.json` and `payloads/` before running with real data.
+- Check `pass_env`, provider credentials, Slack/email/web adapters, and any shell or OpenShell runners.
+- Start with mock, dry-run, or quick-test configuration before live external integrations.
+- Keep local customer overrides out of committed defaults.
+
+## Local Documentation
+
+- [SPEC](SPEC.md)
+- [TERM](TERM.md)
+- [License](LICENSE.md)
+
+- [Manifest](manifest.json)
+- [Default config](config/default.json)
+
+## Validation
+
+Run repository-level tests from `mn-blueprints` after changing catalog metadata,
+manifest structure, payload behavior, or shared fixtures:
 
 ```bash
-cd ai_strategy_planning
-python3 payloads/advisory_workflow/scripts/run_blueprint.py \
-  --runs-root /tmp/mirror-neuron-runs
+cd ..
+python3 -m pytest -q
 ```
-
-Run with a real packet:
-
-```bash
-python3 payloads/advisory_workflow/scripts/run_blueprint.py \
-  --input-file /path/to/discovery_packet.json \
-  --runs-root /tmp/mirror-neuron-runs
-```
-
-## How to customize it
-
-Replace the mock packet with client document exports, transcript files, financial tables, process maps, policy repositories, and market research notes. Tune the theme keywords, output schema, stakeholder language, roadmap workstreams, and risk scoring to match the engagement method your team already uses.
-
-## What to look for in results
-
-Check whether evidence flows cleanly from source documents into themes, opportunities, slides, and the roadmap. The strongest runs have source refs for major claims, a clear issue tree, a short opportunity map, and a roadmap that names owners and dependencies.
-
-## Investor and evaluator narrative
-
-This compresses the strategy-discovery layer that sits below partner judgment. The product wedge is not a generic chatbot; it is a repeatable evidence-to-recommendation workflow for consulting, PE value creation, and transformation offices.
-
-## Runtime features demonstrated
-
-- document ingestion
-- meeting summarization
-- spreadsheet profiling
-- market research synthesis
-- first-draft slide outlines
-- implementation roadmap generation
-- run-store audit artifacts
-
-## Test coverage
-
-The worker is deterministic and can be run locally without credentials. The blueprint conforms to the shared manifest, config, README, catalog, and run-store conventions used by the blueprint library tests.
-
-## Limitations
-
-- Mock data is simplified for fast local runs.
-- Generated artifacts are first drafts and require expert review.
-- The default theme clustering is keyword based.
-- Outputs are decision-support artifacts, not professional advice.
-
-## Next steps
-
-- Add file adapters for PDFs, DOCX exports, and spreadsheet uploads.
-- Add organization-specific benchmark libraries.
-- Add human review gates for partner/steering committee approval.
-- Connect final artifacts to slide-generation or document-generation workflows.
-
-## Documentation map
-
-- [SPEC.md](SPEC.md): behavior contract, customer outcome, input/output contract, evaluation criteria, and upgrade path.
-- [manifest.json](manifest.json): graph, agents, edges, metadata, interface channels, and output contract.
-- [config/default.json](config/default.json): default identity, inputs, simulation, LLM, outputs, logging, resources, web UI, and adapters.
-- [config/overwrite.json](config/overwrite.json): local override template layered on top of the default config.
-- [../BLUEPRINT_STANDARD.md](../BLUEPRINT_STANDARD.md): shared input, output, web UI, logging, resources, and artifact standards.
-- [../README.md](../README.md): root catalog, run instructions, and repository structure.
-- `payloads/`: worker code, fixtures, policies, or support assets used by the blueprint.

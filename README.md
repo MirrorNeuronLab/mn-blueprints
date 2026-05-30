@@ -1,255 +1,103 @@
-# MirrorNeuron Blueprint Library
+# MirrorNeuron Blueprints
 
-Runnable workflow blueprints for MirrorNeuron.
+`mn-blueprints` is a self-contained runnable MirrorNeuron workflow blueprint catalog. Each blueprint folder includes
+its own manifest, configuration, payloads, README, and user-facing `SPEC.md`.
 
-Each blueprint is a deployable workflow folder with a manifest, configuration, payloads, tests, documentation, and a customer-facing `SPEC.md`. Blueprints can run with mock inputs first, then be adapted to real data sources and operational systems. The `SPEC.md` files describe the intended real-world customer problem and expected outcome even when the prototype implementation is still partial.
+## Quick Start
 
-Blueprints also declare a product-facing experience layer: input contracts, output/artifact contracts, human-control policy, status phases, and observability dashboard panels. These are metadata and config contracts over the same local run store, so launchers and users can see what inputs are needed, what work is happening, when human review is required, and where final artifacts and logs are written.
-
-In this architecture, agents are the working units. A blueprint describes how agents work together: which agent starts, what messages flow between agents, what state and artifacts are produced, and which execution boundaries apply. MirrorNeuron is the runtime system that runs that workflow in an orchestrated way, with scheduling, message routing, run-state tracking, artifact capture, and resource controls.
-
-Shared entries in `mn-agents` are generic agent templates. A blueprint actualizes those templates into customized workflow agents with `uses`, `with`, and `config`, then assembles them like reusable blocks. Control templates coordinate lifecycle, routing, retry, joins, filters, checkpoints, approval, and output fanout. Data templates do the work: Python execution, native modules, LLM decisions/tools, observation, sandboxed code work, edge model inference, and data services. Not every agent should call an LLM. Agents that do call LLMs should reference named LLM config, and agents that generate, review, browse, or execute code should run inside an explicit sandbox. The blueprint should make those choices visible so the same workflow can be tested locally and run reliably on constrained or edge environments.
-
-## Categories
-
-Use descriptive blueprint IDs that tell end users what the workflow does. Do not prefix IDs with the category; category filtering comes from metadata and `index.json`.
-
-| Category | Use for |
-| --- | --- |
-| General | Runtime patterns, reusable workflow capabilities, and developer examples. |
-| Business | Operations, revenue, service, supply chain, safety, and workflow decisions. |
-| Finance | Market, portfolio, credit, claims, property, and investment workflows. |
-| Science | Public health, traffic, climate, lab, ecosystem, and research simulations. |
-
-Simulation-oriented blueprint IDs should end with `_simulation`; document or email automation blueprint IDs should end with `_auto`.
-
-Category filtering uses the `category` value in `index.json`; `category.json` lists the canonical display names and slugs exposed to clients.
-
-Current filter categories:
-
-| Name | Slug |
-| --- | --- |
-| Finance | `finance` |
-| Business | `business` |
-| Science | `science` |
-| Security | `security` |
-| Engineering | `engineering` |
-
-Example local catalog filter:
+List available blueprints:
 
 ```bash
-jq -r '.[] | select((.category | ascii_downcase) == "finance") | .id' index.json
+mn blueprint list
 ```
 
-## Blueprint Catalog
-
-| Blueprint | Spec | Category | Summary |
-| --- | --- | --- | --- |
-| [`codebase_memory_compression_analysis`](codebase_memory_compression_analysis/README.md) | [SPEC](codebase_memory_compression_analysis/SPEC.md) | Engineering | Large-repo code analysis memory benchmark with bounded context packets. |
-| [`customer_lifecycle_email_auto`](customer_lifecycle_email_auto/README.md) | [SPEC](customer_lifecycle_email_auto/SPEC.md) | Business | Lifecycle email workflow with campaign, delivery, reply, and policy state. |
-| [`pricing_profit_simulation`](pricing_profit_simulation/README.md) | [SPEC](pricing_profit_simulation/SPEC.md) | Business | Pricing workflow with demand, competitor price, inventory, and revenue state. |
-| [`facility_safety_video_monitor`](facility_safety_video_monitor/README.md) | [SPEC](facility_safety_video_monitor/SPEC.md) | Security | Video sampling workflow with alert state and escalation decisions. |
-| [`revenue_retention_simulation`](revenue_retention_simulation/README.md) | [SPEC](revenue_retention_simulation/SPEC.md) | Business | Customer health and churn-risk workflow with intervention planning. |
-| [`service_capacity_simulation`](service_capacity_simulation/README.md) | [SPEC](service_capacity_simulation/SPEC.md) | Business | Queue, staffing, and SLA workflow for service-capacity decisions. |
-| [`supply_chain_resilience_simulation`](supply_chain_resilience_simulation/README.md) | [SPEC](supply_chain_resilience_simulation/SPEC.md) | Business | Inventory, demand, and supplier-delay workflow with mitigation planning. |
-| [`ai_strategy_planning`](ai_strategy_planning/README.md) | [SPEC](ai_strategy_planning/SPEC.md) | Business | Enterprise discovery workflow that produces board-ready recommendation artifacts. |
-| [`ai_audit_readiness`](ai_audit_readiness/README.md) | [SPEC](ai_audit_readiness/SPEC.md) | Security | AI, cyber, and control readiness workflow with evidence mapping and remediation planning. |
-| [`vendor_selection_decision`](vendor_selection_decision/README.md) | [SPEC](vendor_selection_decision/SPEC.md) | Business | Vendor comparison, RFP, scoring, roadmap, and negotiation workflow. |
-| [`claim_risk_triage`](claim_risk_triage/README.md) | [SPEC](claim_risk_triage/SPEC.md) | Finance | Claim queue and fraud-signal workflow with triage recommendations. |
-| [`credit_default_warning`](credit_default_warning/README.md) | [SPEC](credit_default_warning/SPEC.md) | Finance | Borrower default and credit-policy workflow. |
-| [`liquidity_risk_monitor`](liquidity_risk_monitor/README.md) | [SPEC](liquidity_risk_monitor/SPEC.md) | Finance | Market stream workflow with signals, explanations, advice events, and optional Slack alerts. |
-| [`portfolio_crash_stress_simulation`](portfolio_crash_stress_simulation/README.md) | [SPEC](portfolio_crash_stress_simulation/SPEC.md) | Finance | Macro shock and portfolio-risk workflow with rebalance recommendations. |
-| [`zip_code_property_ranking`](zip_code_property_ranking/README.md) | [SPEC](zip_code_property_ranking/SPEC.md) | Finance | ZIP-code property-market workflow with ranked opportunities. |
-| [`zip_code_property_memory_ranking`](zip_code_property_memory_ranking/README.md) | [SPEC](zip_code_property_memory_ranking/SPEC.md) | Finance | Large-context property acquisition workflow with working memory and decision-quality benchmarks. |
-| [`closed_loop_agent_runtime`](closed_loop_agent_runtime/README.md) | [SPEC](closed_loop_agent_runtime/SPEC.md) | Engineering | Time-stepped operations queue workflow. |
-| [`cluster_reliability_simulation`](cluster_reliability_simulation/README.md) | [SPEC](cluster_reliability_simulation/SPEC.md) | Engineering | Combined-cluster reliability management demo for scheduling, recovery, drain, and maintenance. |
-| [`context_memory_audit`](context_memory_audit/README.md) | [SPEC](context_memory_audit/SPEC.md) | Engineering | Multi-agent context handoff workflow with scoped memory and audit output. |
-| [`context_memory_compression`](context_memory_compression/README.md) | [SPEC](context_memory_compression/SPEC.md) | Engineering | Memory compression workflow for bounded prompt budgets. |
-| [`environment_control_simulation`](environment_control_simulation/README.md) | [SPEC](environment_control_simulation/SPEC.md) | Engineering | Control-loop workflow over changing metrics and actions. |
-| [`event_stream_triage`](event_stream_triage/README.md) | [SPEC](event_stream_triage/SPEC.md) | Engineering | Stateful event stream triage workflow. |
-| [`human_approval_gate`](human_approval_gate/README.md) | [SPEC](human_approval_gate/SPEC.md) | Security | Approval-gated decision workflow. |
-| [`live_telemetry_monitor`](live_telemetry_monitor/README.md) | [SPEC](live_telemetry_monitor/SPEC.md) | Engineering | Live telemetry stream workflow. |
-| [`llm_tool_orchestration`](llm_tool_orchestration/README.md) | [SPEC](llm_tool_orchestration/SPEC.md) | Engineering | Tool-informed planning workflow. |
-| [`message_routing_trace`](message_routing_trace/README.md) | [SPEC](message_routing_trace/SPEC.md) | Engineering | Deterministic message-flow trace for the runtime message model. |
-| [`contract_negotiation_simulation`](contract_negotiation_simulation/README.md) | [SPEC](contract_negotiation_simulation/SPEC.md) | Engineering | Multi-agent negotiation state workflow. |
-| [`native_live_monitor_service`](native_live_monitor_service/README.md) | [SPEC](native_live_monitor_service/SPEC.md) | Engineering | Native BEAM live monitor workflow. |
-| [`openshell_sandbox_worker_pipeline`](openshell_sandbox_worker_pipeline/README.md) | [SPEC](openshell_sandbox_worker_pipeline/SPEC.md) | Engineering | Sandboxed worker execution and artifact handoff workflow. |
-| [`parallel_worker_benchmark`](parallel_worker_benchmark/README.md) | [SPEC](parallel_worker_benchmark/SPEC.md) | Engineering | Parallel synthetic workload benchmark. |
-| [`policy_feedback_optimization_simulation`](policy_feedback_optimization_simulation/README.md) | [SPEC](policy_feedback_optimization_simulation/SPEC.md) | Engineering | Policy adjustment workflow with feedback over time. |
-| [`python_sdk_research_service`](python_sdk_research_service/README.md) | [SPEC](python_sdk_research_service/SPEC.md) | Engineering | Long-running Python SDK research workflow. |
-| [`python_sdk_research_pipeline`](python_sdk_research_pipeline/README.md) | [SPEC](python_sdk_research_pipeline/SPEC.md) | Engineering | Python-defined staged research workflow. |
-| [`sandboxed_codegen_review`](sandboxed_codegen_review/README.md) | [SPEC](sandboxed_codegen_review/SPEC.md) | Security | Sandboxed code generation, review, and validation workflow. |
-| [`state_audit_simulation`](state_audit_simulation/README.md) | [SPEC](state_audit_simulation/SPEC.md) | Engineering | State tracking workflow with inspectable transitions. |
-| [`stream_backpressure_simulation`](stream_backpressure_simulation/README.md) | [SPEC](stream_backpressure_simulation/SPEC.md) | Engineering | Live stream workflow with bounded queues and backpressure behavior. |
-| [`adaptive_experiment_planning`](adaptive_experiment_planning/README.md) | [SPEC](adaptive_experiment_planning/SPEC.md) | Science | Iterative experiment selection workflow. |
-| [`climate_resilience_planning_simulation`](climate_resilience_planning_simulation/README.md) | [SPEC](climate_resilience_planning_simulation/SPEC.md) | Science | Weather, flooding, and infrastructure-risk workflow. |
-| [`drug_discovery_simulation`](drug_discovery_simulation/README.md) | [SPEC](drug_discovery_simulation/SPEC.md) | Science | Long-running staged discovery workflow. |
-| [`ecosystem_simulation`](ecosystem_simulation/README.md) | [SPEC](ecosystem_simulation/SPEC.md) | Science | Multi-region population dynamics workflow. |
-| [`motion_planning_simulation`](motion_planning_simulation/README.md) | [SPEC](motion_planning_simulation/SPEC.md) | Science | Multi-agent particle simulation and visualization workflow. |
-| [`outbreak_response_simulation`](outbreak_response_simulation/README.md) | [SPEC](outbreak_response_simulation/SPEC.md) | Science | Disease spread and intervention workflow. |
-| [`traffic_control_simulation`](traffic_control_simulation/README.md) | [SPEC](traffic_control_simulation/SPEC.md) | Science | Traffic network and incident-control workflow. |
-| [`user_activity_rmf_triage`](user_activity_rmf_triage/README.md) | [SPEC](user_activity_rmf_triage/SPEC.md) | Security | User activity stream triage workflow with RMF evidence artifacts and safe response recommendations. |
-
-## Prerequisites
-
-- Python 3.11 or newer.
-- MirrorNeuron CLI installed as `mn`.
-- Runtime dependencies required by the selected blueprint.
-- Optional provider credentials for blueprints that call LLM, Slack, email, web, or other external services.
-
-## Running a Blueprint
-
-Run a catalog blueprint through the CLI:
+Run a catalog blueprint:
 
 ```bash
-mn blueprint run message_routing_trace
-mn blueprint monitor --follow
+mn run <blueprint_id>
 ```
 
-Run a local blueprint folder:
+Run a checked-in folder directly:
 
 ```bash
-mn blueprint run ./message_routing_trace
+cd <blueprint_id>
+mn run --folder .
 ```
 
-Run a shared simulation blueprint directly from its folder:
-
-```bash
-cd supply_chain_resilience_simulation
-python3 payloads/simulation_loop/scripts/run_blueprint.py --mock-llm --steps 3
-```
-
-Use a fixed run ID and isolated run store when comparing scenarios:
-
-```bash
-python3 payloads/simulation_loop/scripts/run_blueprint.py \
-  --mock-llm \
-  --run-id supply-chain-review-001 \
-  --runs-root /tmp/mirror-neuron-runs \
-  --steps 3
-```
-
-Run with a local Ollama-compatible endpoint:
-
-```bash
-MN_LLM_API_BASE=http://localhost:11434 \
-MN_LLM_MODEL=ollama/nemotron3:33b \
-python3 payloads/simulation_loop/scripts/run_blueprint.py --steps 3
-```
-
-## Output and Run Artifacts
-
-Blueprint runs typically write artifacts under:
-
-```text
-~/.mn/runs/<run_id>/
-```
-
-Common files:
-
-| File | Purpose |
-| --- | --- |
-| `run.json` | Run identity and status. |
-| `config.json` | Effective configuration. |
-| `inputs.json` | Input payload used for the run. |
-| `events.jsonl` | Event stream. |
-| `result.json` | Machine-readable result. |
-| `final_artifact.json` | Final workflow artifact. |
-| `job.json` | Runtime job correlation when submitted through the CLI. |
-| `web_ui.json` | Local UI or report metadata when available. |
-| `ui.json` | Dashboard layout or UI state when a web UI is available. |
-| `logs.jsonl` | Structured runtime logs. |
-| `logs.index.json` | Log segment and rotation index metadata. |
-| `human.jsonl` | Sparse human notices, requests, and responses mirrored to events. |
-| `resources.jsonl` | Resource usage samples for CPU, GPU, memory, queues, and LLM tokens when collected. |
-
-Useful observability commands:
-
-```bash
-mn blueprint monitor --follow
-mn blueprint tail <run_id>
-mn blueprint compare <run_a> <run_b>
-mn blueprint export <run_id> --format markdown
-mn blueprint export <run_id> --format html
-```
-
-## Project Structure
-
-Most blueprint folders contain:
-
-| Path | Purpose |
-| --- | --- |
-| `manifest.json` | Graph topology, metadata, entrypoints, workers, runtime requirements, input validation, and output contracts. |
-| `config/default.json` | Default inputs, simulation settings, LLM settings, output adapters, logging config, resource sampling, human-control policy, and web UI config. |
-| `config/overwrite.json` | Local customer-specific overwrite values layered on top of `config/default.json` before launch. |
-| `scenario.json` | Data-driven simulation metadata, when applicable. |
-| `payloads/` | Worker scripts, generated runners, policies, fixtures, and domain assets. |
-| `scripts/pre-launch.sh` | Optional host-side setup hook started before run validation/submission for long-lived services required by the run. |
-| `README.md` | Blueprint-specific usage notes and developer/evaluator quickstart. |
-| `SPEC.md` | Customer-facing problem statement, outcome definition, evaluation criteria, prototype limits, and upgrade path. |
-| `tests/` | Smoke tests or package-specific tests. |
-
-The root `index.json` is the catalog source of truth.
-
-For the shared contract behind these files, see [BLUEPRINT_STANDARD.md](BLUEPRINT_STANDARD.md). Each blueprint README includes a documentation map that points back to the standard plus its local `SPEC.md`, `manifest.json`, `config/default.json`, override template, and payloads.
-
-## Agent Workflow Model
-
-Blueprint manifests should treat each node as an actualized agent with a clear job and communication contract. Shared `mn-agents` templates provide generic building blocks; the blueprint gives them concrete roles, configs, message types, and domain payloads. The graph should explain:
-
-- what starts the workflow;
-- which message types move between agents;
-- which agents are deterministic and which may call an LLM;
-- which agents need a sandbox, custom image, service port, or external capability;
-- what artifacts and events are expected from each stage;
-- how the runtime should remain efficient under local, cloud, or edge constraints.
-
-MirrorNeuron owns execution concerns such as scheduling, retries, pools, event recording, run storage, and resource isolation. Blueprints own the workflow shape and domain intent. Shared templates in `mn-agents` provide reusable agent contracts so those workflows stay consistent and testable.
-
-## Customization
-
-When adapting a blueprint:
-
-1. Replace synthetic inputs with a real adapter while preserving the expected input shape.
-2. Tune simulation parameters and action effects using real data or domain review.
-3. Update allowed actions, prompts, and final artifact schemas.
-4. Add approval gates for irreversible, regulated, or expensive actions.
-5. Keep `blueprint_id`, `name`, `run_id`, and run-store artifacts stable for auditability.
-
-## Testing
-
-Run the full blueprint suite:
+Run repository tests:
 
 ```bash
 python3 -m pytest -q
 ```
 
-Run optional Ollama smoke tests:
+## Catalog
 
-```bash
-RUN_OLLAMA_INTEGRATION=1 \
-MN_LLM_API_BASE=http://localhost:11434 \
-MN_LLM_MODEL=ollama/nemotron3:33b \
-python3 -m pytest tests/test_blueprint_library.py -m ollama -q
-```
+| Blueprint | Category | Purpose |
+| --- | --- | --- |
+| [`adaptive_experiment_planning`](adaptive_experiment_planning/README.md) | Science | Use this blueprint to choose the next experiment from prior yield, toxicity, cost, and confidence signals before spending lab capacity. |
+| [`ai_audit_readiness`](ai_audit_readiness/README.md) | Security | Use this blueprint to turn AI and cyber control requirements into an evidence-backed readiness pack your team can review before audit or launch. |
+| [`ai_strategy_planning`](ai_strategy_planning/README.md) | Business | Use this blueprint to turn messy discovery notes into a board-ready AI strategy recommendation with priorities, risks, and next steps. |
+| [`claim_risk_triage`](claim_risk_triage/README.md) | Finance | Use this blueprint to prioritize claim reviews by combining fraud signals, queue pressure, and adjuster capacity into an auditable triage recommendation. |
+| [`climate_resilience_planning_simulation`](climate_resilience_planning_simulation/README.md) | Science | Use this blueprint to compare local flood mitigation plans as rainfall, water levels, pump capacity, and vulnerable assets change. |
+| [`closed_loop_agent_runtime`](closed_loop_agent_runtime/README.md) | Engineering | Use this blueprint to understand how a closed-loop agent observes changing work, decides on each tick, and leaves an inspectable action trail. |
+| [`cluster_reliability_simulation`](cluster_reliability_simulation/README.md) | Engineering | Use this blueprint to test and demo advanced cluster reliability management with Nomad-inspired scheduling, lifecycle, recovery, drain, and service-discovery controls. |
+| [`codebase_memory_compression_analysis`](codebase_memory_compression_analysis/README.md) | Engineering | Use this blueprint to see how compressed agent memory helps teams analyze large codebases without flooding every worker with full repository context. |
+| [`context_memory_audit`](context_memory_audit/README.md) | Engineering | Use this blueprint to audit how role-specific context packets move through a multi-agent decision process and affect the final recommendation. |
+| [`context_memory_compression`](context_memory_compression/README.md) | Engineering | Use this blueprint to test whether compressed working memory keeps a growing LLM workflow useful while reducing context load and cost. |
+| [`contract_negotiation_simulation`](contract_negotiation_simulation/README.md) | Engineering | Use this blueprint to model buyer-supplier negotiation rounds and compare offers as demand, price, and capacity change. |
+| [`credit_default_warning`](credit_default_warning/README.md) | Finance | Use this blueprint to spot borrower default pressure early and compare policy responses before credit risk turns into losses. |
+| [`customer_lifecycle_email_auto`](customer_lifecycle_email_auto/README.md) | Business | Use this blueprint to plan, generate, check, send, and track lifecycle emails so customer outreach stays timely, governed, and tied to customer state. |
+| [`drug_discovery_simulation`](drug_discovery_simulation/README.md) | Science | Use this blueprint to run a multi-stage drug discovery loop that generates, filters, and evaluates candidates with reviewable evidence. |
+| [`ecosystem_simulation`](ecosystem_simulation/README.md) | Science | Use this blueprint to explore ecosystem interventions across regions and compare population effects before making policy or field decisions. |
+| [`environment_control_simulation`](environment_control_simulation/README.md) | Engineering | Use this blueprint to experiment with control decisions in a changing environment where load, temperature, reserve, and service levels interact. |
+| [`event_stream_triage`](event_stream_triage/README.md) | Engineering | Use this blueprint to triage noisy event streams and see how anomaly pressure, queue depth, and false positives change decisions over time. |
+| [`facility_safety_video_monitor`](facility_safety_video_monitor/README.md) | Security | Use this blueprint to watch an approved camera stream, detect visible people, summarize what is observable, and raise safety alerts with a reviewable event trail. |
+| [`human_approval_gate`](human_approval_gate/README.md) | Security | Use this blueprint to add a human approval checkpoint before an agent applies high-impact actions, with clear review and audit records. |
+| [`human_review_workflow`](human_review_workflow/README.md) | Security | Use this blueprint to run a complete human review loop where requests, decisions, revisions, and applied actions are all captured. |
+| [`liquidity_risk_monitor`](liquidity_risk_monitor/README.md) | Finance | Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile. |
+| [`live_telemetry_monitor`](live_telemetry_monitor/README.md) | Engineering | Use this blueprint to process live telemetry chunks, detect changing signal patterns, and summarize what operators need to notice. |
+| [`llm_tool_orchestration`](llm_tool_orchestration/README.md) | Engineering | Use this blueprint to see an LLM agent call a forecast tool, weigh the result, and choose a resource action you can inspect. |
+| [`message_routing_trace`](message_routing_trace/README.md) | Engineering | Use this blueprint to trace how messages move through router and aggregator agents so workflow wiring is easier to debug and explain. |
+| [`motion_planning_simulation`](motion_planning_simulation/README.md) | Science | Use this blueprint to visualize shared-world motion planning so you can inspect coordination, conflicts, and route choices between agents. |
+| [`native_live_monitor_service`](native_live_monitor_service/README.md) | Engineering | Use this blueprint to run a lightweight native monitor that keeps producing decisions over live state until you stop it. |
+| [`network_threat_monitor`](network_threat_monitor/README.md) | security | This generated blueprint monitors network events, scores suspicious spamware/malware/hack behavior, and writes a dry-run alarm artifact for human review. |
+| [`openshell_sandbox_worker_pipeline`](openshell_sandbox_worker_pipeline/README.md) | Engineering | Use this blueprint to run shell and Python workers inside isolated execution boundaries while keeping each step traceable. |
+| [`outbreak_response_simulation`](outbreak_response_simulation/README.md) | Science | Use this blueprint to compare outbreak response policies as infections, mobility, vaccination, and hospital load evolve. |
+| [`parallel_worker_benchmark`](parallel_worker_benchmark/README.md) | Engineering | Use this blueprint to stress-test broad parallel fan-out and measure how deterministic workers behave as runtime scale increases. |
+| [`policy_feedback_optimization_simulation`](policy_feedback_optimization_simulation/README.md) | Engineering | Use this blueprint to tune policy thresholds through repeated feedback so you can compare rewards, incidents, and tradeoffs before deployment. |
+| [`portfolio_crash_stress_simulation`](portfolio_crash_stress_simulation/README.md) | Finance | Use this blueprint to stress a portfolio against crash, rate, and liquidity shocks and review rebalancing choices before taking action. |
+| [`pricing_profit_simulation`](pricing_profit_simulation/README.md) | Business | Use this blueprint to compare pricing moves against demand, inventory, margin, and competitors before you change prices in the real world. |
+| [`python_sdk_research_pipeline`](python_sdk_research_pipeline/README.md) | Engineering | Use this blueprint to author a MirrorNeuron workflow directly in Python and compile it into a runnable blueprint bundle. |
+| [`python_sdk_research_service`](python_sdk_research_service/README.md) | Engineering | Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns. |
+| [`revenue_retention_simulation`](revenue_retention_simulation/README.md) | Business | Use this blueprint to compare retention offers for at-risk customers and choose interventions with clear revenue, churn, and customer-experience tradeoffs. |
+| [`sandboxed_codegen_review`](sandboxed_codegen_review/README.md) | Security | Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result. |
+| [`service_capacity_simulation`](service_capacity_simulation/README.md) | Business | Use this blueprint to test staffing, deflection, and escalation decisions before service queues miss SLA targets. |
+| [`state_audit_simulation`](state_audit_simulation/README.md) | Engineering | Use this blueprint to record simulation state changes so every agent decision can be inspected after the run. |
+| [`stream_backpressure_simulation`](stream_backpressure_simulation/README.md) | Engineering | Use this blueprint to observe bounded queues, slow workers, and retry-later behavior before building live stream workflows. |
+| [`supply_chain_resilience_simulation`](supply_chain_resilience_simulation/README.md) | Business | Use this blueprint to rehearse supplier disruption responses and choose actions that protect inventory, fulfillment, and customer service levels. |
+| [`traffic_control_simulation`](traffic_control_simulation/README.md) | Science | Use this blueprint to test traffic signal and rerouting controls against speed, incident, volume, and emissions tradeoffs. |
+| [`user_activity_rmf_triage`](user_activity_rmf_triage/README.md) | general | A local security worker that watches user activity, detects suspicious behavior, asks risky sessions to re-authenticate, and writes RMF/ATO/cATO-ready evidence artifacts. |
+| [`vendor_selection_decision`](vendor_selection_decision/README.md) | Business | Use this blueprint to convert requirements and vendor responses into a scored recommendation, implementation plan, and reviewable decision record. |
+| [`zip_code_property_memory_ranking`](zip_code_property_memory_ranking/README.md) | Finance | Use this blueprint to rank property opportunities while preserving useful deal memory across noisy ZIP-code history, broker flow, financing constraints, and past outcomes. |
+| [`zip_code_property_ranking`](zip_code_property_ranking/README.md) | Finance | Use this blueprint to rank property acquisition opportunities by ZIP-code demand, price, cap-rate, and risk signals before committing diligence time. |
 
-## Troubleshooting
+## Folder Contract
 
-| Symptom | Check |
+Most blueprint folders contain:
+
+| Path | Purpose |
 | --- | --- |
-| Blueprint ID is not found | Run `mn blueprint update` and confirm the ID exists in `index.json`. |
-| Run artifacts are missing | Check `MN_RUNS_ROOT`, `MN_NO_RUN_STORE`, and write permissions. |
-| LLM calls fail | Confirm `MN_LLM_MODEL`, `MN_LLM_API_BASE`, and provider credentials. |
-| Local folder run fails | Confirm the folder contains `manifest.json` or valid Python source blueprint metadata. |
+| `README.md` | Self-contained quickstart, inspection notes, and validation guidance. |
+| `SPEC.md` | User-facing problem, outcome, evaluation criteria, limits, and upgrade path. |
+| `TERM.md` | Terms, assumptions, or domain notes when present. |
+| `manifest.json` | Runtime graph, entrypoints, metadata, runners, services, and environment access. |
+| `config/default.json` | Default launch configuration and mock/sample inputs. |
+| `config/overwrite.json` | Optional local overrides. Do not commit customer secrets. |
+| `payloads/` | Worker code, prompts, policies, fixtures, and support files. |
 
-## Rename Migration Notes
+## Safety Checklist
 
-Historical names are preserved as aliases in the shared support library where needed. New names should use the current category prefixes and the current blueprint directory names listed above.
-
-## Contributing
-
-Keep blueprint folders self-contained, testable, and clear about required inputs and provider credentials. Keep each `SPEC.md` customer-facing: describe the real operational problem, expected outcome, evaluation criteria, prototype limits, and upgrade path without implying unfinished integrations are already production-ready. Put reusable helper code in `mn-skills`, not in one blueprint folder.
-
-## License
-
-No top-level license file is currently present in this repository. Add one before distributing blueprint assets outside the project.
+- Review `manifest.json`, `payloads/`, and `pass_env` before live runs.
+- Start with mock, dry-run, or quick-test settings before enabling real external services.
+- Keep customer-specific inputs and secrets in local overrides or environment variables.
+- Update the local blueprint README and `SPEC.md` when behavior, inputs, outputs, or limits change.

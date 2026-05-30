@@ -713,7 +713,7 @@
       "status_event": "blueprint_status"
     },
     "status_logging": {
-      "description": "mn blueprint run writes slow-agent and backpressure events to /tmp/mn_<job_id>/run.log.",
+      "description": "mn run writes slow-agent and backpressure events to /tmp/mn_<job_id>/run.log.",
       "env": "MN_BLUEPRINT_LOG_LEVEL",
       "format": "jsonl",
       "stream": "stderr"

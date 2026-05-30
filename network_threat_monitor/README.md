@@ -1,53 +1,71 @@
 # Network Threat Monitor
 
 `Blueprint ID:` `network_threat_monitor`
+`Category:` `security`
 
 This generated blueprint monitors network events, scores suspicious spamware/malware/hack behavior, and writes a dry-run alarm artifact for human review.
 
-## How To Run
+## What It Does
+
+This folder is a self-contained MirrorNeuron blueprint. It defines the runtime
+manifest, default configuration, payload code, local documentation, and any
+fixtures needed to review or run the workflow from this checkout.
+
+## Quick Start
+
+Run from the catalog:
 
 ```bash
-cd mn-blueprints/network_threat_monitor
-python3 payloads/network_monitor/scripts/run_blueprint.py \
-  --events inputs/sample_network_events.jsonl \
-  --runs-root /tmp/mirror-neuron-runs
+mn run network_threat_monitor
 ```
 
-The runner writes `run.json`, `config.json`, `inputs.json`, `events.jsonl`, `result.json`, and `final_artifact.json` under the selected run root.
+Run directly from this folder:
 
-## Safety
+```bash
+mn run --folder .
+```
 
-This blueprint does not block traffic, isolate hosts, change firewall policy, or disable accounts. It produces decision-support artifacts and requires human approval before any real response action.
+Inspect recent run state:
 
-## Reference Blueprints
+```bash
+mn blueprint monitor --follow
+```
 
-- `user_activity_rmf_triage`
-- `ai_audit_readiness`
-- `facility_safety_video_monitor`
+## Inputs And Configuration
 
-## Selected Agents
+- `manifest.json`: graph shape, entrypoints, runtime metadata, runners, services, and environment access.
+- `config/default.json`: default launch configuration and mock/sample input settings.
+- `config/overwrite.json`: optional local overrides layered on defaults.
+- `payloads/`: worker scripts, policies, fixtures, prompts, and support files used by this blueprint.
 
-- `mn-agents.control_lifecycle`
-- `mn-agents.control_router`
-- `mn-agents.control_output_fanout`
-- `mn-agents.control_input_listener`
-- `mn-agents.data_observer`
-- `mn-agents.control_approval_gate`
-- `mn-agents.data_python_executor`
-- `mn-agents.control_join`
-- `mn-agents.data_module`
+## Outputs
 
-## Selected Skills
+Most runs write artifacts under `~/.mn/runs/<run_id>/`. Common files include
+`events.jsonl`, `result.json`, `final_artifact.json`, worker logs, and generated
+reports when the blueprint produces them.
 
-- `blueprint_support_skill`
-- `email_delivery_skill`
+## Safety Checklist
 
-## Documentation map
+- Review `manifest.json` and `payloads/` before running with real data.
+- Check `pass_env`, provider credentials, Slack/email/web adapters, and any shell or OpenShell runners.
+- Start with mock, dry-run, or quick-test configuration before live external integrations.
+- Keep local customer overrides out of committed defaults.
 
-- [SPEC.md](SPEC.md): behavior contract, customer outcome, input/output contract, evaluation criteria, and upgrade path.
-- [manifest.json](manifest.json): graph, agents, edges, metadata, interface channels, and output contract.
-- [config/default.json](config/default.json): default identity, inputs, simulation, LLM, outputs, logging, resources, web UI, and adapters.
-- [config/overwrite.json](config/overwrite.json): local override template layered on top of the default config.
-- [../BLUEPRINT_STANDARD.md](../BLUEPRINT_STANDARD.md): shared input, output, web UI, logging, resources, and artifact standards.
-- [../README.md](../README.md): root catalog, run instructions, and repository structure.
-- `payloads/`: worker code, fixtures, policies, or support assets used by the blueprint.
+## Local Documentation
+
+- [SPEC](SPEC.md)
+- [TERM](TERM.md)
+- [License](LICENSE.md)
+
+- [Manifest](manifest.json)
+- [Default config](config/default.json)
+
+## Validation
+
+Run repository-level tests from `mn-blueprints` after changing catalog metadata,
+manifest structure, payload behavior, or shared fixtures:
+
+```bash
+cd ..
+python3 -m pytest -q
+```

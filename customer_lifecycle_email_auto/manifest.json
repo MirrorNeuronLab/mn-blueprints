@@ -184,28 +184,13 @@
       }
     ]
   },
-  "job_name": "customer-lifecycle-email-auto",
-  "license": "LICENSE.md",
-  "term": "TERM.md",
-  "long_lived": true,
-  "manifest_version": "1.0",
-  "requirements": {
-    "cpu": {
-      "min_cores": 1
-    },
-    "gpu": {
-      "min_count": 0
-    },
-    "memory": {
-      "min_gb": 2
-    },
-    "disk": {
-      "min_gb": 1
-    }
-  },
   "input_validation": {
     "rules": []
   },
+  "job_name": "customer-lifecycle-email-auto",
+  "license": "LICENSE.md",
+  "long_lived": true,
+  "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
       "library": "../mn-agents/index.json",
@@ -275,6 +260,30 @@
     },
     "customizable_for": "Retention campaigns, onboarding journeys, renewal nudges, education sequences.",
     "description": "Use this blueprint to plan, generate, check, send, and track lifecycle emails so customer outreach stays timely, governed, and tied to customer state.",
+    "documentation": {
+      "catalog": "../README.md",
+      "config": "config/default.json",
+      "manifest": "manifest.json",
+      "overrides": "config/overwrite.json",
+      "payloads": "payloads/",
+      "readme": "README.md",
+      "spec": "SPEC.md",
+      "standard": "../BLUEPRINT_STANDARD.md"
+    },
+    "human_control": {
+      "enabled": true,
+      "events": [
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied"
+      ],
+      "mode": "notice_only",
+      "notice_event": "human_notice",
+      "reason": "The workflow may surface notable findings for review but does not apply irreversible actions by itself.",
+      "requires_ack": false
+    },
     "init_config_review": {
       "checks": [
         "identity",
@@ -286,7 +295,104 @@
         "privacy",
         "budgets"
       ],
+      "fields": [
+        {
+          "default": "mock",
+          "description": "Run mode used for mock, test, or real-adapter execution.",
+          "label": "Run mode",
+          "path": "mode"
+        },
+        {
+          "default": "mock",
+          "description": "Input source adapter. Mock is safe for demos; real inputs use json, file, env_json, streams, or connector profiles.",
+          "label": "Input adapter",
+          "path": "inputs.adapter"
+        },
+        {
+          "default": "~/.mn/runs",
+          "description": "Local run-store root for logs, events, inputs, outputs, and final artifacts.",
+          "label": "Run-store root",
+          "path": "outputs.run_root"
+        },
+        {
+          "default": "notice_only",
+          "description": "Whether this blueprint disables human control, emits notice-only events, or requires approval for high-impact actions.",
+          "label": "Human control mode",
+          "path": "human_control.mode"
+        },
+        {
+          "default": true,
+          "description": "Whether the shared run-store dashboard should be available for this run.",
+          "label": "Web UI",
+          "path": "web_ui.enabled"
+        },
+        {
+          "default": "http://192.168.4.173:11434",
+          "description": "LLM endpoint used by LLM-backed agents.",
+          "label": "LLM API base",
+          "path": "llm.configs.primary.api_base"
+        },
+        {
+          "default": "ollama/nemotron3:33b",
+          "description": "LLM model used by LLM-backed agents.",
+          "label": "LLM model",
+          "path": "llm.configs.primary.model"
+        }
+      ],
       "required": true
+    },
+    "input_contract": {
+      "description": "Use this blueprint to plan, generate, check, send, and track lifecycle emails so customer outreach stays timely, governed, and tied to customer state.",
+      "optional_inputs": [],
+      "privacy_classification": "internal",
+      "profiles": {
+        "env_json": {
+          "adapter": "env_json",
+          "description": "JSON object loaded from MN_BLUEPRINT_INPUT_JSON."
+        },
+        "file": {
+          "adapter": "file",
+          "description": "JSON object loaded from a local file path."
+        },
+        "json": {
+          "adapter": "json",
+          "description": "Inline JSON object supplied through config or runtime overrides."
+        },
+        "mock": {
+          "adapter": "mock",
+          "description": "Default synthetic inputs bundled with the blueprint.",
+          "payload": {}
+        }
+      },
+      "required_inputs": [
+        {
+          "description": "Audience segment or lifecycle cohort.",
+          "example": null,
+          "name": "customer_segment",
+          "type": "domain_value"
+        },
+        {
+          "description": "Retention, conversion, onboarding, or winback objective.",
+          "example": null,
+          "name": "campaign_goal",
+          "type": "domain_value"
+        },
+        {
+          "description": "Review, personalization, and delivery constraints.",
+          "example": null,
+          "name": "send_policy",
+          "type": "domain_value"
+        }
+      ],
+      "resolved_artifact": "inputs.json",
+      "schema_version": "mn.blueprint.input_contract.v1",
+      "supported_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "validation_rules": []
     },
     "interfaces": {
       "channels": {
@@ -305,12 +411,20 @@
             "web_ui.json",
             "ui.json",
             "web/index.html",
-            "logs.jsonl"
+            "logs.jsonl",
+            "logs.index.json",
+            "human.jsonl",
+            "resources.jsonl"
           ]
         },
         "events": {
           "artifact": "events.jsonl",
           "description": "Append-only workflow events."
+        },
+        "human": {
+          "artifact": "human.jsonl",
+          "description": "Sparse human collaboration notices, input requests, and responses.",
+          "mirrored_to": "events.jsonl"
         },
         "input_skills": {
           "description": "Connector-backed or reusable skill-backed input sources."
@@ -320,7 +434,9 @@
           "description": "Resolved runtime inputs and adapter provenance."
         },
         "logs": {
+          "artifact": "logs.jsonl",
           "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "index": "logs.index.json",
           "stream": "stdout/stderr"
         },
         "output_skills": {
@@ -332,6 +448,10 @@
             "final_artifact.json"
           ],
           "description": "Primary result and final user-facing artifact."
+        },
+        "resources": {
+          "artifact": "resources.jsonl",
+          "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
         },
         "streams": {
           "default": [
@@ -381,6 +501,7 @@
         "outputs",
         "logging",
         "resources",
+        "human_control",
         "real_adapters",
         "streams",
         "input_skills",
@@ -464,13 +585,158 @@
     "llm": {},
     "llm_agent_role": "Campaign planner, copywriter, policy checker, delivery executor, inbox responder.",
     "name": "Customer Lifecycle Email Auto",
+    "observability_dashboard": {
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ],
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store"
+    },
     "output": "Prepared emails, sent-event logs, reply handling events, and campaign summaries.",
     "output_contract": {
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        }
+      ],
       "events": "typed event objects with payload",
       "events_jsonl": "events.jsonl",
+      "final_artifact": {
+        "description": "The durable user-facing artifact should summarize the result, recommendation, confidence, evidence, next steps, and source references.",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ],
+        "schema_version": "mn.blueprint.final_artifact_contract.v1"
+      },
       "final_artifact_json": "final_artifact.json",
       "local_run_store": "~/.mn/runs/<run_id>/",
       "logs_jsonl": "logs.jsonl",
+      "output_skills": [],
       "response_schema": "mn.blueprint.response.v1",
       "result_json": "result.json",
       "status": "JSON lines on stderr",
@@ -486,7 +752,11 @@
       "LLM messaging",
       "delivery integration",
       "policy checks",
-      "long-running campaign loop"
+      "long-running campaign loop",
+      "transparent run status",
+      "human control policy",
+      "artifact records",
+      "run-store observability dashboard"
     ],
     "simulation_type": "Lifecycle campaign loop with inbox and delivery state.",
     "standard": {
@@ -516,6 +786,56 @@
       ],
       "run_store": "~/.mn/runs/<run_id>/",
       "version": "1.0"
+    },
+    "standard_version": "1.0",
+    "status_contract": {
+      "heartbeat_event": "blueprint_status",
+      "heartbeat_required": false,
+      "phases": [
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "loading_inputs",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "running_worker",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "waiting_for_human",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "writing_artifacts",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "completed",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        }
+      ],
+      "schema_version": "mn.blueprint.status_contract.v1",
+      "source": "run_store",
+      "status_event": "blueprint_status"
     },
     "status_logging": {
       "env": "MN_BLUEPRINT_LOG_LEVEL",
@@ -551,6 +871,10 @@
       "node_id": "customer_research_agent",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
+        "command": [
+          "python3",
+          "scripts/execute.py"
+        ],
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
@@ -569,12 +893,19 @@
           "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
           "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
         },
+        "from": "base",
         "name_prefix": "customer_research",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "customer_research_result",
+        "pool": "default",
+        "pool_slots": 1,
         "role": "Customer Research Agent",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/execute.py",
+        "tty": false,
+        "upload_as": "customer_research",
         "upload_path": "customer_research",
         "upload_paths": [
           {
@@ -602,17 +933,6 @@
             "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ],
-        "command": [
-          "python3",
-          "scripts/execute.py"
-        ],
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "customer_research",
         "workdir": "/sandbox/job/customer_research"
       }
     },
@@ -620,6 +940,10 @@
       "node_id": "lifecycle_copywriter_agent",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
+        "command": [
+          "python3",
+          "scripts/execute.py"
+        ],
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
@@ -638,12 +962,19 @@
           "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
           "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
         },
+        "from": "base",
         "name_prefix": "lifecycle_copywriter",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "lifecycle_copywriter_result",
+        "pool": "default",
+        "pool_slots": 1,
         "role": "Lifecycle Copywriter Agent",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/execute.py",
+        "tty": false,
+        "upload_as": "lifecycle_copywriter",
         "upload_path": "lifecycle_copywriter",
         "upload_paths": [
           {
@@ -671,17 +1002,6 @@
             "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ],
-        "command": [
-          "python3",
-          "scripts/execute.py"
-        ],
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "lifecycle_copywriter",
         "workdir": "/sandbox/job/lifecycle_copywriter"
       }
     },
@@ -689,6 +1009,10 @@
       "node_id": "email_designer_agent",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
+        "command": [
+          "python3",
+          "scripts/execute.py"
+        ],
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
@@ -707,12 +1031,19 @@
           "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
           "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
         },
+        "from": "base",
         "name_prefix": "email_designer",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "email_designer_result",
+        "pool": "default",
+        "pool_slots": 1,
         "role": "Email Designer Agent",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/execute.py",
+        "tty": false,
+        "upload_as": "email_designer",
         "upload_path": "email_designer",
         "upload_paths": [
           {
@@ -740,17 +1071,6 @@
             "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ],
-        "command": [
-          "python3",
-          "scripts/execute.py"
-        ],
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "email_designer",
         "workdir": "/sandbox/job/email_designer"
       }
     },
@@ -758,6 +1078,10 @@
       "node_id": "deliverability_ops_agent",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
+        "command": [
+          "python3",
+          "scripts/execute.py"
+        ],
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
@@ -776,12 +1100,19 @@
           "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
           "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
         },
+        "from": "base",
         "name_prefix": "deliverability_ops",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "deliverability_ops_result",
+        "pool": "default",
+        "pool_slots": 1,
         "role": "Deliverability & Ops Specialist Agent",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/execute.py",
+        "tty": false,
+        "upload_as": "deliverability_ops",
         "upload_path": "deliverability_ops",
         "upload_paths": [
           {
@@ -809,17 +1140,6 @@
             "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ],
-        "command": [
-          "python3",
-          "scripts/execute.py"
-        ],
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "deliverability_ops",
         "workdir": "/sandbox/job/deliverability_ops"
       }
     },
@@ -827,6 +1147,10 @@
       "node_id": "control_manager_agent",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
+        "command": [
+          "python3",
+          "scripts/execute.py"
+        ],
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
@@ -845,12 +1169,19 @@
           "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
           "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
         },
+        "from": "base",
         "name_prefix": "control_manager",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "control_manager_result",
+        "pool": "default",
+        "pool_slots": 1,
         "role": "Control Manager Agent",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/execute.py",
+        "tty": false,
+        "upload_as": "control_manager",
         "upload_path": "control_manager",
         "upload_paths": [
           {
@@ -878,17 +1209,6 @@
             "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ],
-        "command": [
-          "python3",
-          "scripts/execute.py"
-        ],
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "control_manager",
         "workdir": "/sandbox/job/control_manager"
       }
     },
@@ -896,6 +1216,10 @@
       "node_id": "marketing_automation_agent",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
+        "command": [
+          "python3",
+          "scripts/execute.py"
+        ],
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
@@ -914,12 +1238,19 @@
           "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
           "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
         },
+        "from": "base",
         "name_prefix": "marketing_automation",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": null,
+        "pool": "default",
+        "pool_slots": 1,
         "role": "Marketing Automation Engineer Agent",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/execute.py",
+        "tty": false,
+        "upload_as": "marketing_automation",
         "upload_path": "marketing_automation",
         "upload_paths": [
           {
@@ -947,17 +1278,6 @@
             "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ],
-        "command": [
-          "python3",
-          "scripts/execute.py"
-        ],
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "marketing_automation",
         "workdir": "/sandbox/job/marketing_automation"
       }
     },
@@ -965,6 +1285,10 @@
       "node_id": "inbox_reply_agent",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
+        "command": [
+          "python3",
+          "scripts/execute.py"
+        ],
         "environment": {
           "AGENTMAIL_API_KEY": "am_us_inbox_f23abdc78f49575ba38d9cfd84e60de943fcd3b10933048dba0f45ebe2cce5a9",
           "AGENTMAIL_INBOX": "mn-demo@agentmail.to",
@@ -983,11 +1307,18 @@
           "SYNAPTIC_EMIT_CYCLE_TRIGGER": "true",
           "SYNAPTIC_TEST_EMAIL_TO": "lujooo@gmail.com"
         },
+        "from": "base",
         "name_prefix": "inbox_reply",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
+        "pool": "default",
+        "pool_slots": 1,
         "role": "Inbox Reply Agent",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/execute.py",
+        "tty": false,
+        "upload_as": "inbox_reply",
         "upload_path": "inbox_reply",
         "upload_paths": [
           {
@@ -1015,17 +1346,6 @@
             "target": "_shared_skills/mn_external_rate_limit_skill"
           }
         ],
-        "command": [
-          "python3",
-          "scripts/execute.py"
-        ],
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "inbox_reply",
         "workdir": "/sandbox/job/inbox_reply"
       }
     },
@@ -1045,5 +1365,20 @@
     "recovery_mode": "local_restart"
   },
   "require_config": false,
-  "requiredContextEngine": false
+  "requiredContextEngine": false,
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "term": "TERM.md"
 }

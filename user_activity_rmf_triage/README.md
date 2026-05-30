@@ -114,3 +114,12 @@ The included tests cover event normalization with missing optional fields, risk 
 - Add specific NIST SP 800-53 or SP 800-171 control mappings after compliance review.
 - Run continuously through a service or scheduler once the event source and output review workflow are validated.
 
+## Documentation map
+
+- [SPEC.md](SPEC.md): behavior contract, customer outcome, input/output contract, evaluation criteria, and upgrade path.
+- [manifest.json](manifest.json): graph, agents, edges, metadata, interface channels, and output contract.
+- [config/default.json](config/default.json): default identity, inputs, simulation, LLM, outputs, logging, resources, web UI, and adapters.
+- [config/overwrite.json](config/overwrite.json): local override template layered on top of the default config.
+- [../BLUEPRINT_STANDARD.md](../BLUEPRINT_STANDARD.md): shared input, output, web UI, logging, resources, and artifact standards.
+- [../README.md](../README.md): root catalog, run instructions, and repository structure.
+- `payloads/`: worker code, fixtures, policies, or support assets used by the blueprint.

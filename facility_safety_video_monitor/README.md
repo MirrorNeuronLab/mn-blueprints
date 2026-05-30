@@ -98,7 +98,9 @@ Replace the local webcam source with approved facility streams, add human review
 ## Documentation map
 
 - [SPEC.md](SPEC.md): detailed behavior contract, customer outcome, input/output contract, and upgrade path.
-- `manifest.json`: graph, nodes, edges, initial inputs, metadata, stream declarations, and interface contract.
-- `config/default.json`: default identity, inputs, streams, LLM, outputs, logging, privacy, budgets, and adapters.
-- `config/overwrite.json`: editable local override template.
+- [manifest.json](manifest.json): graph, nodes, edges, initial inputs, metadata, stream declarations, and interface contract.
+- [config/default.json](config/default.json): default identity, inputs, streams, LLM, outputs, logging, privacy, budgets, resources, web UI, and adapters.
+- [config/overwrite.json](config/overwrite.json): editable local override template.
+- [../BLUEPRINT_STANDARD.md](../BLUEPRINT_STANDARD.md): shared input, output, web UI, logging, resources, and artifact standards.
+- [../README.md](../README.md): root catalog, run instructions, and repository structure.
 - `payloads/`: worker code, policies, and supporting runtime assets.

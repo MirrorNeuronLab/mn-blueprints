@@ -320,6 +320,8 @@ def test_every_blueprint_declares_standard_config_and_interfaces() -> None:
         "llm",
         "outputs",
         "logging",
+        "resources",
+        "human_control",
         "real_adapters",
         "streams",
         "input_skills",
@@ -377,6 +379,9 @@ def test_every_blueprint_declares_standard_config_and_interfaces() -> None:
         assert config["logging"]["events_jsonl"] is True
         assert config["logging"]["logs_jsonl"] is True
         assert config["logging"]["stderr_jsonl"] is True
+        assert config["human_control"]["mode"] in {"disabled", "notice_only", "approval_required"}
+        assert config["human_control"]["enabled"] is (config["human_control"]["mode"] != "disabled")
+        assert "blueprint_status" in config["logging"]["events"]
         assert "retry" in {policy["mode"] for policy in config["error_handling"]["policies"].values()}
         assert config["privacy"]["default_classification"] in {"public", "internal", "confidential", "regulated"}
         assert config["schemas"]["events"] == "mn.blueprint.events.v1"
@@ -410,6 +415,23 @@ def test_every_blueprint_declares_standard_config_and_interfaces() -> None:
         assert manifest["metadata"]["interfaces"]["response_schema"] == RESPONSE_SCHEMA
         assert "events" in manifest["metadata"]["interfaces"]["channels"]
         assert manifest["metadata"]["output_contract"]["logs_jsonl"] == "logs.jsonl"
+        assert manifest["metadata"]["input_contract"]["supported_adapters"] == ["mock", "json", "file", "env_json"]
+        assert manifest["metadata"]["input_contract"]["required_inputs"]
+        assert "mock" in manifest["metadata"]["input_contract"]["profiles"]
+        assert manifest["metadata"]["human_control"]["mode"] == config["human_control"]["mode"]
+        assert {phase["phase"] for phase in manifest["metadata"]["status_contract"]["phases"]} >= {
+            "loading_inputs",
+            "running_worker",
+            "waiting_for_human",
+            "writing_artifacts",
+            "completed",
+        }
+        final_contract = manifest["metadata"]["output_contract"]["final_artifact"]
+        assert {"recommended_action", "confidence", "evidence", "next_steps", "source_refs"}.issubset(final_contract["required_fields"])
+        artifact_ids = {artifact["artifact_id"] for artifact in manifest["metadata"]["output_contract"]["artifacts"]}
+        assert {"run_metadata", "resolved_inputs", "event_stream", "result", "final_artifact", "logs", "resources"}.issubset(artifact_ids)
+        panels = set(manifest["metadata"]["observability_dashboard"]["panels"])
+        assert {"current_status", "recent_events", "pending_human_requests", "output_artifacts", "resource_usage", "errors"}.issubset(panels)
 
     for blueprint_id in REQUIRED_BLUEPRINT_IDS:
         scenario_path = ROOT / blueprint_id / "scenario.json"
@@ -475,7 +497,7 @@ def test_portfolio_standard_document_explains_execution_contract() -> None:
 def test_blueprint_standard_imports_shared_mn_skill_implementation() -> None:
     assert RunStore.__module__ == "mn_blueprint_support.run_store"
     support_files = {path.name for path in (SKILL_SRC / "mn_blueprint_support").glob("*.py")}
-    assert {"interfaces.py", "events.py", "state_workflow.py", "human_loop.py", "streams.py", "io_skills.py"}.issubset(
+    assert {"interfaces.py", "events.py", "state_workflow.py", "human_loop.py", "streams.py", "io_skills.py", "experience.py"}.issubset(
         support_files
     )
     scenarios_text = (SKILL_SRC / "mn_blueprint_support" / "scenarios.py").read_text()
@@ -693,6 +715,50 @@ def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> 
         runs_root=tmp_path,
     )
     assert all("agent_messages" in step["observation"] for step in negotiation_result["timeline"])
+
+
+def test_experience_status_human_and_output_skill_events_are_recorded(tmp_path: Path) -> None:
+    human_result = run_blueprint(
+        "human_approval_gate",
+        inputs={"steps": 1, "human_approval": "approve_high_confidence"},
+        llm_client=FakeLLMClient(),
+        runs_root=tmp_path,
+    )
+    human_run_dir = tmp_path / human_result["identity"]["run_id"]
+    human_events = [json.loads(line) for line in (human_run_dir / "human.jsonl").read_text().splitlines()]
+    human_event_types = {event["type"] for event in human_events}
+    assert {"human_input_requested", "human_input_received", "human_decision_applied"}.issubset(human_event_types)
+
+    run_events = [json.loads(line) for line in (human_run_dir / "events.jsonl").read_text().splitlines()]
+    run_event_types = {event["type"] for event in run_events}
+    assert {"blueprint_status", "blueprint_phase_started", "blueprint_phase_completed", "artifact_written"}.issubset(
+        run_event_types
+    )
+    assert {"confidence", "evidence", "source_refs"}.issubset(human_result["final_artifact"])
+
+    output_skill_result = run_blueprint(
+        "closed_loop_agent_runtime",
+        inputs={"steps": 1},
+        config={
+            "output_skills": {
+                "notify_review": {
+                    "enabled": True,
+                    "mock": False,
+                    "skill": "webhook.send",
+                    "connector": "webhook",
+                    "destination": "https://example.invalid/hook",
+                    "content": "summary",
+                    "required": False,
+                    "failure_policy": "skip",
+                }
+            }
+        },
+        llm_client=FakeLLMClient(),
+        runs_root=tmp_path,
+    )
+    output_run_dir = tmp_path / output_skill_result["identity"]["run_id"]
+    output_events = [json.loads(line) for line in (output_run_dir / "events.jsonl").read_text().splitlines()]
+    assert "output_skill_failed" in {event["type"] for event in output_events}
 
 
 def test_run_store_writes_global_execution_artifacts(tmp_path: Path) -> None:

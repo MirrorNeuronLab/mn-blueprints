@@ -20,27 +20,12 @@
       }
     ]
   },
-  "job_name": "ai-strategy-planning",
-  "license": "LICENSE.md",
-  "term": "TERM.md",
-  "manifest_version": "1.0",
-  "requirements": {
-    "cpu": {
-      "min_cores": 1
-    },
-    "gpu": {
-      "min_count": 0
-    },
-    "memory": {
-      "min_gb": 2
-    },
-    "disk": {
-      "min_gb": 1
-    }
-  },
   "input_validation": {
     "rules": []
   },
+  "job_name": "ai-strategy-planning",
+  "license": "LICENSE.md",
+  "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
       "library": "../mn-agents/index.json",
@@ -78,6 +63,30 @@
     },
     "customizable_for": "Enterprise strategy, private-equity value creation, CFO transformation, corporate development, and transformation-office discovery.",
     "description": "Use this blueprint to turn messy discovery notes into a board-ready AI strategy recommendation with priorities, risks, and next steps.",
+    "documentation": {
+      "catalog": "../README.md",
+      "config": "config/default.json",
+      "manifest": "manifest.json",
+      "overrides": "config/overwrite.json",
+      "payloads": "payloads/",
+      "readme": "README.md",
+      "spec": "SPEC.md",
+      "standard": "../BLUEPRINT_STANDARD.md"
+    },
+    "human_control": {
+      "enabled": true,
+      "events": [
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied"
+      ],
+      "mode": "notice_only",
+      "notice_event": "human_notice",
+      "reason": "The workflow may surface notable findings for review but does not apply irreversible actions by itself.",
+      "requires_ack": false
+    },
     "init_config_review": {
       "checks": [
         "identity",
@@ -89,7 +98,198 @@
         "privacy",
         "budgets"
       ],
+      "fields": [
+        {
+          "default": "mock",
+          "description": "Run mode used for mock, test, or real-adapter execution.",
+          "label": "Run mode",
+          "path": "mode"
+        },
+        {
+          "default": "mock",
+          "description": "Input source adapter. Mock is safe for demos; real inputs use json, file, env_json, streams, or connector profiles.",
+          "label": "Input adapter",
+          "path": "inputs.adapter"
+        },
+        {
+          "default": "~/.mn/runs",
+          "description": "Local run-store root for logs, events, inputs, outputs, and final artifacts.",
+          "label": "Run-store root",
+          "path": "outputs.run_root"
+        },
+        {
+          "default": "notice_only",
+          "description": "Whether this blueprint disables human control, emits notice-only events, or requires approval for high-impact actions.",
+          "label": "Human control mode",
+          "path": "human_control.mode"
+        },
+        {
+          "default": false,
+          "description": "Whether the shared run-store dashboard should be available for this run.",
+          "label": "Web UI",
+          "path": "web_ui.enabled"
+        },
+        {
+          "default": "http://192.168.4.173:11434",
+          "description": "LLM endpoint used by LLM-backed agents.",
+          "label": "LLM API base",
+          "path": "llm.configs.primary.api_base"
+        },
+        {
+          "default": "ollama/nemotron3:33b",
+          "description": "LLM model used by LLM-backed agents.",
+          "label": "LLM model",
+          "path": "llm.configs.primary.model"
+        }
+      ],
       "required": true
+    },
+    "input_contract": {
+      "description": "Use this blueprint to turn messy discovery notes into a board-ready AI strategy recommendation with priorities, risks, and next steps.",
+      "optional_inputs": [],
+      "privacy_classification": "internal",
+      "profiles": {
+        "env_json": {
+          "adapter": "env_json",
+          "description": "JSON object loaded from MN_BLUEPRINT_INPUT_JSON."
+        },
+        "file": {
+          "adapter": "file",
+          "description": "JSON object loaded from a local file path."
+        },
+        "json": {
+          "adapter": "json",
+          "description": "Inline JSON object supplied through config or runtime overrides."
+        },
+        "mock": {
+          "adapter": "mock",
+          "description": "Synthetic consulting-discovery packet with documents, transcripts, financials, and benchmark notes.",
+          "payload": {
+            "company": "Northstar Industrial",
+            "documents": [
+              {
+                "name": "annual_report_excerpt.md",
+                "text": "# Annual Report Excerpt\nRevenue grew 4 percent while SG&A rose 11 percent. Management cited fragmented demand planning, manual quote approvals, and elevated cloud spend as margin headwinds."
+              },
+              {
+                "name": "operations_policy.md",
+                "text": "# Operations Policy\nPlant managers own local scheduling. Exceptions require regional VP approval. Teams maintain separate spreadsheets for maintenance backlog, supplier delays, and workforce availability."
+              },
+              {
+                "name": "technology_assessment.md",
+                "text": "# Technology Assessment\nERP data quality is uneven. Cloud tagging is incomplete. Field service teams use four workflow tools and lack a single owner for automation standards."
+              }
+            ],
+            "engagement_goal": "Find board-ready cost, growth, risk, and technology opportunities for the next 12 months.",
+            "financials_csv": "metric,baseline,target\nSG&A growth,11,6\nQuote cycle days,9,4\nCloud waste percent,18,7\nMaintenance backlog days,21,12\n",
+            "market_notes": [
+              {
+                "claims": [
+                  "Industrial peers use shared services to reduce SG&A growth",
+                  "Quote automation improves cycle time and win-rate consistency",
+                  "Cloud cost governance is a near-term margin lever"
+                ],
+                "source": "Benchmark study"
+              },
+              {
+                "claims": [
+                  "Buyers cite slow quote turnaround",
+                  "Service disruptions affect renewal confidence"
+                ],
+                "source": "Customer interviews"
+              }
+            ],
+            "meeting_transcripts": [
+              "Alex: Finance wants a clearer path to reduce SG&A without hurting service.\nPriya: Decision: focus first on quote automation and cloud cost governance.\nMina will gather owner-level process maps by Friday.\nAction item: validate savings assumptions with operations."
+            ],
+            "roadmap_weeks": 12
+          }
+        }
+      },
+      "required_inputs": [
+        {
+          "description": "Domain input value for company.",
+          "example": "Northstar Industrial",
+          "name": "company",
+          "type": "str"
+        },
+        {
+          "description": "Domain input value for documents.",
+          "example": [
+            {
+              "name": "annual_report_excerpt.md",
+              "text": "# Annual Report Excerpt\nRevenue grew 4 percent while SG&A rose 11 percent. Management cited fragmented demand planning, manual quote approvals, and elevated cloud spend as margin headwinds."
+            },
+            {
+              "name": "operations_policy.md",
+              "text": "# Operations Policy\nPlant managers own local scheduling. Exceptions require regional VP approval. Teams maintain separate spreadsheets for maintenance backlog, supplier delays, and workforce availability."
+            },
+            {
+              "name": "technology_assessment.md",
+              "text": "# Technology Assessment\nERP data quality is uneven. Cloud tagging is incomplete. Field service teams use four workflow tools and lack a single owner for automation standards."
+            }
+          ],
+          "name": "documents",
+          "type": "list"
+        },
+        {
+          "description": "Domain input value for engagement_goal.",
+          "example": "Find board-ready cost, growth, risk, and technology opportunities for the next 12 months.",
+          "name": "engagement_goal",
+          "type": "str"
+        },
+        {
+          "description": "Domain input value for financials_csv.",
+          "example": "metric,baseline,target\nSG&A growth,11,6\nQuote cycle days,9,4\nCloud waste percent,18,7\nMaintenance backlog days,21,12\n",
+          "name": "financials_csv",
+          "type": "str"
+        },
+        {
+          "description": "Domain input value for market_notes.",
+          "example": [
+            {
+              "claims": [
+                "Industrial peers use shared services to reduce SG&A growth",
+                "Quote automation improves cycle time and win-rate consistency",
+                "Cloud cost governance is a near-term margin lever"
+              ],
+              "source": "Benchmark study"
+            },
+            {
+              "claims": [
+                "Buyers cite slow quote turnaround",
+                "Service disruptions affect renewal confidence"
+              ],
+              "source": "Customer interviews"
+            }
+          ],
+          "name": "market_notes",
+          "type": "list"
+        },
+        {
+          "description": "Domain input value for meeting_transcripts.",
+          "example": [
+            "Alex: Finance wants a clearer path to reduce SG&A without hurting service.\nPriya: Decision: focus first on quote automation and cloud cost governance.\nMina will gather owner-level process maps by Friday.\nAction item: validate savings assumptions with operations."
+          ],
+          "name": "meeting_transcripts",
+          "type": "list"
+        },
+        {
+          "description": "Domain input value for roadmap_weeks.",
+          "example": 12,
+          "name": "roadmap_weeks",
+          "type": "int"
+        }
+      ],
+      "resolved_artifact": "inputs.json",
+      "schema_version": "mn.blueprint.input_contract.v1",
+      "supported_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "validation_rules": []
     },
     "interfaces": {
       "channels": {
@@ -108,12 +308,20 @@
             "web_ui.json",
             "ui.json",
             "web/index.html",
-            "logs.jsonl"
+            "logs.jsonl",
+            "logs.index.json",
+            "human.jsonl",
+            "resources.jsonl"
           ]
         },
         "events": {
           "artifact": "events.jsonl",
           "description": "Append-only workflow events."
+        },
+        "human": {
+          "artifact": "human.jsonl",
+          "description": "Sparse human collaboration notices, input requests, and responses.",
+          "mirrored_to": "events.jsonl"
         },
         "input_skills": {
           "description": "Connector-backed or reusable skill-backed input sources."
@@ -123,7 +331,9 @@
           "description": "Resolved runtime inputs and adapter provenance."
         },
         "logs": {
+          "artifact": "logs.jsonl",
           "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "index": "logs.index.json",
           "stream": "stdout/stderr"
         },
         "output_skills": {
@@ -135,6 +345,10 @@
             "final_artifact.json"
           ],
           "description": "Primary result and final user-facing artifact."
+        },
+        "resources": {
+          "artifact": "resources.jsonl",
+          "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
         },
         "streams": {
           "default": [
@@ -184,6 +398,7 @@
         "outputs",
         "logging",
         "resources",
+        "human_control",
         "real_adapters",
         "streams",
         "input_skills",
@@ -271,15 +486,150 @@
     },
     "llm_agent_role": "Strategy discovery and board recommendation agent.",
     "name": "AI Strategy Planning",
+    "observability_dashboard": {
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ],
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store"
+    },
     "output": "Board-ready recommendation packet with summary, issue tree, opportunity map, roadmap, slide outline, and evidence appendix.",
     "output_contract": {
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        }
+      ],
       "events": "strategy_recommendation_pack",
       "events_jsonl": "events.jsonl",
+      "final_artifact": {
+        "description": "The durable user-facing artifact should summarize the result, recommendation, confidence, evidence, next steps, and source references.",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ],
+        "schema_version": "mn.blueprint.final_artifact_contract.v1"
+      },
       "final_artifact_json": "final_artifact.json",
       "local_run_store": "~/.mn/runs/<run_id>/",
       "logs_jsonl": "logs.jsonl",
+      "output_skills": [],
       "response_schema": "mn.blueprint.response.v1",
       "result_json": "result.json",
+      "status": "JSON lines on stderr",
       "stdout": "JSON result with final_artifact and run-store metadata"
     },
     "problem_solved": "Companies spend weeks collecting documents, interviewing teams, summarizing findings, and building first-draft strategy recommendations.",
@@ -293,7 +643,11 @@
       "market research synthesis",
       "spreadsheet profiling",
       "first-draft slide outline",
-      "implementation roadmap"
+      "implementation roadmap",
+      "transparent run status",
+      "human control policy",
+      "artifact records",
+      "run-store observability dashboard"
     ],
     "simulation_type": "Document-to-board-recommendation consulting workflow.",
     "standard": {
@@ -324,6 +678,61 @@
       "run_store": "~/.mn/runs/<run_id>/",
       "version": "1.0"
     },
+    "standard_version": "1.0",
+    "status_contract": {
+      "heartbeat_event": "blueprint_status",
+      "heartbeat_required": false,
+      "phases": [
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "loading_inputs",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "running_worker",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "waiting_for_human",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "writing_artifacts",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "completed",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        }
+      ],
+      "schema_version": "mn.blueprint.status_contract.v1",
+      "source": "run_store",
+      "status_event": "blueprint_status"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
     "target_user": "Large enterprise strategy, CFO, corporate development, private-equity operating, and transformation-office teams."
   },
   "name": "AI Strategy Planning",
@@ -332,11 +741,22 @@
       "node_id": "advisory_workflow",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
+        "command": [
+          "python3",
+          "scripts/run_blueprint.py"
+        ],
+        "from": "base",
         "name_prefix": "ai-strategy-planning",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "strategy_recommendation_pack",
+        "pool": "default",
+        "pool_slots": 1,
         "role": "root_coordinator",
         "script": "scripts/run_blueprint.py",
+        "tty": false,
+        "upload_as": "advisory_workflow",
         "upload_path": "advisory_workflow",
         "upload_paths": [
           {
@@ -384,17 +804,6 @@
             "target": "mn-skills/client_report_skill"
           }
         ],
-        "command": [
-          "python3",
-          "scripts/run_blueprint.py"
-        ],
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "advisory_workflow",
         "workdir": "/sandbox/job/advisory_workflow"
       }
     },
@@ -411,5 +820,20 @@
   "policies": {
     "recovery_mode": "local_restart"
   },
-  "requiredContextEngine": false
+  "requiredContextEngine": false,
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "term": "TERM.md"
 }

@@ -136,3 +136,13 @@ The shared test suite verifies manifest loading, standard config sections, mock 
 - Add human approval gates for high-impact actions.
 - Track evaluation metrics that compare simulated recommendations against known outcomes.
 - Move operational logs and final artifacts into your team's normal review workflow.
+
+## Documentation map
+
+- [SPEC.md](SPEC.md): behavior contract, customer outcome, input/output contract, evaluation criteria, and upgrade path.
+- [manifest.json](manifest.json): graph, agents, edges, metadata, interface channels, and output contract.
+- [config/default.json](config/default.json): default identity, inputs, simulation, LLM, outputs, logging, resources, web UI, and adapters.
+- [config/overwrite.json](config/overwrite.json): local override template layered on top of the default config.
+- [../BLUEPRINT_STANDARD.md](../BLUEPRINT_STANDARD.md): shared input, output, web UI, logging, resources, and artifact standards.
+- [../README.md](../README.md): root catalog, run instructions, and repository structure.
+- `payloads/`: worker code, fixtures, policies, or support assets used by the blueprint.

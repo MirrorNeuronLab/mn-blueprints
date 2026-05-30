@@ -28,28 +28,12 @@
       }
     ]
   },
-  "job_name": "python-sdk-research-service",
-  "license": "LICENSE.md",
-  "term": "TERM.md",
-  "manifest_version": "1.0",
-  "type": "service",
-  "requirements": {
-    "cpu": {
-      "min_cores": 1
-    },
-    "gpu": {
-      "min_count": 0
-    },
-    "memory": {
-      "min_gb": 2
-    },
-    "disk": {
-      "min_gb": 1
-    }
-  },
   "input_validation": {
     "rules": []
   },
+  "job_name": "python-sdk-research-service",
+  "license": "LICENSE.md",
+  "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
       "library": "../mn-agents/index.json",
@@ -92,8 +76,32 @@
     },
     "customizable_for": "Incident monitors, market watchers, research crawlers.",
     "description": "Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns.",
+    "documentation": {
+      "catalog": "../README.md",
+      "config": "config/default.json",
+      "manifest": "manifest.json",
+      "overrides": "config/overwrite.json",
+      "payloads": "payloads/",
+      "readme": "README.md",
+      "spec": "SPEC.md",
+      "standard": "../BLUEPRINT_STANDARD.md"
+    },
     "generated_at": "2026-04-30T11:17:52+00:00",
     "generated_by": "mn-python-sdk",
+    "human_control": {
+      "enabled": true,
+      "events": [
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied"
+      ],
+      "mode": "notice_only",
+      "notice_event": "human_notice",
+      "reason": "The workflow may surface notable findings for review but does not apply irreversible actions by itself.",
+      "requires_ack": false
+    },
     "init_config_review": {
       "checks": [
         "identity",
@@ -105,7 +113,148 @@
         "privacy",
         "budgets"
       ],
+      "fields": [
+        {
+          "default": "mock",
+          "description": "Run mode used for mock, test, or real-adapter execution.",
+          "label": "Run mode",
+          "path": "mode"
+        },
+        {
+          "default": "mock",
+          "description": "Input source adapter. Mock is safe for demos; real inputs use json, file, env_json, streams, or connector profiles.",
+          "label": "Input adapter",
+          "path": "inputs.adapter"
+        },
+        {
+          "default": "~/.mn/runs",
+          "description": "Local run-store root for logs, events, inputs, outputs, and final artifacts.",
+          "label": "Run-store root",
+          "path": "outputs.run_root"
+        },
+        {
+          "default": "notice_only",
+          "description": "Whether this blueprint disables human control, emits notice-only events, or requires approval for high-impact actions.",
+          "label": "Human control mode",
+          "path": "human_control.mode"
+        },
+        {
+          "default": true,
+          "description": "Whether the shared run-store dashboard should be available for this run.",
+          "label": "Web UI",
+          "path": "web_ui.enabled"
+        },
+        {
+          "default": "http://192.168.4.173:11434",
+          "description": "LLM endpoint used by LLM-backed agents.",
+          "label": "LLM API base",
+          "path": "llm.configs.primary.api_base"
+        },
+        {
+          "default": "ollama/nemotron3:33b",
+          "description": "LLM model used by LLM-backed agents.",
+          "label": "LLM model",
+          "path": "llm.configs.primary.model"
+        },
+        {
+          "default": "${MN_RESEARCH_WS_URL}",
+          "description": "Live or replayed stream endpoint consumed by the blueprint.",
+          "label": "research_updates stream",
+          "path": "streams.research_updates.url"
+        },
+        {
+          "default": false,
+          "description": "Enable only after the connector destination and credentials are approved.",
+          "label": "websocket_events output",
+          "path": "output_skills.websocket_events.enabled"
+        },
+        {
+          "default": "MN_BLUEPRINT_EVENTS_WS_URL",
+          "description": "Connector destination reference; secrets must remain outside blueprint config.",
+          "label": "websocket_events destination",
+          "path": "output_skills.websocket_events.destination"
+        }
+      ],
       "required": true
+    },
+    "input_contract": {
+      "description": "Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns.",
+      "optional_inputs": [],
+      "privacy_classification": "internal",
+      "profiles": {
+        "connector": {
+          "adapter": "mock",
+          "description": "Connector-backed input profile; credentials stay outside blueprint config.",
+          "input_skills": [
+            "research_updates"
+          ]
+        },
+        "env_json": {
+          "adapter": "env_json",
+          "description": "JSON object loaded from MN_BLUEPRINT_INPUT_JSON."
+        },
+        "file": {
+          "adapter": "file",
+          "description": "JSON object loaded from a local file path."
+        },
+        "json": {
+          "adapter": "json",
+          "description": "Inline JSON object supplied through config or runtime overrides."
+        },
+        "live_stream": {
+          "adapter": "mock",
+          "description": "Runtime stream configuration used for live or replayed stream inputs.",
+          "streams": [
+            "research_updates"
+          ]
+        },
+        "mock": {
+          "adapter": "mock",
+          "description": "Default synthetic inputs bundled with the blueprint.",
+          "payload": {}
+        }
+      },
+      "required_inputs": [
+        {
+          "description": "Live or replayed research task updates.",
+          "example": null,
+          "name": "research_updates",
+          "type": "domain_value"
+        },
+        {
+          "description": "Question, benchmark, or synthesis target.",
+          "example": null,
+          "name": "research_goal",
+          "type": "domain_value"
+        },
+        {
+          "description": "How findings should be surfaced for human review.",
+          "example": null,
+          "name": "review_policy",
+          "type": "domain_value"
+        },
+        {
+          "description": "Data stream consumed by the blueprint.",
+          "example": "${MN_RESEARCH_WS_URL}",
+          "name": "research_updates",
+          "type": "data_stream"
+        },
+        {
+          "description": "Connector-backed input skill websocket_stream.",
+          "example": "websocket_stream",
+          "name": "research_updates",
+          "type": "input_skill"
+        }
+      ],
+      "resolved_artifact": "inputs.json",
+      "schema_version": "mn.blueprint.input_contract.v1",
+      "supported_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "validation_rules": []
     },
     "interfaces": {
       "channels": {
@@ -124,12 +273,20 @@
             "web_ui.json",
             "ui.json",
             "web/index.html",
-            "logs.jsonl"
+            "logs.jsonl",
+            "logs.index.json",
+            "human.jsonl",
+            "resources.jsonl"
           ]
         },
         "events": {
           "artifact": "events.jsonl",
           "description": "Append-only workflow events."
+        },
+        "human": {
+          "artifact": "human.jsonl",
+          "description": "Sparse human collaboration notices, input requests, and responses.",
+          "mirrored_to": "events.jsonl"
         },
         "input_skills": {
           "description": "Connector-backed or reusable skill-backed input sources."
@@ -139,7 +296,9 @@
           "description": "Resolved runtime inputs and adapter provenance."
         },
         "logs": {
+          "artifact": "logs.jsonl",
           "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "index": "logs.index.json",
           "stream": "stdout/stderr"
         },
         "output_skills": {
@@ -151,6 +310,10 @@
             "final_artifact.json"
           ],
           "description": "Primary result and final user-facing artifact."
+        },
+        "resources": {
+          "artifact": "resources.jsonl",
+          "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
         },
         "streams": {
           "default": [
@@ -200,6 +363,7 @@
         "outputs",
         "logging",
         "resources",
+        "human_control",
         "real_adapters",
         "streams",
         "input_skills",
@@ -284,15 +448,186 @@
     "llm_agent_role": "Python service coordinator.",
     "manifest_schema": "1.0",
     "name": "Python SDK Research Service",
+    "observability_dashboard": {
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "input_lag",
+        "backpressure",
+        "llm_calls",
+        "token_budget",
+        "llm_retries",
+        "output_skill_attempts",
+        "output_skill_failures"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ],
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store"
+    },
     "output": "Ongoing events and final cancellation-safe state.",
     "output_contract": {
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        },
+        {
+          "artifact_id": "output_skill_websocket_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "websocket_events",
+          "schema_version": "mn.blueprint.output_skill_attempt.v1",
+          "source_refs": [
+            "final_artifact.json"
+          ],
+          "type": "output_skill_delivery"
+        }
+      ],
       "events": "blueprint_report",
       "events_jsonl": "events.jsonl",
+      "final_artifact": {
+        "description": "The durable user-facing artifact should summarize the result, recommendation, confidence, evidence, next steps, and source references.",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ],
+        "schema_version": "mn.blueprint.final_artifact_contract.v1"
+      },
       "final_artifact_json": "final_artifact.json",
       "local_run_store": "~/.mn/runs/<run_id>/",
       "logs_jsonl": "logs.jsonl",
+      "output_skills": [
+        {
+          "connector": "websocket",
+          "content": "events",
+          "destination": "MN_BLUEPRINT_EVENTS_WS_URL",
+          "failure_policy": "skip",
+          "name": "websocket_events",
+          "required": false,
+          "skill": "websocket_stream"
+        }
+      ],
       "response_schema": "mn.blueprint.response.v1",
       "result_json": "result.json",
+      "status": "JSON lines on stderr",
       "stdout": "JSON result with final_artifact and run-store metadata"
     },
     "problem_solved": "Many agent workflows need to keep running, react to new events, and maintain operational state rather than finish after one request.",
@@ -313,7 +648,11 @@
       "Python SDK",
       "service execution",
       "live loop",
-      "runtime events"
+      "runtime events",
+      "transparent run status",
+      "human control policy",
+      "artifact records",
+      "run-store observability dashboard"
     ],
     "simulation_type": "Live service loop with repeated inputs.",
     "source_hash": "88528011c2a28c55dbfb3bc2c966feb0371316baf8beac8f415bd6f5caaad198",
@@ -345,6 +684,61 @@
       "run_store": "~/.mn/runs/<run_id>/",
       "version": "1.0"
     },
+    "standard_version": "1.0",
+    "status_contract": {
+      "heartbeat_event": "blueprint_status",
+      "heartbeat_required": true,
+      "phases": [
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "loading_inputs",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "running_worker",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "waiting_for_human",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "writing_artifacts",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "completed",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        }
+      ],
+      "schema_version": "mn.blueprint.status_contract.v1",
+      "source": "run_store",
+      "status_event": "blueprint_status"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
     "streaming": {
       "backpressure": {
         "drop_policy": "skip_with_error",
@@ -375,6 +769,10 @@
           "max_queue_depth": 6,
           "retry_after_ms": 500
         },
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
         "environment": {
           "MN_PY_COMPLETE_FINAL": "0",
           "MN_PY_FINAL": "0",
@@ -392,12 +790,8 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "mn_worker.py",
         "timeout_seconds": 10,
-        "upload_path": "mn_python_workflow",
-        "command": [
-          "python3",
-          "mn_worker.py"
-        ],
         "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
         "workdir": "/sandbox/job/mn_python_workflow"
       }
     },
@@ -411,6 +805,10 @@
           "max_queue_depth": 6,
           "retry_after_ms": 500
         },
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
         "environment": {
           "MN_PY_COMPLETE_FINAL": "0",
           "MN_PY_FINAL": "0",
@@ -427,12 +825,8 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "mn_worker.py",
         "timeout_seconds": 10,
-        "upload_path": "mn_python_workflow",
-        "command": [
-          "python3",
-          "mn_worker.py"
-        ],
         "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
         "workdir": "/sandbox/job/mn_python_workflow"
       }
     },
@@ -446,6 +840,10 @@
           "max_queue_depth": 6,
           "retry_after_ms": 500
         },
+        "command": [
+          "python3",
+          "mn_worker.py"
+        ],
         "environment": {
           "MN_PY_COMPLETE_FINAL": "0",
           "MN_PY_FINAL": "1",
@@ -462,12 +860,8 @@
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "mn_worker.py",
         "timeout_seconds": 10,
-        "upload_path": "mn_python_workflow",
-        "command": [
-          "python3",
-          "mn_worker.py"
-        ],
         "upload_as": "mn_python_workflow",
+        "upload_path": "mn_python_workflow",
         "workdir": "/sandbox/job/mn_python_workflow"
       }
     }
@@ -480,5 +874,21 @@
     },
     "recovery_mode": "cluster_recover",
     "stream_mode": "live"
-  }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "term": "TERM.md",
+  "type": "service"
 }

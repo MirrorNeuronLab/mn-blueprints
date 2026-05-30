@@ -115,3 +115,13 @@ The worker is deterministic and runs locally without credentials. It follows the
 - Add approval gates for finalist selection.
 - Expand TCO and lock-in modeling.
 - Connect outputs to implementation-planning, contract-review, and steering-committee workflows.
+
+## Documentation map
+
+- [SPEC.md](SPEC.md): behavior contract, customer outcome, input/output contract, evaluation criteria, and upgrade path.
+- [manifest.json](manifest.json): graph, agents, edges, metadata, interface channels, and output contract.
+- [config/default.json](config/default.json): default identity, inputs, simulation, LLM, outputs, logging, resources, web UI, and adapters.
+- [config/overwrite.json](config/overwrite.json): local override template layered on top of the default config.
+- [../BLUEPRINT_STANDARD.md](../BLUEPRINT_STANDARD.md): shared input, output, web UI, logging, resources, and artifact standards.
+- [../README.md](../README.md): root catalog, run instructions, and repository structure.
+- `payloads/`: worker code, fixtures, policies, or support assets used by the blueprint.

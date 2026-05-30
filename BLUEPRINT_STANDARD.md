@@ -139,6 +139,8 @@ Required top-level config sections:
 - `llm`
 - `outputs`
 - `logging`
+- `resources`
+- `human_control`
 - `real_adapters`
 - `interfaces`
 - `execution_model`
@@ -199,6 +201,48 @@ Input fields should be domain concepts, not internal implementation toggles. Exa
 - Portfolio stress: holdings, cash constraints, hedge constraints, shock assumptions.
 - Property alpha: target ZIP, price ceiling, history months, broker notes, financing constraints.
 - Drug discovery: disease or target profile, screening criteria, candidate seeds.
+
+### Product Input Contract
+
+Each blueprint should declare `manifest.json.metadata.input_contract` so launchers and users can understand what the blueprint actually needs before a run starts. This product-facing contract complements, but does not replace, the executable `inputs` config.
+
+Recommended shape:
+
+```json
+{
+  "input_contract": {
+    "schema_version": "mn.blueprint.input_contract.v1",
+    "required_inputs": [
+      {
+        "name": "portfolio",
+        "type": "object",
+        "description": "Holdings, cash constraints, and exposure assumptions.",
+        "example": {}
+      }
+    ],
+    "optional_inputs": [
+      {
+        "name": "seed",
+        "type": "integer",
+        "description": "Deterministic replay seed.",
+        "example": 42
+      }
+    ],
+    "supported_adapters": ["mock", "json", "file", "env_json"],
+    "profiles": {
+      "mock": {"adapter": "mock", "description": "Bundled synthetic inputs."},
+      "sample_file": {"adapter": "file", "path": "inputs/sample.json"},
+      "live_stream": {"adapter": "mock", "streams": ["primary_stream"]},
+      "connector": {"adapter": "mock", "input_skills": ["source_folder"]}
+    },
+    "privacy_classification": "internal",
+    "validation_rules": [],
+    "resolved_artifact": "inputs.json"
+  }
+}
+```
+
+Launchers should use this contract and `metadata.init_config_review.fields` to ask only about meaningful runtime values such as data source, stream endpoint, model endpoint, output destination, or human-control mode.
 
 ### Stream Inputs
 
@@ -391,8 +435,27 @@ Optional run artifacts:
 - `web/index.html`: static report or output page.
 - `ui.json`: UI state or richer dashboard metadata.
 - `logs.jsonl`: structured runtime logs when logs are persisted separately from `events.jsonl`.
+- `logs.index.json`: index metadata for rotated or segmented structured logs.
+- `human.jsonl`: sparse human collaboration notices, input requests, and responses, mirrored to `events.jsonl`.
+- `resources.jsonl`: CPU, GPU, memory, and LLM token usage samples captured for the run.
 
 `result.json` should contain enough context to audit the run without reading stdout. `final_artifact.json` should contain the durable product answer, not internal logs.
+
+### Product Output Contract
+
+Every blueprint should declare `metadata.output_contract.final_artifact` and `metadata.output_contract.artifacts`.
+
+The final artifact should include these user-facing fields when the blueprint can produce them:
+
+- `type`
+- `executive_summary`
+- `recommended_action`
+- `confidence`
+- `evidence`
+- `next_steps`
+- `source_refs`
+
+The artifact list should include durable records for `run.json`, `config.json`, `inputs.json`, `events.jsonl`, `result.json`, `final_artifact.json`, logs, resources, human events when enabled, web UI metadata when enabled, and output-skill delivery attempts when configured. Each record should include `artifact_id`, `type`, `schema_version`, `path`, `mime_type`, and `producer`.
 
 Blueprints may also declare skill-backed output destinations. Output skills are optional fan-out destinations, not replacements for local logs and events.
 
@@ -629,6 +692,81 @@ Recommended logging config shape:
 Blueprints should not rely on logs for product state. If a fact is needed for audit, UI, replay, downstream skills, or final artifacts, it should be emitted as an event or artifact record.
 
 Secret redaction must happen before a log line is written. Raw prompts, connector payloads, headers, OAuth tokens, cookies, private keys, and full environment dumps must not be logged unless explicitly redacted.
+
+## Resource Observability Contract
+
+Every blueprint should declare `resources` even if resource sampling is only best-effort in the local runner. The resource channel records operational signals that help compare runs, debug regressions, and decide whether a blueprint is ready for hosted or edge execution.
+
+Recommended resource config shape:
+
+```json
+{
+  "resources": {
+    "enabled": true,
+    "sample_interval_seconds": 10,
+    "gpu_enabled": "auto",
+    "gpu_sample_interval_seconds": 60,
+    "history_window_hours": 24,
+    "raw_retention_hours": 48,
+    "rollup_bucket_seconds": 3600
+  }
+}
+```
+
+When enabled, resource samples should be written to `resources.jsonl`. Samples may include CPU, memory, disk, GPU, queue depth, and LLM token usage. Resource sampling failures should be recorded as events or logs, but they should not fail the blueprint unless the blueprint explicitly marks resource enforcement as required.
+
+## Human-Control Contract
+
+Every blueprint must declare `human_control` in config, even when no human approval is needed.
+
+Supported modes:
+
+- `disabled`: the blueprint only writes local decision-support artifacts and has no high-impact action to approve. It must include `reason`.
+- `notice_only`: the blueprint may emit `human_notice` events for review, but it does not block artifact writing on approval.
+- `approval_required`: the blueprint must request approval before applying or recommending high-impact actions. It must declare `allowed_decisions`, `timeout_seconds`, `default_action`, and `blocked_actions`.
+
+Human-control events use the existing human channel and are mirrored to `events.jsonl`:
+
+- `human_notice`
+- `human_input_requested`
+- `human_input_received`
+- `human_input_timeout`
+- `human_decision_applied`
+
+The manifest should mirror the policy under `metadata.human_control` so catalog and launch UI code can explain the review behavior before a run starts.
+
+## Status Transparency Contract
+
+Every blueprint should declare `metadata.status_contract` and emit status events from the run store. Standard phases are:
+
+- `loading_inputs`
+- `running_worker`
+- `waiting_for_human`
+- `writing_artifacts`
+- `completed`
+
+Each phase should define `start_event`, `progress_event`, `completion_event`, and `failure_event`. The shared events are `blueprint_phase_started`, `blueprint_status`, `blueprint_phase_completed`, and `blueprint_phase_failed`.
+
+Long-running, stream, service, or multi-stage blueprints should emit progress or heartbeat `blueprint_status` events so users can tell whether work is still active. Web UI surfaces must read status from run-store events rather than private worker state.
+
+## Observability Dashboard Contract
+
+Blueprint dashboards should be declared in metadata and config, then rendered by the shared web UI from run-store files.
+
+Standard panels:
+
+- `current_status`
+- `recent_events`
+- `pending_human_requests`
+- `output_artifacts`
+- `resource_usage`
+- `errors`
+
+Conditional panels:
+
+- Stream blueprints: `input_lag`, `backpressure`
+- LLM blueprints: `llm_calls`, `token_budget`, `llm_retries`
+- Output-skill blueprints: `output_skill_attempts`, `output_skill_failures`
 
 ## Error Handling Contract
 

@@ -41,3 +41,13 @@ This blueprint does not block traffic, isolate hosts, change firewall policy, or
 
 - `blueprint_support_skill`
 - `email_delivery_skill`
+
+## Documentation map
+
+- [SPEC.md](SPEC.md): behavior contract, customer outcome, input/output contract, evaluation criteria, and upgrade path.
+- [manifest.json](manifest.json): graph, agents, edges, metadata, interface channels, and output contract.
+- [config/default.json](config/default.json): default identity, inputs, simulation, LLM, outputs, logging, resources, web UI, and adapters.
+- [config/overwrite.json](config/overwrite.json): local override template layered on top of the default config.
+- [../BLUEPRINT_STANDARD.md](../BLUEPRINT_STANDARD.md): shared input, output, web UI, logging, resources, and artifact standards.
+- [../README.md](../README.md): root catalog, run instructions, and repository structure.
+- `payloads/`: worker code, fixtures, policies, or support assets used by the blueprint.

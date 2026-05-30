@@ -70,6 +70,34 @@
     "write_final_artifact",
     "fan_out_output_skills"
   ],
+  "human_control": {
+    "allowed_decisions": [
+      "approve",
+      "revise",
+      "reject"
+    ],
+    "blocked_actions": [
+      "change_credit_policy",
+      "freeze_credit_line",
+      "collection_escalation"
+    ],
+    "decision_event": "human_decision_applied",
+    "default_action": "reject",
+    "enabled": true,
+    "events": [
+      "human_notice",
+      "human_input_requested",
+      "human_input_received",
+      "human_input_timeout",
+      "human_decision_applied"
+    ],
+    "mode": "approval_required",
+    "reason": "This blueprint can recommend high-impact operational, security, compliance, financial, or code actions.",
+    "request_event": "human_input_requested",
+    "response_event": "human_input_received",
+    "timeout_event": "human_input_timeout",
+    "timeout_seconds": 3600
+  },
   "identity": {
     "blueprint_id": "credit_default_warning",
     "name": "Credit Default Warning"
@@ -101,12 +129,20 @@
           "web_ui.json",
           "ui.json",
           "web/index.html",
-          "logs.jsonl"
+          "logs.jsonl",
+          "logs.index.json",
+          "human.jsonl",
+          "resources.jsonl"
         ]
       },
       "events": {
         "artifact": "events.jsonl",
         "description": "Append-only workflow events."
+      },
+      "human": {
+        "artifact": "human.jsonl",
+        "description": "Sparse human collaboration notices, input requests, and responses.",
+        "mirrored_to": "events.jsonl"
       },
       "input_skills": {
         "description": "Connector-backed or reusable skill-backed input sources."
@@ -116,7 +152,9 @@
         "description": "Resolved runtime inputs and adapter provenance."
       },
       "logs": {
+        "artifact": "logs.jsonl",
         "description": "Runtime stdout/stderr and explicit log artifacts.",
+        "index": "logs.index.json",
         "stream": "stdout/stderr"
       },
       "output_skills": {
@@ -128,6 +166,10 @@
           "final_artifact.json"
         ],
         "description": "Primary result and final user-facing artifact."
+      },
+      "resources": {
+        "artifact": "resources.jsonl",
+        "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
       },
       "streams": {
         "default": [
@@ -176,6 +218,8 @@
       "llm",
       "outputs",
       "logging",
+      "resources",
+      "human_control",
       "real_adapters",
       "streams",
       "input_skills",
@@ -300,7 +344,20 @@
       "simulation_step_started",
       "llm_decision",
       "simulation_state_updated",
-      "run_completed"
+      "run_completed",
+      "blueprint_status",
+      "blueprint_phase_started",
+      "blueprint_phase_completed",
+      "blueprint_phase_failed",
+      "artifact_written",
+      "human_notice",
+      "human_input_requested",
+      "human_input_received",
+      "human_input_timeout",
+      "human_decision_applied",
+      "output_skill_started",
+      "output_skill_completed",
+      "output_skill_failed"
     ],
     "events_jsonl": true,
     "level": "INFO",
@@ -314,12 +371,30 @@
       "password",
       "private_key"
     ],
-    "stderr_jsonl": true
+    "rotation": {
+      "check_interval_records": 100,
+      "compress": "background",
+      "enabled": true,
+      "max_bytes_mb": 100,
+      "max_segments": 7,
+      "span_seconds": 86400
+    },
+    "stderr_jsonl": true,
+    "writer": {
+      "batch_size": 100,
+      "flush_interval_seconds": 0.5,
+      "mode": "async",
+      "overflow_policy": "drop_low_priority",
+      "queue_size": 10000,
+      "shutdown_flush_timeout_seconds": 2
+    }
   },
   "metadata": {
+    "blueprint_id": "credit_default_warning",
     "blueprint_revision": "v1",
     "category": "finance",
     "customizable_for": "Consumer lending, SMB credit, cards, mortgage prequalification.",
+    "name": "Credit Default Warning",
     "problem_solved": "Borrower behavior, rates, approvals, and yield interact over time; static scorecards miss policy tradeoffs under changing conditions.",
     "standard_version": "1.0",
     "target_users": "Credit-risk teams, lenders, fintech underwriters, and portfolio analysts."
@@ -374,13 +449,28 @@
       "path": null
     }
   },
+  "resources": {
+    "enabled": true,
+    "gpu_enabled": "auto",
+    "gpu_sample_interval_seconds": 60,
+    "history_window_hours": 24,
+    "raw_retention_hours": 48,
+    "rollup_bucket_seconds": 3600,
+    "sample_interval_seconds": 10
+  },
   "schemas": {
+    "artifact_record": "mn.artifact.record.v1",
     "config": "mn.blueprint.config.v1",
     "events": "mn.blueprint.events.v1",
     "final_artifact": "mn.blueprint.final_artifact.v1",
+    "human_control": "mn.blueprint.human_control.v1",
     "input_skills": "mn.blueprint.input_skills.v1",
     "inputs": "mn.blueprint.inputs.v1",
-    "output_skills": "mn.blueprint.output_skills.v1"
+    "logs": "mn.blueprint.logs.v1",
+    "output_skills": "mn.blueprint.output_skills.v1",
+    "resources": "mn.blueprint.resources.v1",
+    "status_contract": "mn.blueprint.status_contract.v1",
+    "web_ui": "mn.blueprint.web_ui.v1"
   },
   "simulation": {
     "actions": [
@@ -422,6 +512,33 @@
     "type": "manual"
   },
   "web_ui": {
+    "artifacts": [
+      "web_ui.json",
+      "ui.json",
+      "web/index.html"
+    ],
+    "dashboard": {
+      "data_source": "local_run_store",
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ]
+    },
     "enabled": true,
     "input": {
       "adapter": "none",
@@ -439,6 +556,7 @@
       "custom_url": null,
       "refresh_seconds": 2.0,
       "title": null
-    }
+    },
+    "reads_from": "local_run_store"
   }
 }

@@ -46,27 +46,12 @@
       }
     ]
   },
-  "job_name": "codebase-memory-compression-analysis",
-  "license": "LICENSE.md",
-  "term": "TERM.md",
-  "manifest_version": "1.0",
-  "requirements": {
-    "cpu": {
-      "min_cores": 1
-    },
-    "gpu": {
-      "min_count": 0
-    },
-    "memory": {
-      "min_gb": 2
-    },
-    "disk": {
-      "min_gb": 1
-    }
-  },
   "input_validation": {
     "rules": []
   },
+  "job_name": "codebase-memory-compression-analysis",
+  "license": "LICENSE.md",
+  "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
       "library": "../mn-agents/index.json",
@@ -124,6 +109,30 @@
     },
     "customizable_for": "Architecture review, codebase onboarding, migration planning, technical due diligence, and large-repo code review.",
     "description": "Use this blueprint to see how compressed agent memory helps teams analyze large codebases without flooding every worker with full repository context.",
+    "documentation": {
+      "catalog": "../README.md",
+      "config": "config/default.json",
+      "manifest": "manifest.json",
+      "overrides": "config/overwrite.json",
+      "payloads": "payloads/",
+      "readme": "README.md",
+      "spec": "SPEC.md",
+      "standard": "../BLUEPRINT_STANDARD.md"
+    },
+    "human_control": {
+      "enabled": true,
+      "events": [
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied"
+      ],
+      "mode": "notice_only",
+      "notice_event": "human_notice",
+      "reason": "The workflow may surface notable findings for review but does not apply irreversible actions by itself.",
+      "requires_ack": false
+    },
     "init_config_review": {
       "checks": [
         "identity",
@@ -135,7 +144,101 @@
         "privacy",
         "budgets"
       ],
+      "fields": [
+        {
+          "default": "mock",
+          "description": "Run mode used for mock, test, or real-adapter execution.",
+          "label": "Run mode",
+          "path": "mode"
+        },
+        {
+          "default": "mock",
+          "description": "Input source adapter. Mock is safe for demos; real inputs use json, file, env_json, streams, or connector profiles.",
+          "label": "Input adapter",
+          "path": "inputs.adapter"
+        },
+        {
+          "default": "~/.mn/runs",
+          "description": "Local run-store root for logs, events, inputs, outputs, and final artifacts.",
+          "label": "Run-store root",
+          "path": "outputs.run_root"
+        },
+        {
+          "default": "notice_only",
+          "description": "Whether this blueprint disables human control, emits notice-only events, or requires approval for high-impact actions.",
+          "label": "Human control mode",
+          "path": "human_control.mode"
+        },
+        {
+          "default": true,
+          "description": "Whether the shared run-store dashboard should be available for this run.",
+          "label": "Web UI",
+          "path": "web_ui.enabled"
+        },
+        {
+          "default": "http://192.168.4.173:11434",
+          "description": "LLM endpoint used by LLM-backed agents.",
+          "label": "LLM API base",
+          "path": "llm.configs.primary.api_base"
+        },
+        {
+          "default": "ollama/nemotron3:33b",
+          "description": "LLM model used by LLM-backed agents.",
+          "label": "LLM model",
+          "path": "llm.configs.primary.model"
+        }
+      ],
       "required": true
+    },
+    "input_contract": {
+      "description": "Use this blueprint to see how compressed agent memory helps teams analyze large codebases without flooding every worker with full repository context.",
+      "optional_inputs": [],
+      "privacy_classification": "internal",
+      "profiles": {
+        "env_json": {
+          "adapter": "env_json",
+          "description": "JSON object loaded from MN_BLUEPRINT_INPUT_JSON."
+        },
+        "file": {
+          "adapter": "file",
+          "description": "JSON object loaded from a local file path."
+        },
+        "json": {
+          "adapter": "json",
+          "description": "Inline JSON object supplied through config or runtime overrides."
+        },
+        "mock": {
+          "adapter": "mock",
+          "description": "Default metadata-only Django repository fixture bundled with the blueprint.",
+          "payload": {
+            "fixture_max_files": 260,
+            "notes_per_file": 1
+          }
+        }
+      },
+      "required_inputs": [
+        {
+          "description": "Domain input value for fixture_max_files.",
+          "example": 260,
+          "name": "fixture_max_files",
+          "type": "int"
+        },
+        {
+          "description": "Domain input value for notes_per_file.",
+          "example": 1,
+          "name": "notes_per_file",
+          "type": "int"
+        }
+      ],
+      "resolved_artifact": "inputs.json",
+      "schema_version": "mn.blueprint.input_contract.v1",
+      "supported_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "validation_rules": []
     },
     "interfaces": {
       "channels": {
@@ -154,12 +257,20 @@
             "web_ui.json",
             "ui.json",
             "web/index.html",
-            "logs.jsonl"
+            "logs.jsonl",
+            "logs.index.json",
+            "human.jsonl",
+            "resources.jsonl"
           ]
         },
         "events": {
           "artifact": "events.jsonl",
           "description": "Append-only workflow events."
+        },
+        "human": {
+          "artifact": "human.jsonl",
+          "description": "Sparse human collaboration notices, input requests, and responses.",
+          "mirrored_to": "events.jsonl"
         },
         "input_skills": {
           "description": "Connector-backed or reusable skill-backed input sources."
@@ -169,7 +280,9 @@
           "description": "Resolved runtime inputs and adapter provenance."
         },
         "logs": {
+          "artifact": "logs.jsonl",
           "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "index": "logs.index.json",
           "stream": "stdout/stderr"
         },
         "output_skills": {
@@ -181,6 +294,10 @@
             "final_artifact.json"
           ],
           "description": "Primary result and final user-facing artifact."
+        },
+        "resources": {
+          "artifact": "resources.jsonl",
+          "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
         },
         "streams": {
           "default": [
@@ -230,6 +347,7 @@
         "outputs",
         "logging",
         "resources",
+        "human_control",
         "real_adapters",
         "streams",
         "input_skills",
@@ -326,13 +444,158 @@
       "sdk_import_package": "mn_context_engine_sdk"
     },
     "name": "Codebase Memory Compression Analysis",
+    "observability_dashboard": {
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ],
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store"
+    },
     "output": "Compressed code-analysis handoff, final architecture briefing, and context-memory benchmark report.",
     "output_contract": {
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        }
+      ],
       "events": "typed event objects with payload",
       "events_jsonl": "events.jsonl",
+      "final_artifact": {
+        "description": "The durable user-facing artifact should summarize the result, recommendation, confidence, evidence, next steps, and source references.",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ],
+        "schema_version": "mn.blueprint.final_artifact_contract.v1"
+      },
       "final_artifact_json": "final_artifact.json",
       "local_run_store": "~/.mn/runs/<run_id>/",
       "logs_jsonl": "logs.jsonl",
+      "output_skills": [],
       "response_schema": "mn.blueprint.response.v1",
       "result_json": "result.json",
       "status": "JSON lines on stderr",
@@ -352,7 +615,11 @@
       "source_refs",
       "private memory isolation",
       "multi-agent code analysis relay",
-      "token, latency, quality, and privacy telemetry"
+      "token, latency, quality, and privacy telemetry",
+      "transparent run status",
+      "human control policy",
+      "artifact records",
+      "run-store observability dashboard"
     ],
     "simulation_type": "Large-repo code analysis memory-pressure benchmark.",
     "standard": {
@@ -382,6 +649,56 @@
       ],
       "run_store": "~/.mn/runs/<run_id>/",
       "version": "1.0"
+    },
+    "standard_version": "1.0",
+    "status_contract": {
+      "heartbeat_event": "blueprint_status",
+      "heartbeat_required": false,
+      "phases": [
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "loading_inputs",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "running_worker",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "waiting_for_human",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "writing_artifacts",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "completed",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        }
+      ],
+      "schema_version": "mn.blueprint.status_contract.v1",
+      "source": "run_store",
+      "status_event": "blueprint_status"
     },
     "status_logging": {
       "env": "MN_BLUEPRINT_LOG_LEVEL",
@@ -423,6 +740,9 @@
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
         },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "repo_fixture_seeded",
         "pass_env": [
@@ -462,9 +782,12 @@
           "MN_QDRANT_EMBEDDING_MODEL",
           "MN_QDRANT_BATCH_SIZE"
         ],
+        "pool": "default",
+        "pool_slots": 1,
         "role": "initializer",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
+        "tty": false,
         "upload_path": "initializer",
         "upload_paths": [
           {
@@ -480,13 +803,7 @@
             "target": "repo_fixture"
           }
         ],
-        "workdir": "/sandbox/job/initializer",
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false
+        "workdir": "/sandbox/job/initializer"
       }
     },
     {
@@ -520,6 +837,9 @@
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
         },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "architecture_digest_done",
         "pass_env": [
@@ -559,9 +879,12 @@
           "MN_QDRANT_EMBEDDING_MODEL",
           "MN_QDRANT_BATCH_SIZE"
         ],
+        "pool": "default",
+        "pool_slots": 1,
         "role": "repo_architect",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
+        "tty": false,
         "upload_path": "interpreter",
         "upload_paths": [
           {
@@ -573,13 +896,7 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/interpreter",
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false
+        "workdir": "/sandbox/job/interpreter"
       }
     },
     {
@@ -613,6 +930,9 @@
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
         },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "dependency_map_done",
         "pass_env": [
@@ -652,9 +972,12 @@
           "MN_QDRANT_EMBEDDING_MODEL",
           "MN_QDRANT_BATCH_SIZE"
         ],
+        "pool": "default",
+        "pool_slots": 1,
         "role": "dependency_mapper",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
+        "tty": false,
         "upload_path": "extractor",
         "upload_paths": [
           {
@@ -666,13 +989,7 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/extractor",
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false
+        "workdir": "/sandbox/job/extractor"
       }
     },
     {
@@ -706,6 +1023,9 @@
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
         },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "risk_register_done",
         "pass_env": [
@@ -745,9 +1065,12 @@
           "MN_QDRANT_EMBEDDING_MODEL",
           "MN_QDRANT_BATCH_SIZE"
         ],
+        "pool": "default",
+        "pool_slots": 1,
         "role": "risk_classifier",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
+        "tty": false,
         "upload_path": "classifier",
         "upload_paths": [
           {
@@ -759,13 +1082,7 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/classifier",
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false
+        "workdir": "/sandbox/job/classifier"
       }
     },
     {
@@ -799,6 +1116,9 @@
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
         },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "code_handoff_done",
         "pass_env": [
@@ -838,9 +1158,12 @@
           "MN_QDRANT_EMBEDDING_MODEL",
           "MN_QDRANT_BATCH_SIZE"
         ],
+        "pool": "default",
+        "pool_slots": 1,
         "role": "context_compressor",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
+        "tty": false,
         "upload_path": "decision",
         "upload_paths": [
           {
@@ -852,13 +1175,7 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/decision",
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false
+        "workdir": "/sandbox/job/decision"
       }
     },
     {
@@ -892,6 +1209,9 @@
           "MN_QDRANT_NAMESPACE": "business_code_analysis_memory",
           "MN_QDRANT_URL": "http://localhost:6333"
         },
+        "from": "base",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "code_analysis_briefing_done",
         "pass_env": [
@@ -931,9 +1251,12 @@
           "MN_QDRANT_EMBEDDING_MODEL",
           "MN_QDRANT_BATCH_SIZE"
         ],
+        "pool": "default",
+        "pool_slots": 1,
         "role": "briefing_author",
         "runner_module": "MirrorNeuron.Runner.HostLocal",
         "script": "scripts/run_blueprint.py",
+        "tty": false,
         "upload_path": "critic",
         "upload_paths": [
           {
@@ -945,13 +1268,7 @@
             "target": "_vendor"
           }
         ],
-        "workdir": "/sandbox/job/critic",
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false
+        "workdir": "/sandbox/job/critic"
       }
     },
     {
@@ -998,5 +1315,20 @@
   "policies": {
     "recovery_mode": "local_restart"
   },
-  "requiredContextEngine": false
+  "requiredContextEngine": false,
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "term": "TERM.md"
 }

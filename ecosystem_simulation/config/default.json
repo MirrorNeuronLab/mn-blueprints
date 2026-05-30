@@ -84,6 +84,20 @@
     "write_final_artifact",
     "fan_out_output_skills"
   ],
+  "human_control": {
+    "enabled": true,
+    "events": [
+      "human_notice",
+      "human_input_requested",
+      "human_input_received",
+      "human_input_timeout",
+      "human_decision_applied"
+    ],
+    "mode": "notice_only",
+    "notice_event": "human_notice",
+    "reason": "The workflow may surface notable findings for review but does not apply irreversible actions by itself.",
+    "requires_ack": false
+  },
   "identity": {
     "blueprint_id": "ecosystem_simulation",
     "name": "Ecosystem Simulation"
@@ -137,6 +151,11 @@
         "artifact": "events.jsonl",
         "description": "Append-only workflow events."
       },
+      "human": {
+        "artifact": "human.jsonl",
+        "description": "Sparse human collaboration notices, input requests, and responses.",
+        "mirrored_to": "events.jsonl"
+      },
       "input_skills": {
         "description": "Connector-backed or reusable skill-backed input sources."
       },
@@ -149,11 +168,6 @@
         "description": "Runtime stdout/stderr and explicit log artifacts.",
         "index": "logs.index.json",
         "stream": "stdout/stderr"
-      },
-      "human": {
-        "artifact": "human.jsonl",
-        "description": "Sparse human collaboration notices, input requests, and responses.",
-        "mirrored_to": "events.jsonl"
       },
       "output_skills": {
         "description": "Optional fan-out destinations after local run-store writes."
@@ -217,6 +231,7 @@
       "outputs",
       "logging",
       "resources",
+      "human_control",
       "real_adapters",
       "streams",
       "input_skills",
@@ -332,19 +347,24 @@
       "simulation_step_started",
       "llm_decision",
       "simulation_state_updated",
-      "run_completed"
+      "run_completed",
+      "blueprint_status",
+      "blueprint_phase_started",
+      "blueprint_phase_completed",
+      "blueprint_phase_failed",
+      "artifact_written",
+      "human_notice",
+      "human_input_requested",
+      "human_input_received",
+      "human_input_timeout",
+      "human_decision_applied",
+      "output_skill_started",
+      "output_skill_completed",
+      "output_skill_failed"
     ],
     "events_jsonl": true,
     "level": "INFO",
     "logs_jsonl": true,
-    "rotation": {
-      "check_interval_records": 100,
-      "compress": "background",
-      "enabled": true,
-      "max_bytes_mb": 100,
-      "max_segments": 7,
-      "span_seconds": 86400
-    },
     "redact_env_secrets": true,
     "redact_fields": [
       "api_key",
@@ -354,6 +374,14 @@
       "password",
       "private_key"
     ],
+    "rotation": {
+      "check_interval_records": 100,
+      "compress": "background",
+      "enabled": true,
+      "max_bytes_mb": 100,
+      "max_segments": 7,
+      "span_seconds": 86400
+    },
     "stderr_jsonl": true,
     "writer": {
       "batch_size": 100,
@@ -483,9 +511,11 @@
     }
   ],
   "metadata": {
+    "blueprint_id": "ecosystem_simulation",
     "blueprint_revision": "v1",
     "category": "science",
     "customizable_for": "Conservation planning, invasive species modeling, education, agent-based simulation.",
+    "name": "Ecosystem Simulation",
     "problem_solved": "Ecological systems change through local interactions, migration, resources, and mutation; interventions need scenario testing before field action.",
     "standard_version": "1.0",
     "target_users": "Ecologists, conservation analysts, simulation researchers, and education teams."
@@ -550,12 +580,18 @@
     "sample_interval_seconds": 10
   },
   "schemas": {
+    "artifact_record": "mn.artifact.record.v1",
     "config": "mn.blueprint.config.v1",
     "events": "mn.blueprint.events.v1",
     "final_artifact": "mn.blueprint.final_artifact.v1",
+    "human_control": "mn.blueprint.human_control.v1",
     "input_skills": "mn.blueprint.input_skills.v1",
     "inputs": "mn.blueprint.inputs.v1",
-    "output_skills": "mn.blueprint.output_skills.v1"
+    "logs": "mn.blueprint.logs.v1",
+    "output_skills": "mn.blueprint.output_skills.v1",
+    "resources": "mn.blueprint.resources.v1",
+    "status_contract": "mn.blueprint.status_contract.v1",
+    "web_ui": "mn.blueprint.web_ui.v1"
   },
   "simulation": {
     "deterministic": true,
@@ -583,17 +619,11 @@
     "type": "manual"
   },
   "web_ui": {
-    "enabled": true,
-    "input": {
-      "adapter": "none",
-      "custom_url": null,
-      "fields": [],
-      "host": "127.0.0.1",
-      "instructions": null,
-      "port": null,
-      "share": false,
-      "title": null
-    },
+    "artifacts": [
+      "web_ui.json",
+      "ui.json",
+      "web/index.html"
+    ],
     "dashboard": {
       "copy": {
         "event_glossary": {
@@ -612,308 +642,7 @@
           "Rank outcomes and preserve reviewable run artifacts."
         ]
       },
-      "grafana": {
-        "title": "Ecosystem Simulation",
-        "tags": [
-          "mirrorneuron",
-          "blueprint",
-          "ecosystem"
-        ],
-        "timezone": "browser",
-        "editable": false,
-        "refresh": "2s",
-        "schemaVersion": 39,
-        "time": {
-          "from": "now-1h",
-          "to": "now"
-        },
-        "templating": {
-          "list": []
-        },
-        "panels": [
-          {
-            "id": 1,
-            "type": "text",
-            "title": "Overview",
-            "gridPos": {
-              "x": 0,
-              "y": 0,
-              "w": 24,
-              "h": 4
-            },
-            "options": {
-              "mode": "markdown",
-              "content": "Compare regional ecosystem outcomes while population, resources, migration, and mutation change over time."
-            }
-          },
-          {
-            "id": 2,
-            "type": "stat",
-            "title": "Run Status",
-            "gridPos": {
-              "x": 0,
-              "y": 4,
-              "w": 6,
-              "h": 4
-            },
-            "targets": [
-              {
-                "refId": "A",
-                "queryType": "run_status"
-              }
-            ]
-          },
-          {
-            "id": 3,
-            "type": "stat",
-            "title": "Region Summaries",
-            "gridPos": {
-              "x": 6,
-              "y": 4,
-              "w": 6,
-              "h": 4
-            },
-            "targets": [
-              {
-                "refId": "A",
-                "queryType": "event_count",
-                "eventTypes": [
-                  "region_summary"
-                ]
-              }
-            ]
-          },
-          {
-            "id": 4,
-            "type": "stat",
-            "title": "Latest Event",
-            "gridPos": {
-              "x": 12,
-              "y": 4,
-              "w": 6,
-              "h": 4
-            },
-            "targets": [
-              {
-                "refId": "A",
-                "queryType": "latest_event_type",
-                "eventTypes": [
-                  "simulation_start",
-                  "region_bootstrap",
-                  "region_summary",
-                  "region_collection",
-                  "blueprint_report",
-                  "job_running",
-                  "job_completed"
-                ]
-              }
-            ]
-          },
-          {
-            "id": 5,
-            "type": "stat",
-            "title": "Report Events",
-            "gridPos": {
-              "x": 18,
-              "y": 4,
-              "w": 6,
-              "h": 4
-            },
-            "targets": [
-              {
-                "refId": "A",
-                "queryType": "event_count",
-                "eventTypes": [
-                  "blueprint_report",
-                  "job_completed"
-                ]
-              }
-            ]
-          },
-          {
-            "id": 6,
-            "type": "table",
-            "title": "Regional Event Timeline",
-            "gridPos": {
-              "x": 0,
-              "y": 8,
-              "w": 16,
-              "h": 10
-            },
-            "targets": [
-              {
-                "refId": "A",
-                "queryType": "events",
-                "limit": 80,
-                "eventTypes": [
-                  "simulation_start",
-                  "region_bootstrap",
-                  "region_summary",
-                  "region_collection",
-                  "blueprint_report",
-                  "job_running",
-                  "job_completed"
-                ]
-              }
-            ],
-            "options": {
-              "columns": [
-                {
-                  "text": "Time",
-                  "field": "timestamp"
-                },
-                {
-                  "text": "Event",
-                  "field": "type",
-                  "transform": "humanize"
-                },
-                {
-                  "text": "Summary",
-                  "field": "summary"
-                },
-                {
-                  "text": "Region",
-                  "field": "region_id"
-                },
-                {
-                  "text": "Population",
-                  "field": "population"
-                },
-                {
-                  "text": "Food",
-                  "field": "food"
-                }
-              ]
-            }
-          },
-          {
-            "id": 7,
-            "type": "logs",
-            "title": "Event Log",
-            "gridPos": {
-              "x": 16,
-              "y": 8,
-              "w": 8,
-              "h": 10
-            },
-            "targets": [
-              {
-                "refId": "A",
-                "queryType": "events",
-                "limit": 12,
-                "eventTypes": [
-                  "simulation_start",
-                  "region_bootstrap",
-                  "region_summary",
-                  "region_collection",
-                  "blueprint_report",
-                  "job_running",
-                  "job_completed"
-                ]
-              }
-            ]
-          },
-          {
-            "id": 8,
-            "type": "timeseries",
-            "title": "Event Stream",
-            "gridPos": {
-              "x": 0,
-              "y": 18,
-              "w": 12,
-              "h": 7
-            },
-            "targets": [
-              {
-                "refId": "A",
-                "queryType": "event_timeseries",
-                "eventTypes": [
-                  "simulation_start",
-                  "region_bootstrap",
-                  "region_summary",
-                  "region_collection",
-                  "blueprint_report",
-                  "job_running",
-                  "job_completed"
-                ]
-              }
-            ],
-            "options": {
-              "x": "time",
-              "y": "value"
-            }
-          },
-          {
-            "id": 9,
-            "type": "table",
-            "title": "Event Counts",
-            "gridPos": {
-              "x": 12,
-              "y": 18,
-              "w": 12,
-              "h": 7
-            },
-            "targets": [
-              {
-                "refId": "A",
-                "queryType": "event_counts",
-                "eventTypes": [
-                  "simulation_start",
-                  "region_bootstrap",
-                  "region_summary",
-                  "region_collection",
-                  "blueprint_report",
-                  "job_running",
-                  "job_completed"
-                ]
-              }
-            ]
-          },
-          {
-            "id": 10,
-            "type": "json",
-            "title": "Final Artifact",
-            "gridPos": {
-              "x": 0,
-              "y": 25,
-              "w": 12,
-              "h": 8
-            },
-            "targets": [
-              {
-                "refId": "A",
-                "queryType": "final_artifact"
-              }
-            ]
-          },
-          {
-            "id": 11,
-            "type": "json",
-            "title": "Latest Raw Event",
-            "gridPos": {
-              "x": 12,
-              "y": 25,
-              "w": 12,
-              "h": 8
-            },
-            "targets": [
-              {
-                "refId": "A",
-                "queryType": "latest_event",
-                "eventTypes": [
-                  "simulation_start",
-                  "region_bootstrap",
-                  "region_summary",
-                  "region_collection",
-                  "blueprint_report",
-                  "job_running",
-                  "job_completed"
-                ]
-              }
-            ]
-          }
-        ]
-      },
+      "data_source": "local_run_store",
       "event_types": [
         "simulation_start",
         "region_bootstrap",
@@ -922,7 +651,339 @@
         "blueprint_report",
         "job_running",
         "job_completed"
+      ],
+      "grafana": {
+        "editable": false,
+        "panels": [
+          {
+            "gridPos": {
+              "h": 4,
+              "w": 24,
+              "x": 0,
+              "y": 0
+            },
+            "id": 1,
+            "options": {
+              "content": "Compare regional ecosystem outcomes while population, resources, migration, and mutation change over time.",
+              "mode": "markdown"
+            },
+            "title": "Overview",
+            "type": "text"
+          },
+          {
+            "gridPos": {
+              "h": 4,
+              "w": 6,
+              "x": 0,
+              "y": 4
+            },
+            "id": 2,
+            "targets": [
+              {
+                "queryType": "run_status",
+                "refId": "A"
+              }
+            ],
+            "title": "Run Status",
+            "type": "stat"
+          },
+          {
+            "gridPos": {
+              "h": 4,
+              "w": 6,
+              "x": 6,
+              "y": 4
+            },
+            "id": 3,
+            "targets": [
+              {
+                "eventTypes": [
+                  "region_summary"
+                ],
+                "queryType": "event_count",
+                "refId": "A"
+              }
+            ],
+            "title": "Region Summaries",
+            "type": "stat"
+          },
+          {
+            "gridPos": {
+              "h": 4,
+              "w": 6,
+              "x": 12,
+              "y": 4
+            },
+            "id": 4,
+            "targets": [
+              {
+                "eventTypes": [
+                  "simulation_start",
+                  "region_bootstrap",
+                  "region_summary",
+                  "region_collection",
+                  "blueprint_report",
+                  "job_running",
+                  "job_completed"
+                ],
+                "queryType": "latest_event_type",
+                "refId": "A"
+              }
+            ],
+            "title": "Latest Event",
+            "type": "stat"
+          },
+          {
+            "gridPos": {
+              "h": 4,
+              "w": 6,
+              "x": 18,
+              "y": 4
+            },
+            "id": 5,
+            "targets": [
+              {
+                "eventTypes": [
+                  "blueprint_report",
+                  "job_completed"
+                ],
+                "queryType": "event_count",
+                "refId": "A"
+              }
+            ],
+            "title": "Report Events",
+            "type": "stat"
+          },
+          {
+            "gridPos": {
+              "h": 10,
+              "w": 16,
+              "x": 0,
+              "y": 8
+            },
+            "id": 6,
+            "options": {
+              "columns": [
+                {
+                  "field": "timestamp",
+                  "text": "Time"
+                },
+                {
+                  "field": "type",
+                  "text": "Event",
+                  "transform": "humanize"
+                },
+                {
+                  "field": "summary",
+                  "text": "Summary"
+                },
+                {
+                  "field": "region_id",
+                  "text": "Region"
+                },
+                {
+                  "field": "population",
+                  "text": "Population"
+                },
+                {
+                  "field": "food",
+                  "text": "Food"
+                }
+              ]
+            },
+            "targets": [
+              {
+                "eventTypes": [
+                  "simulation_start",
+                  "region_bootstrap",
+                  "region_summary",
+                  "region_collection",
+                  "blueprint_report",
+                  "job_running",
+                  "job_completed"
+                ],
+                "limit": 80,
+                "queryType": "events",
+                "refId": "A"
+              }
+            ],
+            "title": "Regional Event Timeline",
+            "type": "table"
+          },
+          {
+            "gridPos": {
+              "h": 10,
+              "w": 8,
+              "x": 16,
+              "y": 8
+            },
+            "id": 7,
+            "targets": [
+              {
+                "eventTypes": [
+                  "simulation_start",
+                  "region_bootstrap",
+                  "region_summary",
+                  "region_collection",
+                  "blueprint_report",
+                  "job_running",
+                  "job_completed"
+                ],
+                "limit": 12,
+                "queryType": "events",
+                "refId": "A"
+              }
+            ],
+            "title": "Event Log",
+            "type": "logs"
+          },
+          {
+            "gridPos": {
+              "h": 7,
+              "w": 12,
+              "x": 0,
+              "y": 18
+            },
+            "id": 8,
+            "options": {
+              "x": "time",
+              "y": "value"
+            },
+            "targets": [
+              {
+                "eventTypes": [
+                  "simulation_start",
+                  "region_bootstrap",
+                  "region_summary",
+                  "region_collection",
+                  "blueprint_report",
+                  "job_running",
+                  "job_completed"
+                ],
+                "queryType": "event_timeseries",
+                "refId": "A"
+              }
+            ],
+            "title": "Event Stream",
+            "type": "timeseries"
+          },
+          {
+            "gridPos": {
+              "h": 7,
+              "w": 12,
+              "x": 12,
+              "y": 18
+            },
+            "id": 9,
+            "targets": [
+              {
+                "eventTypes": [
+                  "simulation_start",
+                  "region_bootstrap",
+                  "region_summary",
+                  "region_collection",
+                  "blueprint_report",
+                  "job_running",
+                  "job_completed"
+                ],
+                "queryType": "event_counts",
+                "refId": "A"
+              }
+            ],
+            "title": "Event Counts",
+            "type": "table"
+          },
+          {
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 25
+            },
+            "id": 10,
+            "targets": [
+              {
+                "queryType": "final_artifact",
+                "refId": "A"
+              }
+            ],
+            "title": "Final Artifact",
+            "type": "json"
+          },
+          {
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 25
+            },
+            "id": 11,
+            "targets": [
+              {
+                "eventTypes": [
+                  "simulation_start",
+                  "region_bootstrap",
+                  "region_summary",
+                  "region_collection",
+                  "blueprint_report",
+                  "job_running",
+                  "job_completed"
+                ],
+                "queryType": "latest_event",
+                "refId": "A"
+              }
+            ],
+            "title": "Latest Raw Event",
+            "type": "json"
+          }
+        ],
+        "refresh": "2s",
+        "schemaVersion": 39,
+        "tags": [
+          "mirrorneuron",
+          "blueprint",
+          "ecosystem"
+        ],
+        "templating": {
+          "list": []
+        },
+        "time": {
+          "from": "now-1h",
+          "to": "now"
+        },
+        "timezone": "browser",
+        "title": "Ecosystem Simulation"
+      },
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
       ]
+    },
+    "enabled": true,
+    "input": {
+      "adapter": "none",
+      "custom_url": null,
+      "fields": [],
+      "host": "127.0.0.1",
+      "instructions": null,
+      "port": null,
+      "share": false,
+      "title": null
     },
     "output": {
       "adapter": "gradio",
@@ -930,6 +991,7 @@
       "custom_url": null,
       "refresh_seconds": 2.0,
       "title": "Ecosystem Simulation"
-    }
+    },
+    "reads_from": "local_run_store"
   }
 }

@@ -4,6 +4,8 @@ Runnable workflow blueprints for MirrorNeuron.
 
 Each blueprint is a deployable workflow folder with a manifest, configuration, payloads, tests, documentation, and a customer-facing `SPEC.md`. Blueprints can run with mock inputs first, then be adapted to real data sources and operational systems. The `SPEC.md` files describe the intended real-world customer problem and expected outcome even when the prototype implementation is still partial.
 
+Blueprints also declare a product-facing experience layer: input contracts, output/artifact contracts, human-control policy, status phases, and observability dashboard panels. These are metadata and config contracts over the same local run store, so launchers and users can see what inputs are needed, what work is happening, when human review is required, and where final artifacts and logs are written.
+
 In this architecture, agents are the working units. A blueprint describes how agents work together: which agent starts, what messages flow between agents, what state and artifacts are produced, and which execution boundaries apply. MirrorNeuron is the runtime system that runs that workflow in an orchestrated way, with scheduling, message routing, run-state tracking, artifact capture, and resource controls.
 
 Shared entries in `mn-agents` are generic agent templates. A blueprint actualizes those templates into customized workflow agents with `uses`, `with`, and `config`, then assembles them like reusable blocks. Control templates coordinate lifecycle, routing, retry, joins, filters, checkpoints, approval, and output fanout. Data templates do the work: Python execution, native modules, LLM decisions/tools, observation, sandboxed code work, edge model inference, and data services. Not every agent should call an LLM. Agents that do call LLMs should reference named LLM config, and agents that generate, review, browse, or execute code should run inside an explicit sandbox. The blueprint should make those choices visible so the same workflow can be tested locally and run reliably on constrained or edge environments.
@@ -155,6 +157,11 @@ Common files:
 | `final_artifact.json` | Final workflow artifact. |
 | `job.json` | Runtime job correlation when submitted through the CLI. |
 | `web_ui.json` | Local UI or report metadata when available. |
+| `ui.json` | Dashboard layout or UI state when a web UI is available. |
+| `logs.jsonl` | Structured runtime logs. |
+| `logs.index.json` | Log segment and rotation index metadata. |
+| `human.jsonl` | Sparse human notices, requests, and responses mirrored to events. |
+| `resources.jsonl` | Resource usage samples for CPU, GPU, memory, queues, and LLM tokens when collected. |
 
 Useful observability commands:
 
@@ -173,7 +180,7 @@ Most blueprint folders contain:
 | Path | Purpose |
 | --- | --- |
 | `manifest.json` | Graph topology, metadata, entrypoints, workers, runtime requirements, input validation, and output contracts. |
-| `config/default.json` | Default inputs, simulation settings, LLM settings, output adapters, and logging config. |
+| `config/default.json` | Default inputs, simulation settings, LLM settings, output adapters, logging config, resource sampling, human-control policy, and web UI config. |
 | `config/overwrite.json` | Local customer-specific overwrite values layered on top of `config/default.json` before launch. |
 | `scenario.json` | Data-driven simulation metadata, when applicable. |
 | `payloads/` | Worker scripts, generated runners, policies, fixtures, and domain assets. |
@@ -183,6 +190,8 @@ Most blueprint folders contain:
 | `tests/` | Smoke tests or package-specific tests. |
 
 The root `index.json` is the catalog source of truth.
+
+For the shared contract behind these files, see [BLUEPRINT_STANDARD.md](BLUEPRINT_STANDARD.md). Each blueprint README includes a documentation map that points back to the standard plus its local `SPEC.md`, `manifest.json`, `config/default.json`, override template, and payloads.
 
 ## Agent Workflow Model
 

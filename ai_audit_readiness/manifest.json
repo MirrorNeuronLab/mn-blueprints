@@ -20,27 +20,12 @@
       }
     ]
   },
-  "job_name": "ai-audit-readiness",
-  "license": "LICENSE.md",
-  "term": "TERM.md",
-  "manifest_version": "1.0",
-  "requirements": {
-    "cpu": {
-      "min_cores": 1
-    },
-    "gpu": {
-      "min_count": 0
-    },
-    "memory": {
-      "min_gb": 2
-    },
-    "disk": {
-      "min_gb": 1
-    }
-  },
   "input_validation": {
     "rules": []
   },
+  "job_name": "ai-audit-readiness",
+  "license": "LICENSE.md",
+  "manifest_version": "1.0",
   "metadata": {
     "agent_templates": {
       "library": "../mn-agents/index.json",
@@ -78,6 +63,44 @@
     },
     "customizable_for": "AI governance, cyber readiness, cloud change assurance, ERP controls, RMF/ATO preparation, and operational control advisory.",
     "description": "Use this blueprint to turn AI and cyber control requirements into an evidence-backed readiness pack your team can review before audit or launch.",
+    "documentation": {
+      "catalog": "../README.md",
+      "config": "config/default.json",
+      "manifest": "manifest.json",
+      "overrides": "config/overwrite.json",
+      "payloads": "payloads/",
+      "readme": "README.md",
+      "spec": "SPEC.md",
+      "standard": "../BLUEPRINT_STANDARD.md"
+    },
+    "human_control": {
+      "allowed_decisions": [
+        "approve",
+        "revise",
+        "reject"
+      ],
+      "blocked_actions": [
+        "approve_remediation_plan",
+        "accept_control_exception",
+        "change_governance_policy"
+      ],
+      "decision_event": "human_decision_applied",
+      "default_action": "reject",
+      "enabled": true,
+      "events": [
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied"
+      ],
+      "mode": "approval_required",
+      "reason": "This blueprint can recommend high-impact operational, security, compliance, financial, or code actions.",
+      "request_event": "human_input_requested",
+      "response_event": "human_input_received",
+      "timeout_event": "human_input_timeout",
+      "timeout_seconds": 3600
+    },
     "init_config_review": {
       "checks": [
         "identity",
@@ -89,7 +112,226 @@
         "privacy",
         "budgets"
       ],
+      "fields": [
+        {
+          "default": "mock",
+          "description": "Run mode used for mock, test, or real-adapter execution.",
+          "label": "Run mode",
+          "path": "mode"
+        },
+        {
+          "default": "mock",
+          "description": "Input source adapter. Mock is safe for demos; real inputs use json, file, env_json, streams, or connector profiles.",
+          "label": "Input adapter",
+          "path": "inputs.adapter"
+        },
+        {
+          "default": "~/.mn/runs",
+          "description": "Local run-store root for logs, events, inputs, outputs, and final artifacts.",
+          "label": "Run-store root",
+          "path": "outputs.run_root"
+        },
+        {
+          "default": "approval_required",
+          "description": "Whether this blueprint disables human control, emits notice-only events, or requires approval for high-impact actions.",
+          "label": "Human control mode",
+          "path": "human_control.mode"
+        },
+        {
+          "default": false,
+          "description": "Whether the shared run-store dashboard should be available for this run.",
+          "label": "Web UI",
+          "path": "web_ui.enabled"
+        },
+        {
+          "default": "http://192.168.4.173:11434",
+          "description": "LLM endpoint used by LLM-backed agents.",
+          "label": "LLM API base",
+          "path": "llm.configs.primary.api_base"
+        },
+        {
+          "default": "ollama/nemotron3:33b",
+          "description": "LLM model used by LLM-backed agents.",
+          "label": "LLM model",
+          "path": "llm.configs.primary.model"
+        }
+      ],
       "required": true
+    },
+    "input_contract": {
+      "description": "Use this blueprint to turn AI and cyber control requirements into an evidence-backed readiness pack your team can review before audit or launch.",
+      "optional_inputs": [],
+      "privacy_classification": "internal",
+      "profiles": {
+        "env_json": {
+          "adapter": "env_json",
+          "description": "JSON object loaded from MN_BLUEPRINT_INPUT_JSON."
+        },
+        "file": {
+          "adapter": "file",
+          "description": "JSON object loaded from a local file path."
+        },
+        "json": {
+          "adapter": "json",
+          "description": "Inline JSON object supplied through config or runtime overrides."
+        },
+        "mock": {
+          "adapter": "mock",
+          "description": "Synthetic AI/cyber/control readiness packet with policies, frameworks, evidence, and audit findings.",
+          "payload": {
+            "audit_findings": [
+              "No retained evidence for human escalation testing.",
+              "Vendor security package is incomplete.",
+              "Privileged access review is older than the quarterly target."
+            ],
+            "control_framework": [
+              {
+                "domain": "governance",
+                "id": "AI-01",
+                "requirement": "Maintain approved AI system inventory"
+              },
+              {
+                "domain": "model risk",
+                "id": "AI-02",
+                "requirement": "Document human review and escalation controls"
+              },
+              {
+                "domain": "cyber",
+                "id": "CY-01",
+                "requirement": "Review privileged access at least quarterly"
+              },
+              {
+                "domain": "third party",
+                "id": "TP-01",
+                "requirement": "Retain vendor security and privacy evidence"
+              }
+            ],
+            "evidence_items": [
+              {
+                "control_id": "AI-01",
+                "name": "Draft inventory export",
+                "strength": "medium"
+              },
+              {
+                "control_id": "CY-01",
+                "name": "Last access review",
+                "strength": "weak"
+              }
+            ],
+            "policies": [
+              {
+                "name": "AI Governance Policy",
+                "text": "# AI Governance Policy\nHigh-risk AI systems require model inventory, owner approval, human review, monitoring, incident response, and retained evidence."
+              },
+              {
+                "name": "Cloud Security Standard",
+                "text": "# Cloud Security Standard\nProduction workloads require privileged access review, encryption, logging, vendor due diligence, and change approval."
+              }
+            ],
+            "program": "Enterprise GenAI Claims Assistant",
+            "system_architecture": "User request -> claims assistant -> retrieval service -> policy engine -> human adjuster queue -> audit log.",
+            "target_readiness_score": 85
+          }
+        }
+      },
+      "required_inputs": [
+        {
+          "description": "Domain input value for audit_findings.",
+          "example": [
+            "No retained evidence for human escalation testing.",
+            "Vendor security package is incomplete.",
+            "Privileged access review is older than the quarterly target."
+          ],
+          "name": "audit_findings",
+          "type": "list"
+        },
+        {
+          "description": "Domain input value for control_framework.",
+          "example": [
+            {
+              "domain": "governance",
+              "id": "AI-01",
+              "requirement": "Maintain approved AI system inventory"
+            },
+            {
+              "domain": "model risk",
+              "id": "AI-02",
+              "requirement": "Document human review and escalation controls"
+            },
+            {
+              "domain": "cyber",
+              "id": "CY-01",
+              "requirement": "Review privileged access at least quarterly"
+            },
+            {
+              "domain": "third party",
+              "id": "TP-01",
+              "requirement": "Retain vendor security and privacy evidence"
+            }
+          ],
+          "name": "control_framework",
+          "type": "list"
+        },
+        {
+          "description": "Domain input value for evidence_items.",
+          "example": [
+            {
+              "control_id": "AI-01",
+              "name": "Draft inventory export",
+              "strength": "medium"
+            },
+            {
+              "control_id": "CY-01",
+              "name": "Last access review",
+              "strength": "weak"
+            }
+          ],
+          "name": "evidence_items",
+          "type": "list"
+        },
+        {
+          "description": "Domain input value for policies.",
+          "example": [
+            {
+              "name": "AI Governance Policy",
+              "text": "# AI Governance Policy\nHigh-risk AI systems require model inventory, owner approval, human review, monitoring, incident response, and retained evidence."
+            },
+            {
+              "name": "Cloud Security Standard",
+              "text": "# Cloud Security Standard\nProduction workloads require privileged access review, encryption, logging, vendor due diligence, and change approval."
+            }
+          ],
+          "name": "policies",
+          "type": "list"
+        },
+        {
+          "description": "Domain input value for program.",
+          "example": "Enterprise GenAI Claims Assistant",
+          "name": "program",
+          "type": "str"
+        },
+        {
+          "description": "Domain input value for system_architecture.",
+          "example": "User request -> claims assistant -> retrieval service -> policy engine -> human adjuster queue -> audit log.",
+          "name": "system_architecture",
+          "type": "str"
+        },
+        {
+          "description": "Domain input value for target_readiness_score.",
+          "example": 85,
+          "name": "target_readiness_score",
+          "type": "int"
+        }
+      ],
+      "resolved_artifact": "inputs.json",
+      "schema_version": "mn.blueprint.input_contract.v1",
+      "supported_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "validation_rules": []
     },
     "interfaces": {
       "channels": {
@@ -108,12 +350,20 @@
             "web_ui.json",
             "ui.json",
             "web/index.html",
-            "logs.jsonl"
+            "logs.jsonl",
+            "logs.index.json",
+            "human.jsonl",
+            "resources.jsonl"
           ]
         },
         "events": {
           "artifact": "events.jsonl",
           "description": "Append-only workflow events."
+        },
+        "human": {
+          "artifact": "human.jsonl",
+          "description": "Sparse human collaboration notices, input requests, and responses.",
+          "mirrored_to": "events.jsonl"
         },
         "input_skills": {
           "description": "Connector-backed or reusable skill-backed input sources."
@@ -123,7 +373,9 @@
           "description": "Resolved runtime inputs and adapter provenance."
         },
         "logs": {
+          "artifact": "logs.jsonl",
           "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "index": "logs.index.json",
           "stream": "stdout/stderr"
         },
         "output_skills": {
@@ -135,6 +387,10 @@
             "final_artifact.json"
           ],
           "description": "Primary result and final user-facing artifact."
+        },
+        "resources": {
+          "artifact": "resources.jsonl",
+          "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
         },
         "streams": {
           "default": [
@@ -184,6 +440,7 @@
         "outputs",
         "logging",
         "resources",
+        "human_control",
         "real_adapters",
         "streams",
         "input_skills",
@@ -271,15 +528,150 @@
     },
     "llm_agent_role": "AI, cyber, and control readiness agent.",
     "name": "AI Audit Readiness",
+    "observability_dashboard": {
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ],
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store"
+    },
     "output": "Compliance gap report with control matrix, risk register, remediation plan, audit evidence package, and executive risk summary.",
     "output_contract": {
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        }
+      ],
       "events": "control_readiness_pack",
       "events_jsonl": "events.jsonl",
+      "final_artifact": {
+        "description": "The durable user-facing artifact should summarize the result, recommendation, confidence, evidence, next steps, and source references.",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ],
+        "schema_version": "mn.blueprint.final_artifact_contract.v1"
+      },
       "final_artifact_json": "final_artifact.json",
       "local_run_store": "~/.mn/runs/<run_id>/",
       "logs_jsonl": "logs.jsonl",
+      "output_skills": [],
       "response_schema": "mn.blueprint.response.v1",
       "result_json": "result.json",
+      "status": "JSON lines on stderr",
       "stdout": "JSON result with final_artifact and run-store metadata"
     },
     "problem_solved": "Regulated companies need to prove that AI, cyber, cloud, ERP, or operational changes are safe, compliant, auditable, and controlled.",
@@ -293,7 +685,11 @@
       "evidence strength scoring",
       "risk register generation",
       "remediation planning",
-      "audit package assembly"
+      "audit package assembly",
+      "transparent run status",
+      "human control policy",
+      "artifact records",
+      "run-store observability dashboard"
     ],
     "simulation_type": "Risk, compliance, and control readiness workflow.",
     "standard": {
@@ -324,6 +720,61 @@
       "run_store": "~/.mn/runs/<run_id>/",
       "version": "1.0"
     },
+    "standard_version": "1.0",
+    "status_contract": {
+      "heartbeat_event": "blueprint_status",
+      "heartbeat_required": false,
+      "phases": [
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "loading_inputs",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "running_worker",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "waiting_for_human",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "writing_artifacts",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "completed",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        }
+      ],
+      "schema_version": "mn.blueprint.status_contract.v1",
+      "source": "run_store",
+      "status_event": "blueprint_status"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
     "target_user": "Financial services, healthcare, aerospace, defense, public sector contractors, enterprise AI, and cybersecurity teams."
   },
   "name": "AI Audit Readiness",
@@ -332,11 +783,22 @@
       "node_id": "readiness_workflow",
       "uses": "mn-agents.data_python_executor@1.0.0",
       "with": {
+        "command": [
+          "python3",
+          "scripts/run_blueprint.py"
+        ],
+        "from": "base",
         "name_prefix": "ai-audit-readiness",
+        "no_auto_providers": true,
+        "no_keep": true,
         "node_type": "generic",
         "output_message_type": "control_readiness_pack",
+        "pool": "default",
+        "pool_slots": 1,
         "role": "root_coordinator",
         "script": "scripts/run_blueprint.py",
+        "tty": false,
+        "upload_as": "readiness_workflow",
         "upload_path": "readiness_workflow",
         "upload_paths": [
           {
@@ -368,17 +830,6 @@
             "target": "mn-skills/client_report_skill"
           }
         ],
-        "command": [
-          "python3",
-          "scripts/run_blueprint.py"
-        ],
-        "from": "base",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "pool": "default",
-        "pool_slots": 1,
-        "tty": false,
-        "upload_as": "readiness_workflow",
         "workdir": "/sandbox/job/readiness_workflow"
       }
     },
@@ -395,5 +846,20 @@
   "policies": {
     "recovery_mode": "local_restart"
   },
-  "requiredContextEngine": false
+  "requiredContextEngine": false,
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "term": "TERM.md"
 }

@@ -72,6 +72,20 @@
     "write_final_artifact",
     "fan_out_output_skills"
   ],
+  "human_control": {
+    "enabled": true,
+    "events": [
+      "human_notice",
+      "human_input_requested",
+      "human_input_received",
+      "human_input_timeout",
+      "human_decision_applied"
+    ],
+    "mode": "notice_only",
+    "notice_event": "human_notice",
+    "reason": "The workflow may surface notable findings for review but does not apply irreversible actions by itself.",
+    "requires_ack": false
+  },
   "identity": {
     "blueprint_id": "facility_safety_video_monitor",
     "name": "Facility Safety Video Monitor"
@@ -99,12 +113,20 @@
           "web_ui.json",
           "ui.json",
           "web/index.html",
-          "logs.jsonl"
+          "logs.jsonl",
+          "logs.index.json",
+          "human.jsonl",
+          "resources.jsonl"
         ]
       },
       "events": {
         "artifact": "events.jsonl",
         "description": "Append-only workflow events."
+      },
+      "human": {
+        "artifact": "human.jsonl",
+        "description": "Sparse human collaboration notices, input requests, and responses.",
+        "mirrored_to": "events.jsonl"
       },
       "input_skills": {
         "description": "Connector-backed or reusable skill-backed input sources."
@@ -114,7 +136,9 @@
         "description": "Resolved runtime inputs and adapter provenance."
       },
       "logs": {
+        "artifact": "logs.jsonl",
         "description": "Runtime stdout/stderr and explicit log artifacts.",
+        "index": "logs.index.json",
         "stream": "stdout/stderr"
       },
       "output_skills": {
@@ -126,6 +150,10 @@
           "final_artifact.json"
         ],
         "description": "Primary result and final user-facing artifact."
+      },
+      "resources": {
+        "artifact": "resources.jsonl",
+        "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
       },
       "streams": {
         "default": [
@@ -174,6 +202,8 @@
       "llm",
       "outputs",
       "logging",
+      "resources",
+      "human_control",
       "real_adapters",
       "streams",
       "input_skills",
@@ -294,7 +324,20 @@
       "door_camera_slack_alert_sent",
       "door_camera_slack_alert_skipped",
       "door_camera_slack_alert_error",
-      "door_camera_frame_analysis_failed"
+      "door_camera_frame_analysis_failed",
+      "blueprint_status",
+      "blueprint_phase_started",
+      "blueprint_phase_completed",
+      "blueprint_phase_failed",
+      "artifact_written",
+      "human_notice",
+      "human_input_requested",
+      "human_input_received",
+      "human_input_timeout",
+      "human_decision_applied",
+      "output_skill_started",
+      "output_skill_completed",
+      "output_skill_failed"
     ],
     "events_jsonl": true,
     "level": "INFO",
@@ -308,7 +351,23 @@
       "password",
       "private_key"
     ],
-    "stderr_jsonl": true
+    "rotation": {
+      "check_interval_records": 100,
+      "compress": "background",
+      "enabled": true,
+      "max_bytes_mb": 100,
+      "max_segments": 7,
+      "span_seconds": 86400
+    },
+    "stderr_jsonl": true,
+    "writer": {
+      "batch_size": 100,
+      "flush_interval_seconds": 0.5,
+      "mode": "async",
+      "overflow_policy": "drop_low_priority",
+      "queue_size": 10000,
+      "shutdown_flush_timeout_seconds": 2
+    }
   },
   "manifest_config_bindings": [
     {
@@ -323,9 +382,11 @@
     }
   ],
   "metadata": {
+    "blueprint_id": "facility_safety_video_monitor",
     "blueprint_revision": "v1",
     "category": "business",
     "customizable_for": "Door monitoring, restricted-area alerts, retail safety, warehouse operations.",
+    "name": "Facility Safety Video Monitor",
     "problem_solved": "Video monitoring is continuous, noisy, and operationally sensitive; teams need stateful alerts, cooldowns, and explainable observations rather than raw frames.",
     "standard_version": "1.0",
     "target_users": "Facilities, security, safety operations, and property management teams."
@@ -335,8 +396,10 @@
     "websocket_events": {
       "connector": "websocket",
       "content": "events",
+      "destination": "MN_BLUEPRINT_EVENTS_WS_URL",
       "direction": "output",
       "enabled": false,
+      "failure_policy": "skip",
       "mock": true,
       "required": false,
       "skill": "websocket_stream",
@@ -352,8 +415,10 @@
       "websocket_events": {
         "connector": "websocket",
         "content": "events",
+        "destination": "MN_BLUEPRINT_EVENTS_WS_URL",
         "direction": "output",
         "enabled": false,
+        "failure_policy": "skip",
         "mock": true,
         "required": false,
         "skill": "websocket_stream",
@@ -404,13 +469,28 @@
       "path": null
     }
   },
+  "resources": {
+    "enabled": true,
+    "gpu_enabled": "auto",
+    "gpu_sample_interval_seconds": 60,
+    "history_window_hours": 24,
+    "raw_retention_hours": 48,
+    "rollup_bucket_seconds": 3600,
+    "sample_interval_seconds": 10
+  },
   "schemas": {
+    "artifact_record": "mn.artifact.record.v1",
     "config": "mn.blueprint.config.v1",
     "events": "mn.blueprint.events.v1",
     "final_artifact": "mn.blueprint.final_artifact.v1",
+    "human_control": "mn.blueprint.human_control.v1",
     "input_skills": "mn.blueprint.input_skills.v1",
     "inputs": "mn.blueprint.inputs.v1",
-    "output_skills": "mn.blueprint.output_skills.v1"
+    "logs": "mn.blueprint.logs.v1",
+    "output_skills": "mn.blueprint.output_skills.v1",
+    "resources": "mn.blueprint.resources.v1",
+    "status_contract": "mn.blueprint.status_contract.v1",
+    "web_ui": "mn.blueprint.web_ui.v1"
   },
   "simulation": {
     "deterministic": true,
@@ -466,9 +546,15 @@
     "timeout_seconds": 90
   },
   "web_ui": {
+    "artifacts": [
+      "web_ui.json",
+      "ui.json",
+      "web/index.html"
+    ],
     "dashboard": {
       "browser_publish_source": "http://127.0.0.1:8889/local-camera/publish?video-codec=h264%2F90000&audio-device=none&video-width=1280&video-height=720&video-framerate=30",
       "browser_video_source": "http://127.0.0.1:8889/local-camera/",
+      "data_source": "local_run_store",
       "default_video_source": "rtsp://host.docker.internal:8554/local-camera",
       "event_feed": {
         "default_path": "~/.mn/runs/<run_id>/events.jsonl",
@@ -480,6 +566,29 @@
         "door_camera_slack_alert_skipped",
         "door_camera_slack_alert_error",
         "door_camera_frame_analysis_failed"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "input_lag",
+        "backpressure",
+        "llm_calls",
+        "token_budget",
+        "llm_retries",
+        "output_skill_attempts",
+        "output_skill_failures"
       ]
     },
     "enabled": true,
@@ -501,6 +610,7 @@
       "refresh_seconds": 2.0,
       "server": "blueprint_support",
       "title": "Facility Safety Video Monitor"
-    }
+    },
+    "reads_from": "local_run_store"
   }
 }

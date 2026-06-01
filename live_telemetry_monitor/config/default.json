@@ -382,54 +382,54 @@
   "manifest_config_bindings": [
     {
       "config_path": "telemetry.chunk_size",
-      "manifest_path": "nodes.telemetry_source.config.chunk_size"
+      "manifest_path": "runtime.bindings.run_workflow.workers.telemetry_source.with.chunk_size"
     },
     {
       "config_path": "telemetry.interval_ms",
-      "manifest_path": "nodes.telemetry_source.config.interval_ms"
+      "manifest_path": "runtime.bindings.run_workflow.workers.telemetry_source.with.interval_ms"
     },
     {
       "config_path": "telemetry.baseline",
-      "manifest_path": "nodes.telemetry_source.config.baseline"
+      "manifest_path": "runtime.bindings.run_workflow.workers.telemetry_source.with.baseline"
     },
     {
       "config_path": "telemetry.jitter",
-      "manifest_path": "nodes.telemetry_source.config.jitter"
+      "manifest_path": "runtime.bindings.run_workflow.workers.telemetry_source.with.jitter"
     },
     {
       "config_path": "telemetry.peak_height",
-      "manifest_path": "nodes.telemetry_source.config.peak_height"
+      "manifest_path": "runtime.bindings.run_workflow.workers.telemetry_source.with.peak_height"
     },
     {
       "config_path": "telemetry.peak_every",
-      "manifest_path": "nodes.telemetry_source.config.peak_every"
+      "manifest_path": "runtime.bindings.run_workflow.workers.telemetry_source.with.peak_every"
     },
     {
       "config_path": "telemetry.device_id",
-      "manifest_path": "nodes.telemetry_source.config.device_id"
+      "manifest_path": "runtime.bindings.run_workflow.workers.telemetry_source.with.device_id"
     },
     {
       "config_path": "telemetry.content_encoding",
-      "manifest_path": "nodes.telemetry_source.config.content_encoding"
+      "manifest_path": "runtime.bindings.run_workflow.workers.telemetry_source.with.content_encoding"
     },
     {
       "config_path": "peak_detection.warmup_points",
-      "manifest_path": "nodes.peak_detector.config.environment.WARMUP_POINTS",
+      "manifest_path": "runtime.bindings.run_workflow.workers.peak_detector.with.environment.WARMUP_POINTS",
       "stringify": true
     },
     {
       "config_path": "peak_detection.window_size",
-      "manifest_path": "nodes.peak_detector.config.environment.WINDOW_SIZE",
+      "manifest_path": "runtime.bindings.run_workflow.workers.peak_detector.with.environment.WINDOW_SIZE",
       "stringify": true
     },
     {
       "config_path": "peak_detection.spike_multiplier",
-      "manifest_path": "nodes.peak_detector.config.environment.SPIKE_MULTIPLIER",
+      "manifest_path": "runtime.bindings.run_workflow.workers.peak_detector.with.environment.SPIKE_MULTIPLIER",
       "stringify": true
     },
     {
       "config_path": "peak_detection.min_spike_delta",
-      "manifest_path": "nodes.peak_detector.config.environment.MIN_SPIKE_DELTA",
+      "manifest_path": "runtime.bindings.run_workflow.workers.peak_detector.with.environment.MIN_SPIKE_DELTA",
       "stringify": true
     }
   ],

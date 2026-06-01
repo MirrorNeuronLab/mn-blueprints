@@ -1,136 +1,705 @@
 {
+  "apiVersion": "mn.workflow/v1",
+  "kind": "Workflow",
+  "id": "sandboxed_codegen_review",
+  "name": "Sandboxed Codegen Review",
+  "version": "1.0.0",
+  "manifest_version": "1.0",
   "description": "Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result.",
-  "edges": [
-    {
-      "edge_id": "codegen_r1_to_review_r1",
-      "from_node": "codegen_round_1",
-      "message_type": "codegen_round_1_result",
-      "to_node": "review_round_1"
-    },
-    {
-      "edge_id": "review_r1_to_codegen_r2",
-      "from_node": "review_round_1",
-      "message_type": "review_round_1_result",
-      "to_node": "codegen_round_2"
-    },
-    {
-      "edge_id": "codegen_r2_to_review_r2",
-      "from_node": "codegen_round_2",
-      "message_type": "codegen_round_2_result",
-      "to_node": "review_round_2"
-    },
-    {
-      "edge_id": "review_r2_to_codegen_r3",
-      "from_node": "review_round_2",
-      "message_type": "review_round_2_result",
-      "to_node": "codegen_round_3"
-    },
-    {
-      "edge_id": "codegen_r3_to_validator",
-      "from_node": "codegen_round_3",
-      "message_type": "codegen_round_3_result",
-      "to_node": "validator"
-    }
-  ],
-  "entrypoints": [
-    "codegen_round_1"
-  ],
   "graph_id": "sandboxed_codegen_review_v1",
-  "init_config_review": {
-    "fields": [
-      {
-        "default": "ollama/nemotron3:33b",
-        "description": "Model used by codegen and review workers.",
-        "label": "LLM model",
-        "path": "llm.model"
-      },
-      {
-        "default": "http://192.168.4.173:11434",
-        "description": "LiteLLM/Ollama-compatible API base URL.",
-        "label": "LLM API base",
-        "path": "llm.api_base"
-      },
-      {
-        "default": 2,
-        "description": "Retry attempts per sandboxed worker.",
-        "label": "Max attempts",
-        "path": "sandbox.max_attempts"
-      },
-      {
-        "default": "Inventory report CLI",
-        "description": "Human-readable coding task title.",
-        "label": "Task title",
-        "path": "task.title"
-      }
+  "job_name": "sandboxed-codegen-review",
+  "contract": {
+    "summary": "Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result.",
+    "users": [
+      "Engineering teams evaluating safe LLM coding workflows."
     ],
-    "instruction": "Review model, sandbox retry, and task settings before launching the codegen loop.",
-    "required": false
-  },
-  "initial_inputs": {
-    "codegen_round_1": [
-      {
-        "description": "Create a Python 3 script named inventory_report.py. The script must read a JSON array of inventory records from a file passed with --input or from stdin when --input is omitted. Each record has sku, category, quantity, and price. The CLI must support --format text|json and --low-stock-threshold (default 5).",
-        "requirements": [
-          "Use only the Python standard library.",
-          "Include a pure function build_report(records, low_stock_threshold=5).",
-          "The JSON output must include total_quantity, total_value, category_totals, and low_stock_skus.",
-          "Category totals must be sorted alphabetically by category name.",
-          "low_stock_skus must be sorted alphabetically.",
-          "Round total_value to two decimal places.",
-          "Expose a main() entrypoint and guard it with if __name__ == '__main__'."
-        ],
-        "sample_records": [
-          {
-            "category": "books",
-            "price": 12.5,
-            "quantity": 3,
-            "sku": "A-100"
-          },
-          {
-            "category": "books",
-            "price": 8.0,
-            "quantity": 7,
-            "sku": "B-200"
-          },
-          {
-            "category": "games",
-            "price": 59.99,
-            "quantity": 2,
-            "sku": "C-300"
-          }
-        ],
-        "task_id": "inventory-report-cli",
-        "title": "Inventory report CLI",
-        "validation": {
-          "expected": {
-            "category_totals": [
-              {
-                "category": "books",
-                "quantity": 10
-              },
-              {
-                "category": "games",
-                "quantity": 2
-              }
-            ],
-            "low_stock_skus": [
-              "A-100",
-              "C-300"
-            ],
-            "total_quantity": 12,
-            "total_value": 213.48
-          },
-          "low_stock_threshold": 4
+    "inputs": {
+      "scenario_parameters": {
+        "type": "object",
+        "required": true,
+        "description": "Scenario-specific payload resolved from the selected input adapter.",
+        "example": {},
+        "privacy": "internal"
+      }
+    },
+    "input_adapters": {
+      "default": "mock",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "resolved_artifact": "inputs.json"
+    },
+    "outputs": {
+      "profile": "standard_run_store",
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "type": "final_artifact",
+        "schema_version": "mn.blueprint.final_artifact_contract.v1",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ]
+      },
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        }
+      ]
+    },
+    "events": {
+      "stream": "events.jsonl",
+      "human_stream": "human.jsonl",
+      "types": [
+        "run_started",
+        "inputs_loaded",
+        "workflow_graph_compiled",
+        "workflow_step_started",
+        "workflow_worker_completed",
+        "workflow_step_completed",
+        "workflow_result_ready",
+        "final_artifact_written",
+        "artifact_written",
+        "run_completed",
+        "run_failed",
+        "blueprint_status",
+        "blueprint_phase_started",
+        "blueprint_phase_completed",
+        "blueprint_phase_failed",
+        "output_skill_started",
+        "output_skill_completed",
+        "output_skill_failed",
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied",
+        "typed event objects with payload",
+        "codegen_round_1_result",
+        "review_round_1_result",
+        "codegen_round_2_result",
+        "review_round_2_result",
+        "codegen_round_3_result",
+        "validation_result"
+      ]
+    },
+    "status": {
+      "event": "blueprint_status",
+      "heartbeat": false,
+      "phases": [
+        "loading_inputs",
+        "running_worker",
+        "waiting_for_human",
+        "writing_artifacts",
+        "completed"
+      ]
+    },
+    "privacy": {
+      "default_classification": "internal",
+      "rules": {
+        "confidential": {
+          "log": "redacted",
+          "send_to_llm": "allowed_configs_only",
+          "send_to_output_skills": "approved_destinations_only"
+        },
+        "internal": {
+          "log": "metadata_only",
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "public": {
+          "log": true,
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "regulated": {
+          "log": "redacted",
+          "send_to_llm": false,
+          "send_to_output_skills": "approved_destinations_only"
         }
       }
-    ]
+    }
+  },
+  "flow": {
+    "entrypoint": "load_inputs",
+    "state": {
+      "resolved_inputs": {},
+      "workflow_result": {},
+      "final_artifact": {}
+    },
+    "steps": [
+      {
+        "id": "load_inputs",
+        "kind": "stage",
+        "label": "Load Inputs",
+        "goal": "Resolve the selected input adapter and record input provenance.",
+        "action": "load_inputs",
+        "in": {},
+        "out": {
+          "resolved_inputs": "$state.resolved_inputs"
+        },
+        "run": "load_inputs",
+        "emits": "inputs_loaded",
+        "on": {
+          "inputs_loaded": "run_workflow"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": 120,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      },
+      {
+        "id": "run_workflow",
+        "kind": "stage",
+        "label": "Run Workflow",
+        "goal": "One-shot code generation is risky; production teams need review, validation, isolation, and iterative improvement before executing generated code.",
+        "action": "run_blueprint_workflow",
+        "in": {
+          "inputs": "$state.resolved_inputs"
+        },
+        "out": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "run": "run_workflow",
+        "emits": "workflow_result_ready",
+        "on": {
+          "workflow_result_ready": "write_final_artifact"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": null,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      },
+      {
+        "id": "write_final_artifact",
+        "kind": "stage",
+        "label": "Write Final Artifact",
+        "goal": "Persist result.json, final_artifact.json, events, logs, and optional output-skill fan-out records.",
+        "action": "write_final_artifact",
+        "in": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "out": {
+          "final_artifact": "$state.final_artifact"
+        },
+        "run": "write_final_artifact",
+        "emits": "final_artifact_written",
+        "on": {
+          "final_artifact_written": "completed"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": 120,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      }
+    ],
+    "graph": {
+      "schema": "mn.workflow.problem_graph/v1",
+      "mode": "static_dag",
+      "source": "load_inputs",
+      "sink": "write_final_artifact",
+      "execution": {
+        "strategy": "serial"
+      },
+      "dynamic": {
+        "enabled": false,
+        "patch_events": [],
+        "apply_at": "between_steps"
+      },
+      "edges": [
+        {
+          "id": "load_inputs_to_run_workflow",
+          "from": "load_inputs",
+          "to": "run_workflow",
+          "event": "inputs_loaded",
+          "required": true,
+          "accepts": [
+            "done"
+          ]
+        },
+        {
+          "id": "run_workflow_to_write_final_artifact",
+          "from": "run_workflow",
+          "to": "write_final_artifact",
+          "event": "workflow_result_ready",
+          "required": true,
+          "accepts": [
+            "done"
+          ]
+        }
+      ]
+    },
+    "policy": {
+      "safety": {
+        "default": "allow",
+        "blocked_actions": [
+          "apply_generated_patch",
+          "merge_generated_code",
+          "run_untrusted_code_outside_sandbox"
+        ],
+        "rules": []
+      },
+      "human": {
+        "enabled": true,
+        "mode": "approval_required",
+        "decisions": [
+          "approve",
+          "revise",
+          "reject"
+        ],
+        "default": "reject",
+        "timeout_seconds": 3600,
+        "events": {
+          "request": "human_input_requested",
+          "response": "human_input_received",
+          "timeout": "human_input_timeout",
+          "decision": "human_decision_applied"
+        }
+      },
+      "failure": {
+        "default": "fail_closed"
+      }
+    },
+    "observers": []
+  },
+  "runtime": {
+    "store": {
+      "type": "local_run_store",
+      "path": "./runs/${run_id}",
+      "artifacts": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "worker_defaults": {
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "runner": "MirrorNeuron.Runner.HostLocal",
+      "pool": "default",
+      "pool_slots": 1,
+      "workdir": "/sandbox/job/workflow"
+    },
+    "bindings": {
+      "load_inputs": {
+        "type": "worker",
+        "strategy": "single",
+        "side_effect": "read",
+        "risk": "low",
+        "workers": [
+          {
+            "id": "input_adapter",
+            "role": "Resolve mock, JSON, file, or env_json inputs"
+          }
+        ]
+      },
+      "run_workflow": {
+        "type": "team",
+        "strategy": "fanout_reduce",
+        "side_effect": "internal_write",
+        "risk": "medium",
+        "workers": [
+          {
+            "id": "codegen_round_1",
+            "role": "root_coordinator",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "kind": "generic"
+          },
+          {
+            "id": "review_round_1",
+            "role": "Review Round 1",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "kind": "generic"
+          },
+          {
+            "id": "codegen_round_2",
+            "role": "Codegen Round 2",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "kind": "generic"
+          },
+          {
+            "id": "review_round_2",
+            "role": "Review Round 2",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "kind": "generic"
+          },
+          {
+            "id": "codegen_round_3",
+            "role": "Codegen Round 3",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "kind": "generic"
+          },
+          {
+            "id": "validator",
+            "role": "Validator",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "kind": "generic",
+            "with": {
+              "command": [
+                "python3",
+                "scripts/validate_candidate.py"
+              ],
+              "complete_job": true,
+              "environment": {
+                "LITELLM_API_BASE": "http://192.168.4.173:11434",
+                "LITELLM_API_KEY": "",
+                "LITELLM_MODEL": "ollama/nemotron3:33b",
+                "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+                "MN_LLM_API_KEY": "",
+                "MN_LLM_MODEL": "ollama/nemotron3:33b"
+              },
+              "from": "base",
+              "max_attempts": 2,
+              "name_prefix": "validator",
+              "no_auto_providers": true,
+              "no_keep": true,
+              "node_type": "generic",
+              "output_message_type": "validation_result",
+              "pass_env": [
+                "LITELLM_MODEL",
+                "LITELLM_API_BASE",
+                "LITELLM_API_KEY",
+                "MN_LLM_MODEL",
+                "MN_LLM_API_BASE",
+                "MN_LLM_API_KEY"
+              ],
+              "pool": "default",
+              "pool_slots": 1,
+              "retry_backoff_ms": 500,
+              "script": "scripts/validate_candidate.py",
+              "tty": false,
+              "upload_as": "llm_worker",
+              "upload_path": "llm_worker",
+              "workdir": "/sandbox/job/llm_worker"
+            }
+          }
+        ],
+        "routes": [
+          {
+            "edge_id": "codegen_r1_to_review_r1",
+            "from_node": "codegen_round_1",
+            "message_type": "codegen_round_1_result",
+            "to_node": "review_round_1"
+          },
+          {
+            "edge_id": "review_r1_to_codegen_r2",
+            "from_node": "review_round_1",
+            "message_type": "review_round_1_result",
+            "to_node": "codegen_round_2"
+          },
+          {
+            "edge_id": "codegen_r2_to_review_r2",
+            "from_node": "codegen_round_2",
+            "message_type": "codegen_round_2_result",
+            "to_node": "review_round_2"
+          },
+          {
+            "edge_id": "review_r2_to_codegen_r3",
+            "from_node": "review_round_2",
+            "message_type": "review_round_2_result",
+            "to_node": "codegen_round_3"
+          },
+          {
+            "edge_id": "codegen_r3_to_validator",
+            "from_node": "codegen_round_3",
+            "message_type": "codegen_round_3_result",
+            "to_node": "validator"
+          }
+        ],
+        "start_workers": [
+          "codegen_round_1"
+        ],
+        "seed_inputs": {
+          "codegen_round_1": [
+            {
+              "description": "Create a Python 3 script named inventory_report.py. The script must read a JSON array of inventory records from a file passed with --input or from stdin when --input is omitted. Each record has sku, category, quantity, and price. The CLI must support --format text|json and --low-stock-threshold (default 5).",
+              "requirements": [
+                "Use only the Python standard library.",
+                "Include a pure function build_report(records, low_stock_threshold=5).",
+                "The JSON output must include total_quantity, total_value, category_totals, and low_stock_skus.",
+                "Category totals must be sorted alphabetically by category name.",
+                "low_stock_skus must be sorted alphabetically.",
+                "Round total_value to two decimal places.",
+                "Expose a main() entrypoint and guard it with if __name__ == '__main__'."
+              ],
+              "sample_records": [
+                {
+                  "category": "books",
+                  "price": 12.5,
+                  "quantity": 3,
+                  "sku": "A-100"
+                },
+                {
+                  "category": "books",
+                  "price": 8.0,
+                  "quantity": 7,
+                  "sku": "B-200"
+                },
+                {
+                  "category": "games",
+                  "price": 59.99,
+                  "quantity": 2,
+                  "sku": "C-300"
+                }
+              ],
+              "task_id": "inventory-report-cli",
+              "title": "Inventory report CLI",
+              "validation": {
+                "expected": {
+                  "category_totals": [
+                    {
+                      "category": "books",
+                      "quantity": 10
+                    },
+                    {
+                      "category": "games",
+                      "quantity": 2
+                    }
+                  ],
+                  "low_stock_skus": [
+                    "A-100",
+                    "C-300"
+                  ],
+                  "total_quantity": 12,
+                  "total_value": 213.48
+                },
+                "low_stock_threshold": 4
+              }
+            }
+          ]
+        }
+      },
+      "write_final_artifact": {
+        "type": "worker",
+        "strategy": "single",
+        "side_effect": "internal_write",
+        "risk": "low",
+        "workers": [
+          {
+            "id": "artifact_writer",
+            "role": "Write result and final artifact to the local run store"
+          }
+        ]
+      }
+    },
+    "models": {
+      "primary": {
+        "type": "llm",
+        "provider": "ollama",
+        "model": "ollama/nemotron3:33b",
+        "role": "Codegen agent, review agent, validator."
+      }
+    },
+    "memory": {},
+    "resources": {
+      "cpu": {
+        "min_cores": 1
+      },
+      "gpu": {
+        "min_count": 0
+      },
+      "memory": {
+        "min_gb": 2
+      },
+      "disk": {
+        "min_gb": 1
+      }
+    },
+    "observability": {
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store",
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ]
+    }
   },
   "input_validation": {
     "rules": []
   },
-  "job_name": "sandboxed-codegen-review",
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "policies": {
+    "recovery_mode": "cluster_recover"
+  },
   "license": "LICENSE.md",
-  "manifest_version": "1.0",
+  "term": "TERM.md",
   "metadata": {
     "agent_templates": {
       "library": "../mn-agents/index.json",
@@ -192,7 +761,7 @@
       "payloads": "payloads/",
       "readme": "README.md",
       "spec": "SPEC.md",
-      "standard": "../BLUEPRINT_STANDARD.md"
+      "standard": "../../mn-docs/blueprint-standard.md"
     },
     "human_control": {
       "allowed_decisions": [
@@ -711,7 +1280,9 @@
         "env_json"
       ],
       "run_store": "~/.mn/runs/<run_id>/",
-      "version": "1.0"
+      "version": "1.0",
+      "workflow_api_version": "mn.workflow/v1",
+      "workflow_model": "contract -> flow -> runtime"
     },
     "standard_version": "1.0",
     "status_contract": {
@@ -768,290 +1339,88 @@
       "format": "jsonl",
       "stream": "stderr"
     },
-    "target_user": "Engineering teams evaluating safe LLM coding workflows."
-  },
-  "name": "Sandboxed Codegen Review",
-  "nodes": [
-    {
-      "node_id": "codegen_round_1",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "command": [
-          "python3",
-          "scripts/run_llm_step.py",
-          "codegen",
-          "1"
+    "target_user": "Engineering teams evaluating safe LLM coding workflows.",
+    "web_ui": {
+      "enabled": true,
+      "kind": "output",
+      "adapter": "gradio",
+      "server": "blueprint_support",
+      "description": "Shared blueprint support dashboard rendered from local run-store events and artifacts.",
+      "data_source": "local_run_store",
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "registration": {
+        "api": [
+          "main"
         ],
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "codegen-r1",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "node_type": "generic",
-        "output_message_type": "codegen_round_1_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "role": "root_coordinator",
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "script": "scripts/run_blueprint.py",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      }
-    },
-    {
-      "node_id": "review_round_1",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "command": [
-          "python3",
-          "scripts/run_llm_step.py",
-          "review",
-          "1"
-        ],
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "review-r1",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "node_type": "generic",
-        "output_message_type": "review_round_1_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "script": "scripts/run_blueprint.py",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      }
-    },
-    {
-      "node_id": "codegen_round_2",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "command": [
-          "python3",
-          "scripts/run_llm_step.py",
-          "codegen",
-          "2"
-        ],
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "codegen-r2",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "node_type": "generic",
-        "output_message_type": "codegen_round_2_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "script": "scripts/run_blueprint.py",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      }
-    },
-    {
-      "node_id": "review_round_2",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "command": [
-          "python3",
-          "scripts/run_llm_step.py",
-          "review",
-          "2"
-        ],
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "review-r2",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "node_type": "generic",
-        "output_message_type": "review_round_2_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "script": "scripts/run_blueprint.py",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      }
-    },
-    {
-      "node_id": "codegen_round_3",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "command": [
-          "python3",
-          "scripts/run_llm_step.py",
-          "codegen",
-          "3"
-        ],
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "codegen-r3",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "node_type": "generic",
-        "output_message_type": "codegen_round_3_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "script": "scripts/run_blueprint.py",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
-      }
-    },
-    {
-      "node_id": "validator",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "command": [
-          "python3",
-          "scripts/validate_candidate.py"
-        ],
-        "complete_job": true,
-        "environment": {
-          "LITELLM_API_BASE": "http://192.168.4.173:11434",
-          "LITELLM_API_KEY": "",
-          "LITELLM_MODEL": "ollama/nemotron3:33b",
-          "MN_LLM_API_BASE": "http://192.168.4.173:11434",
-          "MN_LLM_API_KEY": "",
-          "MN_LLM_MODEL": "ollama/nemotron3:33b"
-        },
-        "from": "base",
-        "max_attempts": 2,
-        "name_prefix": "validator",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "node_type": "generic",
-        "output_message_type": "validation_result",
-        "pass_env": [
-          "LITELLM_MODEL",
-          "LITELLM_API_BASE",
-          "LITELLM_API_KEY",
-          "MN_LLM_MODEL",
-          "MN_LLM_API_BASE",
-          "MN_LLM_API_KEY"
-        ],
-        "pool": "default",
-        "pool_slots": 1,
-        "retry_backoff_ms": 500,
-        "script": "scripts/validate_candidate.py",
-        "tty": false,
-        "upload_as": "llm_worker",
-        "upload_path": "llm_worker",
-        "workdir": "/sandbox/job/llm_worker"
+        "module": "mn_blueprint_support.gradio_dashboard",
+        "package": "mirrorneuron-blueprint-support-skill[webui]",
+        "writes": "ui.json and web_ui.json",
+        "service": {
+          "service_name": "blueprint-web-ui",
+          "provider": "mirror_neuron",
+          "lifecycle": "runtime_managed",
+          "registered_by": "launch_prepare_web_ui",
+          "tags": [
+            "web_ui",
+            "blueprint",
+            "sandboxed_codegen_review",
+            "gradio"
+          ],
+          "meta": {
+            "blueprint_id": "sandboxed_codegen_review",
+            "adapter": "gradio",
+            "run_id": "${run_id}"
+          }
+        }
       }
     }
-  ],
-  "policies": {
-    "recovery_mode": "cluster_recover"
   },
-  "requirements": {
-    "cpu": {
-      "min_cores": 1
-    },
-    "disk": {
-      "min_gb": 1
-    },
-    "gpu": {
-      "min_count": 0
-    },
-    "memory": {
-      "min_gb": 2
-    }
-  },
-  "term": "TERM.md"
+  "init_config_review": {
+    "fields": [
+      {
+        "default": "ollama/nemotron3:33b",
+        "description": "Model used by codegen and review workers.",
+        "label": "LLM model",
+        "path": "llm.model"
+      },
+      {
+        "default": "http://192.168.4.173:11434",
+        "description": "LiteLLM/Ollama-compatible API base URL.",
+        "label": "LLM API base",
+        "path": "llm.api_base"
+      },
+      {
+        "default": 2,
+        "description": "Retry attempts per sandboxed worker.",
+        "label": "Max attempts",
+        "path": "sandbox.max_attempts"
+      },
+      {
+        "default": "Inventory report CLI",
+        "description": "Human-readable coding task title.",
+        "label": "Task title",
+        "path": "task.title"
+      }
+    ],
+    "instruction": "Review model, sandbox retry, and task settings before launching the codegen loop.",
+    "required": false
+  }
 }

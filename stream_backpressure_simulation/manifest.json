@@ -1,44 +1,596 @@
 {
+  "apiVersion": "mn.workflow/v1",
+  "kind": "Workflow",
+  "id": "stream_backpressure_simulation",
+  "name": "Stream Backpressure Simulation",
+  "version": "1.0.0",
+  "manifest_version": "1.0",
   "description": "Use this blueprint to observe bounded queues, slow workers, and retry-later behavior before building live stream workflows.",
-  "edges": [
-    {
-      "edge_id": "ingress_to_source",
-      "from_node": "ingress",
-      "message_type": "stream_start",
-      "to_node": "live_source"
-    },
-    {
-      "edge_id": "source_to_slow",
-      "from_node": "live_source",
-      "message_type": "telemetry_event",
-      "to_node": "slow_enricher"
-    },
-    {
-      "edge_id": "slow_to_sink",
-      "from_node": "slow_enricher",
-      "message_type": "enriched_event",
-      "to_node": "metrics_sink"
-    }
-  ],
-  "entrypoints": [
-    "ingress"
-  ],
   "graph_id": "stream_backpressure_simulation_v1",
-  "initial_inputs": {
-    "ingress": [
-      {
-        "description": "Start a never-ending live telemetry stream into deliberately slow stream consumers.",
-        "scenario": "stream_backpressure_simulation",
-        "stream_id": "bp-live"
+  "job_name": "stream-backpressure-simulation",
+  "type": "service",
+  "contract": {
+    "summary": "Use this blueprint to observe bounded queues, slow workers, and retry-later behavior before building live stream workflows.",
+    "users": [
+      "Platform teams designing reliable live agent systems."
+    ],
+    "inputs": {
+      "load_test_ingress": {
+        "type": "input_skill",
+        "required": true,
+        "description": "Data stream consumed by the blueprint.",
+        "example": "websocket_stream",
+        "privacy": "internal"
       }
-    ]
+    },
+    "input_adapters": {
+      "default": "mock",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "resolved_artifact": "inputs.json"
+    },
+    "outputs": {
+      "profile": "standard_run_store",
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "type": "final_artifact",
+        "schema_version": "mn.blueprint.final_artifact_contract.v1",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ]
+      },
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        },
+        {
+          "artifact_id": "output_skill_websocket_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "websocket_events",
+          "schema_version": "mn.blueprint.output_skill_attempt.v1",
+          "source_refs": [
+            "final_artifact.json"
+          ],
+          "type": "output_skill_delivery"
+        }
+      ]
+    },
+    "events": {
+      "stream": "events.jsonl",
+      "human_stream": "human.jsonl",
+      "types": [
+        "run_started",
+        "inputs_loaded",
+        "workflow_graph_compiled",
+        "workflow_step_started",
+        "workflow_worker_completed",
+        "workflow_step_completed",
+        "workflow_result_ready",
+        "final_artifact_written",
+        "artifact_written",
+        "run_completed",
+        "run_failed",
+        "blueprint_status",
+        "blueprint_phase_started",
+        "blueprint_phase_completed",
+        "blueprint_phase_failed",
+        "output_skill_started",
+        "output_skill_completed",
+        "output_skill_failed",
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied",
+        "typed event objects with payload",
+        "stream_start",
+        "telemetry_event",
+        "enriched_event"
+      ]
+    },
+    "status": {
+      "event": "blueprint_status",
+      "heartbeat": true,
+      "phases": [
+        "loading_inputs",
+        "running_worker",
+        "waiting_for_human",
+        "writing_artifacts",
+        "completed"
+      ]
+    },
+    "privacy": {
+      "default_classification": "internal",
+      "rules": {
+        "confidential": {
+          "log": "redacted",
+          "send_to_llm": "allowed_configs_only",
+          "send_to_output_skills": "approved_destinations_only"
+        },
+        "internal": {
+          "log": "metadata_only",
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "public": {
+          "log": true,
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "regulated": {
+          "log": "redacted",
+          "send_to_llm": false,
+          "send_to_output_skills": "approved_destinations_only"
+        }
+      }
+    }
+  },
+  "flow": {
+    "entrypoint": "load_inputs",
+    "state": {
+      "resolved_inputs": {},
+      "workflow_result": {},
+      "final_artifact": {}
+    },
+    "steps": [
+      {
+        "id": "load_inputs",
+        "kind": "stage",
+        "label": "Load Inputs",
+        "goal": "Resolve the selected input adapter and record input provenance.",
+        "action": "load_inputs",
+        "in": {},
+        "out": {
+          "resolved_inputs": "$state.resolved_inputs"
+        },
+        "run": "load_inputs",
+        "emits": "inputs_loaded",
+        "on": {
+          "inputs_loaded": "run_workflow"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": 120,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      },
+      {
+        "id": "run_workflow",
+        "kind": "stage",
+        "label": "Run Workflow",
+        "goal": "Real event streams overload workers; agent runtimes need visible backpressure and safe rejection semantics.",
+        "action": "run_blueprint_workflow",
+        "in": {
+          "inputs": "$state.resolved_inputs"
+        },
+        "out": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "run": "run_workflow",
+        "emits": "workflow_result_ready",
+        "on": {
+          "workflow_result_ready": "write_final_artifact"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": null,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      },
+      {
+        "id": "write_final_artifact",
+        "kind": "stage",
+        "label": "Write Final Artifact",
+        "goal": "Persist result.json, final_artifact.json, events, logs, and optional output-skill fan-out records.",
+        "action": "write_final_artifact",
+        "in": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "out": {
+          "final_artifact": "$state.final_artifact"
+        },
+        "run": "write_final_artifact",
+        "emits": "final_artifact_written",
+        "on": {
+          "final_artifact_written": "completed"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": 120,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      }
+    ],
+    "graph": {
+      "schema": "mn.workflow.problem_graph/v1",
+      "mode": "static_dag",
+      "source": "load_inputs",
+      "sink": "write_final_artifact",
+      "execution": {
+        "strategy": "serial"
+      },
+      "dynamic": {
+        "enabled": false,
+        "patch_events": [],
+        "apply_at": "between_steps"
+      },
+      "edges": [
+        {
+          "id": "load_inputs_to_run_workflow",
+          "from": "load_inputs",
+          "to": "run_workflow",
+          "event": "inputs_loaded",
+          "required": true,
+          "accepts": [
+            "done"
+          ]
+        },
+        {
+          "id": "run_workflow_to_write_final_artifact",
+          "from": "run_workflow",
+          "to": "write_final_artifact",
+          "event": "workflow_result_ready",
+          "required": true,
+          "accepts": [
+            "done"
+          ]
+        }
+      ]
+    },
+    "policy": {
+      "safety": {
+        "default": "allow",
+        "blocked_actions": [],
+        "rules": []
+      },
+      "human": {
+        "enabled": true,
+        "mode": "notice_only",
+        "decisions": [
+          "approve",
+          "revise",
+          "reject"
+        ],
+        "default": "reject",
+        "timeout_seconds": null,
+        "events": {
+          "request": "human_input_requested",
+          "response": "human_input_received",
+          "timeout": "human_input_timeout",
+          "decision": "human_decision_applied"
+        }
+      },
+      "failure": {
+        "default": "fail_closed"
+      }
+    },
+    "observers": []
+  },
+  "runtime": {
+    "store": {
+      "type": "local_run_store",
+      "path": "./runs/${run_id}",
+      "artifacts": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "worker_defaults": {
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "runner": "MirrorNeuron.Runner.HostLocal",
+      "pool": "default",
+      "pool_slots": 1,
+      "workdir": "/sandbox/job/workflow"
+    },
+    "bindings": {
+      "load_inputs": {
+        "type": "worker",
+        "strategy": "single",
+        "side_effect": "read",
+        "risk": "low",
+        "workers": [
+          {
+            "id": "input_adapter",
+            "role": "Resolve mock, JSON, file, or env_json inputs"
+          }
+        ]
+      },
+      "run_workflow": {
+        "type": "team",
+        "strategy": "fanout_reduce",
+        "side_effect": "internal_write",
+        "risk": "medium",
+        "workers": [
+          {
+            "id": "live_source",
+            "role": "source",
+            "uses": "mn-agents.data_module@1.0.0",
+            "kind": "stream"
+          },
+          {
+            "id": "slow_enricher",
+            "role": "processor",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "kind": "stream"
+          }
+        ],
+        "routes": [
+          {
+            "edge_id": "ingress_to_source",
+            "from_node": "ingress",
+            "message_type": "stream_start",
+            "to_node": "live_source"
+          },
+          {
+            "edge_id": "source_to_slow",
+            "from_node": "live_source",
+            "message_type": "telemetry_event",
+            "to_node": "slow_enricher"
+          },
+          {
+            "edge_id": "slow_to_sink",
+            "from_node": "slow_enricher",
+            "message_type": "enriched_event",
+            "to_node": "metrics_sink"
+          }
+        ],
+        "start_workers": [
+          "ingress"
+        ],
+        "seed_inputs": {
+          "ingress": [
+            {
+              "description": "Start a never-ending live telemetry stream into deliberately slow stream consumers.",
+              "scenario": "stream_backpressure_simulation",
+              "stream_id": "bp-live"
+            }
+          ]
+        }
+      },
+      "write_final_artifact": {
+        "type": "worker",
+        "strategy": "single",
+        "side_effect": "internal_write",
+        "risk": "low",
+        "workers": [
+          {
+            "id": "artifact_writer",
+            "role": "Write result and final artifact to the local run store"
+          }
+        ]
+      }
+    },
+    "models": {
+      "primary": {
+        "type": "llm",
+        "provider": "ollama",
+        "model": "ollama/nemotron3:33b",
+        "role": "Live source, slow processor, metrics sink."
+      }
+    },
+    "memory": {},
+    "resources": {
+      "cpu": {
+        "min_cores": 1
+      },
+      "gpu": {
+        "min_count": 0
+      },
+      "memory": {
+        "min_gb": 2
+      },
+      "disk": {
+        "min_gb": 1
+      }
+    },
+    "observability": {
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store",
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "input_lag",
+        "backpressure",
+        "llm_calls",
+        "token_budget",
+        "llm_retries",
+        "output_skill_attempts",
+        "output_skill_failures"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ]
+    }
   },
   "input_validation": {
     "rules": []
   },
-  "job_name": "stream-backpressure-simulation",
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "policies": {
+    "backpressure": {
+      "external_input": "retry_later",
+      "propagation": "downstream_to_upstream",
+      "strategy": "bounded_queue"
+    },
+    "recovery_mode": "cluster_recover",
+    "stream_mode": "live"
+  },
   "license": "LICENSE.md",
-  "manifest_version": "1.0",
+  "term": "TERM.md",
   "metadata": {
     "agent_templates": {
       "library": "../mn-agents/index.json",
@@ -92,7 +644,7 @@
       "payloads": "payloads/",
       "readme": "README.md",
       "spec": "SPEC.md",
-      "standard": "../BLUEPRINT_STANDARD.md"
+      "standard": "../../mn-docs/blueprint-standard.md"
     },
     "human_control": {
       "enabled": true,
@@ -223,12 +775,6 @@
       "required_inputs": [
         {
           "description": "Data stream consumed by the blueprint.",
-          "example": "${MN_LOAD_TEST_WS_URL}",
-          "name": "load_test_ingress",
-          "type": "data_stream"
-        },
-        {
-          "description": "Connector-backed input skill websocket_stream.",
           "example": "websocket_stream",
           "name": "load_test_ingress",
           "type": "input_skill"
@@ -660,7 +1206,9 @@
         "env_json"
       ],
       "run_store": "~/.mn/runs/<run_id>/",
-      "version": "1.0"
+      "version": "1.0",
+      "workflow_api_version": "mn.workflow/v1",
+      "workflow_model": "contract -> flow -> runtime"
     },
     "standard_version": "1.0",
     "status_contract": {
@@ -734,123 +1282,63 @@
       "transport": "websocket",
       "websocket_skill": true
     },
-    "target_user": "Platform teams designing reliable live agent systems."
-  },
-  "name": "Stream Backpressure Simulation",
-  "nodes": [
-    {
-      "node_id": "ingress",
-      "uses": "mn-agents.control_router@1.0.0",
-      "with": {
-        "backpressure": {
-          "high_watermark": 8,
-          "low_watermark": 3,
-          "max_queue_depth": 16,
-          "retry_after_ms": 250
-        },
-        "emit_type": "stream_start",
-        "node_type": "generic",
-        "role": "root_coordinator"
-      }
-    },
-    {
-      "node_id": "live_source",
-      "uses": "mn-agents.data_module@1.0.0",
-      "with": {
-        "backpressure": {
-          "high_watermark": 8,
-          "low_watermark": 3,
-          "max_queue_depth": 16,
-          "retry_after_ms": 250
-        },
-        "interval_ms": 250,
-        "module": "MirrorNeuron.Examples.StreamLiveBackpressure.LiveSource",
-        "module_source": "beam_modules/live_source.ex",
-        "node_type": "stream",
-        "role": "source",
-        "stream_id": "bp-live",
-        "target_node": "slow_enricher"
-      }
-    },
-    {
-      "node_id": "slow_enricher",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "backpressure": {
-          "high_watermark": 2,
-          "low_watermark": 1,
-          "max_queue_depth": 4,
-          "retry_after_ms": 750
-        },
-        "command": [
-          "python3",
-          "scripts/slow_enrich.py"
+    "target_user": "Platform teams designing reliable live agent systems.",
+    "web_ui": {
+      "enabled": true,
+      "kind": "output",
+      "adapter": "gradio",
+      "server": "blueprint_support",
+      "description": "Shared blueprint support dashboard rendered from local run-store events and artifacts.",
+      "data_source": "local_run_store",
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "input_lag",
+        "backpressure",
+        "llm_calls",
+        "token_budget",
+        "llm_retries",
+        "output_skill_attempts",
+        "output_skill_failures"
+      ],
+      "registration": {
+        "api": [
+          "main"
         ],
-        "environment": {
-          "SLOW_MS": "1200"
-        },
-        "node_type": "stream",
-        "output_message_type": "enriched_event",
-        "role": "processor",
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "script": "scripts/slow_enrich.py",
-        "upload_as": "slow",
-        "upload_path": "slow",
-        "workdir": "/sandbox/job/slow"
-      }
-    },
-    {
-      "node_id": "metrics_sink",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "backpressure": {
-          "high_watermark": 2,
-          "low_watermark": 1,
-          "max_queue_depth": 5,
-          "retry_after_ms": 500
-        },
-        "command": [
-          "python3",
-          "scripts/collect_metrics.py"
-        ],
-        "environment": {
-          "SINK_SLOW_MS": "450"
-        },
-        "node_type": "stream",
-        "output_message_type": null,
-        "role": "sink",
-        "runner_module": "MirrorNeuron.Runner.HostLocal",
-        "script": "scripts/collect_metrics.py",
-        "upload_as": "sink",
-        "upload_path": "sink",
-        "workdir": "/sandbox/job/sink"
+        "module": "mn_blueprint_support.gradio_dashboard",
+        "package": "mirrorneuron-blueprint-support-skill[webui]",
+        "writes": "ui.json and web_ui.json",
+        "service": {
+          "service_name": "blueprint-web-ui",
+          "provider": "mirror_neuron",
+          "lifecycle": "runtime_managed",
+          "registered_by": "launch_prepare_web_ui",
+          "tags": [
+            "web_ui",
+            "blueprint",
+            "stream_backpressure_simulation",
+            "gradio"
+          ],
+          "meta": {
+            "blueprint_id": "stream_backpressure_simulation",
+            "adapter": "gradio",
+            "run_id": "${run_id}"
+          }
+        }
       }
     }
-  ],
-  "policies": {
-    "backpressure": {
-      "external_input": "retry_later",
-      "propagation": "downstream_to_upstream",
-      "strategy": "bounded_queue"
-    },
-    "recovery_mode": "cluster_recover",
-    "stream_mode": "live"
   },
-  "requiredContextEngine": false,
-  "requirements": {
-    "cpu": {
-      "min_cores": 1
-    },
-    "disk": {
-      "min_gb": 1
-    },
-    "gpu": {
-      "min_count": 0
-    },
-    "memory": {
-      "min_gb": 2
-    }
-  },
-  "term": "TERM.md",
-  "type": "service"
+  "requiredContextEngine": false
 }

@@ -1,38 +1,630 @@
 {
+  "apiVersion": "mn.workflow/v1",
+  "kind": "Workflow",
+  "id": "facility_safety_video_monitor",
+  "name": "Facility Safety Video Monitor",
+  "version": "1.0.0",
+  "manifest_version": "1.0",
   "description": "Use this blueprint to watch an approved camera stream, detect visible people, summarize what is observable, and raise safety alerts with a reviewable event trail.",
-  "edges": [
-    {
-      "edge_id": "ingress_to_tick_source",
-      "from_node": "ingress",
-      "message_type": "video_monitor_start",
-      "to_node": "door_camera_tick_source"
-    },
-    {
-      "edge_id": "tick_source_to_person_detector",
-      "from_node": "door_camera_tick_source",
-      "message_type": "door_camera_frame_tick",
-      "to_node": "person_detector"
-    }
-  ],
-  "entrypoints": [
-    "ingress"
-  ],
   "graph_id": "facility_safety_video_monitor_v1",
-  "initial_inputs": {
-    "ingress": [
-      {
-        "description": "Continuously sample a 24/7 door camera or local webcam stream, ask the configured VL model whether a human is visible, describe observable appearance and activity, and send Slack alerts when a human is detected.",
-        "ollama_base_url": "http://192.168.4.173:11434",
-        "ollama_model": "nemotron3:33b",
-        "scenario": "door_camera_safety_monitor",
-        "slack_optional": true,
-        "video_source_codec": "h264",
-        "video_source_transport": "rtsp",
-        "video_source_uri": "rtsp://host.docker.internal:8554/local-camera",
-        "vl_model_base_url": "http://192.168.4.173:11434",
-        "vl_model_name": "nemotron3:33b"
+  "job_name": "facility-safety-video-monitor",
+  "type": "service",
+  "contract": {
+    "summary": "Use this blueprint to watch an approved camera stream, detect visible people, summarize what is observable, and raise safety alerts with a reviewable event trail.",
+    "users": [
+      "Facilities, security, safety operations, and property management teams."
+    ],
+    "inputs": {
+      "door_camera_video": {
+        "type": "video_stream",
+        "required": true,
+        "description": "Approved facility video stream or bundled demo feed.",
+        "example": "rtsp://host.docker.internal:8554/local-camera",
+        "privacy": "internal"
+      },
+      "monitored_zone": {
+        "type": "domain_value",
+        "required": true,
+        "description": "Facility zone or camera context reviewers care about.",
+        "example": null,
+        "privacy": "internal"
+      },
+      "alert_policy": {
+        "type": "domain_value",
+        "required": true,
+        "description": "Escalation and cooldown policy for safety notices.",
+        "example": null,
+        "privacy": "internal"
       }
-    ]
+    },
+    "input_adapters": {
+      "default": "mock",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "resolved_artifact": "inputs.json"
+    },
+    "outputs": {
+      "profile": "standard_run_store",
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "type": "final_artifact",
+        "schema_version": "mn.blueprint.final_artifact_contract.v1",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ]
+      },
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        },
+        {
+          "artifact_id": "output_skill_websocket_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "websocket_events",
+          "schema_version": "mn.blueprint.output_skill_attempt.v1",
+          "source_refs": [
+            "final_artifact.json"
+          ],
+          "type": "output_skill_delivery"
+        }
+      ]
+    },
+    "events": {
+      "stream": "events.jsonl",
+      "human_stream": "human.jsonl",
+      "types": [
+        "run_started",
+        "inputs_loaded",
+        "workflow_graph_compiled",
+        "workflow_step_started",
+        "workflow_worker_completed",
+        "workflow_step_completed",
+        "workflow_result_ready",
+        "final_artifact_written",
+        "artifact_written",
+        "run_completed",
+        "run_failed",
+        "blueprint_status",
+        "blueprint_phase_started",
+        "blueprint_phase_completed",
+        "blueprint_phase_failed",
+        "output_skill_started",
+        "output_skill_completed",
+        "output_skill_failed",
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied",
+        "typed event objects with payload",
+        "video_monitor_start",
+        "door_camera_frame_tick"
+      ]
+    },
+    "status": {
+      "event": "blueprint_status",
+      "heartbeat": true,
+      "phases": [
+        "loading_inputs",
+        "running_worker",
+        "waiting_for_human",
+        "writing_artifacts",
+        "completed"
+      ]
+    },
+    "privacy": {
+      "default_classification": "internal",
+      "rules": {
+        "confidential": {
+          "log": "redacted",
+          "send_to_llm": "allowed_configs_only",
+          "send_to_output_skills": "approved_destinations_only"
+        },
+        "internal": {
+          "log": "metadata_only",
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "public": {
+          "log": true,
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "regulated": {
+          "log": "redacted",
+          "send_to_llm": false,
+          "send_to_output_skills": "approved_destinations_only"
+        }
+      }
+    }
+  },
+  "flow": {
+    "entrypoint": "load_inputs",
+    "state": {
+      "resolved_inputs": {},
+      "workflow_result": {},
+      "final_artifact": {}
+    },
+    "steps": [
+      {
+        "id": "load_inputs",
+        "kind": "stage",
+        "label": "Load Inputs",
+        "goal": "Resolve the selected input adapter and record input provenance.",
+        "action": "load_inputs",
+        "in": {},
+        "out": {
+          "resolved_inputs": "$state.resolved_inputs"
+        },
+        "run": "load_inputs",
+        "emits": "inputs_loaded",
+        "on": {
+          "inputs_loaded": "run_workflow"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": 120,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      },
+      {
+        "id": "run_workflow",
+        "kind": "stage",
+        "label": "Run Workflow",
+        "goal": "Video monitoring is continuous, noisy, and operationally sensitive; teams need stateful alerts, cooldowns, and explainable observations rather than raw frames.",
+        "action": "run_blueprint_workflow",
+        "in": {
+          "inputs": "$state.resolved_inputs"
+        },
+        "out": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "run": "run_workflow",
+        "emits": "workflow_result_ready",
+        "on": {
+          "workflow_result_ready": "write_final_artifact"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": null,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      },
+      {
+        "id": "write_final_artifact",
+        "kind": "stage",
+        "label": "Write Final Artifact",
+        "goal": "Persist result.json, final_artifact.json, events, logs, and optional output-skill fan-out records.",
+        "action": "write_final_artifact",
+        "in": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "out": {
+          "final_artifact": "$state.final_artifact"
+        },
+        "run": "write_final_artifact",
+        "emits": "final_artifact_written",
+        "on": {
+          "final_artifact_written": "completed"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": 120,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      }
+    ],
+    "graph": {
+      "schema": "mn.workflow.problem_graph/v1",
+      "mode": "static_dag",
+      "source": "load_inputs",
+      "sink": "write_final_artifact",
+      "execution": {
+        "strategy": "serial"
+      },
+      "dynamic": {
+        "enabled": false,
+        "patch_events": [],
+        "apply_at": "between_steps"
+      },
+      "edges": [
+        {
+          "id": "load_inputs_to_run_workflow",
+          "from": "load_inputs",
+          "to": "run_workflow",
+          "event": "inputs_loaded",
+          "required": true,
+          "accepts": [
+            "done"
+          ]
+        },
+        {
+          "id": "run_workflow_to_write_final_artifact",
+          "from": "run_workflow",
+          "to": "write_final_artifact",
+          "event": "workflow_result_ready",
+          "required": true,
+          "accepts": [
+            "done"
+          ]
+        }
+      ]
+    },
+    "policy": {
+      "safety": {
+        "default": "allow",
+        "blocked_actions": [],
+        "rules": []
+      },
+      "human": {
+        "enabled": true,
+        "mode": "notice_only",
+        "decisions": [
+          "approve",
+          "revise",
+          "reject"
+        ],
+        "default": "reject",
+        "timeout_seconds": null,
+        "events": {
+          "request": "human_input_requested",
+          "response": "human_input_received",
+          "timeout": "human_input_timeout",
+          "decision": "human_decision_applied"
+        }
+      },
+      "failure": {
+        "default": "fail_closed"
+      }
+    },
+    "observers": []
+  },
+  "runtime": {
+    "store": {
+      "type": "local_run_store",
+      "path": "./runs/${run_id}",
+      "artifacts": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "worker_defaults": {
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "runner": "MirrorNeuron.Runner.HostLocal",
+      "pool": "default",
+      "pool_slots": 1,
+      "workdir": "/sandbox/job/workflow"
+    },
+    "bindings": {
+      "load_inputs": {
+        "type": "worker",
+        "strategy": "single",
+        "side_effect": "read",
+        "risk": "low",
+        "workers": [
+          {
+            "id": "input_adapter",
+            "role": "Resolve mock, JSON, file, or env_json inputs"
+          }
+        ]
+      },
+      "run_workflow": {
+        "type": "team",
+        "strategy": "fanout_reduce",
+        "side_effect": "internal_write",
+        "risk": "medium",
+        "workers": [
+          {
+            "id": "door_camera_tick_source",
+            "role": "door_camera_sampler",
+            "uses": "mn-agents.data_module@1.0.0",
+            "kind": "stream"
+          },
+          {
+            "id": "person_detector",
+            "role": "vl_model_video_safety_detector",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "kind": "stream",
+            "with": {
+              "cleanup_remote_dir": true,
+              "command": [
+                "bash",
+                "scripts/run_detector_in_openshell.sh"
+              ],
+              "custom_openshell_image": "person_detector/openshell_sandbox",
+              "environment": {
+                "FACE_ALERT_COOLDOWN_SECONDS": "60",
+                "FACE_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
+                "FFMPEG_FRAME_TIMEOUT_SECONDS": "8",
+                "FFMPEG_RTSP_TRANSPORT": "tcp",
+                "FRAME_JPEG_MAX_WIDTH": "896",
+                "FRAME_SAMPLE_SECONDS": "10.0",
+                "MN_BLUEPRINT_LOG_LEVEL": "info",
+                "OLLAMA_BASE_URL": "http://192.168.4.173:11434",
+                "OLLAMA_MODEL": "nemotron3:33b",
+                "OLLAMA_THINK": "false",
+                "PERSON_ALERT_COOLDOWN_SECONDS": "60",
+                "PERSON_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
+                "SLACK_ALERT_ENABLED": "true",
+                "SLACK_DEFAULT_CHANNEL": "#safety",
+                "SLACK_MESSAGE_PREFIX": "Door camera human alert",
+                "VIDEO_SOURCE_CODEC": "h264",
+                "VIDEO_SOURCE_TRANSPORT": "rtsp",
+                "VIDEO_SOURCE_URI": "rtsp://host.docker.internal:8554/local-camera",
+                "VL_MODEL_BASE_URL": "http://192.168.4.173:11434",
+                "VL_MODEL_NAME": "nemotron3:33b"
+              },
+              "gpu": false,
+              "name_prefix": "facility-safety-detector",
+              "node_type": "stream",
+              "output_message_type": null,
+              "persistent_workspace": false,
+              "policy": "person_detector/policies/local-video-egress.yaml",
+              "reuse_shared_sandbox": true,
+              "role": "vl_model_video_safety_detector",
+              "runner_module": "MirrorNeuron.Sandbox.OpenShell",
+              "script": "scripts/run_blueprint.py",
+              "upload_as": "person_detector",
+              "upload_path": "person_detector",
+              "upload_paths": [
+                {
+                  "source": "person_detector",
+                  "target": "person_detector"
+                }
+              ],
+              "workdir": "/sandbox/job/person_detector"
+            }
+          }
+        ],
+        "routes": [
+          {
+            "edge_id": "ingress_to_tick_source",
+            "from_node": "ingress",
+            "message_type": "video_monitor_start",
+            "to_node": "door_camera_tick_source"
+          },
+          {
+            "edge_id": "tick_source_to_person_detector",
+            "from_node": "door_camera_tick_source",
+            "message_type": "door_camera_frame_tick",
+            "to_node": "person_detector"
+          }
+        ],
+        "start_workers": [
+          "ingress"
+        ],
+        "seed_inputs": {
+          "ingress": [
+            {
+              "description": "Continuously sample a 24/7 door camera or local webcam stream, ask the configured VL model whether a human is visible, describe observable appearance and activity, and send Slack alerts when a human is detected.",
+              "ollama_base_url": "http://192.168.4.173:11434",
+              "ollama_model": "nemotron3:33b",
+              "scenario": "door_camera_safety_monitor",
+              "slack_optional": true,
+              "video_source_codec": "h264",
+              "video_source_transport": "rtsp",
+              "video_source_uri": "rtsp://host.docker.internal:8554/local-camera",
+              "vl_model_base_url": "http://192.168.4.173:11434",
+              "vl_model_name": "nemotron3:33b"
+            }
+          ]
+        }
+      },
+      "write_final_artifact": {
+        "type": "worker",
+        "strategy": "single",
+        "side_effect": "internal_write",
+        "risk": "low",
+        "workers": [
+          {
+            "id": "artifact_writer",
+            "role": "Write result and final artifact to the local run store"
+          }
+        ]
+      }
+    },
+    "models": {
+      "primary": {
+        "type": "llm",
+        "provider": "ollama",
+        "model": "ollama/nemotron3:33b",
+        "role": "Safety observation and face-description escalation agent."
+      }
+    },
+    "memory": {},
+    "resources": {
+      "cpu": {
+        "min_cores": 1
+      },
+      "gpu": {
+        "min_count": 0
+      },
+      "memory": {
+        "min_gb": 2
+      },
+      "disk": {
+        "min_gb": 1
+      }
+    },
+    "observability": {
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store",
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "input_lag",
+        "backpressure",
+        "llm_calls",
+        "token_budget",
+        "llm_retries",
+        "output_skill_attempts",
+        "output_skill_failures"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ]
+    }
   },
   "input_validation": {
     "rules": [
@@ -54,9 +646,26 @@
       }
     ]
   },
-  "job_name": "facility-safety-video-monitor",
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "policies": {
+    "recovery_mode": "cluster_recover",
+    "stream_mode": "live"
+  },
   "license": "LICENSE.md",
-  "manifest_version": "1.0",
+  "term": "TERM.md",
   "metadata": {
     "agent_templates": {
       "library": "../mn-agents/index.json",
@@ -106,7 +715,7 @@
       "payloads": "payloads/",
       "readme": "README.md",
       "spec": "SPEC.md",
-      "standard": "../BLUEPRINT_STANDARD.md"
+      "standard": "../../mn-docs/blueprint-standard.md"
     },
     "human_control": {
       "enabled": true,
@@ -239,9 +848,9 @@
       "required_inputs": [
         {
           "description": "Approved facility video stream or bundled demo feed.",
-          "example": null,
+          "example": "rtsp://host.docker.internal:8554/local-camera",
           "name": "door_camera_video",
-          "type": "domain_value"
+          "type": "video_stream"
         },
         {
           "description": "Facility zone or camera context reviewers care about.",
@@ -254,12 +863,6 @@
           "example": null,
           "name": "alert_policy",
           "type": "domain_value"
-        },
-        {
-          "description": "Video stream consumed by the blueprint.",
-          "example": "rtsp://host.docker.internal:8554/local-camera",
-          "name": "door_camera_video",
-          "type": "video_stream"
         }
       ],
       "resolved_artifact": "inputs.json",
@@ -705,7 +1308,9 @@
         "env_json"
       ],
       "run_store": "~/.mn/runs/<run_id>/",
-      "version": "1.0"
+      "version": "1.0",
+      "workflow_api_version": "mn.workflow/v1",
+      "workflow_model": "contract -> flow -> runtime"
     },
     "standard_version": "1.0",
     "status_contract": {
@@ -827,108 +1432,51 @@
         ],
         "module": "mn_blueprint_support.gradio_dashboard",
         "package": "mirrorneuron-blueprint-support-skill[webui]",
-        "writes": "ui.json and web_ui.json"
-      },
-      "server": "blueprint_support"
-    }
-  },
-  "name": "Facility Safety Video Monitor",
-  "nodes": [
-    {
-      "node_id": "ingress",
-      "uses": "mn-agents.control_router@1.0.0",
-      "with": {
-        "emit_type": "video_monitor_start",
-        "node_type": "map",
-        "role": "root_coordinator"
-      }
-    },
-    {
-      "node_id": "door_camera_tick_source",
-      "uses": "mn-agents.data_module@1.0.0",
-      "with": {
-        "camera_id": "front-door",
-        "interval_ms": 10000,
-        "module": "MirrorNeuron.Examples.VideoSafetyDoorMonitor.DoorCameraTickSource",
-        "module_source": "beam_modules/door_camera_tick_source.ex",
-        "node_type": "stream",
-        "role": "door_camera_sampler",
-        "target_node": "person_detector"
-      }
-    },
-    {
-      "node_id": "person_detector",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "cleanup_remote_dir": true,
-        "command": [
-          "bash",
-          "scripts/run_detector_in_openshell.sh"
-        ],
-        "custom_openshell_image": "person_detector/openshell_sandbox",
-        "environment": {
-          "FACE_ALERT_COOLDOWN_SECONDS": "60",
-          "FACE_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
-          "FFMPEG_FRAME_TIMEOUT_SECONDS": "8",
-          "FFMPEG_RTSP_TRANSPORT": "tcp",
-          "FRAME_JPEG_MAX_WIDTH": "896",
-          "FRAME_SAMPLE_SECONDS": "10.0",
-          "MN_BLUEPRINT_LOG_LEVEL": "info",
-          "OLLAMA_BASE_URL": "http://192.168.4.173:11434",
-          "OLLAMA_MODEL": "nemotron3:33b",
-          "OLLAMA_THINK": "false",
-          "PERSON_ALERT_COOLDOWN_SECONDS": "60",
-          "PERSON_DETECTION_CONFIDENCE_THRESHOLD": "0.65",
-          "SLACK_ALERT_ENABLED": "true",
-          "SLACK_DEFAULT_CHANNEL": "#safety",
-          "SLACK_MESSAGE_PREFIX": "Door camera human alert",
-          "VIDEO_SOURCE_CODEC": "h264",
-          "VIDEO_SOURCE_TRANSPORT": "rtsp",
-          "VIDEO_SOURCE_URI": "rtsp://host.docker.internal:8554/local-camera",
-          "VL_MODEL_BASE_URL": "http://192.168.4.173:11434",
-          "VL_MODEL_NAME": "nemotron3:33b"
-        },
-        "gpu": false,
-        "name_prefix": "facility-safety-detector",
-        "node_type": "stream",
-        "output_message_type": null,
-        "persistent_workspace": false,
-        "policy": "person_detector/policies/local-video-egress.yaml",
-        "reuse_shared_sandbox": true,
-        "role": "vl_model_video_safety_detector",
-        "runner_module": "MirrorNeuron.Sandbox.OpenShell",
-        "script": "scripts/run_blueprint.py",
-        "upload_as": "person_detector",
-        "upload_path": "person_detector",
-        "upload_paths": [
-          {
-            "source": "person_detector",
-            "target": "person_detector"
+        "writes": "ui.json and web_ui.json",
+        "service": {
+          "service_name": "blueprint-web-ui",
+          "provider": "mirror_neuron",
+          "lifecycle": "runtime_managed",
+          "registered_by": "launch_prepare_web_ui",
+          "tags": [
+            "web_ui",
+            "blueprint",
+            "facility_safety_video_monitor",
+            "gradio"
+          ],
+          "meta": {
+            "blueprint_id": "facility_safety_video_monitor",
+            "adapter": "gradio",
+            "run_id": "${run_id}"
           }
-        ],
-        "workdir": "/sandbox/job/person_detector"
-      }
+        }
+      },
+      "server": "blueprint_support",
+      "data_source": "local_run_store",
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "input_lag",
+        "backpressure",
+        "llm_calls",
+        "token_budget",
+        "llm_retries",
+        "output_skill_attempts",
+        "output_skill_failures"
+      ]
     }
-  ],
-  "policies": {
-    "recovery_mode": "cluster_recover",
-    "stream_mode": "live"
   },
-  "requiredContextEngine": false,
-  "requirements": {
-    "cpu": {
-      "min_cores": 1
-    },
-    "disk": {
-      "min_gb": 1
-    },
-    "gpu": {
-      "min_count": 0
-    },
-    "memory": {
-      "min_gb": 2
-    }
-  },
-  "term": "TERM.md",
-  "type": "service"
+  "requiredContextEngine": false
 }

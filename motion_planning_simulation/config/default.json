@@ -395,40 +395,40 @@
     },
     {
       "config_path": "motion.python_bin",
-      "manifest_path": "nodes.visualizer.config.command.0"
+      "manifest_path": "runtime.bindings.run_workflow.workers.visualizer.with.command.0"
     },
     {
       "config_path": "motion.python_bin",
-      "manifest_path": "nodes.shared_world.config.command.0"
+      "manifest_path": "runtime.bindings.run_workflow.workers.shared_world.with.command.0"
     },
     {
       "config_path": "motion.seed",
-      "manifest_path": "nodes.shared_world.config.environment.SIMULATION_SEED",
+      "manifest_path": "runtime.bindings.run_workflow.workers.shared_world.with.environment.SIMULATION_SEED",
       "stringify": true
     },
     {
       "config_path": "motion.max_cycles",
-      "manifest_path": "nodes.shared_world.config.environment.MAX_CYCLES",
+      "manifest_path": "runtime.bindings.run_workflow.workers.shared_world.with.environment.MAX_CYCLES",
       "stringify": true
     },
     {
       "config_path": "motion.good_agents",
-      "manifest_path": "nodes.shared_world.config.environment.NUM_GOOD",
+      "manifest_path": "runtime.bindings.run_workflow.workers.shared_world.with.environment.NUM_GOOD",
       "stringify": true
     },
     {
       "config_path": "motion.adversaries",
-      "manifest_path": "nodes.shared_world.config.environment.NUM_ADVERSARIES",
+      "manifest_path": "runtime.bindings.run_workflow.workers.shared_world.with.environment.NUM_ADVERSARIES",
       "stringify": true
     },
     {
       "config_path": "motion.obstacles",
-      "manifest_path": "nodes.shared_world.config.environment.NUM_OBSTACLES",
+      "manifest_path": "runtime.bindings.run_workflow.workers.shared_world.with.environment.NUM_OBSTACLES",
       "stringify": true
     },
     {
       "config_path": "motion.policy_mode",
-      "manifest_path": "nodes.shared_world.config.environment.POLICY_MODE",
+      "manifest_path": "runtime.bindings.run_workflow.workers.shared_world.with.environment.POLICY_MODE",
       "stringify": true
     }
   ],

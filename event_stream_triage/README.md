@@ -69,3 +69,63 @@ manifest structure, payload behavior, or shared fixtures:
 cd ..
 python3 -m pytest -q
 ```
+
+## One-line value proposition
+
+Run this blueprint to turn a repeatable operational decision into an auditable MirrorNeuron workflow with clear inputs, outputs, and runtime artifacts.
+
+## What it is
+
+This blueprint is a workflow-first package with manifest metadata, runtime bindings, payload assets, configuration, and local documentation for running the scenario from this checkout.
+
+## Who this is for
+
+It is for teams that need a coordinated workflow rather than a static dashboard or a one-shot LLM answer.
+
+## Why it matters
+
+The workflow helps replace manual handoffs with observable steps, durable artifacts, and checks that can be reviewed after each run.
+
+## Why this runtime is useful here
+
+MirrorNeuron separates input resolution, worker execution, and final artifact writing so the run can be monitored, replayed, and inspected without hiding decisions inside one prompt.
+
+## How it works
+
+The input adapter resolves mock, JSON, file, or environment-provided inputs. The runtime executes the workflow workers declared in `manifest.json`, records events, and writes the final result to the local run store.
+
+## Example scenario
+
+An evaluator runs the blueprint with sample inputs, reviews the generated result, checks the event stream, and compares the workflow output against the expected decision or simulation outcome.
+
+## How to run
+
+Run from the catalog with `mn run event_stream_triage` or from this folder with `mn run --folder .`.
+
+## How to customize it
+
+Adjust `config/default.json` for reusable defaults, use `config/overwrite.json` for local overrides, and update payload code or prompts when changing worker behavior.
+
+## What to look for in results
+
+Check that the output matches the input scenario, that the event log shows the expected workflow progression, and that warnings or uncertainty notes are easy to trace.
+
+## Investor and evaluator narrative
+
+This blueprint shows how MirrorNeuron can replace brittle scripts, static dashboards, and one-shot LLM workflows with a packaged runtime contract that produces inspectable results.
+
+## Runtime features demonstrated
+
+The blueprint demonstrates workflow-first manifests, input and output contracts, runtime worker bindings, local run-store artifacts, and service registration metadata.
+
+## Test coverage
+
+Catalog tests validate manifest shape, documentation standards, scenario fixtures, bundle generation, and compatibility with the shared blueprint support tooling.
+
+## Limitations
+
+Sample inputs and local fixtures are intended for evaluation. Live data, credentials, and external services should be configured deliberately before production use.
+
+## Next steps
+
+Tune the scenario inputs, connect approved live services, and add domain-specific assertions or review gates for production workflows.

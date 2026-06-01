@@ -41,14 +41,21 @@ from mn_blueprint_support.standard import (
     STANDARD_VERSION,
     STREAM_TRANSPORTS,
     RunStore,
-    render_manifest_agent_templates,
     validate_agent_library,
 )
-from tools.agent_behavior import simulate_agent_instance
+from mn_blueprint_support.workflow_manifest import validate_workflow_manifest
 
 
 def _category_slug(value: str) -> str:
     return "-".join("".join(char.lower() if char.isalnum() else " " for char in value).split())
+
+
+def _runtime_workers(manifest: dict) -> list[dict]:
+    workers: list[dict] = []
+    bindings = manifest.get("runtime", {}).get("bindings", {})
+    for binding in bindings.values():
+        workers.extend(worker for worker in binding.get("workers", []) if isinstance(worker, dict))
+    return workers
 
 
 def test_category_metadata_covers_filterable_index_categories() -> None:
@@ -153,9 +160,10 @@ def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() ->
     fixture = json.loads((blueprint_dir / "payloads" / "repo_fixture" / "django_tree_fixture.json").read_text())
 
     assert manifest["metadata"]["blueprint_id"] == blueprint_id
-    assert manifest["entrypoints"] == ["initializer"]
-    executable_nodes = [node for node in manifest["nodes"] if node.get("node_id") != "sink"]
-    assert [node["with"]["role"] for node in executable_nodes] == [
+    assert {"nodes", "edges", "entrypoints", "initial_inputs"}.isdisjoint(manifest)
+    validate_workflow_manifest(manifest) == []
+    workers = manifest["runtime"]["bindings"]["run_workflow"]["workers"]
+    assert [worker["role"] for worker in workers] == [
         "initializer",
         "repo_architect",
         "dependency_mapper",
@@ -163,8 +171,14 @@ def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() ->
         "context_compressor",
         "briefing_author",
     ]
-    initializer_uploads = {item["source"] for item in manifest["nodes"][0]["with"]["upload_paths"]}
-    assert {"initializer", "_vendor", "repo_fixture"}.issubset(initializer_uploads)
+    assert {worker["id"] for worker in workers} == {
+        "initializer",
+        "interpreter",
+        "extractor",
+        "classifier",
+        "decision",
+        "critic",
+    }
 
     assert fixture["schema_version"] == "mn.code_analysis_fixture.v1"
     assert fixture["repo"]["url"] == "https://github.com/django/django"
@@ -203,7 +217,8 @@ def test_finance_property_alpha_memory_benchmark_contract(tmp_path: Path) -> Non
     runner_path = blueprint_dir / "payloads" / "simulation_loop" / "scripts" / "run_blueprint.py"
 
     assert manifest["metadata"]["blueprint_id"] == blueprint_id
-    assert manifest["initial_inputs"]["simulation_loop"][0]["memory_mode"] == "compare"
+    assert {"nodes", "edges", "entrypoints", "initial_inputs"}.isdisjoint(manifest)
+    assert manifest["metadata"]["input_contract"]["profiles"]["mock"]["payload"]["memory_mode"] == "compare"
     assert "working memory retrieval" in manifest["metadata"]["runtime_features"]
     assert config["benchmark"]["baseline"] == "all_context"
     assert config["benchmark"]["schema_version"] == "mn.finance.property_alpha.memory_benchmark.v2"
@@ -473,7 +488,7 @@ def test_every_blueprint_has_product_quality_readme_sections() -> None:
 
 
 def test_portfolio_standard_document_explains_execution_contract() -> None:
-    text = (ROOT / "BLUEPRINT_STANDARD.md").read_text()
+    text = (ROOT.parent / "mn-docs" / "blueprint-standard.md").read_text()
     for phrase in [
         "Required Files",
         "config/default.json",
@@ -538,43 +553,42 @@ def test_shared_agent_library_is_valid_and_cataloged() -> None:
     }.issubset(template_ids)
 
 
-def test_blueprint_nodes_reference_shared_agent_templates_and_render() -> None:
+def test_blueprint_runtime_workers_reference_shared_agent_templates() -> None:
     index = json.loads((ROOT / "index.json").read_text())
 
     for entry in index:
         manifest_path = ROOT / entry["path"] / "manifest.json"
         manifest = json.loads(manifest_path.read_text())
+        assert {"nodes", "edges", "entrypoints", "initial_inputs"}.isdisjoint(manifest), entry["id"]
+        validate_workflow_manifest(manifest) == []
         usages = (manifest["metadata"].get("agent_templates") or {}).get("nodes") or []
         assert usages, entry["id"]
-        for node in manifest.get("nodes") or []:
-            assert "uses" in node, (entry["id"], node.get("node_id"))
-            assert node["uses"].startswith("mn-agents."), (entry["id"], node.get("node_id"))
-            assert not any(node["uses"].startswith(f"{template_id}@") for template_id in LEGACY_AGENT_TEMPLATE_IDS), (
+        workers = [worker for worker in _runtime_workers(manifest) if worker.get("uses")]
+        assert workers, entry["id"]
+        for worker in workers:
+            assert worker["uses"].startswith("mn-agents."), (entry["id"], worker.get("id"))
+            assert not any(worker["uses"].startswith(f"{template_id}@") for template_id in LEGACY_AGENT_TEMPLATE_IDS), (
                 entry["id"],
-                node.get("node_id"),
+                worker.get("id"),
             )
-            assert "@" in node["uses"] and not node["uses"].endswith("@latest"), (entry["id"], node.get("node_id"))
-            assert isinstance(node.get("with"), dict), (entry["id"], node.get("node_id"))
-            assert not {"agent_type", "type", "role", "config"} & set(node), (entry["id"], node.get("node_id"))
-
-        rendered = render_manifest_agent_templates(manifest, AGENTS_ROOT)
-        assert len(rendered["nodes"]) == len(manifest["nodes"])
-        assert len(rendered["metadata"]["agent_templates"]["rendered"]) == len(manifest["nodes"])
-        assert all("uses" not in node and "with" not in node for node in rendered["nodes"])
+            assert "@" in worker["uses"] and not worker["uses"].endswith("@latest"), (entry["id"], worker.get("id"))
 
 
-def test_blueprint_nodes_simulate_with_shared_agent_behaviors() -> None:
+def test_blueprint_template_usages_reference_versioned_shared_agents() -> None:
     index = json.loads((ROOT / "index.json").read_text())
 
     for entry in index:
         manifest_path = ROOT / entry["path"] / "manifest.json"
         manifest = json.loads(manifest_path.read_text())
 
-        for node in manifest.get("nodes") or []:
-            result = simulate_agent_instance(node, AGENTS_ROOT)
-            assert result["status"] == "completed", (entry["id"], node.get("node_id"))
-            assert result["events"], (entry["id"], node.get("node_id"))
-            assert result["delegation"]["allow_recursive"] is False, (entry["id"], node.get("node_id"))
+        usages = (manifest["metadata"].get("agent_templates") or {}).get("nodes") or []
+        for usage in usages:
+            assert usage["uses"].startswith("mn-agents."), (entry["id"], usage.get("node_id"))
+            assert "@" in usage["uses"] and not usage["uses"].endswith("@latest"), (entry["id"], usage.get("node_id"))
+            assert not any(usage["uses"].startswith(f"{template_id}@") for template_id in LEGACY_AGENT_TEMPLATE_IDS), (
+                entry["id"],
+                usage.get("node_id"),
+            )
 
 
 def test_renamed_blueprint_aliases_resolve_to_new_scenarios() -> None:
@@ -598,11 +612,15 @@ def test_blueprint_manifest_and_runner_are_loadable(blueprint_id: str) -> None:
     assert manifest["metadata"]["blueprint_id"] == blueprint_id
     assert manifest["metadata"]["category"] == SCENARIOS[blueprint_id].category
     assert manifest["metadata"]["llm"]["default_model"] == "ollama/nemotron3:33b"
-    assert manifest["entrypoints"] == ["simulation_loop"]
-    rendered = render_manifest_agent_templates(manifest, AGENTS_ROOT)
-    assert rendered["nodes"][0]["agent_type"] == "executor"
-    assert rendered["nodes"][1]["agent_type"] == "aggregator"
-    assert manifest["edges"][0]["message_type"] == "blueprint_report"
+    assert {"nodes", "edges", "entrypoints", "initial_inputs"}.isdisjoint(manifest)
+    assert validate_workflow_manifest(manifest) == []
+    assert manifest["flow"]["entrypoint"] == "load_inputs"
+    assert [step["id"] for step in manifest["flow"]["steps"]] == [
+        "load_inputs",
+        "run_workflow",
+        "write_final_artifact",
+    ]
+    assert "simulation_loop" in {worker["id"] for worker in manifest["runtime"]["bindings"]["run_workflow"]["workers"]}
 
 
 @pytest.mark.parametrize("blueprint_id", REQUIRED_BLUEPRINT_IDS)

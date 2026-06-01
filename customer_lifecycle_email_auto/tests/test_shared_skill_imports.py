@@ -114,15 +114,16 @@ def test_runtime_get_plan_accepts_explicit_emit_body():
 
 def test_host_local_uploads_shared_skills_with_each_executor():
     manifest = json.loads((BLUEPRINT_DIR / "manifest.json").read_text())
-    executor_nodes = [
-        node
-        for node in manifest["nodes"]
-        if (node.get("with") or node.get("config") or {}).get("runner_module") == "MirrorNeuron.Runner.HostLocal"
+    workflow_workers = manifest["runtime"]["bindings"]["run_workflow"]["workers"]
+    executor_workers = [
+        worker
+        for worker in workflow_workers
+        if (worker.get("with") or {}).get("runner_module") == "MirrorNeuron.Runner.HostLocal"
     ]
 
-    assert executor_nodes
-    for node in executor_nodes:
-        node_config = node.get("with") or node.get("config") or {}
+    assert executor_workers
+    for worker in executor_workers:
+        node_config = worker.get("with") or {}
         upload_paths = node_config.get("upload_paths", [])
         sources = {entry["source"] for entry in upload_paths}
         assert "_shared_skills/business_email_campaign_skill" in sources
@@ -133,6 +134,7 @@ def test_host_local_uploads_shared_skills_with_each_executor():
 
 def test_manifest_sets_slack_channel_but_not_credentials():
     manifest = json.loads((BLUEPRINT_DIR / "manifest.json").read_text())
+    workflow_workers = manifest["runtime"]["bindings"]["run_workflow"]["workers"]
     secret_slack_keys = {
         "SLACK_BOT_TOKEN",
         "SLACK_API_BASE_URL",
@@ -141,8 +143,8 @@ def test_manifest_sets_slack_channel_but_not_credentials():
         "MN_SLACK_API_BASE_URL",
     }
 
-    for node in manifest["nodes"]:
-        env = node.get("config", {}).get("environment", {})
+    for worker in workflow_workers:
+        env = (worker.get("with") or {}).get("environment", {})
         if env:
             assert not secret_slack_keys & set(env)
             assert env.get("SLACK_DEFAULT_CHANNEL") == "#claw"

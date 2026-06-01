@@ -1,30 +1,713 @@
 {
+  "apiVersion": "mn.workflow/v1",
+  "kind": "Workflow",
+  "id": "vendor_selection_decision",
+  "name": "Vendor Selection Decision",
+  "version": "1.0.0",
+  "manifest_version": "1.0",
   "description": "Use this blueprint to convert requirements and vendor responses into a scored recommendation, implementation plan, and reviewable decision record.",
-  "edges": [
-    {
-      "edge_id": "vendor_to_sink",
-      "from_node": "vendor_workflow",
-      "message_type": "vendor_decision_pack",
-      "to_node": "result_sink"
-    }
-  ],
-  "entrypoints": [
-    "vendor_workflow"
-  ],
   "graph_id": "vendor_selection_decision_v1",
-  "initial_inputs": {
-    "vendor_workflow": [
-      {
-        "initiative": "Select an AI-enabled field service platform"
+  "job_name": "vendor-selection-decision",
+  "contract": {
+    "summary": "Use this blueprint to convert requirements and vendor responses into a scored recommendation, implementation plan, and reviewable decision record.",
+    "users": [
+      "CIO offices, procurement, transformation offices, private-equity operating teams, and enterprise architecture teams."
+    ],
+    "inputs": {
+      "initiative": {
+        "type": "str",
+        "required": true,
+        "description": "Domain input value for initiative.",
+        "example": "Select an AI-enabled field service platform",
+        "privacy": "internal"
+      },
+      "pricing_csv": {
+        "type": "str",
+        "required": true,
+        "description": "Domain input value for pricing_csv.",
+        "example": "vendor,year_one_cost_usd,implementation_cost_usd,risk_reserve_usd\nAtlasFlow,740000,220000,90000\nBrightOps,820000,260000,70000\nCoreRoute,610000,180000,130000\n",
+        "privacy": "internal"
+      },
+      "requirements": {
+        "type": "list",
+        "required": true,
+        "description": "Domain input value for requirements.",
+        "example": [
+          "Integrate with ERP and CRM",
+          "Support role-based access control",
+          "Provide offline mobile workflows",
+          "Expose audit logs and security evidence",
+          "Deploy pilot within 90 days"
+        ],
+        "privacy": "internal"
+      },
+      "stakeholder_notes": {
+        "type": "str",
+        "required": true,
+        "description": "Domain input value for stakeholder_notes.",
+        "example": "Operations wants offline mobile. Security requires evidence before award. Procurement wants negotiation leverage on implementation services.",
+        "privacy": "internal"
+      },
+      "timeline_weeks": {
+        "type": "int",
+        "required": true,
+        "description": "Domain input value for timeline_weeks.",
+        "example": 14,
+        "privacy": "internal"
+      },
+      "vendors": {
+        "type": "list",
+        "required": true,
+        "description": "Domain input value for vendors.",
+        "example": [
+          {
+            "name": "AtlasFlow",
+            "notes": "Strong workflow depth, vague ERP migration estimate.",
+            "pricing_usd": 740000,
+            "scores": {
+              "cost": 4,
+              "functional_fit": 5,
+              "implementation_speed": 3,
+              "security": 4
+            }
+          },
+          {
+            "name": "BrightOps",
+            "notes": "Best security evidence, higher platform cost.",
+            "pricing_usd": 820000,
+            "scores": {
+              "cost": 3,
+              "functional_fit": 4,
+              "implementation_speed": 4,
+              "security": 5
+            }
+          },
+          {
+            "name": "CoreRoute",
+            "notes": "Fastest pilot, incomplete audit-log response.",
+            "pricing_usd": 610000,
+            "scores": {
+              "cost": 2,
+              "functional_fit": 3,
+              "implementation_speed": 5,
+              "security": 3
+            }
+          }
+        ],
+        "privacy": "internal"
+      },
+      "weighted_criteria": {
+        "type": "list",
+        "required": true,
+        "description": "Domain input value for weighted_criteria.",
+        "example": [
+          {
+            "name": "functional_fit",
+            "weight": 3
+          },
+          {
+            "name": "security",
+            "weight": 2
+          },
+          {
+            "name": "implementation_speed",
+            "weight": 2
+          },
+          {
+            "higher_is_better": false,
+            "name": "cost",
+            "weight": 1
+          }
+        ],
+        "privacy": "internal"
       }
-    ]
+    },
+    "input_adapters": {
+      "default": "mock",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "resolved_artifact": "inputs.json"
+    },
+    "outputs": {
+      "profile": "standard_run_store",
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "type": "final_artifact",
+        "schema_version": "mn.blueprint.final_artifact_contract.v1",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ]
+      },
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "type": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "path": "web_ui.json",
+          "mime_type": "application/json",
+          "producer": "web_ui",
+          "source_refs": [
+            "run.json"
+          ]
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        }
+      ]
+    },
+    "events": {
+      "stream": "events.jsonl",
+      "human_stream": "human.jsonl",
+      "types": [
+        "run_started",
+        "inputs_loaded",
+        "workflow_graph_compiled",
+        "workflow_step_started",
+        "workflow_worker_completed",
+        "workflow_step_completed",
+        "workflow_result_ready",
+        "final_artifact_written",
+        "artifact_written",
+        "run_completed",
+        "run_failed",
+        "blueprint_status",
+        "blueprint_phase_started",
+        "blueprint_phase_completed",
+        "blueprint_phase_failed",
+        "output_skill_started",
+        "output_skill_completed",
+        "output_skill_failed",
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied",
+        "vendor_decision_pack"
+      ]
+    },
+    "status": {
+      "event": "blueprint_status",
+      "heartbeat": false,
+      "phases": [
+        "loading_inputs",
+        "running_worker",
+        "waiting_for_human",
+        "writing_artifacts",
+        "completed"
+      ]
+    },
+    "privacy": {
+      "default_classification": "internal",
+      "rules": {
+        "confidential": {
+          "log": "redacted",
+          "send_to_llm": "allowed_configs_only",
+          "send_to_output_skills": "approved_destinations_only"
+        },
+        "internal": {
+          "log": "metadata_only",
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "public": {
+          "log": true,
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "regulated": {
+          "log": "redacted",
+          "send_to_llm": false,
+          "send_to_output_skills": "approved_destinations_only"
+        }
+      }
+    }
+  },
+  "flow": {
+    "entrypoint": "load_inputs",
+    "state": {
+      "resolved_inputs": {},
+      "workflow_result": {},
+      "final_artifact": {}
+    },
+    "steps": [
+      {
+        "id": "load_inputs",
+        "kind": "stage",
+        "label": "Load Inputs",
+        "goal": "Resolve the selected input adapter and record input provenance.",
+        "action": "load_inputs",
+        "in": {},
+        "out": {
+          "resolved_inputs": "$state.resolved_inputs"
+        },
+        "run": "load_inputs",
+        "emits": "inputs_loaded",
+        "on": {
+          "inputs_loaded": "run_workflow"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": 120,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      },
+      {
+        "id": "run_workflow",
+        "kind": "stage",
+        "label": "Run Workflow",
+        "goal": "Companies need a repeatable way to turn requirements, RFP responses, pricing, security evidence, and stakeholder input into an executive vendor decision.",
+        "action": "run_blueprint_workflow",
+        "in": {
+          "inputs": "$state.resolved_inputs"
+        },
+        "out": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "run": "run_workflow",
+        "emits": "workflow_result_ready",
+        "on": {
+          "workflow_result_ready": "write_final_artifact"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": null,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      },
+      {
+        "id": "write_final_artifact",
+        "kind": "stage",
+        "label": "Write Final Artifact",
+        "goal": "Persist result.json, final_artifact.json, events, logs, and optional output-skill fan-out records.",
+        "action": "write_final_artifact",
+        "in": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "out": {
+          "final_artifact": "$state.final_artifact"
+        },
+        "run": "write_final_artifact",
+        "emits": "final_artifact_written",
+        "on": {
+          "final_artifact_written": "completed"
+        },
+        "control": {
+          "required": true,
+          "timeout_seconds": 120,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 1,
+            "backoff_multiplier": 2,
+            "jitter": 0
+          },
+          "failure_policy": "fail_workflow",
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        }
+      }
+    ],
+    "graph": {
+      "schema": "mn.workflow.problem_graph/v1",
+      "mode": "static_dag",
+      "source": "load_inputs",
+      "sink": "write_final_artifact",
+      "execution": {
+        "strategy": "serial"
+      },
+      "dynamic": {
+        "enabled": false,
+        "patch_events": [],
+        "apply_at": "between_steps"
+      },
+      "edges": [
+        {
+          "id": "load_inputs_to_run_workflow",
+          "from": "load_inputs",
+          "to": "run_workflow",
+          "event": "inputs_loaded",
+          "required": true,
+          "accepts": [
+            "done"
+          ]
+        },
+        {
+          "id": "run_workflow_to_write_final_artifact",
+          "from": "run_workflow",
+          "to": "write_final_artifact",
+          "event": "workflow_result_ready",
+          "required": true,
+          "accepts": [
+            "done"
+          ]
+        }
+      ]
+    },
+    "policy": {
+      "safety": {
+        "default": "allow",
+        "blocked_actions": [],
+        "rules": []
+      },
+      "human": {
+        "enabled": true,
+        "mode": "notice_only",
+        "decisions": [
+          "approve",
+          "revise",
+          "reject"
+        ],
+        "default": "reject",
+        "timeout_seconds": null,
+        "events": {
+          "request": "human_input_requested",
+          "response": "human_input_received",
+          "timeout": "human_input_timeout",
+          "decision": "human_decision_applied"
+        }
+      },
+      "failure": {
+        "default": "fail_closed"
+      }
+    },
+    "observers": []
+  },
+  "runtime": {
+    "store": {
+      "type": "local_run_store",
+      "path": "./runs/${run_id}",
+      "artifacts": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ]
+    },
+    "worker_defaults": {
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "runner": "MirrorNeuron.Runner.HostLocal",
+      "pool": "default",
+      "pool_slots": 1,
+      "workdir": "/sandbox/job/workflow"
+    },
+    "bindings": {
+      "load_inputs": {
+        "type": "worker",
+        "strategy": "single",
+        "side_effect": "read",
+        "risk": "low",
+        "workers": [
+          {
+            "id": "input_adapter",
+            "role": "Resolve mock, JSON, file, or env_json inputs"
+          }
+        ]
+      },
+      "run_workflow": {
+        "type": "worker",
+        "strategy": "single",
+        "side_effect": "internal_write",
+        "risk": "medium",
+        "workers": [
+          {
+            "id": "vendor_workflow",
+            "role": "root_coordinator",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "kind": "generic",
+            "with": {
+              "command": [
+                "python3",
+                "scripts/run_blueprint.py"
+              ],
+              "from": "base",
+              "name_prefix": "vendor-selection-decision",
+              "no_auto_providers": true,
+              "no_keep": true,
+              "node_type": "generic",
+              "output_message_type": "vendor_decision_pack",
+              "pool": "default",
+              "pool_slots": 1,
+              "role": "root_coordinator",
+              "script": "scripts/run_blueprint.py",
+              "tty": false,
+              "upload_as": "vendor_workflow",
+              "upload_path": "vendor_workflow",
+              "upload_paths": [
+                {
+                  "source": "vendor_workflow",
+                  "target": "vendor_workflow"
+                },
+                {
+                  "source": "config",
+                  "target": "config"
+                },
+                {
+                  "source": "mn-skills/blueprint_support_skill",
+                  "target": "mn-skills/blueprint_support_skill"
+                },
+                {
+                  "source": "mn-skills/vendor_comparison_skill",
+                  "target": "mn-skills/vendor_comparison_skill"
+                },
+                {
+                  "source": "mn-skills/spreadsheet_analysis_skill",
+                  "target": "mn-skills/spreadsheet_analysis_skill"
+                },
+                {
+                  "source": "mn-skills/implementation_plan_skill",
+                  "target": "mn-skills/implementation_plan_skill"
+                },
+                {
+                  "source": "mn-skills/process_map_skill",
+                  "target": "mn-skills/process_map_skill"
+                },
+                {
+                  "source": "mn-skills/code_generation_skill",
+                  "target": "mn-skills/code_generation_skill"
+                },
+                {
+                  "source": "mn-skills/first_draft_slides_skill",
+                  "target": "mn-skills/first_draft_slides_skill"
+                },
+                {
+                  "source": "mn-skills/client_report_skill",
+                  "target": "mn-skills/client_report_skill"
+                }
+              ],
+              "workdir": "/sandbox/job/vendor_workflow"
+            }
+          }
+        ],
+        "routes": [
+          {
+            "edge_id": "vendor_to_sink",
+            "from_node": "vendor_workflow",
+            "message_type": "vendor_decision_pack",
+            "to_node": "result_sink"
+          }
+        ],
+        "start_workers": [
+          "vendor_workflow"
+        ],
+        "seed_inputs": {
+          "vendor_workflow": [
+            {
+              "initiative": "Select an AI-enabled field service platform"
+            }
+          ]
+        }
+      },
+      "write_final_artifact": {
+        "type": "worker",
+        "strategy": "single",
+        "side_effect": "internal_write",
+        "risk": "low",
+        "workers": [
+          {
+            "id": "artifact_writer",
+            "role": "Write result and final artifact to the local run store"
+          }
+        ]
+      }
+    },
+    "models": {
+      "primary": {
+        "type": "llm",
+        "provider": "ollama",
+        "model": "ollama/nemotron3:33b",
+        "role": "Vendor selection and implementation roadmap agent"
+      }
+    },
+    "memory": {},
+    "resources": {
+      "cpu": {
+        "min_cores": 1
+      },
+      "gpu": {
+        "min_count": 0
+      },
+      "memory": {
+        "min_gb": 2
+      },
+      "disk": {
+        "min_gb": 1
+      }
+    },
+    "observability": {
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store",
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ]
+    }
   },
   "input_validation": {
     "rules": []
   },
-  "job_name": "vendor-selection-decision",
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "policies": {
+    "recovery_mode": "local_restart"
+  },
   "license": "LICENSE.md",
-  "manifest_version": "1.0",
+  "term": "TERM.md",
   "metadata": {
     "agent_templates": {
       "library": "../mn-agents/index.json",
@@ -70,7 +753,7 @@
       "payloads": "payloads/",
       "readme": "README.md",
       "spec": "SPEC.md",
-      "standard": "../BLUEPRINT_STANDARD.md"
+      "standard": "../../mn-docs/blueprint-standard.md"
     },
     "human_control": {
       "enabled": true,
@@ -650,6 +1333,17 @@
           "type": "resource_samples"
         },
         {
+          "artifact_id": "web_ui",
+          "type": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "path": "web_ui.json",
+          "mime_type": "application/json",
+          "producer": "web_ui",
+          "source_refs": [
+            "run.json"
+          ]
+        },
+        {
           "artifact_id": "human_events",
           "mime_type": "application/x-jsonlines",
           "path": "human.jsonl",
@@ -729,7 +1423,9 @@
         "env_json"
       ],
       "run_store": "~/.mn/runs/<run_id>/",
-      "version": "1.0"
+      "version": "1.0",
+      "workflow_api_version": "mn.workflow/v1",
+      "workflow_model": "contract -> flow -> runtime"
     },
     "standard_version": "1.0",
     "status_contract": {
@@ -786,103 +1482,47 @@
       "format": "jsonl",
       "stream": "stderr"
     },
-    "target_user": "CIO offices, procurement, transformation offices, private-equity operating teams, and enterprise architecture teams."
-  },
-  "name": "Vendor Selection Decision",
-  "nodes": [
-    {
-      "node_id": "vendor_workflow",
-      "uses": "mn-agents.data_python_executor@1.0.0",
-      "with": {
-        "command": [
-          "python3",
-          "scripts/run_blueprint.py"
-        ],
-        "from": "base",
-        "name_prefix": "vendor-selection-decision",
-        "no_auto_providers": true,
-        "no_keep": true,
-        "node_type": "generic",
-        "output_message_type": "vendor_decision_pack",
-        "pool": "default",
-        "pool_slots": 1,
-        "role": "root_coordinator",
-        "script": "scripts/run_blueprint.py",
-        "tty": false,
-        "upload_as": "vendor_workflow",
-        "upload_path": "vendor_workflow",
-        "upload_paths": [
-          {
-            "source": "vendor_workflow",
-            "target": "vendor_workflow"
-          },
-          {
-            "source": "config",
-            "target": "config"
-          },
-          {
-            "source": "mn-skills/blueprint_support_skill",
-            "target": "mn-skills/blueprint_support_skill"
-          },
-          {
-            "source": "mn-skills/vendor_comparison_skill",
-            "target": "mn-skills/vendor_comparison_skill"
-          },
-          {
-            "source": "mn-skills/spreadsheet_analysis_skill",
-            "target": "mn-skills/spreadsheet_analysis_skill"
-          },
-          {
-            "source": "mn-skills/implementation_plan_skill",
-            "target": "mn-skills/implementation_plan_skill"
-          },
-          {
-            "source": "mn-skills/process_map_skill",
-            "target": "mn-skills/process_map_skill"
-          },
-          {
-            "source": "mn-skills/code_generation_skill",
-            "target": "mn-skills/code_generation_skill"
-          },
-          {
-            "source": "mn-skills/first_draft_slides_skill",
-            "target": "mn-skills/first_draft_slides_skill"
-          },
-          {
-            "source": "mn-skills/client_report_skill",
-            "target": "mn-skills/client_report_skill"
-          }
-        ],
-        "workdir": "/sandbox/job/vendor_workflow"
-      }
-    },
-    {
-      "node_id": "result_sink",
-      "uses": "mn-agents.control_join@1.0.0",
-      "with": {
-        "complete_on_message": true,
-        "node_type": "reduce",
-        "role": "result_sink"
+    "target_user": "CIO offices, procurement, transformation offices, private-equity operating teams, and enterprise architecture teams.",
+    "web_ui": {
+      "enabled": false,
+      "kind": "output",
+      "adapter": "none",
+      "server": "none",
+      "description": "Shared blueprint support dashboard rendered from local run-store events and artifacts.",
+      "data_source": "local_run_store",
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "registration": {
+        "enabled": false,
+        "api": [],
+        "module": "mn_blueprint_support.gradio_dashboard",
+        "package": "mirrorneuron-blueprint-support-skill[webui]",
+        "writes": "none",
+        "service": {
+          "service_name": "blueprint-web-ui",
+          "provider": "mirror_neuron",
+          "lifecycle": "disabled",
+          "reason": "web_ui.enabled is false; launch preparation will not inject the runtime dashboard service."
+        }
       }
     }
-  ],
-  "policies": {
-    "recovery_mode": "local_restart"
   },
-  "requiredContextEngine": false,
-  "requirements": {
-    "cpu": {
-      "min_cores": 1
-    },
-    "disk": {
-      "min_gb": 1
-    },
-    "gpu": {
-      "min_count": 0
-    },
-    "memory": {
-      "min_gb": 2
-    }
-  },
-  "term": "TERM.md"
+  "requiredContextEngine": false
 }

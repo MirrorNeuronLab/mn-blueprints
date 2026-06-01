@@ -3,23 +3,61 @@
 `Blueprint ID:` `customer_lifecycle_email_auto`
 `Category:` `Business`
 
-Use this blueprint to plan, generate, check, send, and track lifecycle emails so customer outreach stays timely, governed, and tied to customer state.
+## One-line value proposition
 
-## What It Does
+Plan, generate, review, send, and monitor lifecycle email campaigns from one governed workflow.
 
-This folder is a self-contained MirrorNeuron blueprint. It defines the runtime
-manifest, default configuration, payload code, local documentation, and any
-fixtures needed to review or run the workflow from this checkout.
+## What it is
 
-## Quick Start
+This blueprint coordinates customer research, lifecycle copywriting, email design, deliverability checks, inbox monitoring, and campaign automation. The manifest uses the workflow-first blueprint contract with explicit input, output, runtime, and service registration metadata.
 
-Run from the catalog:
+## Who this is for
+
+It is for growth, lifecycle, and customer-success teams that need email outreach to react to customer state, campaign history, replies, and delivery constraints without turning every campaign into a one-off manual project.
+
+It is designed to replace a static dashboard plus manual copy workflow when the team needs coordinated action, not just reporting.
+
+## Why it matters
+
+Lifecycle outreach is most valuable when it arrives at the right moment with the right context. Static templates miss reply signals, segment changes, policy checks, and delivery feedback that should shape each message.
+
+A one-shot LLM prompt can draft a message, but it cannot reliably preserve state, run delivery checks, monitor replies, and leave behind auditable artifacts.
+
+## Why this runtime is useful here
+
+MirrorNeuron keeps each specialist worker isolated while sharing campaign context through the run store. That makes it easier to audit decisions, inspect generated artifacts, and keep human review and external delivery steps visible.
+
+## How it works
+
+The input adapter resolves mock, JSON, file, or environment-provided inputs. The workflow then fans out across research, writing, design, deliverability, control, automation, and inbox workers before writing `result.json` and `final_artifact.json` to the local run store.
+
+## Example scenario
+
+A lifecycle team wants to follow up with customers who showed interest in a product update. The blueprint reviews customer context, selects an appropriate campaign shape, drafts copy, checks the design and delivery plan, and records the final artifacts for review or delivery.
+
+## Inputs
+
+- Customer profile, segment, and activity history.
+- Campaign objective, product context, and policy constraints.
+- Optional reply context from AgentMail or another inbox source.
+- Local overrides in `config/overwrite.json` for testing or environment-specific behavior.
+
+## Outputs
+
+- Campaign plan and customer brief.
+- Draft subject, body, design metadata, and delivery recommendations.
+- Delivery or dry-run status.
+- Run artifacts under `~/.mn/runs/<run_id>/`, including `events.jsonl`, `result.json`, and `final_artifact.json`.
+
+## How to run
+
+From the catalog:
 
 ```bash
 mn run customer_lifecycle_email_auto
 ```
 
-Run directly from this folder:
+From this folder:
 
 ```bash
 mn run --folder .
@@ -31,41 +69,42 @@ Inspect recent run state:
 mn blueprint monitor --follow
 ```
 
-## Inputs And Configuration
+## How to customize it
 
-- `manifest.json`: graph shape, entrypoints, runtime metadata, runners, services, and environment access.
-- `config/default.json`: default launch configuration and mock/sample input settings.
-- `config/overwrite.json`: optional local overrides layered on defaults.
-- `payloads/`: worker scripts, policies, fixtures, prompts, and support files used by this blueprint.
+Adjust `config/default.json` for reusable defaults and `config/overwrite.json` for local-only overrides. Review the worker payloads under `payloads/` when changing campaign logic, template selection, delivery behavior, or inbox handling.
 
-## Outputs
+## What to look for in results
 
-Most runs write artifacts under `~/.mn/runs/<run_id>/`. Common files include
-`events.jsonl`, `result.json`, `final_artifact.json`, worker logs, and generated
-reports when the blueprint produces them.
+Check whether the selected campaign matches the customer state, whether the copy references the right context, whether the design template fits the campaign type, and whether delivery actions stayed in dry-run or live mode as intended.
 
-## Safety Checklist
+## Investor and evaluator narrative
 
-- Review `manifest.json` and `payloads/` before running with real data.
-- Check `pass_env`, provider credentials, Slack/email/web adapters, and any shell or OpenShell runners.
-- Start with mock, dry-run, or quick-test configuration before live external integrations.
-- Keep local customer overrides out of committed defaults.
+This blueprint demonstrates how MirrorNeuron can coordinate a business workflow with multiple specialized agents, explicit runtime artifacts, human-readable traceability, and production-shaped service registration.
+
+## Runtime features demonstrated
+
+- Workflow-first manifest contract.
+- Runtime worker bindings with HostLocal executor metadata.
+- Local run-store artifacts for inspection and monitoring.
+- Shared skill packaging across executor payloads.
+- Optional external email, inbox, LLM, and Slack-adjacent configuration.
+
+## Test coverage
+
+The local tests cover shared skill imports, campaign template selection, reply-followup behavior, runtime input parsing, Slack channel defaults, and manifest runtime metadata. The catalog-level tests validate the blueprint manifest, documentation, bundle generation, and shared standard checks.
+
+## Limitations
+
+Live delivery and inbox behavior depend on local credentials and service availability. Start with mock or dry-run inputs before connecting customer data or external email providers.
+
+## Next steps
+
+Connect production-safe customer data sources, tune campaign policies for your organization, and add approval rules for any campaign type that should require a human decision before delivery.
 
 ## Local Documentation
 
 - [SPEC](SPEC.md)
 - [TERM](TERM.md)
 - [License](LICENSE.md)
-
 - [Manifest](manifest.json)
 - [Default config](config/default.json)
-
-## Validation
-
-Run repository-level tests from `mn-blueprints` after changing catalog metadata,
-manifest structure, payload behavior, or shared fixtures:
-
-```bash
-cd ..
-python3 -m pytest -q
-```

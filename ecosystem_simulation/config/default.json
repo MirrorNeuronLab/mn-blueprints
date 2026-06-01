@@ -415,99 +415,99 @@
     },
     {
       "config_path": "ecosystem.total_animals",
-      "manifest_path": "nodes.world.config.total_animals"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.total_animals"
     },
     {
       "config_path": "ecosystem.region_count",
-      "manifest_path": "nodes.world.config.region_count"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.region_count"
     },
     {
       "config_path": "ecosystem.duration_seconds",
-      "manifest_path": "nodes.world.config.duration_seconds"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.duration_seconds"
     },
     {
       "config_path": "ecosystem.tick_seconds",
-      "manifest_path": "nodes.world.config.tick_seconds"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.tick_seconds"
     },
     {
       "config_path": "ecosystem.max_food",
-      "manifest_path": "nodes.world.config.max_food"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.max_food"
     },
     {
       "config_path": "ecosystem.food_regen_per_tick",
-      "manifest_path": "nodes.world.config.food_regen_per_tick"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.food_regen_per_tick"
     },
     {
       "config_path": "ecosystem.max_region_population",
-      "manifest_path": "nodes.world.config.max_region_population"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.max_region_population"
     },
     {
       "config_path": "ecosystem.migration_rate",
-      "manifest_path": "nodes.world.config.migration_rate"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.migration_rate"
     },
     {
       "config_path": "ecosystem.mutation_rate",
-      "manifest_path": "nodes.world.config.mutation_rate"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.mutation_rate"
     },
     {
       "config_path": "ecosystem.tick_delay_ms",
-      "manifest_path": "nodes.world.config.tick_delay_ms"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.tick_delay_ms"
     },
     {
       "config_path": "ecosystem.seed",
-      "manifest_path": "nodes.world.config.seed"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.seed"
     },
     {
       "config_path": "ecosystem.local_top_k",
-      "manifest_path": "nodes.world.config.local_top_k"
+      "manifest_path": "runtime.bindings.run_workflow.workers.world.with.local_top_k"
     },
     {
       "config_path": "ecosystem.total_animals",
-      "manifest_path": "nodes.region_*.config.total_animals"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.total_animals"
     },
     {
       "config_path": "ecosystem.region_count",
-      "manifest_path": "nodes.region_*.config.region_count"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.region_count"
     },
     {
       "config_path": "ecosystem.duration_seconds",
-      "manifest_path": "nodes.region_*.config.duration_seconds"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.duration_seconds"
     },
     {
       "config_path": "ecosystem.tick_seconds",
-      "manifest_path": "nodes.region_*.config.tick_seconds"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.tick_seconds"
     },
     {
       "config_path": "ecosystem.max_food",
-      "manifest_path": "nodes.region_*.config.max_food"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.max_food"
     },
     {
       "config_path": "ecosystem.food_regen_per_tick",
-      "manifest_path": "nodes.region_*.config.food_regen_per_tick"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.food_regen_per_tick"
     },
     {
       "config_path": "ecosystem.max_region_population",
-      "manifest_path": "nodes.region_*.config.max_region_population"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.max_region_population"
     },
     {
       "config_path": "ecosystem.migration_rate",
-      "manifest_path": "nodes.region_*.config.migration_rate"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.migration_rate"
     },
     {
       "config_path": "ecosystem.mutation_rate",
-      "manifest_path": "nodes.region_*.config.mutation_rate"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.mutation_rate"
     },
     {
       "config_path": "ecosystem.tick_delay_ms",
-      "manifest_path": "nodes.region_*.config.tick_delay_ms"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.tick_delay_ms"
     },
     {
       "config_path": "ecosystem.seed",
-      "manifest_path": "nodes.region_*.config.seed"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.seed"
     },
     {
       "config_path": "ecosystem.local_top_k",
-      "manifest_path": "nodes.region_*.config.local_top_k"
+      "manifest_path": "runtime.bindings.run_workflow.workers.region_*.with.local_top_k"
     }
   ],
   "metadata": {

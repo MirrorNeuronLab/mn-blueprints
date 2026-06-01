@@ -367,11 +367,11 @@
   "manifest_config_bindings": [
     {
       "config_path": "benchmark.max_attempts",
-      "manifest_path": "nodes.prime_worker_*.config.max_attempts"
+      "manifest_path": "runtime.bindings.run_workflow.workers.prime_worker_*.with.max_attempts"
     },
     {
       "config_path": "benchmark.retry_backoff_ms",
-      "manifest_path": "nodes.prime_worker_*.config.retry_backoff_ms"
+      "manifest_path": "runtime.bindings.run_workflow.workers.prime_worker_*.with.retry_backoff_ms"
     }
   ],
   "metadata": {

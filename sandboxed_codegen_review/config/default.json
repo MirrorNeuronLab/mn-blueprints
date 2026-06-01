@@ -384,43 +384,43 @@
     },
     {
       "config_path": "llm.model",
-      "manifest_path": "nodes.*.config.environment.LITELLM_MODEL",
+      "manifest_path": "runtime.bindings.run_workflow.workers.*.with.environment.LITELLM_MODEL",
       "stringify": true
     },
     {
       "config_path": "llm.model",
-      "manifest_path": "nodes.*.config.environment.MN_LLM_MODEL",
+      "manifest_path": "runtime.bindings.run_workflow.workers.*.with.environment.MN_LLM_MODEL",
       "stringify": true
     },
     {
       "config_path": "llm.api_base",
-      "manifest_path": "nodes.*.config.environment.LITELLM_API_BASE",
+      "manifest_path": "runtime.bindings.run_workflow.workers.*.with.environment.LITELLM_API_BASE",
       "stringify": true
     },
     {
       "config_path": "llm.api_base",
-      "manifest_path": "nodes.*.config.environment.MN_LLM_API_BASE",
+      "manifest_path": "runtime.bindings.run_workflow.workers.*.with.environment.MN_LLM_API_BASE",
       "stringify": true
     },
     {
       "allow_null": true,
       "config_path": "llm.api_key",
-      "manifest_path": "nodes.*.config.environment.LITELLM_API_KEY",
+      "manifest_path": "runtime.bindings.run_workflow.workers.*.with.environment.LITELLM_API_KEY",
       "stringify": true
     },
     {
       "allow_null": true,
       "config_path": "llm.api_key",
-      "manifest_path": "nodes.*.config.environment.MN_LLM_API_KEY",
+      "manifest_path": "runtime.bindings.run_workflow.workers.*.with.environment.MN_LLM_API_KEY",
       "stringify": true
     },
     {
       "config_path": "sandbox.max_attempts",
-      "manifest_path": "nodes.*.config.max_attempts"
+      "manifest_path": "runtime.bindings.run_workflow.workers.*.with.max_attempts"
     },
     {
       "config_path": "sandbox.retry_backoff_ms",
-      "manifest_path": "nodes.*.config.retry_backoff_ms"
+      "manifest_path": "runtime.bindings.run_workflow.workers.*.with.retry_backoff_ms"
     }
   ],
   "metadata": {

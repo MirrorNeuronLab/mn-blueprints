@@ -238,7 +238,7 @@
         "inputs_loaded",
         "workflow_graph_compiled",
         "workflow_step_started",
-        "workflow_worker_completed",
+        "workflow_step_attempt_completed",
         "workflow_step_completed",
         "workflow_result_ready",
         "final_artifact_written",

@@ -12,7 +12,7 @@ defmodule MirrorNeuron.Examples.EcosystemSimulation.LeaderboardAgent do
     region_messages = Map.get(payload, "messages", []) |> Enum.map(&atomize/1)
     summary = Core.summarize_regions(region_messages)
 
-    {:ok, %{state | last_summary: summary}, [{:complete_job, stringify(summary)}]}
+    {:ok, %{state | last_summary: summary}, [{:complete_run, stringify(summary)}]}
   end
 
   @impl true

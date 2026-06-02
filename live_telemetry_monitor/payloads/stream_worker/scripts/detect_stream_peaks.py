@@ -115,7 +115,7 @@ def main() -> None:
     result = {"next_state": state, "events": events}
     stream = message.get("stream") or {}
     if stream.get("close") or stream.get("eof"):
-        result["complete_job"] = summarize(state)
+        result["complete_run"] = summarize(state)
 
     print(json.dumps(result))
 

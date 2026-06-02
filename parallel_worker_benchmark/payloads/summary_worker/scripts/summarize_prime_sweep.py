@@ -54,7 +54,7 @@ def main() -> None:
     incoming = load_input()
     messages = incoming.get("messages", [])
 
-    print(json.dumps({"complete_job": summarize(messages)}))
+    print(json.dumps({"complete_run": summarize(messages)}))
 
 
 if __name__ == "__main__":

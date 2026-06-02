@@ -27,7 +27,7 @@ defmodule MirrorNeuron.Examples.FinancialMarket.SummarizerAgent do
 
         {:ok, state,
          [
-           {:complete_job, %{"market_summary" => final_summary}}
+           {:complete_run, %{"market_summary" => final_summary}}
          ]}
 
       _ ->

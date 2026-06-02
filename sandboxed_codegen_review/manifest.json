@@ -165,7 +165,7 @@
         "inputs_loaded",
         "workflow_graph_compiled",
         "workflow_step_started",
-        "workflow_worker_completed",
+        "workflow_step_attempt_completed",
         "workflow_step_completed",
         "workflow_result_ready",
         "final_artifact_written",
@@ -487,7 +487,6 @@
                 "python3",
                 "scripts/validate_candidate.py"
               ],
-              "complete_job": true,
               "environment": {
                 "LITELLM_API_BASE": "http://192.168.4.173:11434",
                 "LITELLM_API_KEY": "",

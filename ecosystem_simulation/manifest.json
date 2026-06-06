@@ -1280,7 +1280,12 @@
         "ui.json",
         "web/index.html",
         "logs.jsonl",
+        "events.log",
+        "errors.log",
+        "events.index.json",
         "logs.index.json",
+        "errors.index.json",
+        "timeline.json",
         "human.jsonl",
         "resources.jsonl"
       ],

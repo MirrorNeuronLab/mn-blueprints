@@ -1,0 +1,1616 @@
+{
+  "agent_handoffs": {},
+  "backpressure": {
+    "drop_policy": "skip_with_error",
+    "llm": {
+      "max_calls_per_minute": 30,
+      "max_concurrent_calls": 2
+    },
+    "max_concurrency": 4,
+    "max_events_per_second": 10,
+    "queue_size": 1000
+  },
+  "benchmark": {
+    "max_attempts": 4,
+    "retry_backoff_ms": 500
+  },
+  "budgets": {
+    "max_connector_reads": 500,
+    "max_connector_writes": 20,
+    "max_disk_mb": 250,
+    "max_llm_calls": 20,
+    "max_llm_tokens": 20000,
+    "max_runtime_seconds": 600,
+    "max_stream_duration_seconds": 3600
+  },
+  "capabilities": {
+    "optional": [
+      "llm.call",
+      "network.egress",
+      "stream.subscribe"
+    ],
+    "required": [
+      "filesystem.write"
+    ]
+  },
+  "determinism": {
+    "enabled": true,
+    "frozen_clock": null,
+    "replay": {
+      "from_events": "events.jsonl",
+      "from_inputs": "inputs.json",
+      "llm_mode": "mock"
+    },
+    "seed_field": "seed"
+  },
+  "error_handling": {
+    "default_mode": "stop",
+    "policies": {
+      "llm_call": {
+        "backoff_seconds": 2,
+        "max_attempts": 3,
+        "mode": "retry"
+      },
+      "optional_output": {
+        "mode": "skip"
+      },
+      "required_output": {
+        "mode": "stop"
+      }
+    }
+  },
+  "execution_model": [
+    "load_metadata",
+    "resolve_config",
+    "load_inputs",
+    "start_run_store",
+    "observe_simulation_state",
+    "call_llm_agent",
+    "evaluate_workflow_state",
+    "route_by_context",
+    "request_human_input",
+    "apply_decision_to_simulation",
+    "emit_events",
+    "write_final_artifact",
+    "fan_out_output_skills"
+  ],
+  "human_control": {
+    "enabled": false,
+    "events": [
+      "human_notice",
+      "human_input_requested",
+      "human_input_received",
+      "human_input_timeout",
+      "human_decision_applied"
+    ],
+    "mode": "disabled",
+    "reason": "This blueprint is a low-risk runtime or simulation pattern that only writes local decision-support artifacts."
+  },
+  "identity": {
+    "blueprint_id": "demo_parallel_worker_benchmark",
+    "name": "Demo: Parallel Worker Benchmark"
+  },
+  "input_skills": {},
+  "inputs": {
+    "adapter": "mock",
+    "description": "Default synthetic inputs bundled with the blueprint.",
+    "payload": {}
+  },
+  "interfaces": {
+    "channels": {
+      "artifacts": {
+        "artifacts": [
+          "run.json",
+          "config.json",
+          "inputs.json",
+          "events.jsonl",
+          "result.json",
+          "final_artifact.json"
+        ],
+        "description": "Stable run-store files and domain-specific outputs.",
+        "optional_artifacts": [
+          "job.json",
+          "web_ui.json",
+          "ui.json",
+          "web/index.html",
+          "logs.jsonl",
+          "logs.index.json",
+          "human.jsonl",
+          "resources.jsonl"
+        ]
+      },
+      "events": {
+        "artifact": "events.jsonl",
+        "description": "Append-only workflow events."
+      },
+      "human": {
+        "artifact": "human.jsonl",
+        "description": "Sparse human collaboration notices, input requests, and responses.",
+        "mirrored_to": "events.jsonl"
+      },
+      "input_skills": {
+        "description": "Connector-backed or reusable skill-backed input sources."
+      },
+      "inputs": {
+        "artifact": "inputs.json",
+        "description": "Resolved runtime inputs and adapter provenance."
+      },
+      "logs": {
+        "artifact": "logs.jsonl",
+        "description": "Runtime stdout/stderr and explicit log artifacts.",
+        "index": "logs.index.json",
+        "stream": "stdout/stderr"
+      },
+      "output_skills": {
+        "description": "Optional fan-out destinations after local run-store writes."
+      },
+      "outputs": {
+        "artifacts": [
+          "result.json",
+          "final_artifact.json"
+        ],
+        "description": "Primary result and final user-facing artifact."
+      },
+      "resources": {
+        "artifact": "resources.jsonl",
+        "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
+      },
+      "streams": {
+        "default": [
+          "events"
+        ],
+        "description": "Named data or event streams exposed by the blueprint.",
+        "kinds": [
+          "audio",
+          "video",
+          "data",
+          "multimodal"
+        ],
+        "transports": [
+          "file",
+          "http",
+          "https",
+          "rtsp",
+          "rtmp",
+          "webrtc",
+          "websocket",
+          "socketio",
+          "tcp",
+          "udp",
+          "sse",
+          "kafka",
+          "mqtt",
+          "custom"
+        ]
+      },
+      "web_ui": {
+        "artifacts": [
+          "web_ui.json",
+          "ui.json",
+          "web/index.html"
+        ],
+        "description": "Optional web input/output handles."
+      }
+    },
+    "config_sections": [
+      "standard_version",
+      "identity",
+      "mode",
+      "metadata",
+      "inputs",
+      "simulation",
+      "llm",
+      "outputs",
+      "logging",
+      "resources",
+      "human_control",
+      "real_adapters",
+      "streams",
+      "input_skills",
+      "output_skills",
+      "error_handling",
+      "state",
+      "capabilities",
+      "privacy",
+      "triggers",
+      "backpressure",
+      "determinism",
+      "schemas",
+      "budgets",
+      "agent_handoffs",
+      "web_ui",
+      "interfaces",
+      "execution_model"
+    ],
+    "identity_fields": [
+      "blueprint_id",
+      "name",
+      "run_id"
+    ],
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "optional_run_artifacts": [
+      "job.json",
+      "web_ui.json",
+      "ui.json",
+      "web/index.html",
+      "logs.jsonl",
+      "events.log",
+      "errors.log",
+      "events.index.json",
+      "logs.index.json",
+      "errors.index.json",
+      "timeline.json",
+      "human.jsonl",
+      "resources.jsonl"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ],
+    "response_schema": "mn.blueprint.response.v1",
+    "run_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "result.json",
+      "final_artifact.json"
+    ],
+    "stream_kinds": [
+      "audio",
+      "video",
+      "data",
+      "multimodal"
+    ],
+    "stream_transports": [
+      "file",
+      "http",
+      "https",
+      "rtsp",
+      "rtmp",
+      "webrtc",
+      "websocket",
+      "socketio",
+      "tcp",
+      "udp",
+      "sse",
+      "kafka",
+      "mqtt",
+      "custom"
+    ],
+    "web_ui_adapters": [
+      "none",
+      "static_html",
+      "gradio",
+      "custom"
+    ]
+  },
+  "llm": {
+    "agent_role": "Parallel executor workers plus reducer.",
+    "agents": {
+      "artifact_writer": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the artifact writer for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Artifact Writer"
+      },
+      "input_adapter": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the input adapter for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Input Adapter"
+      },
+      "parallel_benchmark_reporter": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel benchmark reporter for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Benchmark Reporter"
+      },
+      "parallel_dispatch_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel dispatch actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Dispatch Actor"
+      },
+      "parallel_prime_worker_0001_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0001 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0001 Actor"
+      },
+      "parallel_prime_worker_0002_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0002 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0002 Actor"
+      },
+      "parallel_prime_worker_0003_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0003 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0003 Actor"
+      },
+      "parallel_prime_worker_0004_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0004 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0004 Actor"
+      },
+      "parallel_prime_worker_0005_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0005 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0005 Actor"
+      },
+      "parallel_prime_worker_0006_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0006 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0006 Actor"
+      },
+      "parallel_prime_worker_0007_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0007 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0007 Actor"
+      },
+      "parallel_prime_worker_0008_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0008 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0008 Actor"
+      },
+      "parallel_prime_worker_0009_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0009 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0009 Actor"
+      },
+      "parallel_prime_worker_0010_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0010 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0010 Actor"
+      },
+      "parallel_prime_worker_0011_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0011 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0011 Actor"
+      },
+      "parallel_prime_worker_0012_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0012 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0012 Actor"
+      },
+      "parallel_prime_worker_0013_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0013 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0013 Actor"
+      },
+      "parallel_prime_worker_0014_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0014 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0014 Actor"
+      },
+      "parallel_prime_worker_0015_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0015 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0015 Actor"
+      },
+      "parallel_prime_worker_0016_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0016 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0016 Actor"
+      },
+      "parallel_prime_worker_0017_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0017 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0017 Actor"
+      },
+      "parallel_prime_worker_0018_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0018 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0018 Actor"
+      },
+      "parallel_prime_worker_0019_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0019 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0019 Actor"
+      },
+      "parallel_prime_worker_0020_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0020 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0020 Actor"
+      },
+      "parallel_prime_worker_0021_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0021 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0021 Actor"
+      },
+      "parallel_prime_worker_0022_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0022 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0022 Actor"
+      },
+      "parallel_prime_worker_0023_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0023 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0023 Actor"
+      },
+      "parallel_prime_worker_0024_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0024 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0024 Actor"
+      },
+      "parallel_prime_worker_0025_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0025 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0025 Actor"
+      },
+      "parallel_prime_worker_0026_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0026 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0026 Actor"
+      },
+      "parallel_prime_worker_0027_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0027 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0027 Actor"
+      },
+      "parallel_prime_worker_0028_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0028 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0028 Actor"
+      },
+      "parallel_prime_worker_0029_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0029 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0029 Actor"
+      },
+      "parallel_prime_worker_0030_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0030 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0030 Actor"
+      },
+      "parallel_prime_worker_0031_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0031 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0031 Actor"
+      },
+      "parallel_prime_worker_0032_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0032 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0032 Actor"
+      },
+      "parallel_prime_worker_0033_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0033 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0033 Actor"
+      },
+      "parallel_prime_worker_0034_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0034 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0034 Actor"
+      },
+      "parallel_prime_worker_0035_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0035 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0035 Actor"
+      },
+      "parallel_prime_worker_0036_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0036 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0036 Actor"
+      },
+      "parallel_prime_worker_0037_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0037 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0037 Actor"
+      },
+      "parallel_prime_worker_0038_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0038 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0038 Actor"
+      },
+      "parallel_prime_worker_0039_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0039 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0039 Actor"
+      },
+      "parallel_prime_worker_0040_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0040 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0040 Actor"
+      },
+      "parallel_prime_worker_0041_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0041 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0041 Actor"
+      },
+      "parallel_prime_worker_0042_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0042 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0042 Actor"
+      },
+      "parallel_prime_worker_0043_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0043 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0043 Actor"
+      },
+      "parallel_prime_worker_0044_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0044 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0044 Actor"
+      },
+      "parallel_prime_worker_0045_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0045 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0045 Actor"
+      },
+      "parallel_prime_worker_0046_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0046 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0046 Actor"
+      },
+      "parallel_prime_worker_0047_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0047 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0047 Actor"
+      },
+      "parallel_prime_worker_0048_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0048 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0048 Actor"
+      },
+      "parallel_prime_worker_0049_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0049 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0049 Actor"
+      },
+      "parallel_prime_worker_0050_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0050 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0050 Actor"
+      },
+      "parallel_prime_worker_0051_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0051 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0051 Actor"
+      },
+      "parallel_prime_worker_0052_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0052 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0052 Actor"
+      },
+      "parallel_prime_worker_0053_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0053 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0053 Actor"
+      },
+      "parallel_prime_worker_0054_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0054 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0054 Actor"
+      },
+      "parallel_prime_worker_0055_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0055 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0055 Actor"
+      },
+      "parallel_prime_worker_0056_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0056 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0056 Actor"
+      },
+      "parallel_prime_worker_0057_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0057 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0057 Actor"
+      },
+      "parallel_prime_worker_0058_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0058 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0058 Actor"
+      },
+      "parallel_prime_worker_0059_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0059 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0059 Actor"
+      },
+      "parallel_prime_worker_0060_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0060 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0060 Actor"
+      },
+      "parallel_prime_worker_0061_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0061 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0061 Actor"
+      },
+      "parallel_prime_worker_0062_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0062 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0062 Actor"
+      },
+      "parallel_prime_worker_0063_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0063 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0063 Actor"
+      },
+      "parallel_prime_worker_0064_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0064 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0064 Actor"
+      },
+      "parallel_prime_worker_0065_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0065 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0065 Actor"
+      },
+      "parallel_prime_worker_0066_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0066 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0066 Actor"
+      },
+      "parallel_prime_worker_0067_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0067 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0067 Actor"
+      },
+      "parallel_prime_worker_0068_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0068 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0068 Actor"
+      },
+      "parallel_prime_worker_0069_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0069 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0069 Actor"
+      },
+      "parallel_prime_worker_0070_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0070 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0070 Actor"
+      },
+      "parallel_prime_worker_0071_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0071 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0071 Actor"
+      },
+      "parallel_prime_worker_0072_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0072 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0072 Actor"
+      },
+      "parallel_prime_worker_0073_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0073 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0073 Actor"
+      },
+      "parallel_prime_worker_0074_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0074 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0074 Actor"
+      },
+      "parallel_prime_worker_0075_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0075 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0075 Actor"
+      },
+      "parallel_prime_worker_0076_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0076 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0076 Actor"
+      },
+      "parallel_prime_worker_0077_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0077 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0077 Actor"
+      },
+      "parallel_prime_worker_0078_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0078 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0078 Actor"
+      },
+      "parallel_prime_worker_0079_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0079 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0079 Actor"
+      },
+      "parallel_prime_worker_0080_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0080 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0080 Actor"
+      },
+      "parallel_prime_worker_0081_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0081 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0081 Actor"
+      },
+      "parallel_prime_worker_0082_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0082 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0082 Actor"
+      },
+      "parallel_prime_worker_0083_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0083 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0083 Actor"
+      },
+      "parallel_prime_worker_0084_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0084 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0084 Actor"
+      },
+      "parallel_prime_worker_0085_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0085 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0085 Actor"
+      },
+      "parallel_prime_worker_0086_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0086 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0086 Actor"
+      },
+      "parallel_prime_worker_0087_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0087 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0087 Actor"
+      },
+      "parallel_prime_worker_0088_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0088 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0088 Actor"
+      },
+      "parallel_prime_worker_0089_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0089 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0089 Actor"
+      },
+      "parallel_prime_worker_0090_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0090 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0090 Actor"
+      },
+      "parallel_prime_worker_0091_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0091 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0091 Actor"
+      },
+      "parallel_prime_worker_0092_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0092 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0092 Actor"
+      },
+      "parallel_prime_worker_0093_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0093 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0093 Actor"
+      },
+      "parallel_prime_worker_0094_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0094 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0094 Actor"
+      },
+      "parallel_prime_worker_0095_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0095 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0095 Actor"
+      },
+      "parallel_prime_worker_0096_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0096 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0096 Actor"
+      },
+      "parallel_prime_worker_0097_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0097 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0097 Actor"
+      },
+      "parallel_prime_worker_0098_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0098 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0098 Actor"
+      },
+      "parallel_prime_worker_0099_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0099 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0099 Actor"
+      },
+      "parallel_prime_worker_0100_actor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel prime worker 0100 actor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Prime Worker 0100 Actor"
+      },
+      "parallel_result_collector": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the parallel result collector for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Parallel Result Collector"
+      }
+    },
+    "api_base": "http://192.168.4.173:11434",
+    "configs": {
+      "primary": {
+        "api_base": "http://192.168.4.173:11434",
+        "max_tokens": 700,
+        "mock_mode": "fake",
+        "mode": "ollama",
+        "model": "ollama/nemotron3:33b",
+        "num_retries": 1,
+        "provider": "ollama",
+        "timeout_seconds": 60
+      }
+    },
+    "default_config": "primary",
+    "enabled": true,
+    "mock_mode": "fake",
+    "mode": "ollama",
+    "model": "ollama/nemotron3:33b",
+    "responsibilities": [
+      "Interpret runtime state as a role-based actor, not as a stateless function.",
+      "Preserve source evidence, run-store events, and human-control boundaries.",
+      "Prepare reviewable findings without taking irreversible actions."
+    ]
+  },
+  "logging": {
+    "events": [
+      "run_started",
+      "inputs_loaded",
+      "simulation_step_started",
+      "llm_decision",
+      "simulation_state_updated",
+      "run_completed",
+      "blueprint_status",
+      "blueprint_phase_started",
+      "blueprint_phase_completed",
+      "blueprint_phase_failed",
+      "artifact_written",
+      "human_notice",
+      "human_input_requested",
+      "human_input_received",
+      "human_input_timeout",
+      "human_decision_applied",
+      "output_skill_started",
+      "output_skill_completed",
+      "output_skill_failed",
+      "agent_beacon",
+      "actor_activity",
+      "workflow_graph_compiled",
+      "workflow_finished"
+    ],
+    "events_jsonl": true,
+    "level": "INFO",
+    "logs_jsonl": true,
+    "redact_env_secrets": true,
+    "redact_fields": [
+      "api_key",
+      "token",
+      "authorization",
+      "cookie",
+      "password",
+      "private_key"
+    ],
+    "rotation": {
+      "check_interval_records": 100,
+      "compress": "background",
+      "enabled": true,
+      "max_bytes_mb": 100,
+      "max_segments": 7,
+      "span_seconds": 86400
+    },
+    "stderr_jsonl": true,
+    "writer": {
+      "batch_size": 100,
+      "flush_interval_seconds": 0.5,
+      "mode": "async",
+      "overflow_policy": "drop_low_priority",
+      "queue_size": 10000,
+      "shutdown_flush_timeout_seconds": 2
+    }
+  },
+  "manifest_config_bindings": [
+    {
+      "config_path": "benchmark.max_attempts",
+      "manifest_path": "runtime.bindings.run_workflow.workers.prime_worker_*.with.max_attempts"
+    },
+    {
+      "config_path": "benchmark.retry_backoff_ms",
+      "manifest_path": "runtime.bindings.run_workflow.workers.prime_worker_*.with.retry_backoff_ms"
+    }
+  ],
+  "memory_layer": {
+    "collection": "mn_memory",
+    "containers": "optional_sidecar",
+    "context_addr_env": "MN_CONTEXT_ADDR",
+    "conversation": {
+      "agent_role": "otterdesk_chat",
+      "include_human_events": true,
+      "include_runtime_events": true,
+      "include_runtime_logs": true,
+      "target_tokens": 2400,
+      "token_budget": 6000,
+      "use_model_compression": false
+    },
+    "conversation_enabled": true,
+    "conversation_enabled_env": "OTTERDESK_CONTEXT_MEMORY_ENABLED",
+    "default_context_addr": "localhost:50052",
+    "enabled": true,
+    "enabled_env": "MN_CONTEXT_MEMORY_ENABLED",
+    "namespace": "demo_parallel_worker_benchmark_context",
+    "project_path": "${MN_MEMBRANE_PROJECT_PATH}",
+    "python_sdk_path": "${MN_MEMBRANE_SDK_PATH}",
+    "sdk_distribution": "mirrorneuron-membrane-python-sdk",
+    "sdk_import_package": "mn_context_engine_sdk"
+  },
+  "metadata": {
+    "blueprint_id": "demo_parallel_worker_benchmark",
+    "blueprint_revision": "v1",
+    "category": "general",
+    "customizable_for": "Batch analytics, Monte Carlo jobs, large enrichment queues.",
+    "name": "Demo: Parallel Worker Benchmark",
+    "problem_solved": "Agent systems need to prove they can dispatch many bounded tasks and collect results reliably before being trusted with larger workloads.",
+    "standard_version": "1.0",
+    "target_users": "Platform teams testing scheduler throughput, worker pools, and aggregation behavior."
+  },
+  "mode": "mock",
+  "output_skills": {},
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifact_contract": "Scale summary and worker completion metrics.",
+    "run_root": "~/.mn/runs",
+    "skills": {},
+    "tcp": {
+      "enabled": false,
+      "ports": []
+    },
+    "write_run_store": true
+  },
+  "privacy": {
+    "default_classification": "internal",
+    "rules": {
+      "confidential": {
+        "log": "redacted",
+        "send_to_llm": "allowed_configs_only",
+        "send_to_output_skills": "approved_destinations_only"
+      },
+      "internal": {
+        "log": "metadata_only",
+        "send_to_llm": true,
+        "send_to_output_skills": true
+      },
+      "public": {
+        "log": true,
+        "send_to_llm": true,
+        "send_to_output_skills": true
+      },
+      "regulated": {
+        "log": "redacted",
+        "send_to_llm": false,
+        "send_to_output_skills": "approved_destinations_only"
+      }
+    }
+  },
+  "real_adapters": {
+    "inline_json": {
+      "adapter": "json",
+      "description": "Load overrides from an inline JSON object.",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "description": "Load JSON overrides from a local file path.",
+      "path": null
+    }
+  },
+  "resources": {
+    "enabled": true,
+    "gpu_enabled": "auto",
+    "gpu_sample_interval_seconds": 60,
+    "history_window_hours": 24,
+    "raw_retention_hours": 48,
+    "rollup_bucket_seconds": 3600,
+    "sample_interval_seconds": 10
+  },
+  "schemas": {
+    "artifact_record": "mn.artifact.record.v1",
+    "config": "mn.blueprint.config.v1",
+    "events": "mn.blueprint.events.v1",
+    "final_artifact": "mn.blueprint.final_artifact.v1",
+    "human_control": "mn.blueprint.human_control.v1",
+    "input_skills": "mn.blueprint.input_skills.v1",
+    "inputs": "mn.blueprint.inputs.v1",
+    "logs": "mn.blueprint.logs.v1",
+    "output_skills": "mn.blueprint.output_skills.v1",
+    "resources": "mn.blueprint.resources.v1",
+    "status_contract": "mn.blueprint.status_contract.v1",
+    "web_ui": "mn.blueprint.web_ui.v1"
+  },
+  "simulation": {
+    "deterministic": true,
+    "enabled": true,
+    "seed_field": "seed",
+    "type": "Parallel synthetic workload sweep."
+  },
+  "standard_version": "1.0",
+  "state": {
+    "checkpoint_interval": {
+      "events": 100,
+      "seconds": 60
+    },
+    "enabled": false,
+    "idempotency_key_fields": [
+      "source_ref",
+      "event_id"
+    ],
+    "resume_mode": "none"
+  },
+  "streams": {},
+  "triggers": {
+    "schedule": null,
+    "sources": [],
+    "type": "manual"
+  },
+  "web_ui": {
+    "artifacts": [
+      "web_ui.json",
+      "ui.json",
+      "web/index.html"
+    ],
+    "dashboard": {
+      "data_source": "local_run_store",
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ]
+    },
+    "enabled": true,
+    "input": {
+      "adapter": "none",
+      "custom_url": null,
+      "fields": [],
+      "host": "127.0.0.1",
+      "instructions": null,
+      "port": null,
+      "share": false,
+      "title": null
+    },
+    "output": {
+      "adapter": "gradio",
+      "auto_generate": true,
+      "custom_url": null,
+      "refresh_seconds": 2.0,
+      "title": null
+    },
+    "reads_from": "local_run_store"
+  }
+}

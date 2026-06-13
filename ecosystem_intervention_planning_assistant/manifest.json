@@ -1,0 +1,2250 @@
+{
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "world_to_region_00",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_00_actor"
+      },
+      {
+        "edge_id": "region_00_to_collector",
+        "from_node": "ecosystem_region_00_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_01",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_01_actor"
+      },
+      {
+        "edge_id": "region_01_to_collector",
+        "from_node": "ecosystem_region_01_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_02",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_02_actor"
+      },
+      {
+        "edge_id": "region_02_to_collector",
+        "from_node": "ecosystem_region_02_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_03",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_03_actor"
+      },
+      {
+        "edge_id": "region_03_to_collector",
+        "from_node": "ecosystem_region_03_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_04",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_04_actor"
+      },
+      {
+        "edge_id": "region_04_to_collector",
+        "from_node": "ecosystem_region_04_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_05",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_05_actor"
+      },
+      {
+        "edge_id": "region_05_to_collector",
+        "from_node": "ecosystem_region_05_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_06",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_06_actor"
+      },
+      {
+        "edge_id": "region_06_to_collector",
+        "from_node": "ecosystem_region_06_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_07",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_07_actor"
+      },
+      {
+        "edge_id": "region_07_to_collector",
+        "from_node": "ecosystem_region_07_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_08",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_08_actor"
+      },
+      {
+        "edge_id": "region_08_to_collector",
+        "from_node": "ecosystem_region_08_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_09",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_09_actor"
+      },
+      {
+        "edge_id": "region_09_to_collector",
+        "from_node": "ecosystem_region_09_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_10",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_10_actor"
+      },
+      {
+        "edge_id": "region_10_to_collector",
+        "from_node": "ecosystem_region_10_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_11",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_11_actor"
+      },
+      {
+        "edge_id": "region_11_to_collector",
+        "from_node": "ecosystem_region_11_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_12",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_12_actor"
+      },
+      {
+        "edge_id": "region_12_to_collector",
+        "from_node": "ecosystem_region_12_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_13",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_13_actor"
+      },
+      {
+        "edge_id": "region_13_to_collector",
+        "from_node": "ecosystem_region_13_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_14",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_14_actor"
+      },
+      {
+        "edge_id": "region_14_to_collector",
+        "from_node": "ecosystem_region_14_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "world_to_region_15",
+        "from_node": "ecosystem_world_actor",
+        "message_type": "region_bootstrap",
+        "to_node": "ecosystem_region_15_actor"
+      },
+      {
+        "edge_id": "region_15_to_collector",
+        "from_node": "ecosystem_region_15_actor",
+        "message_type": "region_summary",
+        "to_node": "ecosystem_signal_collector"
+      },
+      {
+        "edge_id": "ingress_to_world",
+        "from_node": "ingress",
+        "message_type": "simulation_start",
+        "to_node": "ecosystem_world_actor"
+      },
+      {
+        "edge_id": "collector_to_summarizer",
+        "from_node": "ecosystem_signal_collector",
+        "message_type": "region_collection",
+        "to_node": "ecosystem_report_writer"
+      }
+    ],
+    "entrypoints": [
+      "ingress"
+    ],
+    "nodes": [
+      {
+        "agent_type": "router",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ingress",
+        "node_id": "ingress",
+        "role": "Ingress",
+        "type": "map"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem World Actor",
+        "node_id": "ecosystem_world_actor",
+        "role": "World",
+        "type": "stream"
+      },
+      {
+        "agent_type": "executor",
+        "config": {
+          "agent_beacon_required": true,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Signal Collector",
+        "node_id": "ecosystem_signal_collector",
+        "role": "Collector",
+        "type": "generic"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Report Writer",
+        "node_id": "ecosystem_report_writer",
+        "role": "Summarizer",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 00 Actor",
+        "node_id": "ecosystem_region_00_actor",
+        "role": "Region 00",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 01 Actor",
+        "node_id": "ecosystem_region_01_actor",
+        "role": "Region 01",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 02 Actor",
+        "node_id": "ecosystem_region_02_actor",
+        "role": "Region 02",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 03 Actor",
+        "node_id": "ecosystem_region_03_actor",
+        "role": "Region 03",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 04 Actor",
+        "node_id": "ecosystem_region_04_actor",
+        "role": "Region 04",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 05 Actor",
+        "node_id": "ecosystem_region_05_actor",
+        "role": "Region 05",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 06 Actor",
+        "node_id": "ecosystem_region_06_actor",
+        "role": "Region 06",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 07 Actor",
+        "node_id": "ecosystem_region_07_actor",
+        "role": "Region 07",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 08 Actor",
+        "node_id": "ecosystem_region_08_actor",
+        "role": "Region 08",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 09 Actor",
+        "node_id": "ecosystem_region_09_actor",
+        "role": "Region 09",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 10 Actor",
+        "node_id": "ecosystem_region_10_actor",
+        "role": "Region 10",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 11 Actor",
+        "node_id": "ecosystem_region_11_actor",
+        "role": "Region 11",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 12 Actor",
+        "node_id": "ecosystem_region_12_actor",
+        "role": "Region 12",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 13 Actor",
+        "node_id": "ecosystem_region_13_actor",
+        "role": "Region 13",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 14 Actor",
+        "node_id": "ecosystem_region_14_actor",
+        "role": "Region 14",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ecosystem Region 15 Actor",
+        "node_id": "ecosystem_region_15_actor",
+        "role": "Region 15",
+        "type": "stream"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "apiVersion": "mn.workflow/v1",
+  "contract": {
+    "events": {
+      "human_stream": "human.jsonl",
+      "stream": "events.jsonl",
+      "types": [
+        "run_started",
+        "inputs_loaded",
+        "workflow_graph_compiled",
+        "workflow_step_started",
+        "workflow_step_attempt_completed",
+        "workflow_step_completed",
+        "workflow_result_ready",
+        "final_artifact_written",
+        "artifact_written",
+        "run_completed",
+        "run_failed",
+        "blueprint_status",
+        "blueprint_phase_started",
+        "blueprint_phase_completed",
+        "blueprint_phase_failed",
+        "output_skill_started",
+        "output_skill_completed",
+        "output_skill_failed",
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied",
+        "typed event objects with payload",
+        "region_bootstrap",
+        "region_summary",
+        "simulation_start",
+        "region_collection",
+        "workflow_finished",
+        "agent_beacon",
+        "actor_activity"
+      ]
+    },
+    "input_adapters": {
+      "default": "mock",
+      "resolved_artifact": "inputs.json",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ]
+    },
+    "inputs": {
+      "ecosystem": {
+        "description": "Domain input value for ecosystem.",
+        "example": {
+          "duration_seconds": 300,
+          "food_regen_per_tick": 72.0,
+          "local_top_k": 20,
+          "max_food": 420.0,
+          "max_region_population": 220,
+          "migration_rate": 0.035,
+          "mutation_rate": 0.05,
+          "region_count": 16,
+          "seed": 517498978,
+          "tick_delay_ms": 1000,
+          "tick_seconds": 5,
+          "total_animals": 2000
+        },
+        "privacy": "internal",
+        "required": true,
+        "type": "dict"
+      },
+      "scenario": {
+        "description": "Domain input value for scenario.",
+        "example": "ecosystem_competition",
+        "privacy": "internal",
+        "required": true,
+        "type": "str"
+      }
+    },
+    "outputs": {
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        }
+      ],
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ],
+        "schema_version": "mn.blueprint.final_artifact_contract.v1",
+        "type": "final_artifact"
+      },
+      "profile": "standard_run_store"
+    },
+    "privacy": {
+      "default_classification": "internal",
+      "rules": {
+        "confidential": {
+          "log": "redacted",
+          "send_to_llm": "allowed_configs_only",
+          "send_to_output_skills": "approved_destinations_only"
+        },
+        "internal": {
+          "log": "metadata_only",
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "public": {
+          "log": true,
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "regulated": {
+          "log": "redacted",
+          "send_to_llm": false,
+          "send_to_output_skills": "approved_destinations_only"
+        }
+      }
+    },
+    "status": {
+      "event": "blueprint_status",
+      "heartbeat": true,
+      "phases": [
+        "loading_inputs",
+        "running_worker",
+        "waiting_for_human",
+        "writing_artifacts",
+        "completed"
+      ]
+    },
+    "summary": "Use this blueprint to explore ecosystem interventions across regions and compare population effects before making policy or field decisions.",
+    "users": [
+      "Ecologists, conservation analysts, simulation researchers, and education teams."
+    ]
+  },
+  "description": "Use this blueprint to explore ecosystem interventions across regions and compare population effects before making policy or field decisions.",
+  "id": "ecosystem_intervention_planning_assistant",
+  "init_config_review": {
+    "fields": [
+      {
+        "default": 2000,
+        "description": "Starting population across the fixed region topology.",
+        "label": "Total animals",
+        "path": "ecosystem.total_animals"
+      },
+      {
+        "default": 300,
+        "description": "Simulation duration.",
+        "label": "Duration seconds",
+        "path": "ecosystem.duration_seconds"
+      },
+      {
+        "default": 517498978,
+        "description": "Deterministic seed for repeatable runs.",
+        "label": "Simulation seed",
+        "path": "ecosystem.seed"
+      },
+      {
+        "default": 0.035,
+        "description": "Per-tick migration pressure.",
+        "label": "Migration rate",
+        "path": "ecosystem.migration_rate"
+      },
+      {
+        "default": 0.05,
+        "description": "Trait mutation rate.",
+        "label": "Mutation rate",
+        "path": "ecosystem.mutation_rate"
+      }
+    ],
+    "instruction": "Review ecosystem simulation settings before launching the sandbox.",
+    "required": false
+  },
+  "input_validation": {
+    "rules": []
+  },
+  "job_name": "ecosystem-intervention-planning-assistant",
+  "kind": "Workflow",
+  "license": "LICENSE.md",
+  "manifest_version": "1.0",
+  "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "ingress",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_world_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_signal_collector",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_report_writer",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_00_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_01_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_02_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_03_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_04_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_05_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_06_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_07_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_08_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_09_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_10_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_11_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_12_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_13_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_14_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "ecosystem_region_15_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
+    "blueprint_id": "ecosystem_intervention_planning_assistant",
+    "category": "science",
+    "configuration_contract": {
+      "optional_files": [
+        "scenario.json",
+        "config/overwrite.json",
+        "knowledge/"
+      ],
+      "required_files": [
+        "manifest.json",
+        "README.md",
+        "SPEC.md",
+        "config/default.json",
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
+      ]
+    },
+    "customizable_for": "Conservation planning, invasive species modeling, education, agent-based simulation.",
+    "description": "Use this blueprint to explore ecosystem interventions across regions and compare population effects before making policy or field decisions.",
+    "documentation": {
+      "catalog": "../README.md",
+      "config": "config/default.json",
+      "manifest": "manifest.json",
+      "overrides": "config/overwrite.json",
+      "payloads": "payloads/",
+      "readme": "README.md",
+      "spec": "SPEC.md",
+      "standard": "../../mn-docs/blueprint-standard.md"
+    },
+    "human_control": {
+      "enabled": true,
+      "events": [
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied"
+      ],
+      "mode": "notice_only",
+      "notice_event": "human_notice",
+      "reason": "The workflow may surface notable findings for review but does not apply irreversible actions by itself.",
+      "requires_ack": false
+    },
+    "init_config_review": {
+      "checks": [
+        "identity",
+        "mode",
+        "inputs",
+        "streams",
+        "input_skills",
+        "outputs",
+        "privacy",
+        "budgets"
+      ],
+      "fields": [
+        {
+          "default": "mock",
+          "description": "Run mode used for mock, test, or real-adapter execution.",
+          "label": "Run mode",
+          "path": "mode"
+        },
+        {
+          "default": "mock",
+          "description": "Input source adapter. Mock is safe for demos; real inputs use json, file, env_json, streams, or connector profiles.",
+          "label": "Input adapter",
+          "path": "inputs.adapter"
+        },
+        {
+          "default": "~/.mn/runs",
+          "description": "Local run-store root for logs, events, inputs, outputs, and final artifacts.",
+          "label": "Run-store root",
+          "path": "outputs.run_root"
+        },
+        {
+          "default": "notice_only",
+          "description": "Whether this blueprint disables human control, emits notice-only events, or requires approval for high-impact actions.",
+          "label": "Human control mode",
+          "path": "human_control.mode"
+        },
+        {
+          "default": true,
+          "description": "Whether the shared run-store dashboard should be available for this run.",
+          "label": "Web UI",
+          "path": "web_ui.enabled"
+        },
+        {
+          "default": "http://192.168.4.173:11434",
+          "description": "LLM endpoint used by LLM-backed agents.",
+          "label": "LLM API base",
+          "path": "llm.configs.primary.api_base"
+        },
+        {
+          "default": "ollama/nemotron3:33b",
+          "description": "LLM model used by LLM-backed agents.",
+          "label": "LLM model",
+          "path": "llm.configs.primary.model"
+        }
+      ],
+      "required": true
+    },
+    "input_contract": {
+      "description": "Use this blueprint to explore ecosystem interventions across regions and compare population effects before making policy or field decisions.",
+      "optional_inputs": [],
+      "privacy_classification": "internal",
+      "profiles": {
+        "env_json": {
+          "adapter": "env_json",
+          "description": "JSON object loaded from MN_BLUEPRINT_INPUT_JSON."
+        },
+        "file": {
+          "adapter": "file",
+          "description": "JSON object loaded from a local file path."
+        },
+        "json": {
+          "adapter": "json",
+          "description": "Inline JSON object supplied through config or runtime overrides."
+        },
+        "mock": {
+          "adapter": "mock",
+          "description": "Default synthetic inputs bundled with the blueprint.",
+          "payload": {
+            "ecosystem": {
+              "duration_seconds": 300,
+              "food_regen_per_tick": 72.0,
+              "local_top_k": 20,
+              "max_food": 420.0,
+              "max_region_population": 220,
+              "migration_rate": 0.035,
+              "mutation_rate": 0.05,
+              "region_count": 16,
+              "seed": 517498978,
+              "tick_delay_ms": 1000,
+              "tick_seconds": 5,
+              "total_animals": 2000
+            },
+            "scenario": "ecosystem_competition"
+          }
+        }
+      },
+      "required_inputs": [
+        {
+          "description": "Domain input value for ecosystem.",
+          "example": {
+            "duration_seconds": 300,
+            "food_regen_per_tick": 72.0,
+            "local_top_k": 20,
+            "max_food": 420.0,
+            "max_region_population": 220,
+            "migration_rate": 0.035,
+            "mutation_rate": 0.05,
+            "region_count": 16,
+            "seed": 517498978,
+            "tick_delay_ms": 1000,
+            "tick_seconds": 5,
+            "total_animals": 2000
+          },
+          "name": "ecosystem",
+          "type": "dict"
+        },
+        {
+          "description": "Domain input value for scenario.",
+          "example": "ecosystem_competition",
+          "name": "scenario",
+          "type": "str"
+        }
+      ],
+      "resolved_artifact": "inputs.json",
+      "schema_version": "mn.blueprint.input_contract.v1",
+      "supported_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "validation_rules": []
+    },
+    "interfaces": {
+      "channels": {
+        "artifacts": {
+          "artifacts": [
+            "run.json",
+            "config.json",
+            "inputs.json",
+            "events.jsonl",
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Stable run-store files and domain-specific outputs.",
+          "optional_artifacts": [
+            "job.json",
+            "web_ui.json",
+            "ui.json",
+            "web/index.html",
+            "logs.jsonl",
+            "logs.index.json",
+            "human.jsonl",
+            "resources.jsonl"
+          ]
+        },
+        "events": {
+          "artifact": "events.jsonl",
+          "description": "Append-only workflow events."
+        },
+        "human": {
+          "artifact": "human.jsonl",
+          "description": "Sparse human collaboration notices, input requests, and responses.",
+          "mirrored_to": "events.jsonl"
+        },
+        "input_skills": {
+          "description": "Connector-backed or reusable skill-backed input sources."
+        },
+        "inputs": {
+          "artifact": "inputs.json",
+          "description": "Resolved runtime inputs and adapter provenance."
+        },
+        "logs": {
+          "artifact": "logs.jsonl",
+          "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "index": "logs.index.json",
+          "stream": "stdout/stderr"
+        },
+        "output_skills": {
+          "description": "Optional fan-out destinations after local run-store writes."
+        },
+        "outputs": {
+          "artifacts": [
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Primary result and final user-facing artifact."
+        },
+        "resources": {
+          "artifact": "resources.jsonl",
+          "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
+        },
+        "streams": {
+          "default": [
+            "events"
+          ],
+          "description": "Named data or event streams exposed by the blueprint.",
+          "kinds": [
+            "audio",
+            "video",
+            "data",
+            "multimodal"
+          ],
+          "transports": [
+            "file",
+            "http",
+            "https",
+            "rtsp",
+            "rtmp",
+            "webrtc",
+            "websocket",
+            "socketio",
+            "tcp",
+            "udp",
+            "sse",
+            "kafka",
+            "mqtt",
+            "custom"
+          ]
+        },
+        "web_ui": {
+          "artifacts": [
+            "web_ui.json",
+            "ui.json",
+            "web/index.html"
+          ],
+          "description": "Optional web input/output handles."
+        }
+      },
+      "config": [
+        "standard_version",
+        "identity",
+        "mode",
+        "metadata",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "resources",
+        "human_control",
+        "real_adapters",
+        "streams",
+        "input_skills",
+        "output_skills",
+        "error_handling",
+        "state",
+        "capabilities",
+        "privacy",
+        "triggers",
+        "backpressure",
+        "determinism",
+        "schemas",
+        "budgets",
+        "agent_handoffs",
+        "web_ui",
+        "interfaces",
+        "execution_model"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "optional_outputs": [
+        "job.json",
+        "web_ui.json",
+        "ui.json",
+        "web/index.html",
+        "logs.jsonl",
+        "events.log",
+        "errors.log",
+        "events.index.json",
+        "logs.index.json",
+        "errors.index.json",
+        "timeline.json",
+        "human.jsonl",
+        "resources.jsonl"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "response_schema": "mn.blueprint.response.v1",
+      "stream_kinds": [
+        "audio",
+        "video",
+        "data",
+        "multimodal"
+      ],
+      "stream_transports": [
+        "file",
+        "http",
+        "https",
+        "rtsp",
+        "rtmp",
+        "webrtc",
+        "websocket",
+        "socketio",
+        "tcp",
+        "udp",
+        "sse",
+        "kafka",
+        "mqtt",
+        "custom"
+      ],
+      "web_ui_adapters": [
+        "none",
+        "static_html",
+        "gradio",
+        "custom"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "World coordinator, regional agents, leaderboard summarizer.",
+    "memory_layer": {
+      "collection": "mn_memory",
+      "containers": "optional_sidecar",
+      "context_addr_env": "MN_CONTEXT_ADDR",
+      "conversation": {
+        "agent_role": "otterdesk_chat",
+        "include_human_events": true,
+        "include_runtime_events": true,
+        "include_runtime_logs": true,
+        "target_tokens": 2400,
+        "token_budget": 6000,
+        "use_model_compression": false
+      },
+      "conversation_enabled": true,
+      "conversation_enabled_env": "OTTERDESK_CONTEXT_MEMORY_ENABLED",
+      "default_context_addr": "localhost:50052",
+      "enabled": true,
+      "enabled_env": "MN_CONTEXT_MEMORY_ENABLED",
+      "namespace": "ecosystem_intervention_planning_assistant_context",
+      "project_path": "${MN_MEMBRANE_PROJECT_PATH}",
+      "python_sdk_path": "${MN_MEMBRANE_SDK_PATH}",
+      "sdk_distribution": "mirrorneuron-membrane-python-sdk",
+      "sdk_import_package": "mn_context_engine_sdk"
+    },
+    "name": "Ecosystem Intervention Planning Assistant",
+    "observability_dashboard": {
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ],
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store"
+    },
+    "output": "Regional outcomes, population rankings, and ecosystem summary.",
+    "output_contract": {
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        }
+      ],
+      "events": "typed event objects with payload",
+      "events_jsonl": "events.jsonl",
+      "final_artifact": {
+        "description": "The durable user-facing artifact should summarize the result, recommendation, confidence, evidence, next steps, and source references.",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ],
+        "schema_version": "mn.blueprint.final_artifact_contract.v1"
+      },
+      "final_artifact_json": "final_artifact.json",
+      "human_jsonl": "human.jsonl",
+      "local_run_store": "~/.mn/runs/<run_id>/",
+      "logs_jsonl": "logs.jsonl",
+      "output_skills": [],
+      "resources_jsonl": "resources.jsonl",
+      "response_schema": "mn.blueprint.response.v1",
+      "result_json": "result.json",
+      "status": "JSON lines on stderr",
+      "stdout": "single JSON object, event envelope, or bundle path",
+      "ui_json": "ui.json",
+      "web_ui_json": "web_ui.json"
+    },
+    "problem_solved": "Ecological systems change through local interactions, migration, resources, and mutation; interventions need scenario testing before field action.",
+    "quick_test": {
+      "description": "Use generated quick-test bundles when available; fixed blueprints use local dry-run/mock provider environment variables and deterministic sample inputs.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "native agents",
+      "multi-region simulation",
+      "aggregation",
+      "leaderboard reporting",
+      "shared Gradio dashboard",
+      "service registry publication",
+      "transparent run status",
+      "human control policy",
+      "artifact records",
+      "run-store observability dashboard",
+      "Membrane context memory optimization"
+    ],
+    "simulation_type": "Multi-region population dynamics.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load_metadata -> resolve_config -> load_inputs -> start_run_store -> observe_simulation_state -> call_llm_agent -> evaluate_workflow_state -> route_by_context -> request_human_input -> apply_decision_to_simulation -> emit_events -> write_final_artifact -> fan_out_output_skills",
+      "execution_steps": [
+        "load_metadata",
+        "resolve_config",
+        "load_inputs",
+        "start_run_store",
+        "observe_simulation_state",
+        "call_llm_agent",
+        "evaluate_workflow_state",
+        "route_by_context",
+        "request_human_input",
+        "apply_decision_to_simulation",
+        "emit_events",
+        "write_final_artifact",
+        "fan_out_output_skills"
+      ],
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0",
+      "workflow_api_version": "mn.workflow/v1",
+      "workflow_model": "contract -> workflow -> agents/runtime"
+    },
+    "standard_version": "1.0",
+    "status_contract": {
+      "heartbeat_event": "blueprint_status",
+      "heartbeat_required": false,
+      "phases": [
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "loading_inputs",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "running_worker",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "waiting_for_human",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "writing_artifacts",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "completed",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        }
+      ],
+      "schema_version": "mn.blueprint.status_contract.v1",
+      "source": "run_store",
+      "status_event": "blueprint_status"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Ecologists, conservation analysts, simulation researchers, and education teams.",
+    "web_ui": {
+      "adapter": "gradio",
+      "artifacts": [
+        "web_ui.json",
+        "ui.json"
+      ],
+      "dashboard_model": "grafana_json",
+      "data_source": "local_run_store",
+      "description": "Shared blueprint support dashboard rendered from local run-store events and artifacts.",
+      "enabled": true,
+      "kind": "output",
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "registration": {
+        "api": [
+          "main"
+        ],
+        "module": "mn_blueprint_support.gradio_dashboard",
+        "package": "mirrorneuron-blueprint-support-skill[webui]",
+        "service": {
+          "lifecycle": "runtime_managed",
+          "meta": {
+            "adapter": "gradio",
+            "blueprint_id": "ecosystem_intervention_planning_assistant",
+            "run_id": "${run_id}"
+          },
+          "provider": "mirror_neuron",
+          "registered_by": "launch_prepare_web_ui",
+          "service_name": "blueprint-web-ui",
+          "tags": [
+            "web_ui",
+            "blueprint",
+            "ecosystem_intervention_planning_assistant",
+            "gradio"
+          ]
+        },
+        "writes": "ui.json and web_ui.json"
+      },
+      "server": "blueprint_support",
+      "service_name": "blueprint-web-ui",
+      "shared_dashboard": true,
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "tags": [
+        "web_ui",
+        "blueprint",
+        "ecosystem_intervention_planning_assistant",
+        "gradio"
+      ]
+    }
+  },
+  "name": "Ecosystem Intervention Planning Assistant",
+  "policies": {
+    "job_type": "service",
+    "recovery_mode": "cluster_recover",
+    "stream_mode": "live"
+  },
+  "requiredContextEngine": false,
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "load_inputs": {
+        "risk": "low",
+        "side_effect": "read",
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "input_adapter",
+            "model": "ollama/nemotron3:33b",
+            "role": "Resolve mock, JSON, file, or env_json inputs",
+            "uses": "mn-agents.data_python_executor@1.0.0"
+          }
+        ]
+      },
+      "run_workflow": {
+        "risk": "medium",
+        "routes": [
+          {
+            "edge_id": "world_to_region_00",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_00_actor"
+          },
+          {
+            "edge_id": "region_00_to_collector",
+            "from_node": "ecosystem_region_00_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_01",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_01_actor"
+          },
+          {
+            "edge_id": "region_01_to_collector",
+            "from_node": "ecosystem_region_01_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_02",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_02_actor"
+          },
+          {
+            "edge_id": "region_02_to_collector",
+            "from_node": "ecosystem_region_02_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_03",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_03_actor"
+          },
+          {
+            "edge_id": "region_03_to_collector",
+            "from_node": "ecosystem_region_03_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_04",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_04_actor"
+          },
+          {
+            "edge_id": "region_04_to_collector",
+            "from_node": "ecosystem_region_04_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_05",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_05_actor"
+          },
+          {
+            "edge_id": "region_05_to_collector",
+            "from_node": "ecosystem_region_05_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_06",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_06_actor"
+          },
+          {
+            "edge_id": "region_06_to_collector",
+            "from_node": "ecosystem_region_06_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_07",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_07_actor"
+          },
+          {
+            "edge_id": "region_07_to_collector",
+            "from_node": "ecosystem_region_07_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_08",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_08_actor"
+          },
+          {
+            "edge_id": "region_08_to_collector",
+            "from_node": "ecosystem_region_08_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_09",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_09_actor"
+          },
+          {
+            "edge_id": "region_09_to_collector",
+            "from_node": "ecosystem_region_09_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_10",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_10_actor"
+          },
+          {
+            "edge_id": "region_10_to_collector",
+            "from_node": "ecosystem_region_10_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_11",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_11_actor"
+          },
+          {
+            "edge_id": "region_11_to_collector",
+            "from_node": "ecosystem_region_11_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_12",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_12_actor"
+          },
+          {
+            "edge_id": "region_12_to_collector",
+            "from_node": "ecosystem_region_12_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_13",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_13_actor"
+          },
+          {
+            "edge_id": "region_13_to_collector",
+            "from_node": "ecosystem_region_13_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_14",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_14_actor"
+          },
+          {
+            "edge_id": "region_14_to_collector",
+            "from_node": "ecosystem_region_14_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "world_to_region_15",
+            "from_node": "ecosystem_world_actor",
+            "message_type": "region_bootstrap",
+            "to_node": "ecosystem_region_15_actor"
+          },
+          {
+            "edge_id": "region_15_to_collector",
+            "from_node": "ecosystem_region_15_actor",
+            "message_type": "region_summary",
+            "to_node": "ecosystem_signal_collector"
+          },
+          {
+            "edge_id": "ingress_to_world",
+            "from_node": "ingress",
+            "message_type": "simulation_start",
+            "to_node": "ecosystem_world_actor"
+          },
+          {
+            "edge_id": "collector_to_summarizer",
+            "from_node": "ecosystem_signal_collector",
+            "message_type": "region_collection",
+            "to_node": "ecosystem_report_writer"
+          }
+        ],
+        "seed_inputs": {
+          "ingress": [
+            {
+              "animals": 2000,
+              "duration_seconds": 300,
+              "max_region_population": 220,
+              "regions": 16,
+              "scenario": "ecosystem_competition",
+              "seed": 517498978,
+              "tick_seconds": 5
+            }
+          ]
+        },
+        "side_effect": "internal_write",
+        "start_workers": [
+          "ingress"
+        ],
+        "strategy": "fanout_reduce",
+        "type": "team",
+        "workers": [
+          {
+            "id": "ingress",
+            "model": "ollama/nemotron3:33b",
+            "role": "Ingress",
+            "uses": "mn-agents.control_router@1.0.0"
+          },
+          {
+            "id": "ecosystem_world_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "World",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_signal_collector",
+            "model": "ollama/nemotron3:33b",
+            "role": "Collector",
+            "uses": "mn-agents.control_join@1.0.0"
+          },
+          {
+            "id": "ecosystem_report_writer",
+            "model": "ollama/nemotron3:33b",
+            "role": "Summarizer",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_00_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 00",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_01_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 01",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_02_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 02",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_03_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 03",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_04_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 04",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_05_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 05",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_06_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 06",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_07_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 07",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_08_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 08",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_09_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 09",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_10_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 10",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_11_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 11",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_12_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 12",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_13_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 13",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_14_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 14",
+            "uses": "mn-agents.data_module@1.0.0"
+          },
+          {
+            "id": "ecosystem_region_15_actor",
+            "model": "ollama/nemotron3:33b",
+            "role": "Region 15",
+            "uses": "mn-agents.data_module@1.0.0"
+          }
+        ]
+      },
+      "write_final_artifact": {
+        "risk": "low",
+        "side_effect": "internal_write",
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "artifact_writer",
+            "model": "ollama/nemotron3:33b",
+            "role": "Write result and final artifact to the local run store",
+            "uses": "mn-agents.data_python_executor@1.0.0"
+          }
+        ]
+      }
+    },
+    "memory": {},
+    "models": {
+      "primary": {
+        "model": "ollama/nemotron3:33b",
+        "provider": "ollama",
+        "role": "World coordinator, regional agents, leaderboard summarizer.",
+        "type": "llm"
+      }
+    },
+    "observability": {
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ],
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store"
+    },
+    "resources": {
+      "cpu": {
+        "min_cores": 1
+      },
+      "disk": {
+        "min_gb": 1
+      },
+      "gpu": {
+        "min_count": 0
+      },
+      "memory": {
+        "min_gb": 2
+      }
+    },
+    "store": {
+      "artifacts": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "path": "./runs/${run_id}",
+      "type": "local_run_store"
+    },
+    "worker_defaults": {
+      "pool": "default",
+      "pool_slots": 1,
+      "runner": "MirrorNeuron.Runner.HostLocal",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "workdir": "/sandbox/job/workflow"
+    }
+  },
+  "term": "TERM.md",
+  "type": "service",
+  "version": "1.0.0",
+  "workflow": {
+    "dynamic": {
+      "apply_at": "between_steps",
+      "enabled": false,
+      "patch_events": []
+    },
+    "edges": [
+      {
+        "accepts": [
+          "done"
+        ],
+        "event": "inputs_loaded",
+        "from": "load_inputs",
+        "id": "load_inputs_to_run_workflow",
+        "required": true,
+        "to": "run_workflow"
+      },
+      {
+        "accepts": [
+          "done"
+        ],
+        "event": "workflow_result_ready",
+        "from": "run_workflow",
+        "id": "run_workflow_to_write_final_artifact",
+        "required": true,
+        "to": "write_final_artifact"
+      }
+    ],
+    "entrypoint": "load_inputs",
+    "execution": {
+      "strategy": "serial"
+    },
+    "mode": "static_dag",
+    "observers": [],
+    "policy": {
+      "failure": {
+        "default": "fail_closed"
+      },
+      "human": {
+        "decisions": [
+          "approve",
+          "revise",
+          "reject"
+        ],
+        "default": "reject",
+        "enabled": true,
+        "events": {
+          "decision": "human_decision_applied",
+          "request": "human_input_requested",
+          "response": "human_input_received",
+          "timeout": "human_input_timeout"
+        },
+        "mode": "notice_only",
+        "timeout_seconds": null
+      },
+      "safety": {
+        "blocked_actions": [],
+        "default": "allow",
+        "rules": []
+      }
+    },
+    "schema": "mn.workflow.problem_graph/v1",
+    "sink": "write_final_artifact",
+    "source": "load_inputs",
+    "state": {
+      "final_artifact": {},
+      "resolved_inputs": {},
+      "workflow_result": {}
+    },
+    "steps": [
+      {
+        "action": "load_inputs",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_multiplier": 2,
+            "backoff_seconds": 1,
+            "jitter": 0,
+            "max_attempts": 2
+          },
+          "timeout_seconds": 120,
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        },
+        "emits": "inputs_loaded",
+        "goal": "Resolve the selected input adapter and record input provenance.",
+        "id": "load_inputs",
+        "in": {},
+        "kind": "stage",
+        "label": "Load Inputs",
+        "on": {
+          "inputs_loaded": "run_workflow"
+        },
+        "out": {
+          "resolved_inputs": "$state.resolved_inputs"
+        },
+        "run": "load_inputs"
+      },
+      {
+        "action": "run_blueprint_workflow",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_multiplier": 2,
+            "backoff_seconds": 1,
+            "jitter": 0,
+            "max_attempts": 2
+          },
+          "timeout_seconds": null,
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        },
+        "emits": "workflow_result_ready",
+        "goal": "Ecological systems change through local interactions, migration, resources, and mutation; interventions need scenario testing before field action.",
+        "id": "run_workflow",
+        "in": {
+          "inputs": "$state.resolved_inputs"
+        },
+        "kind": "stage",
+        "label": "Run Workflow",
+        "on": {
+          "workflow_result_ready": "write_final_artifact"
+        },
+        "out": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "run": "run_workflow"
+      },
+      {
+        "action": "write_final_artifact",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_multiplier": 2,
+            "backoff_seconds": 1,
+            "jitter": 0,
+            "max_attempts": 2
+          },
+          "timeout_seconds": 120,
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        },
+        "emits": "final_artifact_written",
+        "goal": "Persist result.json, final_artifact.json, events, logs, and optional output-skill fan-out records.",
+        "id": "write_final_artifact",
+        "in": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "kind": "stage",
+        "label": "Write Final Artifact",
+        "on": {
+          "final_artifact_written": "completed"
+        },
+        "out": {
+          "final_artifact": "$state.final_artifact"
+        },
+        "run": "write_final_artifact"
+      }
+    ],
+    "workflow_id": "ecosystem_intervention_planning_assistant_v1"
+  }
+}

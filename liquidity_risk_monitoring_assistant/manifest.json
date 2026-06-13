@@ -1,0 +1,3672 @@
+{
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "ingress_to_exchange",
+        "from_node": "ingress",
+        "message_type": "simulation_start",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "ingress_to_fake_stock_stream",
+        "from_node": "ingress",
+        "message_type": "simulation_start",
+        "to_node": "market_stream_actor"
+      },
+      {
+        "edge_id": "fake_stock_stream_self_tick",
+        "from_node": "market_stream_actor",
+        "message_type": "generate_next_stock_tick",
+        "to_node": "market_stream_actor"
+      },
+      {
+        "edge_id": "fake_stock_stream_to_signal_analyzer",
+        "from_node": "market_stream_actor",
+        "message_type": "stock_price_tick",
+        "to_node": "liquidity_signal_analyst"
+      },
+      {
+        "edge_id": "signal_analyzer_to_advisor",
+        "from_node": "liquidity_signal_analyst",
+        "message_type": "market_signal",
+        "to_node": "liquidity_risk_advisor"
+      },
+      {
+        "edge_id": "llm_explainer_to_advisor",
+        "from_node": "market_explanation_actor",
+        "message_type": "llm_market_explanation",
+        "to_node": "liquidity_risk_advisor"
+      },
+      {
+        "edge_id": "llm_explainer_self_retry",
+        "from_node": "market_explanation_actor",
+        "message_type": "retry_llm_explanation",
+        "to_node": "market_explanation_actor"
+      },
+      {
+        "edge_id": "exchange_to_advisor",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_risk_advisor"
+      },
+      {
+        "edge_id": "exchange_to_trader_000_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_000_actor"
+      },
+      {
+        "edge_id": "trader_000_to_exchange",
+        "from_node": "liquidity_trader_000_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_001_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_001_actor"
+      },
+      {
+        "edge_id": "trader_001_to_exchange",
+        "from_node": "liquidity_trader_001_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_002_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_002_actor"
+      },
+      {
+        "edge_id": "trader_002_to_exchange",
+        "from_node": "liquidity_trader_002_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_003_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_003_actor"
+      },
+      {
+        "edge_id": "trader_003_to_exchange",
+        "from_node": "liquidity_trader_003_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_004_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_004_actor"
+      },
+      {
+        "edge_id": "trader_004_to_exchange",
+        "from_node": "liquidity_trader_004_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_005_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_005_actor"
+      },
+      {
+        "edge_id": "trader_005_to_exchange",
+        "from_node": "liquidity_trader_005_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_006_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_006_actor"
+      },
+      {
+        "edge_id": "trader_006_to_exchange",
+        "from_node": "liquidity_trader_006_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_007_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_007_actor"
+      },
+      {
+        "edge_id": "trader_007_to_exchange",
+        "from_node": "liquidity_trader_007_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_008_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_008_actor"
+      },
+      {
+        "edge_id": "trader_008_to_exchange",
+        "from_node": "liquidity_trader_008_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_009_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_009_actor"
+      },
+      {
+        "edge_id": "trader_009_to_exchange",
+        "from_node": "liquidity_trader_009_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_010_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_010_actor"
+      },
+      {
+        "edge_id": "trader_010_to_exchange",
+        "from_node": "liquidity_trader_010_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_011_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_011_actor"
+      },
+      {
+        "edge_id": "trader_011_to_exchange",
+        "from_node": "liquidity_trader_011_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_012_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_012_actor"
+      },
+      {
+        "edge_id": "trader_012_to_exchange",
+        "from_node": "liquidity_trader_012_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_013_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_013_actor"
+      },
+      {
+        "edge_id": "trader_013_to_exchange",
+        "from_node": "liquidity_trader_013_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_014_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_014_actor"
+      },
+      {
+        "edge_id": "trader_014_to_exchange",
+        "from_node": "liquidity_trader_014_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_015_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_015_actor"
+      },
+      {
+        "edge_id": "trader_015_to_exchange",
+        "from_node": "liquidity_trader_015_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_016_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_016_actor"
+      },
+      {
+        "edge_id": "trader_016_to_exchange",
+        "from_node": "liquidity_trader_016_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_017_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_017_actor"
+      },
+      {
+        "edge_id": "trader_017_to_exchange",
+        "from_node": "liquidity_trader_017_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_018_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_018_actor"
+      },
+      {
+        "edge_id": "trader_018_to_exchange",
+        "from_node": "liquidity_trader_018_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_019_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_019_actor"
+      },
+      {
+        "edge_id": "trader_019_to_exchange",
+        "from_node": "liquidity_trader_019_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_020_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_020_actor"
+      },
+      {
+        "edge_id": "trader_020_to_exchange",
+        "from_node": "liquidity_trader_020_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_021_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_021_actor"
+      },
+      {
+        "edge_id": "trader_021_to_exchange",
+        "from_node": "liquidity_trader_021_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_022_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_022_actor"
+      },
+      {
+        "edge_id": "trader_022_to_exchange",
+        "from_node": "liquidity_trader_022_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_023_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_023_actor"
+      },
+      {
+        "edge_id": "trader_023_to_exchange",
+        "from_node": "liquidity_trader_023_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      },
+      {
+        "edge_id": "exchange_to_trader_024_data",
+        "from_node": "market_exchange_actor",
+        "message_type": "market_data",
+        "to_node": "liquidity_trader_024_actor"
+      },
+      {
+        "edge_id": "trader_024_to_exchange",
+        "from_node": "liquidity_trader_024_actor",
+        "message_type": "place_order",
+        "to_node": "market_exchange_actor"
+      }
+    ],
+    "entrypoints": [
+      "ingress"
+    ],
+    "nodes": [
+      {
+        "agent_type": "router",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "emit_type": "simulation_start",
+          "node_type": "map",
+          "role": "root_coordinator",
+          "runner_module": "MirrorNeuron.Runner.HostLocal"
+        },
+        "display_name": "Ingress",
+        "node_id": "ingress",
+        "role": "Ingress",
+        "type": "map"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_market_data_every_ticks": 30,
+          "module": "MirrorNeuron.Examples.FinancialMarket.ExchangeAgent",
+          "module_source": "beam_modules/exchange_agent.ex",
+          "node_type": "reduce",
+          "role": "exchange",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Market Exchange Actor",
+        "node_id": "market_exchange_actor",
+        "role": "Exchange",
+        "type": "stream"
+      },
+      {
+        "agent_type": "executor",
+        "config": {
+          "agent_beacon_required": true,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "command": [
+            "python3.11",
+            "scripts/generate_stock_stream.py"
+          ],
+          "daily_drift": 0.001,
+          "daily_volatility": 0.018,
+          "environment": {
+            "MN_BLUEPRINT_ID": "liquidity_risk_monitoring_assistant",
+            "STOCK_STREAM_DAILY_DRIFT": "0.001",
+            "STOCK_STREAM_DAILY_VOLATILITY": "0.018",
+            "STOCK_STREAM_INTERVAL_MAX_MS": "1000",
+            "STOCK_STREAM_INTERVAL_MIN_MS": "1000",
+            "STOCK_STREAM_MAX_DAILY_MOVE": "0.06",
+            "STOCK_STREAM_SEED": "729905862",
+            "STOCK_STREAM_START_DATE": "2026-04-30",
+            "STOCK_STREAM_SYMBOLS": "AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA",
+            "STOCK_STREAM_TARGET_NODE": "stock_signal_analyzer",
+            "STOCK_STREAM_TRADING_DAYS": "252"
+          },
+          "interval_max_ms": 1000,
+          "interval_min_ms": 1000,
+          "max_daily_move": 0.06,
+          "node_type": "stream",
+          "output_message_type": null,
+          "role": "fake_data_stream_agent",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "script": "scripts/generate_stock_stream.py",
+          "seed": 729905862,
+          "start_date": "2026-04-30",
+          "symbols": [
+            "AAPL",
+            "MSFT",
+            "NVDA",
+            "GOOGL",
+            "AMZN",
+            "META",
+            "TSLA"
+          ],
+          "target_node": "stock_signal_analyzer",
+          "trading_days": 252,
+          "upload_as": "fake_stock_stream",
+          "upload_path": "fake_stock_stream",
+          "workdir": "/sandbox/job/fake_stock_stream"
+        },
+        "display_name": "Market Stream Actor",
+        "node_id": "market_stream_actor",
+        "role": "Fake Stock Stream",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "config": {
+          "agent_beacon_required": true,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "command": [
+            "python3.11",
+            "scripts/analyze_stock_signal.py"
+          ],
+          "environment": {
+            "LLM_SIGNAL_EVERY_EVENTS": "30",
+            "LLM_SIGNAL_MIN_CONFIDENCE": "0.72",
+            "MN_BLUEPRINT_ID": "liquidity_risk_monitoring_assistant"
+          },
+          "node_type": "stream",
+          "output_message_type": null,
+          "role": "technical_signal_analyzer",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "script": "scripts/analyze_stock_signal.py",
+          "upload_as": "stock_signal_analyzer",
+          "upload_path": "stock_signal_analyzer",
+          "workdir": "/sandbox/job/stock_signal_analyzer"
+        },
+        "display_name": "Liquidity Signal Analyst",
+        "node_id": "liquidity_signal_analyst",
+        "role": "Stock Signal Analyzer",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "config": {
+          "agent_beacon_required": true,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "command": [
+            "python3.11",
+            "scripts/explain_market.py"
+          ],
+          "environment": {
+            "LITELLM_API_BASE": "http://192.168.4.173:11434",
+            "LITELLM_API_KEY": "",
+            "LITELLM_MAX_TOKENS": "800",
+            "LITELLM_MODEL": "ollama/nemotron3:33b",
+            "LITELLM_NUM_RETRIES": "2",
+            "LITELLM_RETRY_BACKOFF_SECONDS": "1.0",
+            "LITELLM_TIMEOUT_SECONDS": "60.0",
+            "LLM_EXPLANATION_INTERVAL_EVENTS": "0",
+            "LLM_EXPLANATION_INTERVAL_SECONDS": "300.0",
+            "LLM_EXPLANATION_MAX_PENDING": "25",
+            "LLM_EXPLANATION_RETRY_DELAY_SECONDS": "5.0",
+            "MN_BLUEPRINT_ID": "liquidity_risk_monitoring_assistant",
+            "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+            "MN_LLM_API_KEY": "",
+            "MN_LLM_MAX_TOKENS": "800",
+            "MN_LLM_MODEL": "ollama/nemotron3:33b",
+            "MN_LLM_NUM_RETRIES": "2",
+            "MN_LLM_RETRY_BACKOFF_SECONDS": "1.0",
+            "MN_LLM_TIMEOUT_SECONDS": "60.0"
+          },
+          "node_type": "stream",
+          "output_message_type": null,
+          "role": "market_explanation_agent",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "script": "scripts/explain_market.py",
+          "upload_as": "llm_market_explainer",
+          "upload_path": "llm_market_explainer",
+          "workdir": "/sandbox/job/llm_market_explainer"
+        },
+        "display_name": "Market Explanation Actor",
+        "node_id": "market_explanation_actor",
+        "role": "Llm Market Explainer",
+        "type": "generic"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "advice_interval_ticks": 5,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "important_move_pct": 1.5,
+          "module": "MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent",
+          "module_source": "beam_modules/market_advisor_agent.ex",
+          "node_type": "map",
+          "role": "advisor",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "slack_channel": "#claw",
+          "slack_enabled": true,
+          "slack_policy": {
+            "alert_on_action_change": true,
+            "cooldown_ticks_per_symbol": 20,
+            "digest_every_ticks": 100,
+            "min_confidence": 0.65,
+            "mode": "important_only"
+          }
+        },
+        "display_name": "Liquidity Risk Advisor",
+        "node_id": "liquidity_risk_advisor",
+        "role": "Market Advisor",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 000 Actor",
+        "node_id": "liquidity_trader_000_actor",
+        "role": "Trader 000",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 001 Actor",
+        "node_id": "liquidity_trader_001_actor",
+        "role": "Trader 001",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 002 Actor",
+        "node_id": "liquidity_trader_002_actor",
+        "role": "Trader 002",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 003 Actor",
+        "node_id": "liquidity_trader_003_actor",
+        "role": "Trader 003",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 004 Actor",
+        "node_id": "liquidity_trader_004_actor",
+        "role": "Trader 004",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "mean_reversion",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "mean_reversion",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 005 Actor",
+        "node_id": "liquidity_trader_005_actor",
+        "role": "Trader 005",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 006 Actor",
+        "node_id": "liquidity_trader_006_actor",
+        "role": "Trader 006",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 007 Actor",
+        "node_id": "liquidity_trader_007_actor",
+        "role": "Trader 007",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 008 Actor",
+        "node_id": "liquidity_trader_008_actor",
+        "role": "Trader 008",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 009 Actor",
+        "node_id": "liquidity_trader_009_actor",
+        "role": "Trader 009",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "mean_reversion",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "mean_reversion",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 010 Actor",
+        "node_id": "liquidity_trader_010_actor",
+        "role": "Trader 010",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 011 Actor",
+        "node_id": "liquidity_trader_011_actor",
+        "role": "Trader 011",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 012 Actor",
+        "node_id": "liquidity_trader_012_actor",
+        "role": "Trader 012",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 013 Actor",
+        "node_id": "liquidity_trader_013_actor",
+        "role": "Trader 013",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 014 Actor",
+        "node_id": "liquidity_trader_014_actor",
+        "role": "Trader 014",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "momentum",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "momentum",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 015 Actor",
+        "node_id": "liquidity_trader_015_actor",
+        "role": "Trader 015",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 016 Actor",
+        "node_id": "liquidity_trader_016_actor",
+        "role": "Trader 016",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "market_maker",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "market_maker",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 017 Actor",
+        "node_id": "liquidity_trader_017_actor",
+        "role": "Trader 017",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "mean_reversion",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "mean_reversion",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 018 Actor",
+        "node_id": "liquidity_trader_018_actor",
+        "role": "Trader 018",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 019 Actor",
+        "node_id": "liquidity_trader_019_actor",
+        "role": "Trader 019",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "market_maker",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "market_maker",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 020 Actor",
+        "node_id": "liquidity_trader_020_actor",
+        "role": "Trader 020",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 021 Actor",
+        "node_id": "liquidity_trader_021_actor",
+        "role": "Trader 021",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "momentum",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "momentum",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 022 Actor",
+        "node_id": "liquidity_trader_022_actor",
+        "role": "Trader 022",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "noise",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "noise",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 023 Actor",
+        "node_id": "liquidity_trader_023_actor",
+        "role": "Trader 023",
+        "type": "stream"
+      },
+      {
+        "agent_type": "module",
+        "config": {
+          "beacon_enabled": true,
+          "beacon_interval_ms": 15000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 45000,
+          "duration_seconds": 86400,
+          "initial_price": 100.0,
+          "live_mode": true,
+          "llm_order_sample_rate": 20,
+          "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+          "module_source": "beam_modules/trader_agent.ex",
+          "node_type": "reduce",
+          "role": "momentum",
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "strategy": "momentum",
+          "tick_delay_ms": 1000,
+          "tick_seconds": 1
+        },
+        "display_name": "Liquidity Trader 024 Actor",
+        "node_id": "liquidity_trader_024_actor",
+        "role": "Trader 024",
+        "type": "stream"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "apiVersion": "mn.workflow/v1",
+  "contract": {
+    "events": {
+      "human_stream": "human.jsonl",
+      "stream": "events.jsonl",
+      "types": [
+        "run_started",
+        "inputs_loaded",
+        "workflow_graph_compiled",
+        "workflow_step_started",
+        "workflow_step_attempt_completed",
+        "workflow_step_completed",
+        "workflow_result_ready",
+        "final_artifact_written",
+        "artifact_written",
+        "run_completed",
+        "run_failed",
+        "blueprint_status",
+        "blueprint_phase_started",
+        "blueprint_phase_completed",
+        "blueprint_phase_failed",
+        "output_skill_started",
+        "output_skill_completed",
+        "output_skill_failed",
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied",
+        "typed event objects with payload",
+        "simulation_start",
+        "generate_next_stock_tick",
+        "stock_price_tick",
+        "market_signal",
+        "llm_market_explanation",
+        "retry_llm_explanation",
+        "market_data",
+        "place_order",
+        "workflow_finished",
+        "agent_beacon",
+        "actor_activity"
+      ]
+    },
+    "input_adapters": {
+      "default": "mock",
+      "resolved_artifact": "inputs.json",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ]
+    },
+    "inputs": {
+      "alert_policy": {
+        "description": "Review and notification policy for liquidity warnings.",
+        "example": null,
+        "privacy": "internal",
+        "required": true,
+        "type": "domain_value"
+      },
+      "market_signals": {
+        "description": "Liquidity, volatility, spread, and portfolio signal inputs.",
+        "example": null,
+        "privacy": "internal",
+        "required": true,
+        "type": "domain_value"
+      },
+      "risk_limits": {
+        "description": "Desk or portfolio liquidity thresholds.",
+        "example": null,
+        "privacy": "internal",
+        "required": true,
+        "type": "domain_value"
+      }
+    },
+    "outputs": {
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        }
+      ],
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ],
+        "schema_version": "mn.blueprint.final_artifact_contract.v1",
+        "type": "final_artifact"
+      },
+      "profile": "standard_run_store"
+    },
+    "privacy": {
+      "default_classification": "internal",
+      "rules": {
+        "confidential": {
+          "log": "redacted",
+          "send_to_llm": "allowed_configs_only",
+          "send_to_output_skills": "approved_destinations_only"
+        },
+        "internal": {
+          "log": "metadata_only",
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "public": {
+          "log": true,
+          "send_to_llm": true,
+          "send_to_output_skills": true
+        },
+        "regulated": {
+          "log": "redacted",
+          "send_to_llm": false,
+          "send_to_output_skills": "approved_destinations_only"
+        }
+      }
+    },
+    "status": {
+      "event": "blueprint_status",
+      "heartbeat": true,
+      "phases": [
+        "loading_inputs",
+        "running_worker",
+        "waiting_for_human",
+        "writing_artifacts",
+        "completed"
+      ]
+    },
+    "summary": "Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile.",
+    "users": [
+      "Trading teams, market-risk analysts, and fintech product evaluators."
+    ]
+  },
+  "description": "Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile.",
+  "id": "liquidity_risk_monitoring_assistant",
+  "init_config_review": {
+    "fields": [
+      {
+        "default": "AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA",
+        "description": "Comma-separated symbols for the synthetic market stream.",
+        "label": "Symbols",
+        "path": "market_stream.symbols"
+      },
+      {
+        "default": 729905862,
+        "description": "Deterministic seed for repeatable market data.",
+        "label": "Market seed",
+        "path": "market_stream.seed"
+      },
+      {
+        "default": "ollama/nemotron3:33b",
+        "description": "Model used for market explanations.",
+        "label": "LLM model",
+        "path": "llm.model"
+      },
+      {
+        "default": "http://192.168.4.173:11434",
+        "description": "LiteLLM/Ollama-compatible API base URL.",
+        "label": "LLM API base",
+        "path": "llm.api_base"
+      },
+      {
+        "default": true,
+        "description": "Enable advisor Slack-style alerts.",
+        "label": "Slack alerts enabled",
+        "path": "alerts.slack_enabled"
+      },
+      {
+        "default": "#claw",
+        "description": "Destination channel for market alerts.",
+        "label": "Slack channel",
+        "path": "alerts.slack_channel"
+      }
+    ],
+    "instruction": "Review market stream, LLM, and alert settings before launching the liquidity radar.",
+    "required": false
+  },
+  "input_validation": {
+    "rules": []
+  },
+  "job_name": "liquidity-risk-monitoring-assistanting-assistant",
+  "kind": "Workflow",
+  "license": "LICENSE.md",
+  "manifest_version": "1.0",
+  "metadata": {
+    "agent_templates": {
+      "library": "../mn-agents/index.json",
+      "nodes": [
+        {
+          "node_id": "ingress",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "market_exchange_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "market_stream_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_signal_analyst",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "market_explanation_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_risk_advisor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_000_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_001_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_002_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_003_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_004_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_005_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_006_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_007_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_008_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_009_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_010_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_011_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_012_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_013_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_014_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_015_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_016_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_017_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_018_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_019_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_020_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_021_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_022_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_023_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        },
+        {
+          "node_id": "liquidity_trader_024_actor",
+          "uses": "mn-agents.data_python_executor@1.0.0"
+        }
+      ],
+      "render_tool": "../mn-agents/tools/render_agent_templates.py",
+      "rendered_output": "manifest.rendered.json or runtime metadata",
+      "renderer": "mn_blueprint_support.render_manifest_agent_templates"
+    },
+    "blueprint_id": "liquidity_risk_monitoring_assistant",
+    "category": "finance",
+    "configuration_contract": {
+      "optional_files": [
+        "scenario.json",
+        "config/overwrite.json",
+        "knowledge/"
+      ],
+      "required_files": [
+        "manifest.json",
+        "README.md",
+        "SPEC.md",
+        "config/default.json",
+        "payloads/",
+        "LICENSE.md",
+        "TERM.md"
+      ]
+    },
+    "customizable_for": "Equities, crypto, FX, liquidity monitoring, trading operations.",
+    "description": "Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile.",
+    "documentation": {
+      "catalog": "../README.md",
+      "config": "config/default.json",
+      "manifest": "manifest.json",
+      "overrides": "config/overwrite.json",
+      "payloads": "payloads/",
+      "readme": "README.md",
+      "spec": "SPEC.md",
+      "standard": "../../mn-docs/blueprint-standard.md"
+    },
+    "human_control": {
+      "enabled": true,
+      "events": [
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied"
+      ],
+      "mode": "notice_only",
+      "notice_event": "human_notice",
+      "reason": "The workflow may surface notable findings for review but does not apply irreversible actions by itself.",
+      "requires_ack": false
+    },
+    "init_config_review": {
+      "checks": [
+        "identity",
+        "mode",
+        "inputs",
+        "streams",
+        "input_skills",
+        "outputs",
+        "privacy",
+        "budgets"
+      ],
+      "fields": [
+        {
+          "default": "mock",
+          "description": "Run mode used for mock, test, or real-adapter execution.",
+          "label": "Run mode",
+          "path": "mode"
+        },
+        {
+          "default": "mock",
+          "description": "Input source adapter. Mock is safe for demos; real inputs use json, file, env_json, streams, or connector profiles.",
+          "label": "Input adapter",
+          "path": "inputs.adapter"
+        },
+        {
+          "default": "~/.mn/runs",
+          "description": "Local run-store root for logs, events, inputs, outputs, and final artifacts.",
+          "label": "Run-store root",
+          "path": "outputs.run_root"
+        },
+        {
+          "default": "notice_only",
+          "description": "Whether this blueprint disables human control, emits notice-only events, or requires approval for high-impact actions.",
+          "label": "Human control mode",
+          "path": "human_control.mode"
+        },
+        {
+          "default": true,
+          "description": "Whether the shared run-store dashboard should be available for this run.",
+          "label": "Web UI",
+          "path": "web_ui.enabled"
+        },
+        {
+          "default": "http://192.168.4.173:11434",
+          "description": "LLM endpoint used by LLM-backed agents.",
+          "label": "LLM API base",
+          "path": "llm.configs.primary.api_base"
+        },
+        {
+          "default": "ollama/nemotron3:33b",
+          "description": "LLM model used by LLM-backed agents.",
+          "label": "LLM model",
+          "path": "llm.configs.primary.model"
+        }
+      ],
+      "required": true
+    },
+    "input_contract": {
+      "description": "Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile.",
+      "optional_inputs": [],
+      "privacy_classification": "internal",
+      "profiles": {
+        "env_json": {
+          "adapter": "env_json",
+          "description": "JSON object loaded from MN_BLUEPRINT_INPUT_JSON."
+        },
+        "file": {
+          "adapter": "file",
+          "description": "JSON object loaded from a local file path."
+        },
+        "json": {
+          "adapter": "json",
+          "description": "Inline JSON object supplied through config or runtime overrides."
+        },
+        "mock": {
+          "adapter": "mock",
+          "description": "Default synthetic inputs bundled with the blueprint.",
+          "payload": {}
+        }
+      },
+      "required_inputs": [
+        {
+          "description": "Liquidity, volatility, spread, and portfolio signal inputs.",
+          "example": null,
+          "name": "market_signals",
+          "type": "domain_value"
+        },
+        {
+          "description": "Desk or portfolio liquidity thresholds.",
+          "example": null,
+          "name": "risk_limits",
+          "type": "domain_value"
+        },
+        {
+          "description": "Review and notification policy for liquidity warnings.",
+          "example": null,
+          "name": "alert_policy",
+          "type": "domain_value"
+        }
+      ],
+      "resolved_artifact": "inputs.json",
+      "schema_version": "mn.blueprint.input_contract.v1",
+      "supported_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "validation_rules": []
+    },
+    "interfaces": {
+      "channels": {
+        "artifacts": {
+          "artifacts": [
+            "run.json",
+            "config.json",
+            "inputs.json",
+            "events.jsonl",
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Stable run-store files and domain-specific outputs.",
+          "optional_artifacts": [
+            "job.json",
+            "web_ui.json",
+            "ui.json",
+            "web/index.html",
+            "logs.jsonl",
+            "logs.index.json",
+            "human.jsonl",
+            "resources.jsonl"
+          ]
+        },
+        "events": {
+          "artifact": "events.jsonl",
+          "description": "Append-only workflow events."
+        },
+        "human": {
+          "artifact": "human.jsonl",
+          "description": "Sparse human collaboration notices, input requests, and responses.",
+          "mirrored_to": "events.jsonl"
+        },
+        "input_skills": {
+          "description": "Connector-backed or reusable skill-backed input sources."
+        },
+        "inputs": {
+          "artifact": "inputs.json",
+          "description": "Resolved runtime inputs and adapter provenance."
+        },
+        "logs": {
+          "artifact": "logs.jsonl",
+          "description": "Runtime stdout/stderr and explicit log artifacts.",
+          "index": "logs.index.json",
+          "stream": "stdout/stderr"
+        },
+        "output_skills": {
+          "description": "Optional fan-out destinations after local run-store writes."
+        },
+        "outputs": {
+          "artifacts": [
+            "result.json",
+            "final_artifact.json"
+          ],
+          "description": "Primary result and final user-facing artifact."
+        },
+        "resources": {
+          "artifact": "resources.jsonl",
+          "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
+        },
+        "streams": {
+          "default": [
+            "events"
+          ],
+          "description": "Named data or event streams exposed by the blueprint.",
+          "kinds": [
+            "audio",
+            "video",
+            "data",
+            "multimodal"
+          ],
+          "transports": [
+            "file",
+            "http",
+            "https",
+            "rtsp",
+            "rtmp",
+            "webrtc",
+            "websocket",
+            "socketio",
+            "tcp",
+            "udp",
+            "sse",
+            "kafka",
+            "mqtt",
+            "custom"
+          ]
+        },
+        "web_ui": {
+          "artifacts": [
+            "web_ui.json",
+            "ui.json",
+            "web/index.html"
+          ],
+          "description": "Optional web input/output handles."
+        }
+      },
+      "config": [
+        "standard_version",
+        "identity",
+        "mode",
+        "metadata",
+        "inputs",
+        "simulation",
+        "llm",
+        "outputs",
+        "logging",
+        "resources",
+        "human_control",
+        "real_adapters",
+        "streams",
+        "input_skills",
+        "output_skills",
+        "error_handling",
+        "state",
+        "capabilities",
+        "privacy",
+        "triggers",
+        "backpressure",
+        "determinism",
+        "schemas",
+        "budgets",
+        "agent_handoffs",
+        "web_ui",
+        "interfaces",
+        "execution_model"
+      ],
+      "identity": [
+        "blueprint_id",
+        "name",
+        "run_id"
+      ],
+      "input_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "optional_outputs": [
+        "job.json",
+        "web_ui.json",
+        "ui.json",
+        "web/index.html",
+        "logs.jsonl",
+        "events.log",
+        "errors.log",
+        "events.index.json",
+        "logs.index.json",
+        "errors.index.json",
+        "timeline.json",
+        "human.jsonl",
+        "resources.jsonl"
+      ],
+      "output_adapters": [
+        "local_run_store"
+      ],
+      "outputs": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "response_schema": "mn.blueprint.response.v1",
+      "stream_kinds": [
+        "audio",
+        "video",
+        "data",
+        "multimodal"
+      ],
+      "stream_transports": [
+        "file",
+        "http",
+        "https",
+        "rtsp",
+        "rtmp",
+        "webrtc",
+        "websocket",
+        "socketio",
+        "tcp",
+        "udp",
+        "sse",
+        "kafka",
+        "mqtt",
+        "custom"
+      ],
+      "web_ui_adapters": [
+        "none",
+        "static_html",
+        "gradio",
+        "custom"
+      ]
+    },
+    "llm": {},
+    "llm_agent_role": "Signal analyzer, market explainer, advisor agent.",
+    "memory_layer": {
+      "collection": "mn_memory",
+      "containers": "optional_sidecar",
+      "context_addr_env": "MN_CONTEXT_ADDR",
+      "conversation": {
+        "agent_role": "otterdesk_chat",
+        "include_human_events": true,
+        "include_runtime_events": true,
+        "include_runtime_logs": true,
+        "target_tokens": 2400,
+        "token_budget": 6000,
+        "use_model_compression": false
+      },
+      "conversation_enabled": true,
+      "conversation_enabled_env": "OTTERDESK_CONTEXT_MEMORY_ENABLED",
+      "default_context_addr": "localhost:50052",
+      "enabled": true,
+      "enabled_env": "MN_CONTEXT_MEMORY_ENABLED",
+      "namespace": "liquidity_risk_monitoring_assistant_context",
+      "project_path": "${MN_MEMBRANE_PROJECT_PATH}",
+      "python_sdk_path": "${MN_MEMBRANE_SDK_PATH}",
+      "sdk_distribution": "mirrorneuron-membrane-python-sdk",
+      "sdk_import_package": "mn_context_engine_sdk"
+    },
+    "name": "Liquidity Risk Monitoring Assistant",
+    "observability_dashboard": {
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ],
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store"
+    },
+    "output": "Market signals, risk explanations, advice events, and optional Slack alerts.",
+    "output_contract": {
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        }
+      ],
+      "events": "typed event objects with payload",
+      "events_jsonl": "events.jsonl",
+      "final_artifact": {
+        "description": "The durable user-facing artifact should summarize the result, recommendation, confidence, evidence, next steps, and source references.",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs"
+        ],
+        "schema_version": "mn.blueprint.final_artifact_contract.v1"
+      },
+      "final_artifact_json": "final_artifact.json",
+      "local_run_store": "~/.mn/runs/<run_id>/",
+      "logs_jsonl": "logs.jsonl",
+      "output_skills": [],
+      "response_schema": "mn.blueprint.response.v1",
+      "result_json": "result.json",
+      "status": "sent to stderr as JSON lines",
+      "stdout": "single JSON object or bundle path"
+    },
+    "problem_solved": "Markets evolve tick by tick; spreads, depth, momentum, and volatility interact faster than static dashboards or one-shot summaries can capture.",
+    "quick_test": {
+      "description": "Uses smaller deterministic inputs and local mock providers where external resources are optional.",
+      "enabled": false,
+      "env": "MN_BLUEPRINT_QUICK_TEST=1"
+    },
+    "runtime_features": [
+      "stream simulation",
+      "technical signals",
+      "LLM explanation",
+      "live advisor loop",
+      "transparent run status",
+      "human control policy",
+      "artifact records",
+      "run-store observability dashboard",
+      "Membrane context memory optimization"
+    ],
+    "simulation_type": "Live market stream and exchange-style signal simulation.",
+    "standard": {
+      "config_path": "config/default.json",
+      "default_input_adapter": "mock",
+      "execution_model": "load_metadata -> resolve_config -> load_inputs -> start_run_store -> observe_simulation_state -> call_llm_agent -> evaluate_workflow_state -> route_by_context -> request_human_input -> apply_decision_to_simulation -> emit_events -> write_final_artifact -> fan_out_output_skills",
+      "execution_steps": [
+        "load_metadata",
+        "resolve_config",
+        "load_inputs",
+        "start_run_store",
+        "observe_simulation_state",
+        "call_llm_agent",
+        "evaluate_workflow_state",
+        "route_by_context",
+        "request_human_input",
+        "apply_decision_to_simulation",
+        "emit_events",
+        "write_final_artifact",
+        "fan_out_output_skills"
+      ],
+      "output_adapter": "local_run_store",
+      "real_input_adapters": [
+        "file",
+        "json",
+        "env_json"
+      ],
+      "run_store": "~/.mn/runs/<run_id>/",
+      "version": "1.0",
+      "workflow_api_version": "mn.workflow/v1",
+      "workflow_model": "contract -> workflow -> agents/runtime"
+    },
+    "standard_version": "1.0",
+    "status_contract": {
+      "heartbeat_event": "blueprint_status",
+      "heartbeat_required": true,
+      "phases": [
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "loading_inputs",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "running_worker",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "waiting_for_human",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "writing_artifacts",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        },
+        {
+          "completion_event": "blueprint_phase_completed",
+          "failure_event": "blueprint_phase_failed",
+          "phase": "completed",
+          "progress_event": "blueprint_status",
+          "required": true,
+          "start_event": "blueprint_phase_started"
+        }
+      ],
+      "schema_version": "mn.blueprint.status_contract.v1",
+      "source": "run_store",
+      "status_event": "blueprint_status"
+    },
+    "status_logging": {
+      "env": "MN_BLUEPRINT_LOG_LEVEL",
+      "format": "jsonl",
+      "stream": "stderr"
+    },
+    "target_user": "Trading teams, market-risk analysts, and fintech product evaluators.",
+    "web_ui": {
+      "adapter": "gradio",
+      "data_source": "local_run_store",
+      "description": "Shared blueprint support dashboard rendered from local run-store events and artifacts.",
+      "enabled": true,
+      "kind": "output",
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "registration": {
+        "api": [
+          "main"
+        ],
+        "module": "mn_blueprint_support.gradio_dashboard",
+        "package": "mirrorneuron-blueprint-support-skill[webui]",
+        "service": {
+          "lifecycle": "runtime_managed",
+          "meta": {
+            "adapter": "gradio",
+            "blueprint_id": "liquidity_risk_monitoring_assistant",
+            "run_id": "${run_id}"
+          },
+          "provider": "mirror_neuron",
+          "registered_by": "launch_prepare_web_ui",
+          "service_name": "blueprint-web-ui",
+          "tags": [
+            "web_ui",
+            "blueprint",
+            "liquidity_risk_monitoring_assistant",
+            "gradio"
+          ]
+        },
+        "writes": "ui.json and web_ui.json"
+      },
+      "server": "blueprint_support",
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ]
+    }
+  },
+  "name": "Liquidity Risk Monitoring Assistant",
+  "policies": {
+    "recovery_mode": "cluster_recover",
+    "stream_mode": "live"
+  },
+  "requiredContextEngine": false,
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "load_inputs": {
+        "risk": "low",
+        "side_effect": "read",
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "input_adapter",
+            "model": "ollama/nemotron3:33b",
+            "role": "Resolve mock, JSON, file, or env_json inputs",
+            "uses": "mn-agents.data_python_executor@1.0.0"
+          }
+        ]
+      },
+      "run_workflow": {
+        "risk": "medium",
+        "routes": [
+          {
+            "edge_id": "ingress_to_exchange",
+            "from_node": "ingress",
+            "message_type": "simulation_start",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "ingress_to_fake_stock_stream",
+            "from_node": "ingress",
+            "message_type": "simulation_start",
+            "to_node": "market_stream_actor"
+          },
+          {
+            "edge_id": "fake_stock_stream_self_tick",
+            "from_node": "market_stream_actor",
+            "message_type": "generate_next_stock_tick",
+            "to_node": "market_stream_actor"
+          },
+          {
+            "edge_id": "fake_stock_stream_to_signal_analyzer",
+            "from_node": "market_stream_actor",
+            "message_type": "stock_price_tick",
+            "to_node": "liquidity_signal_analyst"
+          },
+          {
+            "edge_id": "signal_analyzer_to_advisor",
+            "from_node": "liquidity_signal_analyst",
+            "message_type": "market_signal",
+            "to_node": "liquidity_risk_advisor"
+          },
+          {
+            "edge_id": "llm_explainer_to_advisor",
+            "from_node": "market_explanation_actor",
+            "message_type": "llm_market_explanation",
+            "to_node": "liquidity_risk_advisor"
+          },
+          {
+            "edge_id": "llm_explainer_self_retry",
+            "from_node": "market_explanation_actor",
+            "message_type": "retry_llm_explanation",
+            "to_node": "market_explanation_actor"
+          },
+          {
+            "edge_id": "exchange_to_advisor",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_risk_advisor"
+          },
+          {
+            "edge_id": "exchange_to_trader_000_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_000_actor"
+          },
+          {
+            "edge_id": "trader_000_to_exchange",
+            "from_node": "liquidity_trader_000_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_001_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_001_actor"
+          },
+          {
+            "edge_id": "trader_001_to_exchange",
+            "from_node": "liquidity_trader_001_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_002_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_002_actor"
+          },
+          {
+            "edge_id": "trader_002_to_exchange",
+            "from_node": "liquidity_trader_002_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_003_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_003_actor"
+          },
+          {
+            "edge_id": "trader_003_to_exchange",
+            "from_node": "liquidity_trader_003_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_004_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_004_actor"
+          },
+          {
+            "edge_id": "trader_004_to_exchange",
+            "from_node": "liquidity_trader_004_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_005_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_005_actor"
+          },
+          {
+            "edge_id": "trader_005_to_exchange",
+            "from_node": "liquidity_trader_005_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_006_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_006_actor"
+          },
+          {
+            "edge_id": "trader_006_to_exchange",
+            "from_node": "liquidity_trader_006_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_007_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_007_actor"
+          },
+          {
+            "edge_id": "trader_007_to_exchange",
+            "from_node": "liquidity_trader_007_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_008_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_008_actor"
+          },
+          {
+            "edge_id": "trader_008_to_exchange",
+            "from_node": "liquidity_trader_008_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_009_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_009_actor"
+          },
+          {
+            "edge_id": "trader_009_to_exchange",
+            "from_node": "liquidity_trader_009_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_010_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_010_actor"
+          },
+          {
+            "edge_id": "trader_010_to_exchange",
+            "from_node": "liquidity_trader_010_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_011_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_011_actor"
+          },
+          {
+            "edge_id": "trader_011_to_exchange",
+            "from_node": "liquidity_trader_011_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_012_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_012_actor"
+          },
+          {
+            "edge_id": "trader_012_to_exchange",
+            "from_node": "liquidity_trader_012_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_013_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_013_actor"
+          },
+          {
+            "edge_id": "trader_013_to_exchange",
+            "from_node": "liquidity_trader_013_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_014_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_014_actor"
+          },
+          {
+            "edge_id": "trader_014_to_exchange",
+            "from_node": "liquidity_trader_014_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_015_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_015_actor"
+          },
+          {
+            "edge_id": "trader_015_to_exchange",
+            "from_node": "liquidity_trader_015_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_016_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_016_actor"
+          },
+          {
+            "edge_id": "trader_016_to_exchange",
+            "from_node": "liquidity_trader_016_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_017_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_017_actor"
+          },
+          {
+            "edge_id": "trader_017_to_exchange",
+            "from_node": "liquidity_trader_017_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_018_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_018_actor"
+          },
+          {
+            "edge_id": "trader_018_to_exchange",
+            "from_node": "liquidity_trader_018_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_019_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_019_actor"
+          },
+          {
+            "edge_id": "trader_019_to_exchange",
+            "from_node": "liquidity_trader_019_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_020_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_020_actor"
+          },
+          {
+            "edge_id": "trader_020_to_exchange",
+            "from_node": "liquidity_trader_020_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_021_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_021_actor"
+          },
+          {
+            "edge_id": "trader_021_to_exchange",
+            "from_node": "liquidity_trader_021_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_022_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_022_actor"
+          },
+          {
+            "edge_id": "trader_022_to_exchange",
+            "from_node": "liquidity_trader_022_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_023_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_023_actor"
+          },
+          {
+            "edge_id": "trader_023_to_exchange",
+            "from_node": "liquidity_trader_023_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          },
+          {
+            "edge_id": "exchange_to_trader_024_data",
+            "from_node": "market_exchange_actor",
+            "message_type": "market_data",
+            "to_node": "liquidity_trader_024_actor"
+          },
+          {
+            "edge_id": "trader_024_to_exchange",
+            "from_node": "liquidity_trader_024_actor",
+            "message_type": "place_order",
+            "to_node": "market_exchange_actor"
+          }
+        ],
+        "seed_inputs": {
+          "ingress": [
+            {
+              "scenario": "finance_market_realtime_advisor",
+              "seed": 729905862,
+              "slack_optional": true,
+              "tick_seconds": 1
+            }
+          ]
+        },
+        "side_effect": "internal_write",
+        "start_workers": [
+          "ingress"
+        ],
+        "strategy": "fanout_reduce",
+        "type": "team",
+        "workers": [
+          {
+            "id": "ingress",
+            "kind": "control",
+            "model": "ollama/nemotron3:33b",
+            "role": "Ingress",
+            "uses": "mn-agents.control_router@1.0.0",
+            "with": {
+              "emit_type": "simulation_start",
+              "node_type": "map",
+              "role": "root_coordinator",
+              "runner_module": "MirrorNeuron.Runner.HostLocal"
+            }
+          },
+          {
+            "id": "market_exchange_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Exchange",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_market_data_every_ticks": 30,
+              "module": "MirrorNeuron.Examples.FinancialMarket.ExchangeAgent",
+              "module_source": "beam_modules/exchange_agent.ex",
+              "node_type": "reduce",
+              "role": "exchange",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "market_stream_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Fake Stock Stream",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "with": {
+              "command": [
+                "python3.11",
+                "scripts/generate_stock_stream.py"
+              ],
+              "daily_drift": 0.001,
+              "daily_volatility": 0.018,
+              "environment": {
+                "MN_BLUEPRINT_ID": "liquidity_risk_monitoring_assistant",
+                "STOCK_STREAM_DAILY_DRIFT": "0.001",
+                "STOCK_STREAM_DAILY_VOLATILITY": "0.018",
+                "STOCK_STREAM_INTERVAL_MAX_MS": "1000",
+                "STOCK_STREAM_INTERVAL_MIN_MS": "1000",
+                "STOCK_STREAM_MAX_DAILY_MOVE": "0.06",
+                "STOCK_STREAM_SEED": "729905862",
+                "STOCK_STREAM_START_DATE": "2026-04-30",
+                "STOCK_STREAM_SYMBOLS": "AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA",
+                "STOCK_STREAM_TARGET_NODE": "stock_signal_analyzer",
+                "STOCK_STREAM_TRADING_DAYS": "252"
+              },
+              "interval_max_ms": 1000,
+              "interval_min_ms": 1000,
+              "max_daily_move": 0.06,
+              "node_type": "stream",
+              "output_message_type": null,
+              "role": "fake_data_stream_agent",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "script": "scripts/generate_stock_stream.py",
+              "seed": 729905862,
+              "start_date": "2026-04-30",
+              "symbols": [
+                "AAPL",
+                "MSFT",
+                "NVDA",
+                "GOOGL",
+                "AMZN",
+                "META",
+                "TSLA"
+              ],
+              "target_node": "stock_signal_analyzer",
+              "trading_days": 252,
+              "upload_as": "fake_stock_stream",
+              "upload_path": "fake_stock_stream",
+              "workdir": "/sandbox/job/fake_stock_stream"
+            }
+          },
+          {
+            "id": "liquidity_signal_analyst",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Stock Signal Analyzer",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "with": {
+              "command": [
+                "python3.11",
+                "scripts/analyze_stock_signal.py"
+              ],
+              "environment": {
+                "LLM_SIGNAL_EVERY_EVENTS": "30",
+                "LLM_SIGNAL_MIN_CONFIDENCE": "0.72",
+                "MN_BLUEPRINT_ID": "liquidity_risk_monitoring_assistant"
+              },
+              "node_type": "stream",
+              "output_message_type": null,
+              "role": "technical_signal_analyzer",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "script": "scripts/analyze_stock_signal.py",
+              "upload_as": "stock_signal_analyzer",
+              "upload_path": "stock_signal_analyzer",
+              "workdir": "/sandbox/job/stock_signal_analyzer"
+            }
+          },
+          {
+            "id": "market_explanation_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Llm Market Explainer",
+            "uses": "mn-agents.data_python_executor@1.0.0",
+            "with": {
+              "command": [
+                "python3.11",
+                "scripts/explain_market.py"
+              ],
+              "environment": {
+                "LITELLM_API_BASE": "http://192.168.4.173:11434",
+                "LITELLM_API_KEY": "",
+                "LITELLM_MAX_TOKENS": "800",
+                "LITELLM_MODEL": "ollama/nemotron3:33b",
+                "LITELLM_NUM_RETRIES": "2",
+                "LITELLM_RETRY_BACKOFF_SECONDS": "1.0",
+                "LITELLM_TIMEOUT_SECONDS": "60.0",
+                "LLM_EXPLANATION_INTERVAL_EVENTS": "0",
+                "LLM_EXPLANATION_INTERVAL_SECONDS": "300.0",
+                "LLM_EXPLANATION_MAX_PENDING": "25",
+                "LLM_EXPLANATION_RETRY_DELAY_SECONDS": "5.0",
+                "MN_BLUEPRINT_ID": "liquidity_risk_monitoring_assistant",
+                "MN_LLM_API_BASE": "http://192.168.4.173:11434",
+                "MN_LLM_API_KEY": "",
+                "MN_LLM_MAX_TOKENS": "800",
+                "MN_LLM_MODEL": "ollama/nemotron3:33b",
+                "MN_LLM_NUM_RETRIES": "2",
+                "MN_LLM_RETRY_BACKOFF_SECONDS": "1.0",
+                "MN_LLM_TIMEOUT_SECONDS": "60.0"
+              },
+              "node_type": "stream",
+              "output_message_type": null,
+              "role": "market_explanation_agent",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "script": "scripts/explain_market.py",
+              "upload_as": "llm_market_explainer",
+              "upload_path": "llm_market_explainer",
+              "workdir": "/sandbox/job/llm_market_explainer"
+            }
+          },
+          {
+            "id": "liquidity_risk_advisor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Market Advisor",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "advice_interval_ticks": 5,
+              "important_move_pct": 1.5,
+              "module": "MirrorNeuron.Examples.FinancialMarket.MarketAdvisorAgent",
+              "module_source": "beam_modules/market_advisor_agent.ex",
+              "node_type": "map",
+              "role": "advisor",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "slack_channel": "#claw",
+              "slack_enabled": true,
+              "slack_policy": {
+                "alert_on_action_change": true,
+                "cooldown_ticks_per_symbol": 20,
+                "digest_every_ticks": 100,
+                "min_confidence": 0.65,
+                "mode": "important_only"
+              }
+            }
+          },
+          {
+            "id": "liquidity_trader_000_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 000",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_001_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 001",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_002_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 002",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_003_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 003",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_004_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 004",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_005_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 005",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "mean_reversion",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "mean_reversion",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_006_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 006",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_007_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 007",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_008_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 008",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_009_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 009",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_010_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 010",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "mean_reversion",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "mean_reversion",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_011_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 011",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_012_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 012",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_013_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 013",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_014_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 014",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_015_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 015",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "momentum",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "momentum",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_016_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 016",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_017_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 017",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "market_maker",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "market_maker",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_018_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 018",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "mean_reversion",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "mean_reversion",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_019_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 019",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_020_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 020",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "market_maker",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "market_maker",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_021_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 021",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_022_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 022",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "momentum",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "momentum",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_023_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 023",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "noise",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "noise",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          },
+          {
+            "id": "liquidity_trader_024_actor",
+            "kind": "generic",
+            "model": "ollama/nemotron3:33b",
+            "role": "Trader 024",
+            "uses": "mn-agents.data_module@1.0.0",
+            "with": {
+              "duration_seconds": 86400,
+              "initial_price": 100.0,
+              "live_mode": true,
+              "llm_order_sample_rate": 20,
+              "module": "MirrorNeuron.Examples.FinancialMarket.TraderAgent",
+              "module_source": "beam_modules/trader_agent.ex",
+              "node_type": "reduce",
+              "role": "momentum",
+              "runner_module": "MirrorNeuron.Runner.HostLocal",
+              "strategy": "momentum",
+              "tick_delay_ms": 1000,
+              "tick_seconds": 1
+            }
+          }
+        ]
+      },
+      "write_final_artifact": {
+        "risk": "low",
+        "side_effect": "internal_write",
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "artifact_writer",
+            "model": "ollama/nemotron3:33b",
+            "role": "Write result and final artifact to the local run store",
+            "uses": "mn-agents.data_python_executor@1.0.0"
+          }
+        ]
+      }
+    },
+    "memory": {},
+    "models": {
+      "primary": {
+        "model": "ollama/nemotron3:33b",
+        "provider": "ollama",
+        "role": "Signal analyzer, market explainer, advisor agent.",
+        "type": "llm"
+      }
+    },
+    "observability": {
+      "panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ],
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ],
+      "schema_version": "mn.blueprint.observability_dashboard.v1",
+      "source": "local_run_store"
+    },
+    "resources": {
+      "cpu": {
+        "min_cores": 1
+      },
+      "disk": {
+        "min_gb": 1
+      },
+      "gpu": {
+        "min_count": 0
+      },
+      "memory": {
+        "min_gb": 2
+      }
+    },
+    "store": {
+      "artifacts": [
+        "run.json",
+        "config.json",
+        "inputs.json",
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "path": "./runs/${run_id}",
+      "type": "local_run_store"
+    },
+    "worker_defaults": {
+      "pool": "default",
+      "pool_slots": 1,
+      "runner": "MirrorNeuron.Runner.HostLocal",
+      "uses": "mn-agents.data_python_executor@1.0.0",
+      "workdir": "/sandbox/job/workflow"
+    }
+  },
+  "term": "TERM.md",
+  "type": "service",
+  "version": "1.0.0",
+  "workflow": {
+    "dynamic": {
+      "apply_at": "between_steps",
+      "enabled": false,
+      "patch_events": []
+    },
+    "edges": [
+      {
+        "accepts": [
+          "done"
+        ],
+        "event": "inputs_loaded",
+        "from": "load_inputs",
+        "id": "load_inputs_to_run_workflow",
+        "required": true,
+        "to": "run_workflow"
+      },
+      {
+        "accepts": [
+          "done"
+        ],
+        "event": "workflow_result_ready",
+        "from": "run_workflow",
+        "id": "run_workflow_to_write_final_artifact",
+        "required": true,
+        "to": "write_final_artifact"
+      }
+    ],
+    "entrypoint": "load_inputs",
+    "execution": {
+      "strategy": "serial"
+    },
+    "mode": "static_dag",
+    "observers": [],
+    "policy": {
+      "failure": {
+        "default": "fail_closed"
+      },
+      "human": {
+        "decisions": [
+          "approve",
+          "revise",
+          "reject"
+        ],
+        "default": "reject",
+        "enabled": true,
+        "events": {
+          "decision": "human_decision_applied",
+          "request": "human_input_requested",
+          "response": "human_input_received",
+          "timeout": "human_input_timeout"
+        },
+        "mode": "notice_only",
+        "timeout_seconds": null
+      },
+      "safety": {
+        "blocked_actions": [],
+        "default": "allow",
+        "rules": []
+      }
+    },
+    "schema": "mn.workflow.problem_graph/v1",
+    "sink": "write_final_artifact",
+    "source": "load_inputs",
+    "state": {
+      "final_artifact": {},
+      "resolved_inputs": {},
+      "workflow_result": {}
+    },
+    "steps": [
+      {
+        "action": "load_inputs",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_multiplier": 2,
+            "backoff_seconds": 1,
+            "jitter": 0,
+            "max_attempts": 2
+          },
+          "timeout_seconds": 120,
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        },
+        "emits": "inputs_loaded",
+        "goal": "Resolve the selected input adapter and record input provenance.",
+        "id": "load_inputs",
+        "in": {},
+        "kind": "stage",
+        "label": "Load Inputs",
+        "on": {
+          "inputs_loaded": "run_workflow"
+        },
+        "out": {
+          "resolved_inputs": "$state.resolved_inputs"
+        },
+        "run": "load_inputs"
+      },
+      {
+        "action": "run_blueprint_workflow",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_multiplier": 2,
+            "backoff_seconds": 1,
+            "jitter": 0,
+            "max_attempts": 2
+          },
+          "timeout_seconds": null,
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        },
+        "emits": "workflow_result_ready",
+        "goal": "Markets evolve tick by tick; spreads, depth, momentum, and volatility interact faster than static dashboards or one-shot summaries can capture.",
+        "id": "run_workflow",
+        "in": {
+          "inputs": "$state.resolved_inputs"
+        },
+        "kind": "stage",
+        "label": "Run Workflow",
+        "on": {
+          "workflow_result_ready": "write_final_artifact"
+        },
+        "out": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "run": "run_workflow"
+      },
+      {
+        "action": "write_final_artifact",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_multiplier": 2,
+            "backoff_seconds": 1,
+            "jitter": 0,
+            "max_attempts": 2
+          },
+          "timeout_seconds": 120,
+          "uncertainty": {
+            "min_confidence": 0.0,
+            "on_low_confidence": "continue_with_warning"
+          }
+        },
+        "emits": "final_artifact_written",
+        "goal": "Persist result.json, final_artifact.json, events, logs, and optional output-skill fan-out records.",
+        "id": "write_final_artifact",
+        "in": {
+          "workflow_result": "$state.workflow_result"
+        },
+        "kind": "stage",
+        "label": "Write Final Artifact",
+        "on": {
+          "final_artifact_written": "completed"
+        },
+        "out": {
+          "final_artifact": "$state.final_artifact"
+        },
+        "run": "write_final_artifact"
+      }
+    ],
+    "workflow_id": "liquidity_risk_monitoring_assistant_v1"
+  }
+}

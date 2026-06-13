@@ -1,158 +1,342 @@
 {
+  "adaptive_experiment_planning": [
+    "lab_experiment_planning_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "ai_audit_readiness": [
+    "ai_control_readiness_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "ai_strategy_planning": [
+    "ai_strategy_advisory_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
   "business_call_center_staffing_simulation": [
-    "service_capacity_simulation",
+    "service_capacity_planning_assistant",
     "Targets service leaders managing SLA and capacity tradeoffs."
   ],
   "business_customer_churn_intervention": [
-    "revenue_retention_simulation",
+    "revenue_retention_planning_assistant",
     "Positions churn reduction as revenue retention."
   ],
   "business_email_campaign_deamon": [
-    "customer_lifecycle_email_auto",
+    "lifecycle_email_growth_assistant",
     "Frames email automation as lifecycle growth orchestration."
   ],
   "business_pricing_strategy_simulation": [
-    "pricing_profit_simulation",
+    "pricing_profit_optimization_assistant",
     "Connects pricing simulation to margin and profit outcomes."
   ],
   "business_supply_chain_disruption_response": [
-    "supply_chain_resilience_simulation",
+    "supply_chain_resilience_assistant",
     "Names the high-urgency operator workflow for disruption response."
   ],
+  "claim_risk_triage": [
+    "insurance_claim_risk_triage_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "climate_resilience_planning_simulation": [
+    "climate_resilience_planning_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "closed_loop_agent_runtime": [
+    "demo_closed_loop_agent_runtime",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "cluster_reliability_simulation": [
+    "demo_cluster_reliability_service",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "codebase_memory_compression_analysis": [
+    "codebase_context_memory_analysis_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "context_memory_audit": [
+    "demo_context_memory_audit",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "context_memory_compression": [
+    "demo_context_memory_compression",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "contract_negotiation_simulation": [
+    "contract_negotiation_rehearsal_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "credit_default_warning": [
+    "credit_default_warning_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "customer_lifecycle_email_auto": [
+    "lifecycle_email_growth_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "drug_discovery_simulation": [
+    "drug_discovery_research_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "ecosystem_simulation": [
+    "ecosystem_intervention_planning_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "environment_control_simulation": [
+    "demo_environment_control_loop",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "event_stream_triage": [
+    "event_stream_triage_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "facility_safety_video_monitor": [
+    "facility_safety_monitor_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
   "finance_credit_risk_simulation": [
-    "credit_default_warning",
+    "credit_default_warning_assistant",
     "Turns a simulation into an early-warning risk workflow."
   ],
   "finance_insurance_claim_risk_triage": [
-    "claim_risk_triage",
+    "insurance_claim_risk_triage_assistant",
     "Names the adjuster and SIU prioritization workflow."
   ],
   "finance_portfolio_stress_test": [
-    "portfolio_crash_stress_simulation",
+    "portfolio_risk_review_assistant",
     "Makes crash and rate-shock planning explicit."
   ],
   "finance_real_estate_opportunity_finder": [
-    "zip_code_property_ranking",
+    "property_deal_research_assistant",
     "Frames real-estate search as market alpha discovery."
   ],
   "financial_market_realtime_advisor_deamon": [
-    "liquidity_risk_monitor",
+    "liquidity_risk_monitoring_assistant",
     "Repositions the market watcher around liquidity and microstructure risk."
   ],
   "general_agent_loop_demo": [
-    "closed_loop_agent_runtime",
+    "demo_closed_loop_agent_runtime",
     "Reframes the demo as the core closed-loop runtime pattern."
   ],
   "general_context_memory_advanced": [
-    "context_memory_compression",
+    "demo_context_memory_compression",
     "Highlights compression and context packet behavior under pressure."
   ],
   "general_context_memory_basic": [
-    "context_memory_audit",
+    "demo_context_memory_audit",
     "Positions the context-memory workflow as an audit pipeline."
   ],
   "general_dynamic_environment_demo": [
-    "environment_control_simulation",
+    "demo_environment_control_loop",
     "Emphasizes control over a changing system."
   ],
   "general_event_stream_processing": [
-    "event_stream_triage",
+    "event_stream_triage_assistant",
     "Focuses on stateful event triage, not generic processing."
   ],
   "general_human_in_the_loop_decision": [
-    "human_approval_gate",
+    "demo_human_approval_gate",
     "Names the approval-gated decision workflow."
   ],
   "general_llm_tool_use_demo": [
-    "llm_tool_orchestration",
+    "demo_llm_tool_orchestration",
     "Makes tool orchestration and feedback loops explicit."
   ],
   "general_multi_agent_negotiation": [
-    "contract_negotiation_simulation",
+    "contract_negotiation_rehearsal_assistant",
     "Makes the multi-agent negotiation outcome concrete."
   ],
   "general_native_live_deamon": [
-    "native_live_monitor_service",
+    "demo_native_live_monitor_service",
     "Fixes the old service-name typo and names the live native-agent monitoring value."
   ],
+  "general_native_live_monitor_daemon": [
+    "demo_native_live_monitor_service",
+    "Renames the long-running blueprint suffix to service."
+  ],
   "general_openshell_llm_codegen": [
-    "sandboxed_codegen_review",
+    "sandboxed_codegen_review_assistant",
     "Highlights sandboxed LLM generation, review, and validation."
   ],
   "general_openshell_worker_basic": [
-    "openshell_sandbox_worker_pipeline",
+    "demo_openshell_worker_pipeline",
     "Repositioned from a basic worker example to a sandboxed execution pipeline."
   ],
   "general_policy_optimization_demo": [
-    "policy_feedback_optimization_simulation",
+    "demo_policy_feedback_optimization",
     "Clarifies that policies are optimized through feedback."
   ],
   "general_prime_sweep_scale": [
-    "parallel_worker_benchmark",
+    "demo_parallel_worker_benchmark",
     "Frames the blueprint around parallel runtime scale rather than prime numbers."
   ],
   "general_python_defined_advanced_deamon": [
-    "python_sdk_research_service",
+    "demo_python_sdk_research_service",
     "Fixes the old service-name typo and emphasizes the live Python workflow loop."
   ],
   "general_python_defined_basic": [
-    "python_sdk_research_pipeline",
+    "demo_python_sdk_research_pipeline",
     "Clarifies that this is a Python SDK workflow users can adapt."
   ],
+  "general_python_sdk_live_research_daemon": [
+    "demo_python_sdk_research_service",
+    "Renames the long-running blueprint suffix to service."
+  ],
   "general_simulation_state_tracking": [
-    "state_audit_simulation",
+    "demo_state_audit_workflow",
     "Frames state tracking as an audit trail users can inspect."
   ],
   "general_stream_basic_deamon": [
-    "live_telemetry_monitor",
+    "demo_live_telemetry_monitor",
     "Clarifies that the blueprint demonstrates live telemetry stream handling."
   ],
   "general_stream_live_backpressure_deamon": [
-    "stream_backpressure_simulation",
+    "demo_stream_backpressure_service",
     "Fixes old service wording and makes backpressure control the value."
   ],
   "general_test_message_flow": [
-    "message_routing_trace",
+    "demo_message_routing_trace",
     "Removes test/demo positioning and focuses on message routing traceability."
   ],
+  "human_approval_gate": [
+    "demo_human_approval_gate",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "human_review_workflow": [
+    "demo_human_review_workflow",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "liquidity_risk_monitor": [
+    "liquidity_risk_monitoring_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "live_telemetry_monitor": [
+    "demo_live_telemetry_monitor",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "llm_tool_orchestration": [
+    "demo_llm_tool_orchestration",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "message_routing_trace": [
+    "demo_message_routing_trace",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "motion_planning_simulation": [
+    "robot_motion_planning_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "native_live_monitor_service": [
+    "demo_native_live_monitor_service",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "network_threat_monitor": [
+    "network_threat_response_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "openshell_sandbox_worker_pipeline": [
+    "demo_openshell_worker_pipeline",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "outbreak_response_simulation": [
+    "outbreak_response_planning_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "parallel_worker_benchmark": [
+    "demo_parallel_worker_benchmark",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "policy_feedback_optimization_simulation": [
+    "demo_policy_feedback_optimization",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "portfolio_crash_stress_simulation": [
+    "portfolio_risk_review_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "pricing_profit_simulation": [
+    "pricing_profit_optimization_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "python_sdk_research_pipeline": [
+    "demo_python_sdk_research_pipeline",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "python_sdk_research_service": [
+    "demo_python_sdk_research_service",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "revenue_retention_simulation": [
+    "revenue_retention_planning_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "sandboxed_codegen_review": [
+    "sandboxed_codegen_review_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
   "science_climate_risk_local_planning": [
-    "climate_resilience_planning_simulation",
+    "climate_resilience_planning_assistant",
     "Frames climate risk as actionable resilience planning."
   ],
   "science_drug_discovery_deamon": [
-    "drug_discovery_simulation",
+    "drug_discovery_research_assistant",
     "Fixes old service wording and names the closed-loop scientific workflow."
   ],
   "science_ecosystem_simulation": [
-    "ecosystem_simulation",
+    "ecosystem_intervention_planning_assistant",
     "Makes ecosystem management and intervention testing explicit."
   ],
   "science_flu_spread_intervention_simulation": [
-    "outbreak_response_simulation",
+    "outbreak_response_planning_assistant",
     "Names the policy decision this outbreak model supports."
   ],
   "science_lab_experiment_optimizer": [
-    "adaptive_experiment_planning",
+    "lab_experiment_planning_assistant",
     "Highlights adaptive experiment selection over static optimization."
   ],
   "science_mpe_simple_push_visualization": [
-    "motion_planning_simulation",
+    "robot_motion_planning_assistant",
     "Removes simple/demo wording and emphasizes multi-agent planning."
   ],
   "science_traffic_congestion_control": [
-    "traffic_control_simulation",
+    "traffic_signal_control_assistant",
     "Targets city traffic teams and control-room experimentation."
   ],
+  "service_capacity_simulation": [
+    "service_capacity_planning_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "state_audit_simulation": [
+    "demo_state_audit_workflow",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "stream_backpressure_simulation": [
+    "demo_stream_backpressure_service",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "supply_chain_resilience_simulation": [
+    "supply_chain_resilience_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "traffic_control_simulation": [
+    "traffic_signal_control_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "user_activity_rmf_triage": [
+    "user_activity_rmf_triage_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
+  "vendor_selection_decision": [
+    "vendor_selection_advisor_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
+  ],
   "video_safety_door_monitor_deamon": [
-    "facility_safety_video_monitor",
+    "facility_safety_monitor_assistant",
     "Moves the video safety workflow into a business operations category."
   ],
-  "general_native_live_monitor_daemon": [
-    "native_live_monitor_service",
-    "Renames the long-running blueprint suffix to service."
+  "zip_code_property_memory_ranking": [
+    "property_deal_memory_research_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
   ],
-  "general_python_sdk_live_research_daemon": [
-    "python_sdk_research_service",
-    "Renames the long-running blueprint suffix to service."
+  "zip_code_property_ranking": [
+    "property_deal_research_assistant",
+    "Renamed for actor-style product clarity and the mn.workflow/v1 runtime standard."
   ]
 }

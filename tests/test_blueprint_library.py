@@ -120,7 +120,8 @@ def test_index_entries_point_to_loadable_blueprint_folders() -> None:
         else:
             assert payloads_dir.exists(), entry
         assert manifest["manifest_version"] == "1.0"
-        assert manifest["graph_id"] == entry["graph_id"]
+        assert "graph_id" not in manifest
+        assert entry["workflow_id"] == manifest["workflow"]["workflow_id"]
         assert manifest["job_name"] == entry["job_name"]
         assert not entry["id"].startswith(("general_", "business_", "finance_", "science_"))
         assert manifest["metadata"]["blueprint_id"] == entry["id"]
@@ -147,14 +148,14 @@ def test_optional_knowledge_folder_contract() -> None:
         actual_subdirs = {path.name for path in knowledge_dir.iterdir() if path.is_dir()}
         assert actual_subdirs == expected_subdirs, blueprint_dir
 
-    lifecycle_root = ROOT / "customer_lifecycle_email_auto"
+    lifecycle_root = ROOT / "lifecycle_email_growth_assistant"
     assert (lifecycle_root / "knowledge" / "init" / "knowledge.json").exists()
     assert not (lifecycle_root / "input" / "knowledge.json").exists()
     assert not list((lifecycle_root / "payloads").glob("*/input/knowledge.json"))
 
 
 def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() -> None:
-    blueprint_id = "codebase_memory_compression_analysis"
+    blueprint_id = "codebase_context_memory_analysis_assistant"
     blueprint_dir = ROOT / blueprint_id
     manifest = json.loads((blueprint_dir / "manifest.json").read_text())
     fixture = json.loads((blueprint_dir / "payloads" / "repo_fixture" / "django_tree_fixture.json").read_text())
@@ -172,12 +173,12 @@ def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() ->
         "briefing_author",
     ]
     assert {worker["id"] for worker in workers} == {
-        "initializer",
-        "interpreter",
-        "extractor",
-        "classifier",
-        "decision",
-        "critic",
+        "repo_intake_coordinator",
+        "architecture_interpreter",
+        "dependency_evidence_extractor",
+        "risk_classifier_actor",
+        "context_compression_planner",
+        "briefing_reviewer",
     }
 
     assert fixture["schema_version"] == "mn.code_analysis_fixture.v1"
@@ -210,7 +211,7 @@ def test_business_code_analysis_memory_benchmark_fixture_and_graph_contract() ->
 
 
 def test_finance_property_alpha_memory_benchmark_contract(tmp_path: Path) -> None:
-    blueprint_id = "zip_code_property_memory_ranking"
+    blueprint_id = "property_deal_memory_research_assistant"
     blueprint_dir = ROOT / blueprint_id
     manifest = json.loads((blueprint_dir / "manifest.json").read_text())
     config = json.loads((blueprint_dir / "config" / "default.json").read_text())
@@ -267,8 +268,8 @@ def test_finance_property_alpha_memory_benchmark_contract(tmp_path: Path) -> Non
 @pytest.mark.parametrize(
     "blueprint_id",
     [
-        "python_sdk_research_service",
-        "python_sdk_research_pipeline",
+        "demo_python_sdk_research_service",
+        "demo_python_sdk_research_pipeline",
     ],
 )
 def test_python_sdk_source_blueprints_run_directly_and_generate_bundle(
@@ -517,7 +518,7 @@ def test_blueprint_standard_imports_shared_mn_skill_implementation() -> None:
     )
     scenarios_text = (SKILL_SRC / "mn_blueprint_support" / "scenarios.py").read_text()
     assert "load_blueprint_json_files(\"scenario.json\")" in scenarios_text
-    assert "closed_loop_agent_runtime" not in scenarios_text
+    assert "demo_closed_loop_agent_runtime" not in scenarios_text
 
 
 def test_blueprint_repo_does_not_carry_support_code() -> None:
@@ -614,13 +615,16 @@ def test_blueprint_manifest_and_runner_are_loadable(blueprint_id: str) -> None:
     assert manifest["metadata"]["llm"]["default_model"] == "ollama/nemotron3:33b"
     assert {"nodes", "edges", "entrypoints", "initial_inputs"}.isdisjoint(manifest)
     assert validate_workflow_manifest(manifest) == []
-    assert manifest["flow"]["entrypoint"] == "load_inputs"
-    assert [step["id"] for step in manifest["flow"]["steps"]] == [
+    assert "flow" not in manifest
+    assert manifest["workflow"]["entrypoint"] == "load_inputs"
+    assert [step["id"] for step in manifest["workflow"]["steps"]] == [
         "load_inputs",
         "run_workflow",
         "write_final_artifact",
     ]
-    assert "simulation_loop" in {worker["id"] for worker in manifest["runtime"]["bindings"]["run_workflow"]["workers"]}
+    run_workers = {worker["id"] for worker in manifest["runtime"]["bindings"]["run_workflow"]["workers"]}
+    assert run_workers
+    assert "simulation_loop" not in run_workers
 
 
 @pytest.mark.parametrize("blueprint_id", REQUIRED_BLUEPRINT_IDS)
@@ -701,7 +705,7 @@ def test_required_category_counts_and_prefixes() -> None:
 
 def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> None:
     human_result = run_blueprint(
-        "human_approval_gate",
+        "demo_human_approval_gate",
         inputs={"steps": 2, "human_approval": "approve_high_confidence"},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -710,7 +714,7 @@ def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> 
     assert all(step["human_gate"]["request"]["request_id"] for step in human_result["timeline"])
 
     human_loop_result = run_blueprint(
-        "human_review_workflow",
+        "demo_human_review_workflow",
         inputs={"steps": 2, "human_response": {"decision": "revise", "approved": False, "action": "hold_policy"}},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -719,7 +723,7 @@ def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> 
     assert all(step["route_decisions"] for step in human_loop_result["timeline"])
 
     tool_result = run_blueprint(
-        "llm_tool_orchestration",
+        "demo_llm_tool_orchestration",
         inputs={"steps": 2},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -727,7 +731,7 @@ def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> 
     assert all("tool_result" in step["observation"] for step in tool_result["timeline"])
 
     negotiation_result = run_blueprint(
-        "contract_negotiation_simulation",
+        "contract_negotiation_rehearsal_assistant",
         inputs={"steps": 2},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -737,7 +741,7 @@ def test_human_gate_and_tool_observation_paths_are_exercised(tmp_path: Path) -> 
 
 def test_experience_status_human_and_output_skill_events_are_recorded(tmp_path: Path) -> None:
     human_result = run_blueprint(
-        "human_approval_gate",
+        "demo_human_approval_gate",
         inputs={"steps": 1, "human_approval": "approve_high_confidence"},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -755,7 +759,7 @@ def test_experience_status_human_and_output_skill_events_are_recorded(tmp_path: 
     assert {"confidence", "evidence", "source_refs"}.issubset(human_result["final_artifact"])
 
     output_skill_result = run_blueprint(
-        "closed_loop_agent_runtime",
+        "demo_closed_loop_agent_runtime",
         inputs={"steps": 1},
         config={
             "output_skills": {
@@ -782,7 +786,7 @@ def test_experience_status_human_and_output_skill_events_are_recorded(tmp_path: 
 def test_run_store_writes_global_execution_artifacts(tmp_path: Path) -> None:
     run_id = "test-run-store-contract"
     result = run_blueprint(
-        "supply_chain_resilience_simulation",
+        "supply_chain_resilience_assistant",
         inputs={"steps": 2, "seed": 99},
         llm_client=FakeLLMClient(),
         run_id=run_id,
@@ -822,7 +826,7 @@ def test_run_store_writes_global_execution_artifacts(tmp_path: Path) -> None:
 
 def test_supply_chain_blueprint_reports_pyomo_optimization_plan(tmp_path: Path) -> None:
     result = run_blueprint(
-        "supply_chain_resilience_simulation",
+        "supply_chain_resilience_assistant",
         inputs={
             "steps": 2,
             "seed": 17,
@@ -854,7 +858,7 @@ def test_file_input_adapter_can_replace_mock_payload(tmp_path: Path) -> None:
     input_path.write_text(json.dumps({"steps": 3, "seed": 321, "initial_backlog": 41}) + "\n")
 
     result = run_blueprint(
-        "closed_loop_agent_runtime",
+        "demo_closed_loop_agent_runtime",
         input_file=input_path,
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -868,7 +872,7 @@ def test_file_input_adapter_can_replace_mock_payload(tmp_path: Path) -> None:
 
 def test_run_store_can_be_disabled(tmp_path: Path) -> None:
     result = run_blueprint(
-        "closed_loop_agent_runtime",
+        "demo_closed_loop_agent_runtime",
         inputs={"steps": 1},
         llm_client=FakeLLMClient(),
         runs_root=tmp_path,
@@ -880,7 +884,7 @@ def test_run_store_can_be_disabled(tmp_path: Path) -> None:
 
 
 def test_specialized_motion_worker_uses_shared_run_contract(tmp_path: Path, monkeypatch, capsys) -> None:
-    worker_path = ROOT / "motion_planning_simulation" / "payloads" / "world_worker" / "scripts" / "run_shared_world.py"
+    worker_path = ROOT / "robot_motion_planning_assistant" / "payloads" / "world_worker" / "scripts" / "run_shared_world.py"
     spec = importlib.util.spec_from_file_location("motion_worker_contract_test", worker_path)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
@@ -980,7 +984,7 @@ def test_specialized_motion_worker_uses_shared_run_contract(tmp_path: Path, monk
 
     result = json.loads(capsys.readouterr().out)
     run_dir = runs_root / "motion-worker-contract-run"
-    assert result["identity"]["blueprint_id"] == "motion_planning_simulation"
+    assert result["identity"]["blueprint_id"] == "robot_motion_planning_assistant"
     assert result["identity"]["run_id"] == "motion-worker-contract-run"
     assert result["seed"] == 33
     assert result["max_cycles"] == 2
@@ -1013,7 +1017,7 @@ def test_specialized_motion_worker_uses_shared_run_contract(tmp_path: Path, monk
 
 def test_invalid_step_count_is_rejected() -> None:
     with pytest.raises(ValueError, match="steps"):
-        run_blueprint("supply_chain_resilience_simulation", inputs={"steps": 0}, llm_client=FakeLLMClient())
+        run_blueprint("supply_chain_resilience_assistant", inputs={"steps": 0}, llm_client=FakeLLMClient())
 
 
 @pytest.mark.ollama
@@ -1027,7 +1031,7 @@ def test_optional_ollama_integration_smoke(tmp_path: Path) -> None:
         pytest.skip(f"Ollama model {model} is not available at {api_base}")
 
     client = OllamaLLMClient.from_env(strict=True, prefer_shared_skill=False)
-    result = run_blueprint("closed_loop_agent_runtime", inputs={"steps": 1, "seed": 11}, llm_client=client, runs_root=tmp_path)
+    result = run_blueprint("demo_closed_loop_agent_runtime", inputs={"steps": 1, "seed": 11}, llm_client=client, runs_root=tmp_path)
 
     assert result["llm"]["provider"] == "ollama"
     assert result["llm"]["calls"] == 1

@@ -1,0 +1,673 @@
+{
+  "agent_handoffs": {},
+  "backpressure": {
+    "drop_policy": "skip_with_error",
+    "llm": {
+      "max_calls_per_minute": 30,
+      "max_concurrent_calls": 2
+    },
+    "max_concurrency": 4,
+    "max_events_per_second": 10,
+    "queue_size": 1000
+  },
+  "budgets": {
+    "max_connector_reads": 500,
+    "max_connector_writes": 20,
+    "max_disk_mb": 250,
+    "max_llm_calls": 20,
+    "max_llm_tokens": 20000,
+    "max_runtime_seconds": 600,
+    "max_stream_duration_seconds": 3600
+  },
+  "capabilities": {
+    "optional": [
+      "llm.call",
+      "network.egress",
+      "stream.subscribe"
+    ],
+    "required": [
+      "filesystem.write"
+    ]
+  },
+  "determinism": {
+    "enabled": true,
+    "frozen_clock": null,
+    "replay": {
+      "from_events": "events.jsonl",
+      "from_inputs": "inputs.json",
+      "llm_mode": "mock"
+    },
+    "seed_field": "seed"
+  },
+  "error_handling": {
+    "default_mode": "stop",
+    "policies": {
+      "llm_call": {
+        "backoff_seconds": 2,
+        "max_attempts": 3,
+        "mode": "retry"
+      },
+      "optional_output": {
+        "mode": "skip"
+      },
+      "required_output": {
+        "mode": "stop"
+      }
+    }
+  },
+  "execution_model": [
+    "load_metadata",
+    "resolve_config",
+    "load_inputs",
+    "start_run_store",
+    "observe_simulation_state",
+    "call_llm_agent",
+    "evaluate_workflow_state",
+    "route_by_context",
+    "request_human_input",
+    "apply_decision_to_simulation",
+    "emit_events",
+    "write_final_artifact",
+    "fan_out_output_skills"
+  ],
+  "human_control": {
+    "allowed_decisions": [
+      "approve",
+      "revise",
+      "reject"
+    ],
+    "blocked_actions": [
+      "approve_remediation_plan",
+      "accept_control_exception",
+      "change_governance_policy"
+    ],
+    "decision_event": "human_decision_applied",
+    "default_action": "reject",
+    "enabled": true,
+    "events": [
+      "human_notice",
+      "human_input_requested",
+      "human_input_received",
+      "human_input_timeout",
+      "human_decision_applied"
+    ],
+    "mode": "approval_required",
+    "reason": "This blueprint can recommend high-impact operational, security, compliance, financial, or code actions.",
+    "request_event": "human_input_requested",
+    "response_event": "human_input_received",
+    "timeout_event": "human_input_timeout",
+    "timeout_seconds": 3600
+  },
+  "identity": {
+    "blueprint_id": "ai_control_readiness_assistant",
+    "name": "AI Control Readiness Assistant"
+  },
+  "input_skills": {},
+  "inputs": {
+    "adapter": "mock",
+    "description": "Synthetic AI/cyber/control readiness packet with policies, frameworks, evidence, and audit findings.",
+    "payload": {
+      "audit_findings": [
+        "No retained evidence for human escalation testing.",
+        "Vendor security package is incomplete.",
+        "Privileged access review is older than the quarterly target."
+      ],
+      "control_framework": [
+        {
+          "domain": "governance",
+          "id": "AI-01",
+          "requirement": "Maintain approved AI system inventory"
+        },
+        {
+          "domain": "model risk",
+          "id": "AI-02",
+          "requirement": "Document human review and escalation controls"
+        },
+        {
+          "domain": "cyber",
+          "id": "CY-01",
+          "requirement": "Review privileged access at least quarterly"
+        },
+        {
+          "domain": "third party",
+          "id": "TP-01",
+          "requirement": "Retain vendor security and privacy evidence"
+        }
+      ],
+      "evidence_items": [
+        {
+          "control_id": "AI-01",
+          "name": "Draft inventory export",
+          "strength": "medium"
+        },
+        {
+          "control_id": "CY-01",
+          "name": "Last access review",
+          "strength": "weak"
+        }
+      ],
+      "policies": [
+        {
+          "name": "AI Governance Policy",
+          "text": "# AI Governance Policy\nHigh-risk AI systems require model inventory, owner approval, human review, monitoring, incident response, and retained evidence."
+        },
+        {
+          "name": "Cloud Security Standard",
+          "text": "# Cloud Security Standard\nProduction workloads require privileged access review, encryption, logging, vendor due diligence, and change approval."
+        }
+      ],
+      "program": "Enterprise GenAI Claims Assistant",
+      "system_architecture": "User request -> claims assistant -> retrieval service -> policy engine -> human adjuster queue -> audit log.",
+      "target_readiness_score": 85
+    }
+  },
+  "interfaces": {
+    "channels": {
+      "artifacts": {
+        "artifacts": [
+          "run.json",
+          "config.json",
+          "inputs.json",
+          "events.jsonl",
+          "result.json",
+          "final_artifact.json"
+        ],
+        "description": "Stable run-store files and domain-specific outputs.",
+        "optional_artifacts": [
+          "job.json",
+          "web_ui.json",
+          "ui.json",
+          "web/index.html",
+          "logs.jsonl",
+          "logs.index.json",
+          "human.jsonl",
+          "resources.jsonl"
+        ]
+      },
+      "events": {
+        "artifact": "events.jsonl",
+        "description": "Append-only workflow events."
+      },
+      "human": {
+        "artifact": "human.jsonl",
+        "description": "Sparse human collaboration notices, input requests, and responses.",
+        "mirrored_to": "events.jsonl"
+      },
+      "input_skills": {
+        "description": "Connector-backed or reusable skill-backed input sources."
+      },
+      "inputs": {
+        "artifact": "inputs.json",
+        "description": "Resolved runtime inputs and adapter provenance."
+      },
+      "logs": {
+        "artifact": "logs.jsonl",
+        "description": "Runtime stdout/stderr and explicit log artifacts.",
+        "index": "logs.index.json",
+        "stream": "stdout/stderr"
+      },
+      "output_skills": {
+        "description": "Optional fan-out destinations after local run-store writes."
+      },
+      "outputs": {
+        "artifacts": [
+          "result.json",
+          "final_artifact.json"
+        ],
+        "description": "Primary result and final user-facing artifact."
+      },
+      "resources": {
+        "artifact": "resources.jsonl",
+        "description": "Blueprint-scoped CPU, GPU, memory, and LLM token usage samples."
+      },
+      "streams": {
+        "default": [
+          "events"
+        ],
+        "description": "Named data or event streams exposed by the blueprint.",
+        "kinds": [
+          "audio",
+          "video",
+          "data",
+          "multimodal"
+        ],
+        "transports": [
+          "file",
+          "http",
+          "https",
+          "rtsp",
+          "rtmp",
+          "webrtc",
+          "websocket",
+          "socketio",
+          "tcp",
+          "udp",
+          "sse",
+          "kafka",
+          "mqtt",
+          "custom"
+        ]
+      },
+      "web_ui": {
+        "artifacts": [
+          "web_ui.json",
+          "ui.json",
+          "web/index.html"
+        ],
+        "description": "Optional web input/output handles."
+      }
+    },
+    "config_sections": [
+      "standard_version",
+      "identity",
+      "mode",
+      "metadata",
+      "inputs",
+      "simulation",
+      "llm",
+      "outputs",
+      "logging",
+      "resources",
+      "human_control",
+      "real_adapters",
+      "streams",
+      "input_skills",
+      "output_skills",
+      "error_handling",
+      "state",
+      "capabilities",
+      "privacy",
+      "triggers",
+      "backpressure",
+      "determinism",
+      "schemas",
+      "budgets",
+      "agent_handoffs",
+      "web_ui",
+      "interfaces",
+      "execution_model"
+    ],
+    "identity_fields": [
+      "blueprint_id",
+      "name",
+      "run_id"
+    ],
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "optional_run_artifacts": [
+      "job.json",
+      "web_ui.json",
+      "ui.json",
+      "web/index.html",
+      "logs.jsonl",
+      "events.log",
+      "errors.log",
+      "events.index.json",
+      "logs.index.json",
+      "errors.index.json",
+      "timeline.json",
+      "human.jsonl",
+      "resources.jsonl"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ],
+    "response_schema": "mn.blueprint.response.v1",
+    "run_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "result.json",
+      "final_artifact.json"
+    ],
+    "stream_kinds": [
+      "audio",
+      "video",
+      "data",
+      "multimodal"
+    ],
+    "stream_transports": [
+      "file",
+      "http",
+      "https",
+      "rtsp",
+      "rtmp",
+      "webrtc",
+      "websocket",
+      "socketio",
+      "tcp",
+      "udp",
+      "sse",
+      "kafka",
+      "mqtt",
+      "custom"
+    ],
+    "web_ui_adapters": [
+      "none",
+      "static_html",
+      "gradio",
+      "custom"
+    ]
+  },
+  "llm": {
+    "agent_role": "AI, cyber, and control readiness agent",
+    "agents": {
+      "artifact_writer": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the artifact writer for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Artifact Writer"
+      },
+      "control_readiness_auditor": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the control readiness auditor for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Control Readiness Auditor"
+      },
+      "input_adapter": {
+        "llm_config": "primary",
+        "model": "ollama/nemotron3:33b",
+        "responsibilities": [
+          "Act as the input adapter for the current run.",
+          "Ground findings in supplied inputs, runtime events, and source references.",
+          "Hand off reviewable state to the next actor without taking irreversible action."
+        ],
+        "role": "Input Adapter"
+      }
+    },
+    "api_base": "http://192.168.4.173:11434",
+    "configs": {
+      "primary": {
+        "api_base": "http://192.168.4.173:11434",
+        "max_tokens": 700,
+        "mock_mode": "fake",
+        "mode": "ollama",
+        "model": "ollama/nemotron3:33b",
+        "num_retries": 1,
+        "provider": "ollama",
+        "timeout_seconds": 60
+      }
+    },
+    "default_config": "primary",
+    "enabled": true,
+    "mock_mode": "fake",
+    "mode": "ollama",
+    "model": "ollama/nemotron3:33b",
+    "responsibilities": [
+      "map requirements to evidence",
+      "identify missing controls and weak evidence",
+      "produce audit-ready remediation artifacts"
+    ]
+  },
+  "logging": {
+    "events": [
+      "run_started",
+      "inputs_loaded",
+      "requirements_mapped",
+      "risks_scored",
+      "readiness_pack_generated",
+      "run_completed",
+      "simulation_step_started",
+      "llm_decision",
+      "simulation_state_updated",
+      "blueprint_status",
+      "blueprint_phase_started",
+      "blueprint_phase_completed",
+      "blueprint_phase_failed",
+      "artifact_written",
+      "human_notice",
+      "human_input_requested",
+      "human_input_received",
+      "human_input_timeout",
+      "human_decision_applied",
+      "output_skill_started",
+      "output_skill_completed",
+      "output_skill_failed",
+      "agent_beacon",
+      "actor_activity",
+      "workflow_graph_compiled",
+      "workflow_finished"
+    ],
+    "events_jsonl": true,
+    "level": "INFO",
+    "logs_jsonl": true,
+    "redact_env_secrets": true,
+    "redact_fields": [
+      "api_key",
+      "token",
+      "authorization",
+      "cookie",
+      "password",
+      "private_key"
+    ],
+    "rotation": {
+      "check_interval_records": 100,
+      "compress": "background",
+      "enabled": true,
+      "max_bytes_mb": 100,
+      "max_segments": 7,
+      "span_seconds": 86400
+    },
+    "stderr_jsonl": true,
+    "writer": {
+      "batch_size": 100,
+      "flush_interval_seconds": 0.5,
+      "mode": "async",
+      "overflow_policy": "drop_low_priority",
+      "queue_size": 10000,
+      "shutdown_flush_timeout_seconds": 2
+    }
+  },
+  "memory_layer": {
+    "collection": "mn_memory",
+    "containers": "optional_sidecar",
+    "context_addr_env": "MN_CONTEXT_ADDR",
+    "conversation": {
+      "agent_role": "otterdesk_chat",
+      "include_human_events": true,
+      "include_runtime_events": true,
+      "include_runtime_logs": true,
+      "target_tokens": 2400,
+      "token_budget": 6000,
+      "use_model_compression": false
+    },
+    "conversation_enabled": true,
+    "conversation_enabled_env": "OTTERDESK_CONTEXT_MEMORY_ENABLED",
+    "default_context_addr": "localhost:50052",
+    "enabled": true,
+    "enabled_env": "MN_CONTEXT_MEMORY_ENABLED",
+    "namespace": "ai_control_readiness_assistant_context",
+    "project_path": "${MN_MEMBRANE_PROJECT_PATH}",
+    "python_sdk_path": "${MN_MEMBRANE_SDK_PATH}",
+    "sdk_distribution": "mirrorneuron-membrane-python-sdk",
+    "sdk_import_package": "mn_context_engine_sdk"
+  },
+  "metadata": {
+    "blueprint_id": "ai_control_readiness_assistant",
+    "blueprint_revision": "v1",
+    "category": "business",
+    "customizable_for": "AI governance, cyber readiness, cloud change assurance, ERP controls, RMF/ATO preparation, and operational control advisory.",
+    "name": "AI Control Readiness Assistant",
+    "problem_solved": "Regulated companies need to prove that AI, cyber, cloud, ERP, or operational changes are safe, compliant, auditable, and controlled.",
+    "standard_version": "1.0",
+    "target_users": "Financial services, healthcare, aerospace, defense, public sector contractors, enterprise AI, and cybersecurity teams."
+  },
+  "mode": "mock",
+  "output_skills": {},
+  "outputs": {
+    "adapter": "local_run_store",
+    "artifact_contract": "Compliance gap report with control matrix, risk register, remediation plan, audit evidence package, and executive risk summary.",
+    "run_root": "~/.mn/runs",
+    "skills": {},
+    "tcp": {
+      "enabled": false,
+      "ports": []
+    },
+    "write_run_store": true
+  },
+  "privacy": {
+    "default_classification": "internal",
+    "rules": {
+      "confidential": {
+        "log": "redacted",
+        "send_to_llm": "allowed_configs_only",
+        "send_to_output_skills": "approved_destinations_only"
+      },
+      "internal": {
+        "log": "metadata_only",
+        "send_to_llm": true,
+        "send_to_output_skills": true
+      },
+      "public": {
+        "log": true,
+        "send_to_llm": true,
+        "send_to_output_skills": true
+      },
+      "regulated": {
+        "log": "redacted",
+        "send_to_llm": false,
+        "send_to_output_skills": "approved_destinations_only"
+      }
+    }
+  },
+  "real_adapters": {
+    "env_json": {
+      "adapter": "env_json",
+      "description": "Load readiness packets from MN_BLUEPRINT_INPUT_JSON.",
+      "env": "MN_BLUEPRINT_INPUT_JSON"
+    },
+    "inline_json": {
+      "adapter": "json",
+      "description": "Load overrides from an inline JSON object.",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "description": "Load JSON overrides from a local file path.",
+      "path": null
+    }
+  },
+  "resources": {
+    "enabled": true,
+    "gpu_enabled": "auto",
+    "gpu_sample_interval_seconds": 60,
+    "history_window_hours": 24,
+    "raw_retention_hours": 48,
+    "rollup_bucket_seconds": 3600,
+    "sample_interval_seconds": 10
+  },
+  "schemas": {
+    "artifact_record": "mn.artifact.record.v1",
+    "config": "mn.blueprint.config.v1",
+    "events": "mn.blueprint.events.v1",
+    "final_artifact": "mn.blueprint.final_artifact.v1",
+    "human_control": "mn.blueprint.human_control.v1",
+    "input_skills": "mn.blueprint.input_skills.v1",
+    "inputs": "mn.blueprint.inputs.v1",
+    "logs": "mn.blueprint.logs.v1",
+    "output_skills": "mn.blueprint.output_skills.v1",
+    "resources": "mn.blueprint.resources.v1",
+    "status_contract": "mn.blueprint.status_contract.v1",
+    "web_ui": "mn.blueprint.web_ui.v1"
+  },
+  "simulation": {
+    "actions": [
+      "map_requirements",
+      "score_control_gaps",
+      "generate_remediation_pack"
+    ],
+    "deterministic": true,
+    "enabled": true,
+    "metrics": [
+      "requirements_count",
+      "mapped_controls",
+      "missing_controls",
+      "readiness_score"
+    ],
+    "objective": "maximize audit readiness",
+    "primary_metric": "readiness_score",
+    "risk_metric": "high_risk_gap_count",
+    "seed_field": "seed",
+    "type": "Risk, compliance, and control readiness workflow."
+  },
+  "standard_version": "1.0",
+  "state": {
+    "checkpoint_interval": {
+      "events": 100,
+      "seconds": 60
+    },
+    "enabled": false,
+    "idempotency_key_fields": [
+      "source_ref",
+      "event_id"
+    ],
+    "resume_mode": "none"
+  },
+  "streams": {},
+  "triggers": {
+    "schedule": null,
+    "sources": [],
+    "type": "manual"
+  },
+  "web_ui": {
+    "artifacts": [
+      "web_ui.json",
+      "ui.json",
+      "web/index.html"
+    ],
+    "dashboard": {
+      "data_source": "local_run_store",
+      "reads": [
+        "events.jsonl",
+        "human.jsonl",
+        "logs.jsonl",
+        "resources.jsonl",
+        "result.json",
+        "final_artifact.json"
+      ],
+      "standard_panels": [
+        "current_status",
+        "recent_events",
+        "pending_human_requests",
+        "output_artifacts",
+        "resource_usage",
+        "errors",
+        "llm_calls",
+        "token_budget",
+        "llm_retries"
+      ]
+    },
+    "enabled": false,
+    "input": {
+      "adapter": "none",
+      "custom_url": null,
+      "fields": [],
+      "host": "127.0.0.1",
+      "instructions": null,
+      "port": null,
+      "share": false,
+      "title": null
+    },
+    "output": {
+      "adapter": "none",
+      "auto_generate": true,
+      "custom_url": null,
+      "refresh_seconds": 2.0,
+      "title": null
+    },
+    "reads_from": "local_run_store"
+  }
+}

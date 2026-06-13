@@ -1,226 +1,11 @@
 [
   {
-    "category": "Business",
-    "description": "Use this blueprint to plan, generate, check, send, and track lifecycle emails so customer outreach stays timely, governed, and tied to customer state.",
-    "graph_id": "customer_lifecycle_email_auto_v1",
-    "id": "customer_lifecycle_email_auto",
-    "job_name": "customer-lifecycle-email-auto",
-    "name": "Customer Lifecycle Email Auto",
-    "path": "customer_lifecycle_email_auto",
-    "product": {
-      "agent_role": "Campaign planner, copywriter, policy checker, delivery executor, inbox responder.",
-      "benefit": "This can become a vertical lifecycle-growth product because it connects agent reasoning to real delivery systems and customer state.",
-      "customizable_for": "Retention campaigns, onboarding journeys, renewal nudges, education sequences.",
-      "customize": "Replace the sample customer snapshot with CRM data, add lifecycle events, tune policy gates, and connect approved email or Slack providers.",
-      "example": "Synthetic customer snapshots flow through campaign planning, copy generation, policy checks, email execution, and reply handling.",
-      "how_it_works": "Synthetic customer snapshots flow through campaign planning, copy generation, policy checks, email execution, and reply handling.",
-      "input": "Replace the sample customer snapshot with CRM data, add lifecycle events, tune policy gates, and connect approved email or Slack providers.",
-      "investor": "This can become a vertical lifecycle-growth product because it connects agent reasoning to real delivery systems and customer state.",
-      "one_line": "Use this blueprint to plan, generate, check, send, and track lifecycle emails so customer outreach stays timely, governed, and tied to customer state.",
-      "output": "Prepared emails, sent-event logs, reply handling events, and campaign summaries.",
-      "problem": "Customer outreach changes as replies, segments, policies, and delivery state evolve; static templates miss timing, context, and governance.",
-      "runtime_features": [
-        "LLM messaging",
-        "delivery integration",
-        "policy checks",
-        "long-running campaign loop"
-      ],
-      "simulation_type": "Lifecycle campaign loop with inbox and delivery state.",
-      "target_users": "Growth, lifecycle marketing, and customer success teams."
-    }
-  },
-  {
-    "category": "Business",
-    "description": "Use this blueprint to compare pricing moves against demand, inventory, margin, and competitors before you change prices in the real world.",
-    "graph_id": "pricing_profit_simulation_v1",
-    "id": "pricing_profit_simulation",
-    "job_name": "pricing-profit-simulation",
-    "name": "Pricing Profit Simulation",
-    "path": "pricing_profit_simulation",
-    "product": {
-      "agent_role": "Pricing strategy agent.",
-      "benefit": "Dynamic pricing has direct profit impact and is a strong vertical for agentic simulation with human-reviewable recommendations.",
-      "customizable_for": "Retail, travel, marketplaces, subscriptions, manufacturing quotes.",
-      "customize": "Replace synthetic demand with commerce, competitor, inventory, and margin data; tune elasticity, guardrails, and promotion rules.",
-      "example": "A connected thermostat SKU faces competitor moves and inventory pressure, and the agent chooses price increase, discount, or match actions.",
-      "how_it_works": "A connected thermostat SKU faces competitor moves and inventory pressure, and the agent chooses price increase, discount, or match actions.",
-      "input": "Replace synthetic demand with commerce, competitor, inventory, and margin data; tune elasticity, guardrails, and promotion rules.",
-      "investor": "Dynamic pricing has direct profit impact and is a strong vertical for agentic simulation with human-reviewable recommendations.",
-      "one_line": "Use this blueprint to compare pricing moves against demand, inventory, margin, and competitors before you change prices in the real world.",
-      "output": "Pricing recommendation with revenue and inventory tradeoffs.",
-      "problem": "Pricing is dynamic and coupled: competitors, demand, inventory, and margin move together faster than static rules can explain.",
-      "runtime_features": [
-        "pricing simulation",
-        "competitor dynamics",
-        "revenue forecast",
-        "LLM recommendation"
-      ],
-      "simulation_type": "Demand, competitor price, inventory, and revenue simulation.",
-      "target_users": "Pricing teams, category managers, and revenue management leaders."
-    }
-  },
-  {
-    "category": "Security",
-    "description": "Use this blueprint to watch an approved camera stream, detect visible people, summarize what is observable, and raise safety alerts with a reviewable event trail.",
-    "graph_id": "facility_safety_video_monitor_v1",
-    "id": "facility_safety_video_monitor",
-    "job_name": "facility-safety-video-monitor",
-    "name": "Facility Safety Video Monitor",
-    "path": "facility_safety_video_monitor",
-    "type": "service",
-    "product": {
-      "agent_role": "Safety observation and escalation agent.",
-      "benefit": "This illustrates vertical AI for physical operations: agents reason over evolving sensor state, preserve event trails, and trigger controlled review workflows.",
-      "customizable_for": "Door monitoring, restricted-area alerts, retail safety, warehouse operations.",
-      "customize": "Point the live camera stream at an approved facility source, tune sampling cadence and alert cooldown, add site-specific safety policies, and connect security notification channels.",
-      "example": "A door-camera stream is sampled, an Ollama-backed agent checks whether a person is visible, and alerts are throttled to avoid noise.",
-      "how_it_works": "A door-camera stream is sampled, a VL model checks whether a human face is visible, cooldown state suppresses duplicate alerts, and the run store records events and artifacts for review.",
-      "input": "Live video source URI, VL model endpoint, sampling cadence, cooldown policy, mock payloads, and optional notification destination.",
-      "investor": "This illustrates vertical AI for physical operations: agents reason over evolving sensor state and trigger controlled workflows.",
-      "one_line": "Use this blueprint to watch an approved camera stream, detect visible people, summarize what is observable, and raise safety alerts with a reviewable event trail.",
-      "output": "Human detection events, observable appearance and activity descriptions, alert decisions, and notification payloads.",
-      "problem": "Video monitoring is continuous, noisy, and operationally sensitive; teams need stateful alerts, cooldowns, and explainable observations rather than raw frames.",
-      "runtime_features": [
-        "video sampling",
-        "Ollama decision path",
-        "cooldown state",
-        "Slack alerting"
-      ],
-      "simulation_type": "Video stream sampling with alert state.",
-      "target_users": "Facilities, security, safety operations, and property management teams."
-    }
-  },
-  {
-    "category": "Business",
-    "description": "Use this blueprint to compare retention offers for at-risk customers and choose interventions with clear revenue, churn, and customer-experience tradeoffs.",
-    "graph_id": "revenue_retention_simulation_v1",
-    "id": "revenue_retention_simulation",
-    "job_name": "revenue-retention-simulation",
-    "name": "Revenue Retention Simulation",
-    "path": "revenue_retention_simulation",
-    "product": {
-      "agent_role": "Customer retention strategist.",
-      "benefit": "Retention is measurable and budgeted; this blueprint can evolve into a revenue-copilot product tied to CRM workflows.",
-      "customizable_for": "SaaS retention, subscription commerce, financial services, telecom.",
-      "customize": "Replace synthetic health metrics with CRM, product usage, support tickets, billing, and NPS data; tune action costs and segment rules.",
-      "example": "A mid-market SaaS segment deteriorates, and the agent chooses success calls, loyalty offers, or product-fix campaigns.",
-      "how_it_works": "A mid-market SaaS segment deteriorates, and the agent chooses success calls, loyalty offers, or product-fix campaigns.",
-      "input": "Replace synthetic health metrics with CRM, product usage, support tickets, billing, and NPS data; tune action costs and segment rules.",
-      "investor": "Retention is measurable and budgeted; this blueprint can evolve into a revenue-copilot product tied to CRM workflows.",
-      "one_line": "Use this blueprint to compare retention offers for at-risk customers and choose interventions with clear revenue, churn, and customer-experience tradeoffs.",
-      "output": "Retention intervention plan with expected churn and budget tradeoffs.",
-      "problem": "Churn risk changes with sentiment, product issues, and budget constraints; one-shot LLM suggestions do not show cost or state tradeoffs.",
-      "runtime_features": [
-        "customer behavior simulation",
-        "intervention planning",
-        "LLM strategy",
-        "feedback loop"
-      ],
-      "simulation_type": "Customer health and churn-risk simulation.",
-      "target_users": "Revenue operations, customer success, and growth teams."
-    }
-  },
-  {
-    "category": "Business",
-    "description": "Use this blueprint to test staffing, deflection, and escalation decisions before service queues miss SLA targets.",
-    "graph_id": "service_capacity_simulation_v1",
-    "id": "service_capacity_simulation",
-    "job_name": "service-capacity-simulation",
-    "name": "Service Capacity Simulation",
-    "path": "service_capacity_simulation",
-    "product": {
-      "agent_role": "Workforce management agent.",
-      "benefit": "Service capacity is a concrete buyer problem with clear ROI in SLA, staffing cost, and customer satisfaction.",
-      "customizable_for": "Call centers, field service, support queues, hospital operations.",
-      "customize": "Connect ACD/WFM systems, interval forecasts, schedule data, abandonment curves, and skill-based routing constraints.",
-      "example": "Call arrivals rise, wait time crosses the SLA line, and the agent chooses overtime, staff shifting, or self-service deflection.",
-      "how_it_works": "Call arrivals rise, wait time crosses the SLA line, and the agent chooses overtime, staff shifting, or self-service deflection.",
-      "input": "Connect ACD/WFM systems, interval forecasts, schedule data, abandonment curves, and skill-based routing constraints.",
-      "investor": "Service capacity is a concrete buyer problem with clear ROI in SLA, staffing cost, and customer satisfaction.",
-      "one_line": "Use this blueprint to test staffing, deflection, and escalation decisions before service queues miss SLA targets.",
-      "output": "Staffing forecast and capacity action plan.",
-      "problem": "Staffing decisions are expensive and time-sensitive; dashboards show queue waits but do not simulate next-interval choices.",
-      "runtime_features": [
-        "queue simulation",
-        "staffing decision",
-        "SLA tracking",
-        "decision feedback"
-      ],
-      "simulation_type": "Queue, staffing, and SLA simulation.",
-      "target_users": "Contact-center leaders, workforce managers, and customer operations teams."
-    }
-  },
-  {
-    "category": "Business",
-    "description": "Use this blueprint to rehearse supplier disruption responses and choose actions that protect inventory, fulfillment, and customer service levels.",
-    "graph_id": "supply_chain_resilience_simulation_v1",
-    "id": "supply_chain_resilience_simulation",
-    "job_name": "supply-chain-resilience-simulation",
-    "name": "Supply Chain Resilience Simulation",
-    "path": "supply_chain_resilience_simulation",
-    "product": {
-      "agent_role": "Supply chain disruption response agent.",
-      "benefit": "Supply-chain resilience is a large enterprise pain point where optimization plus LLM recommendations can become an operations command center.",
-      "customizable_for": "Manufacturing, retail, healthcare supplies, logistics networks.",
-      "customize": "Connect ERP, supplier EDI, demand forecasts, inventory systems, and lane-level costs; tune the Pyomo objective, budget, lane capacities, service penalties, and delay assumptions.",
-      "example": "Industrial sensor inventory tightens in the Northeast while delays rise, and a Pyomo model allocates budget across expedite freight, supplier switching, and inventory allocation before the agent explains the plan.",
-      "how_it_works": "Industrial sensor inventory tightens in the Northeast while delays rise, and a Pyomo model allocates budget across expedite freight, supplier switching, and inventory allocation before the agent explains the plan.",
-      "input": "Connect ERP, supplier EDI, demand forecasts, inventory systems, and lane-level costs; tune the Pyomo objective, budget, lane capacities, service penalties, and delay assumptions.",
-      "investor": "Supply-chain resilience is a large enterprise pain point where optimization plus LLM recommendations can become an operations command center.",
-      "one_line": "Use this blueprint to rehearse supplier disruption responses and choose actions that protect inventory, fulfillment, and customer service levels.",
-      "output": "Disruption response plan with optimized mitigation quantities, action history, and supplier-lane ranking.",
-      "problem": "Demand spikes and supplier delays compound over time; static dashboards show the fire but do not optimize budget-constrained mitigation paths.",
-      "runtime_features": [
-        "dynamic simulation",
-        "Pyomo optimization model",
-        "LLM planner",
-        "time-varying inventory",
-        "decision loop"
-      ],
-      "simulation_type": "Inventory, demand, supplier-delay, and Pyomo optimization simulation.",
-      "target_users": "Supply chain operators, procurement leaders, and operations executives."
-    }
-  },
-  {
-    "category": "Business",
-    "description": "Use this blueprint to turn messy discovery notes into a board-ready AI strategy recommendation with priorities, risks, and next steps.",
-    "graph_id": "ai_strategy_planning_v1",
-    "id": "ai_strategy_planning",
-    "job_name": "ai-strategy-planning",
-    "name": "AI Strategy Planning",
-    "path": "ai_strategy_planning",
-    "product": {
-      "agent_role": "Strategy discovery and board recommendation agent.",
-      "benefit": "This compresses the strategy-discovery layer below senior expert judgment and can become a consulting discovery workbench for enterprise and PE transformation teams.",
-      "customizable_for": "Enterprise strategy, private-equity value creation, CFO transformation, corporate development, and transformation-office discovery.",
-      "customize": "Replace the mock packet with client documents, transcripts, financial tables, process maps, policy repositories, and market research notes; tune theme clustering, roadmap workstreams, and report language.",
-      "example": "A synthetic industrial client packet flows through document reading, meeting summarization, benchmark synthesis, spreadsheet profiling, opportunity mapping, slide outlining, and roadmap generation.",
-      "how_it_works": "A synthetic industrial client packet flows through document reading, meeting summarization, benchmark synthesis, spreadsheet profiling, opportunity mapping, slide outlining, and roadmap generation.",
-      "input": "Replace the mock packet with client documents, transcripts, financial tables, process maps, policy repositories, and market research notes; tune theme clustering, roadmap workstreams, and report language.",
-      "investor": "This compresses the strategy-discovery layer below senior expert judgment and can become a consulting discovery workbench for enterprise and PE transformation teams.",
-      "one_line": "Use this blueprint to turn messy discovery notes into a board-ready AI strategy recommendation with priorities, risks, and next steps.",
-      "output": "Board-ready recommendation packet with summary, issue tree, opportunity map, roadmap, slide outline, and evidence appendix.",
-      "problem": "Companies spend weeks collecting documents, interviewing teams, summarizing findings, and building first-draft strategy recommendations.",
-      "runtime_features": [
-        "document ingestion",
-        "meeting summarization",
-        "market research synthesis",
-        "spreadsheet profiling",
-        "first-draft slide outline",
-        "implementation roadmap"
-      ],
-      "simulation_type": "Document-to-board-recommendation consulting workflow.",
-      "target_users": "Large enterprise strategy, CFO, corporate development, private-equity operating, and transformation-office teams."
-    }
-  },
-  {
     "category": "Security",
     "description": "Use this blueprint to turn AI and cyber control requirements into an evidence-backed readiness pack your team can review before audit or launch.",
-    "graph_id": "ai_audit_readiness_v1",
-    "id": "ai_audit_readiness",
-    "job_name": "ai-audit-readiness",
-    "name": "AI Audit Readiness",
-    "path": "ai_audit_readiness",
+    "id": "ai_control_readiness_assistant",
+    "job_name": "ai-control-readiness-assistant",
+    "name": "AI Control Readiness Assistant",
+    "path": "ai_control_readiness_assistant",
     "product": {
       "agent_role": "AI, cyber, and control readiness agent.",
       "benefit": "This is a durable TrustOps workflow for regulated AI and cyber adoption because evidence collection, risk scoring, remediation, and audit trails recur continuously.",
@@ -243,48 +28,78 @@
       ],
       "simulation_type": "Risk, compliance, and control readiness workflow.",
       "target_users": "Financial services, healthcare, aerospace, defense, public sector contractors, enterprise AI, and cybersecurity teams."
-    }
+    },
+    "workflow_id": "ai_control_readiness_assistant_v1"
   },
   {
     "category": "Business",
-    "description": "Use this blueprint to convert requirements and vendor responses into a scored recommendation, implementation plan, and reviewable decision record.",
-    "graph_id": "vendor_selection_decision_v1",
-    "id": "vendor_selection_decision",
-    "job_name": "vendor-selection-decision",
-    "name": "Vendor Selection Decision",
-    "path": "vendor_selection_decision",
+    "description": "Use this blueprint to turn messy discovery notes into a board-ready AI strategy recommendation with priorities, risks, and next steps.",
+    "id": "ai_strategy_advisory_assistant",
+    "job_name": "ai-strategy-advisory-assistant",
+    "name": "AI Strategy Advisory Assistant",
+    "path": "ai_strategy_advisory_assistant",
     "product": {
-      "agent_role": "Vendor selection and implementation roadmap agent.",
-      "benefit": "Vendor selection is a repeatable high-value transformation workflow that can expand from RFP copilot into implementation readiness and procurement decision operations.",
-      "customizable_for": "ERP, CRM, cloud, cybersecurity, AI platform, robotics, outsourcing, and implementation partner selection.",
-      "customize": "Replace mock vendors with RFP exports, security questionnaires, pricing sheets, architecture constraints, stakeholder notes, and procurement policies; adjust criteria, weights, risk rules, and roadmap phases.",
-      "example": "A CIO team selects an AI-enabled field service platform by generating an RFP package, scoring vendors, profiling pricing, surfacing missing answers, and building an implementation roadmap.",
-      "how_it_works": "A CIO team selects an AI-enabled field service platform by generating an RFP package, scoring vendors, profiling pricing, surfacing missing answers, and building an implementation roadmap.",
-      "input": "Replace mock vendors with RFP exports, security questionnaires, pricing sheets, architecture constraints, stakeholder notes, and procurement policies; adjust criteria, weights, risk rules, and roadmap phases.",
-      "investor": "Vendor selection is a repeatable high-value transformation workflow that can expand from RFP copilot into implementation readiness and procurement decision operations.",
-      "one_line": "Use this blueprint to convert requirements and vendor responses into a scored recommendation, implementation plan, and reviewable decision record.",
-      "output": "Vendor comparison matrix, recommendation memo, implementation roadmap, cost/risk model, process map, and negotiation questions.",
-      "problem": "Companies need a repeatable way to turn requirements, RFP responses, pricing, security evidence, and stakeholder input into an executive vendor decision.",
+      "agent_role": "Strategy discovery and board recommendation agent.",
+      "benefit": "This compresses the strategy-discovery layer below senior expert judgment and can become a consulting discovery workbench for enterprise and PE transformation teams.",
+      "customizable_for": "Enterprise strategy, private-equity value creation, CFO transformation, corporate development, and transformation-office discovery.",
+      "customize": "Replace the mock packet with client documents, transcripts, financial tables, process maps, policy repositories, and market research notes; tune theme clustering, roadmap workstreams, and report language.",
+      "example": "A synthetic industrial client packet flows through document reading, meeting summarization, benchmark synthesis, spreadsheet profiling, opportunity mapping, slide outlining, and roadmap generation.",
+      "how_it_works": "A synthetic industrial client packet flows through document reading, meeting summarization, benchmark synthesis, spreadsheet profiling, opportunity mapping, slide outlining, and roadmap generation.",
+      "input": "Replace the mock packet with client documents, transcripts, financial tables, process maps, policy repositories, and market research notes; tune theme clustering, roadmap workstreams, and report language.",
+      "investor": "This compresses the strategy-discovery layer below senior expert judgment and can become a consulting discovery workbench for enterprise and PE transformation teams.",
+      "one_line": "Use this blueprint to turn messy discovery notes into a board-ready AI strategy recommendation with priorities, risks, and next steps.",
+      "output": "Board-ready recommendation packet with summary, issue tree, opportunity map, roadmap, slide outline, and evidence appendix.",
+      "problem": "Companies spend weeks collecting documents, interviewing teams, summarizing findings, and building first-draft strategy recommendations.",
       "runtime_features": [
-        "RFP package generation",
-        "vendor response normalization",
-        "weighted scoring",
-        "spreadsheet cost profiling",
-        "implementation roadmap",
-        "process map generation"
+        "document ingestion",
+        "meeting summarization",
+        "market research synthesis",
+        "spreadsheet profiling",
+        "first-draft slide outline",
+        "implementation roadmap"
       ],
-      "simulation_type": "Vendor selection and implementation roadmap workflow.",
-      "target_users": "CIO offices, procurement, transformation offices, private-equity operating teams, and enterprise architecture teams."
-    }
+      "simulation_type": "Document-to-board-recommendation consulting workflow.",
+      "target_users": "Large enterprise strategy, CFO, corporate development, private-equity operating, and transformation-office teams."
+    },
+    "workflow_id": "ai_strategy_advisory_assistant_v1"
+  },
+  {
+    "category": "Science",
+    "description": "Use this blueprint to compare local flood mitigation plans as rainfall, water levels, pump capacity, and vulnerable assets change.",
+    "id": "climate_resilience_planning_assistant",
+    "job_name": "climate-resilience-planning-assistant",
+    "name": "Climate Resilience Planning Assistant",
+    "path": "climate_resilience_planning_assistant",
+    "product": {
+      "agent_role": "Climate resilience planning advisor.",
+      "benefit": "Climate adaptation budgets are growing, and this blueprint shows a credible planning engine for local infrastructure decisions.",
+      "customizable_for": "Cities, utilities, campuses, hospitals, industrial sites.",
+      "customize": "Replace synthetic weather with forecasts, flood maps, asset inventories, pump telemetry, road networks, and local cost assumptions.",
+      "example": "Rainfall intensifies in Riverton, flood levels rise, and the advisor chooses pumps, sandbags, or road closures.",
+      "how_it_works": "Rainfall intensifies in Riverton, flood levels rise, and the advisor chooses pumps, sandbags, or road closures.",
+      "input": "Replace synthetic weather with forecasts, flood maps, asset inventories, pump telemetry, road networks, and local cost assumptions.",
+      "investor": "Climate adaptation budgets are growing, and this blueprint shows a credible planning engine for local infrastructure decisions.",
+      "one_line": "Use this blueprint to compare local flood mitigation plans as rainfall, water levels, pump capacity, and vulnerable assets change.",
+      "output": "Local climate mitigation plan with ranked assets.",
+      "problem": "Climate events unfold over time and stress infrastructure unevenly; static risk maps do not recommend operational mitigations during a scenario.",
+      "runtime_features": [
+        "climate risk simulation",
+        "infrastructure state",
+        "mitigation planning",
+        "scenario testing"
+      ],
+      "simulation_type": "Weather, flooding, and infrastructure vulnerability simulation.",
+      "target_users": "Municipal resilience teams, infrastructure planners, utilities, and climate-risk analysts."
+    },
+    "workflow_id": "climate_resilience_planning_assistant_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to see how compressed agent memory helps teams analyze large codebases without flooding every worker with full repository context.",
-    "graph_id": "codebase_memory_compression_analysis_v1",
-    "id": "codebase_memory_compression_analysis",
-    "job_name": "codebase-memory-compression-analysis",
-    "name": "Codebase Memory Compression Analysis",
-    "path": "codebase_memory_compression_analysis",
+    "id": "codebase_context_memory_analysis_assistant",
+    "job_name": "codebase-context-memory-analysis-assistant",
+    "name": "Codebase Context Memory Analysis Assistant",
+    "path": "codebase_context_memory_analysis_assistant",
     "product": {
       "agent_role": "Repo architect, dependency mapper, risk classifier, context compressor, briefing author.",
       "benefit": "Large-repo code analysis is a high-value enterprise workflow where memory quality directly affects latency, cost, confidence, and auditability.",
@@ -309,46 +124,46 @@
       ],
       "simulation_type": "Large-repo code analysis memory-pressure benchmark.",
       "target_users": "Engineering leaders and platform teams evaluating memory systems for code analysis agents."
-    }
+    },
+    "workflow_id": "codebase_context_memory_analysis_assistant_v1"
   },
   {
-    "category": "Finance",
-    "description": "Use this blueprint to prioritize claim reviews by combining fraud signals, queue pressure, and adjuster capacity into an auditable triage recommendation.",
-    "graph_id": "claim_risk_triage_v1",
-    "id": "claim_risk_triage",
-    "job_name": "claim-risk-triage",
-    "name": "Claim Risk Triage",
-    "path": "claim_risk_triage",
+    "category": "Engineering",
+    "description": "Use this blueprint to model buyer-supplier negotiation rounds and compare offers as demand, price, and capacity change.",
+    "id": "contract_negotiation_rehearsal_assistant",
+    "job_name": "contract-negotiation-rehearsal-assistant",
+    "name": "Contract Negotiation Rehearsal Assistant",
+    "path": "contract_negotiation_rehearsal_assistant",
     "product": {
-      "agent_role": "Insurance claim risk triage agent.",
-      "benefit": "Claims triage has measurable ROI in leakage, cycle time, and customer satisfaction, making it a strong vertical agent workflow.",
-      "customizable_for": "Auto, property, health, warranty, and specialty claims.",
-      "customize": "Replace synthetic claims with FNOL, adjuster notes, photos, repair estimates, policy data, and fraud-model outputs.",
-      "example": "Auto claims volume rises, fraud signal spikes, and the agent chooses SIU escalation, fast-track, or evidence requests.",
-      "how_it_works": "Auto claims volume rises, fraud signal spikes, and the agent chooses SIU escalation, fast-track, or evidence requests.",
-      "input": "Replace synthetic claims with FNOL, adjuster notes, photos, repair estimates, policy data, and fraud-model outputs.",
-      "investor": "Claims triage has measurable ROI in leakage, cycle time, and customer satisfaction, making it a strong vertical agent workflow.",
-      "one_line": "Use this blueprint to prioritize claim reviews by combining fraud signals, queue pressure, and adjuster capacity into an auditable triage recommendation.",
-      "output": "Claim triage report with prioritized segments and review actions.",
-      "problem": "Claims queues evolve continuously; teams need to balance fast settlement, fraud risk, loss ratio, and adjuster capacity.",
+      "agent_role": "Negotiation mediator agent.",
+      "benefit": "The blueprint shows how the runtime can represent multiple stakeholder agents, a core pattern for enterprise decision automation.",
+      "customizable_for": "Procurement, renewals, vendor management, enterprise sales deal desks.",
+      "customize": "Replace synthetic terms with contracts, supplier scorecards, price corridors, delivery constraints, or approval rules.",
+      "example": "Buyer and supplier messages are generated each tick while a mediator chooses offer, volume, or pause actions.",
+      "how_it_works": "Buyer and supplier messages are generated each tick while a mediator chooses offer, volume, or pause actions.",
+      "input": "Replace synthetic terms with contracts, supplier scorecards, price corridors, delivery constraints, or approval rules.",
+      "investor": "The blueprint shows how the runtime can represent multiple stakeholder agents, a core pattern for enterprise decision automation.",
+      "one_line": "Use this blueprint to model buyer-supplier negotiation rounds and compare offers as demand, price, and capacity change.",
+      "output": "Negotiation brief with agreement score, action history, and ranked deal terms.",
+      "problem": "Negotiation is dynamic: positions change as demand, capacity, and costs move, so static summaries cannot capture the next best move.",
       "runtime_features": [
-        "claim stream simulation",
-        "risk triage",
-        "LLM prioritization",
-        "feedback loop"
+        "multi-agent reasoning",
+        "time-varying constraints",
+        "decision loop",
+        "structured negotiation output"
       ],
-      "simulation_type": "Claim queue and fraud-signal simulation.",
-      "target_users": "Insurance claims leaders, SIU teams, adjuster operations, and insurtech builders."
-    }
+      "simulation_type": "Multi-agent negotiation state simulation.",
+      "target_users": "Developers building multi-agent workflows and procurement teams evaluating negotiation automation."
+    },
+    "workflow_id": "contract_negotiation_rehearsal_assistant_v1"
   },
   {
     "category": "Finance",
     "description": "Use this blueprint to spot borrower default pressure early and compare policy responses before credit risk turns into losses.",
-    "graph_id": "credit_default_warning_v1",
-    "id": "credit_default_warning",
-    "job_name": "credit-default-warning",
-    "name": "Credit Default Warning",
-    "path": "credit_default_warning",
+    "id": "credit_default_warning_assistant",
+    "job_name": "credit-default-warning-assistant-assistant",
+    "name": "Credit Default Warning Assistant",
+    "path": "credit_default_warning_assistant",
     "product": {
       "agent_role": "Credit risk decision agent.",
       "benefit": "Credit risk is a regulated, high-ROI vertical where stateful AI can support explainable early-warning workflows.",
@@ -369,139 +184,16 @@
       ],
       "simulation_type": "Borrower default and credit policy simulation.",
       "target_users": "Credit-risk teams, lenders, fintech underwriters, and portfolio analysts."
-    }
-  },
-  {
-    "category": "Finance",
-    "description": "Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile.",
-    "graph_id": "liquidity_risk_monitor_v1",
-    "id": "liquidity_risk_monitor",
-    "job_name": "liquidity-risk-monitor",
-    "name": "Liquidity Risk Monitor",
-    "path": "liquidity_risk_monitor",
-    "type": "service",
-    "product": {
-      "agent_role": "Signal analyzer, market explainer, advisor agent.",
-      "benefit": "The blueprint is a credible wedge for trading-risk copilots because it combines streaming data, simulation, and explainable agent decisions.",
-      "customizable_for": "Equities, crypto, FX, liquidity monitoring, trading operations.",
-      "customize": "Replace the fake stock stream with exchange, broker, or market-data feeds; tune symbols, volatility, thresholds, and alert policy.",
-      "example": "A synthetic equity stream generates ticks, technical signals, market-advisor events, and LLM explanations for meaningful moves.",
-      "how_it_works": "A synthetic equity stream generates ticks, technical signals, market-advisor events, and LLM explanations for meaningful moves.",
-      "input": "Replace the fake stock stream with exchange, broker, or market-data feeds; tune symbols, volatility, thresholds, and alert policy.",
-      "investor": "The blueprint is a credible wedge for trading-risk copilots because it combines streaming data, simulation, and explainable agent decisions.",
-      "one_line": "Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile.",
-      "output": "Market signals, risk explanations, advice events, and optional Slack alerts.",
-      "problem": "Markets evolve tick by tick; spreads, depth, momentum, and volatility interact faster than static dashboards or one-shot summaries can capture.",
-      "runtime_features": [
-        "stream simulation",
-        "technical signals",
-        "LLM explanation",
-        "live advisor loop"
-      ],
-      "simulation_type": "Live market stream and exchange-style signal simulation.",
-      "target_users": "Trading teams, market-risk analysts, and fintech product evaluators."
-    }
-  },
-  {
-    "category": "Finance",
-    "description": "Use this blueprint to stress a portfolio against crash, rate, and liquidity shocks and review rebalancing choices before taking action.",
-    "graph_id": "portfolio_crash_stress_simulation_v1",
-    "id": "portfolio_crash_stress_simulation",
-    "job_name": "portfolio-crash-stress-simulation",
-    "name": "Portfolio Crash Stress Simulation",
-    "path": "portfolio_crash_stress_simulation",
-    "product": {
-      "agent_role": "Portfolio stress-test analyst.",
-      "benefit": "Asset-management risk copilots are commercially attractive because decisions are high-value and require explainable scenario reasoning.",
-      "customizable_for": "Wealth management, treasury, family offices, robo-advisory risk overlays.",
-      "customize": "Connect holdings, factor exposures, risk models, macro scenarios, tax constraints, and policy limits.",
-      "example": "A stagflation shock raises rates and drawdown while liquidity falls, and the agent chooses hedge, cash, or defensive rebalance actions.",
-      "how_it_works": "A stagflation shock raises rates and drawdown while liquidity falls, and the agent chooses hedge, cash, or defensive rebalance actions.",
-      "input": "Connect holdings, factor exposures, risk models, macro scenarios, tax constraints, and policy limits.",
-      "investor": "Asset-management risk copilots are commercially attractive because decisions are high-value and require explainable scenario reasoning.",
-      "one_line": "Use this blueprint to stress a portfolio against crash, rate, and liquidity shocks and review rebalancing choices before taking action.",
-      "output": "Portfolio risk report and rebalance recommendation.",
-      "problem": "Risk changes path-dependently during shocks; one summary cannot show how hedges, cash, and defensive moves alter the next state.",
-      "runtime_features": [
-        "macro shock simulation",
-        "portfolio risk",
-        "LLM risk report",
-        "decision feedback"
-      ],
-      "simulation_type": "Macro shock and portfolio risk simulation.",
-      "target_users": "Portfolio managers, wealth advisors, risk officers, and fintech evaluators."
-    }
-  },
-  {
-    "category": "Finance",
-    "description": "Use this blueprint to rank property acquisition opportunities by ZIP-code demand, price, cap-rate, and risk signals before committing diligence time.",
-    "graph_id": "zip_code_property_ranking_v1",
-    "id": "zip_code_property_ranking",
-    "job_name": "zip-code-property-ranking",
-    "name": "Zip Code Property Ranking",
-    "path": "zip_code_property_ranking",
-    "product": {
-      "agent_role": "Real estate investment analyst.",
-      "benefit": "This is a credible vertical AI wedge for real-estate investors because the output is a ranked, actionable acquisition list.",
-      "customizable_for": "Rental acquisitions, flipping pipelines, multifamily sourcing, market expansion.",
-      "customize": "Replace synthetic listings with MLS, county records, broker flow, Redfin/Zillow exports, rent data, and investor constraints like DSCR or cap-rate floors.",
-      "example": "A target ZIP code sees demand tighten and risk widen, and the agent decides whether to bid, negotiate, or watchlist listings.",
-      "how_it_works": "A target ZIP code sees demand tighten and risk widen, and the agent decides whether to bid, negotiate, or watchlist listings.",
-      "input": "Replace synthetic listings with MLS, county records, broker flow, Redfin/Zillow exports, rent data, and investor constraints like DSCR or cap-rate floors.",
-      "investor": "This is a credible vertical AI wedge for real-estate investors because the output is a ranked, actionable acquisition list.",
-      "one_line": "Use this blueprint to rank property acquisition opportunities by ZIP-code demand, price, cap-rate, and risk signals before committing diligence time.",
-      "output": "Ranked opportunities and bid/watchlist recommendation.",
-      "problem": "Property opportunities change with rates, inventory, rents, neighborhood demand, and liquidity; static comps cannot rank next-best actions.",
-      "runtime_features": [
-        "market simulation",
-        "opportunity ranking",
-        "LLM investment reasoning",
-        "scenario testing"
-      ],
-      "simulation_type": "ZIP-code property market simulation.",
-      "target_users": "Real-estate investors, acquisition analysts, and property-tech teams."
-    }
-  },
-  {
-    "category": "Finance",
-    "description": "Use this blueprint to rank property opportunities while preserving useful deal memory across noisy ZIP-code history, broker flow, financing constraints, and past outcomes.",
-    "graph_id": "zip_code_property_memory_ranking_v1",
-    "id": "zip_code_property_memory_ranking",
-    "job_name": "zip-code-property-memory-ranking",
-    "name": "Zip Code Property Memory Ranking",
-    "path": "zip_code_property_memory_ranking",
-    "product": {
-      "agent_role": "Real estate investment analyst with working memory.",
-      "benefit": "This shows memory as measurable decision-quality lift, which is a stronger wedge than a simple chat interface over real-estate data.",
-      "customizable_for": "Rental acquisitions, flipping pipelines, multifamily sourcing, market expansion, diligence memory, and capital-allocation committees.",
-      "customize": "Replace the synthetic history with MLS exports, county records, broker notes, rent comps, lender constraints, inspection summaries, insurance quotes, and prior decision outcomes.",
-      "example": "A noisy current snapshot favors Ivy Duplex, but working memory recalls flood and roof risk while connecting River Quad rent upside, financing, and seller motivation.",
-      "how_it_works": "A noisy current snapshot favors Ivy Duplex, but working memory recalls flood and roof risk while connecting River Quad rent upside, financing, and seller motivation.",
-      "input": "Replace the synthetic history with MLS exports, county records, broker notes, rent comps, lender constraints, inspection summaries, insurance quotes, and prior decision outcomes.",
-      "investor": "This shows memory as measurable decision-quality lift, which is a stronger wedge than a simple chat interface over real-estate data.",
-      "one_line": "Use this blueprint to rank property opportunities while preserving useful deal memory across noisy ZIP-code history, broker flow, financing constraints, and past outcomes.",
-      "output": "Ranked opportunities, source-grounded bid/watchlist recommendation, and memory decision-quality benchmark.",
-      "problem": "Property acquisition decisions often depend on older broker, lender, rent, insurance, and diligence facts that disappear inside large noisy deal flow.",
-      "runtime_features": [
-        "large synthetic finance context",
-        "working memory retrieval",
-        "source refs",
-        "decision quality benchmark",
-        "with/without memory comparison",
-        "LLM investment reasoning"
-      ],
-      "simulation_type": "ZIP-code property market simulation with large historical memory.",
-      "target_users": "Real-estate investors, acquisition analysts, property-tech teams, and diligence operators."
-    }
+    },
+    "workflow_id": "credit_default_warning_assistant_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to understand how a closed-loop agent observes changing work, decides on each tick, and leaves an inspectable action trail.",
-    "graph_id": "closed_loop_agent_runtime_v1",
-    "id": "closed_loop_agent_runtime",
-    "job_name": "closed-loop-agent-runtime",
-    "name": "Closed Loop Agent Runtime",
-    "path": "closed_loop_agent_runtime",
+    "id": "demo_closed_loop_agent_runtime",
+    "job_name": "demo-closed-loop-agent-runtime",
+    "name": "Demo: Closed Loop Agent Runtime",
+    "path": "demo_closed_loop_agent_runtime",
     "product": {
       "agent_role": "Operations loop controller.",
       "benefit": "This is the smallest proof of the platform thesis: agents reason inside systems, not outside them.",
@@ -522,17 +214,16 @@
       ],
       "simulation_type": "Time-stepped operations queue simulation.",
       "target_users": "Developers, evaluators, and technical buyers learning the closed-loop agent model."
-    }
+    },
+    "workflow_id": "demo_closed_loop_agent_runtime_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to test and demo advanced cluster reliability management with Nomad-inspired scheduling, lifecycle, recovery, drain, and service-discovery controls.",
-    "graph_id": "cluster_reliability_simulation_v1",
-    "id": "cluster_reliability_simulation",
-    "job_name": "cluster-reliability-simulation",
-    "name": "Cluster Reliability Simulation",
-    "path": "cluster_reliability_simulation",
-    "type": "service",
+    "id": "demo_cluster_reliability_service",
+    "job_name": "demo-cluster-reliability-service",
+    "name": "Demo: Cluster Reliability Service",
+    "path": "demo_cluster_reliability_service",
     "product": {
       "agent_role": "Cluster reliability planner, probe worker, drain rehearsal worker, and manual recovery gate.",
       "benefit": "This turns low-level runtime reliability features into a repeatable product demo and release verification workflow.",
@@ -561,16 +252,17 @@
       ],
       "simulation_type": "Two-node cluster reliability rehearsal with scheduler and recovery evidence.",
       "target_users": "Runtime engineers, cluster operators, and reliability evaluators."
-    }
+    },
+    "type": "service",
+    "workflow_id": "demo_cluster_reliability_service_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to audit how role-specific context packets move through a multi-agent decision process and affect the final recommendation.",
-    "graph_id": "context_memory_audit_v1",
-    "id": "context_memory_audit",
-    "job_name": "context-memory-audit",
-    "name": "Context Memory Audit",
-    "path": "context_memory_audit",
+    "id": "demo_context_memory_audit",
+    "job_name": "demo-context-memory-audit",
+    "name": "Demo: Context Memory Audit",
+    "path": "demo_context_memory_audit",
     "product": {
       "agent_role": "Policy interpreter, evidence extractor, risk classifier, decision agent, critic.",
       "benefit": "Governed memory is a core enterprise requirement for regulated AI workflows; this blueprint makes it concrete.",
@@ -591,16 +283,16 @@
       ],
       "simulation_type": "Multi-agent context handoff with scoped memory.",
       "target_users": "Developers and compliance teams evaluating context-engine governance."
-    }
+    },
+    "workflow_id": "demo_context_memory_audit_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to test whether compressed working memory keeps a growing LLM workflow useful while reducing context load and cost.",
-    "graph_id": "context_memory_compression_v1",
-    "id": "context_memory_compression",
-    "job_name": "context-memory-compression",
-    "name": "Context Memory Compression",
-    "path": "context_memory_compression",
+    "id": "demo_context_memory_compression",
+    "job_name": "demo-context-memory-compression",
+    "name": "Demo: Context Memory Compression",
+    "path": "demo_context_memory_compression",
     "product": {
       "agent_role": "Context researcher, expander, challenger, compressor, briefing author.",
       "benefit": "State management and compression are differentiators for agent platforms moving beyond one-shot prompts.",
@@ -621,16 +313,16 @@
       ],
       "simulation_type": "Growing memory graph with compression pressure.",
       "target_users": "Developers building long-context agent systems with bounded prompt budgets."
-    }
+    },
+    "workflow_id": "demo_context_memory_compression_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to experiment with control decisions in a changing environment where load, temperature, reserve, and service levels interact.",
-    "graph_id": "environment_control_simulation_v1",
-    "id": "environment_control_simulation",
-    "job_name": "environment-control-simulation",
-    "name": "Environment Control Simulation",
-    "path": "environment_control_simulation",
+    "id": "demo_environment_control_loop",
+    "job_name": "demo-environment-control-loop",
+    "name": "Demo: Environment Control Loop",
+    "path": "demo_environment_control_loop",
     "product": {
       "agent_role": "Dynamic environment controller.",
       "benefit": "This demonstrates why runtime state and simulation matter for agentic control applications.",
@@ -651,46 +343,16 @@
       ],
       "simulation_type": "Closed-loop control simulation.",
       "target_users": "Developers and operators testing control-loop blueprints before adding domain data."
-    }
-  },
-  {
-    "category": "Engineering",
-    "description": "Use this blueprint to triage noisy event streams and see how anomaly pressure, queue depth, and false positives change decisions over time.",
-    "graph_id": "event_stream_triage_v1",
-    "id": "event_stream_triage",
-    "job_name": "event-stream-triage",
-    "name": "Event Stream Triage",
-    "path": "event_stream_triage",
-    "product": {
-      "agent_role": "Event stream triage agent.",
-      "benefit": "This maps directly to commercial observability and security use cases where stateful triage is valuable.",
-      "customizable_for": "Security operations, payments monitoring, reliability engineering, fraud detection.",
-      "customize": "Replace synthetic events with logs, payments, telemetry, or security alerts; tune anomaly thresholds and routing actions.",
-      "example": "An event stream spikes, anomaly scores rise, and the triage agent tightens filters or escalates high-signal events.",
-      "how_it_works": "An event stream spikes, anomaly scores rise, and the triage agent tightens filters or escalates high-signal events.",
-      "input": "Replace synthetic events with logs, payments, telemetry, or security alerts; tune anomaly thresholds and routing actions.",
-      "investor": "This maps directly to commercial observability and security use cases where stateful triage is valuable.",
-      "one_line": "Use this blueprint to triage noisy event streams and see how anomaly pressure, queue depth, and false positives change decisions over time.",
-      "output": "Event stream report with queue state, triage actions, and ranked partitions.",
-      "problem": "Event streams are noisy and bursty; teams need agents that maintain state and route actions as conditions change.",
-      "runtime_features": [
-        "event stream processing",
-        "state machine",
-        "LLM triage",
-        "feedback loop"
-      ],
-      "simulation_type": "Stateful event stream simulation.",
-      "target_users": "Developers building alerting, stream processing, and incident triage agents."
-    }
+    },
+    "workflow_id": "demo_environment_control_loop_v1"
   },
   {
     "category": "Security",
     "description": "Use this blueprint to add a human approval checkpoint before an agent applies high-impact actions, with clear review and audit records.",
-    "graph_id": "human_approval_gate_v1",
-    "id": "human_approval_gate",
-    "job_name": "human-approval-gate",
-    "name": "Human Approval Gate",
-    "path": "human_approval_gate",
+    "id": "demo_human_approval_gate",
+    "job_name": "demo-human-approval-gate",
+    "name": "Demo: Human Approval Gate",
+    "path": "demo_human_approval_gate",
     "product": {
       "agent_role": "Decision support agent.",
       "benefit": "Human-in-the-loop control is essential for enterprise adoption, especially in regulated or high-cost workflows.",
@@ -711,16 +373,16 @@
       ],
       "simulation_type": "Approval-gated decision simulation.",
       "target_users": "Developers and governance teams designing approval-gated agent workflows."
-    }
+    },
+    "workflow_id": "demo_human_approval_gate_v1"
   },
   {
     "category": "Security",
     "description": "Use this blueprint to run a complete human review loop where requests, decisions, revisions, and applied actions are all captured.",
-    "graph_id": "human_review_workflow_v1",
-    "id": "human_review_workflow",
-    "job_name": "human-review-workflow",
-    "name": "Human Review Workflow",
-    "path": "human_review_workflow",
+    "id": "demo_human_review_workflow",
+    "job_name": "demo-human-review-workflow",
+    "name": "Demo: Human Review Workflow",
+    "path": "demo_human_review_workflow",
     "product": {
       "agent_role": "Human-in-the-loop workflow coordinator.",
       "benefit": "Human-in-the-loop control is a durable enterprise requirement because it connects agent autonomy to accountable review and audit trails.",
@@ -741,17 +403,16 @@
       ],
       "simulation_type": "State-driven human-in-the-loop decision workflow.",
       "target_users": "Developers and governance teams building reviewable agent workflows."
-    }
+    },
+    "workflow_id": "demo_human_review_workflow_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to process live telemetry chunks, detect changing signal patterns, and summarize what operators need to notice.",
-    "graph_id": "live_telemetry_monitor_v1",
-    "id": "live_telemetry_monitor",
-    "job_name": "live-telemetry-monitor",
-    "name": "Live Telemetry Monitor",
-    "path": "live_telemetry_monitor",
-    "type": "service",
+    "id": "demo_live_telemetry_monitor",
+    "job_name": "demo-live-telemetry-monitor",
+    "name": "Demo: Live Telemetry Monitor",
+    "path": "demo_live_telemetry_monitor",
     "product": {
       "agent_role": "Stream processor and summarizer.",
       "benefit": "Stream processing is where static prompts fail; this blueprint shows agents embedded in live data movement.",
@@ -772,16 +433,17 @@
       ],
       "simulation_type": "Live telemetry stream.",
       "target_users": "Developers building event-stream workflows and runtime observability paths."
-    }
+    },
+    "type": "service",
+    "workflow_id": "demo_live_telemetry_monitor_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to see an LLM agent call a forecast tool, weigh the result, and choose a resource action you can inspect.",
-    "graph_id": "llm_tool_orchestration_v1",
-    "id": "llm_tool_orchestration",
-    "job_name": "llm-tool-orchestration",
-    "name": "LLM Tool Orchestration",
-    "path": "llm_tool_orchestration",
+    "id": "demo_llm_tool_orchestration",
+    "job_name": "demo-llm-tool-orchestration",
+    "name": "Demo: LLM Tool Orchestration",
+    "path": "demo_llm_tool_orchestration",
     "product": {
       "agent_role": "Tool-using planning agent.",
       "benefit": "Tool orchestration is a bridge from chatbot to workflow engine; this blueprint makes that transition inspectable.",
@@ -802,16 +464,16 @@
       ],
       "simulation_type": "Tool-informed resource simulation.",
       "target_users": "Developers adding tools, forecasts, or deterministic calculators to agent workflows."
-    }
+    },
+    "workflow_id": "demo_llm_tool_orchestration_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to trace how messages move through router and aggregator agents so workflow wiring is easier to debug and explain.",
-    "graph_id": "message_routing_trace_v1",
-    "id": "message_routing_trace",
-    "job_name": "message-routing-trace",
-    "name": "Message Routing Trace",
-    "path": "message_routing_trace",
+    "id": "demo_message_routing_trace",
+    "job_name": "demo-message-routing-trace",
+    "name": "Demo: Message Routing Trace",
+    "path": "demo_message_routing_trace",
     "product": {
       "agent_role": "Router and aggregator agents.",
       "benefit": "Clear routing primitives make the platform easier to adopt, debug, and govern.",
@@ -832,47 +494,16 @@
       ],
       "simulation_type": "Deterministic message-flow trace.",
       "target_users": "Developers learning the runtime message model."
-    }
-  },
-  {
-    "category": "Engineering",
-    "description": "Use this blueprint to model buyer-supplier negotiation rounds and compare offers as demand, price, and capacity change.",
-    "graph_id": "contract_negotiation_simulation_v1",
-    "id": "contract_negotiation_simulation",
-    "job_name": "contract-negotiation-simulation",
-    "name": "Contract Negotiation Simulation",
-    "path": "contract_negotiation_simulation",
-    "product": {
-      "agent_role": "Negotiation mediator agent.",
-      "benefit": "The blueprint shows how the runtime can represent multiple stakeholder agents, a core pattern for enterprise decision automation.",
-      "customizable_for": "Procurement, renewals, vendor management, enterprise sales deal desks.",
-      "customize": "Replace synthetic terms with contracts, supplier scorecards, price corridors, delivery constraints, or approval rules.",
-      "example": "Buyer and supplier messages are generated each tick while a mediator chooses offer, volume, or pause actions.",
-      "how_it_works": "Buyer and supplier messages are generated each tick while a mediator chooses offer, volume, or pause actions.",
-      "input": "Replace synthetic terms with contracts, supplier scorecards, price corridors, delivery constraints, or approval rules.",
-      "investor": "The blueprint shows how the runtime can represent multiple stakeholder agents, a core pattern for enterprise decision automation.",
-      "one_line": "Use this blueprint to model buyer-supplier negotiation rounds and compare offers as demand, price, and capacity change.",
-      "output": "Negotiation brief with agreement score, action history, and ranked deal terms.",
-      "problem": "Negotiation is dynamic: positions change as demand, capacity, and costs move, so static summaries cannot capture the next best move.",
-      "runtime_features": [
-        "multi-agent reasoning",
-        "time-varying constraints",
-        "decision loop",
-        "structured negotiation output"
-      ],
-      "simulation_type": "Multi-agent negotiation state simulation.",
-      "target_users": "Developers building multi-agent workflows and procurement teams evaluating negotiation automation."
-    }
+    },
+    "workflow_id": "demo_message_routing_trace_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to run a lightweight native monitor that keeps producing decisions over live state until you stop it.",
-    "graph_id": "native_live_monitor_service_v1",
-    "id": "native_live_monitor_service",
-    "job_name": "native-live-monitor-service",
-    "name": "Native Live Monitor Service",
-    "path": "native_live_monitor_service",
-    "type": "service",
+    "id": "demo_native_live_monitor_service",
+    "job_name": "demo-native-live-monitor-service",
+    "name": "Demo: Native Live Monitor Service",
+    "path": "demo_native_live_monitor_service",
     "product": {
       "agent_role": "Native BEAM monitoring agents.",
       "benefit": "The runtime is not limited to slow external calls; native agents can run high-frequency loops alongside LLM workflows.",
@@ -893,16 +524,17 @@
       ],
       "simulation_type": "Live native signal monitor.",
       "target_users": "Runtime evaluators comparing native BEAM agents with external worker processes."
-    }
+    },
+    "type": "service",
+    "workflow_id": "demo_native_live_monitor_service_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to run shell and Python workers inside isolated execution boundaries while keeping each step traceable.",
-    "graph_id": "openshell_sandbox_worker_pipeline_v1",
-    "id": "openshell_sandbox_worker_pipeline",
-    "job_name": "openshell-sandbox-worker-pipeline",
-    "name": "OpenShell Sandbox Worker Pipeline",
-    "path": "openshell_sandbox_worker_pipeline",
+    "id": "demo_openshell_worker_pipeline",
+    "job_name": "demo-openshell-worker-pipeline",
+    "name": "Demo: OpenShell Worker Pipeline",
+    "path": "demo_openshell_worker_pipeline",
     "product": {
       "agent_role": "Sandboxed worker executor.",
       "benefit": "This shows that the runtime can orchestrate ordinary enterprise tools safely, which is essential for deploying agent workflows inside controlled environments.",
@@ -923,16 +555,16 @@
       ],
       "simulation_type": "Static worker pipeline with deterministic generated input.",
       "target_users": "Developers evaluating sandboxed worker execution and artifact handoff patterns."
-    }
+    },
+    "workflow_id": "demo_openshell_worker_pipeline_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to stress-test broad parallel fan-out and measure how deterministic workers behave as runtime scale increases.",
-    "graph_id": "parallel_worker_benchmark_v1",
-    "id": "parallel_worker_benchmark",
-    "job_name": "parallel-worker-benchmark",
-    "name": "Parallel Worker Benchmark",
-    "path": "parallel_worker_benchmark",
+    "id": "demo_parallel_worker_benchmark",
+    "job_name": "demo-parallel-worker-benchmark",
+    "name": "Demo: Parallel Worker Benchmark",
+    "path": "demo_parallel_worker_benchmark",
     "product": {
       "agent_role": "Parallel executor workers plus reducer.",
       "benefit": "Scale and reliability are commercial proof points; this blueprint makes orchestration capacity visible.",
@@ -953,16 +585,16 @@
       ],
       "simulation_type": "Parallel synthetic workload sweep.",
       "target_users": "Platform teams testing scheduler throughput, worker pools, and aggregation behavior."
-    }
+    },
+    "workflow_id": "demo_parallel_worker_benchmark_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to tune policy thresholds through repeated feedback so you can compare rewards, incidents, and tradeoffs before deployment.",
-    "graph_id": "policy_feedback_optimization_simulation_v1",
-    "id": "policy_feedback_optimization_simulation",
-    "job_name": "policy-feedback-optimization-simulation",
-    "name": "Policy Feedback Optimization Simulation",
-    "path": "policy_feedback_optimization_simulation",
+    "id": "demo_policy_feedback_optimization",
+    "job_name": "demo-policy-feedback-optimization",
+    "name": "Demo: Policy Feedback Optimization",
+    "path": "demo_policy_feedback_optimization",
     "product": {
       "agent_role": "Policy optimization agent.",
       "benefit": "Policy optimization is a high-leverage runtime pattern for safety, fraud, routing, and operations products.",
@@ -983,47 +615,16 @@
       ],
       "simulation_type": "Policy feedback simulation.",
       "target_users": "Developers and policy owners testing adaptive decision rules."
-    }
-  },
-  {
-    "category": "Engineering",
-    "description": "Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns.",
-    "graph_id": "python_sdk_research_service_v1",
-    "id": "python_sdk_research_service",
-    "job_name": "python-sdk-research-service",
-    "name": "Python SDK Research Service",
-    "path": "python_sdk_research_service",
-    "type": "service",
-    "product": {
-      "agent_role": "Python service coordinator.",
-      "benefit": "Long-lived loops are a key difference between agent runtimes and chat interfaces; this blueprint shows that operating model directly.",
-      "customizable_for": "Incident monitors, market watchers, research crawlers.",
-      "customize": "Adjust service cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop.",
-      "example": "A service periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.",
-      "how_it_works": "A service periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.",
-      "input": "Adjust service cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop.",
-      "investor": "Long-lived loops are a key difference between agent runtimes and chat interfaces; this blueprint shows that operating model directly.",
-      "one_line": "Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns.",
-      "output": "Ongoing events and final cancellation-safe state.",
-      "problem": "Many agent workflows need to keep running, react to new events, and maintain operational state rather than finish after one request.",
-      "runtime_features": [
-        "Python SDK",
-        "service execution",
-        "live loop",
-        "runtime events"
-      ],
-      "simulation_type": "Live service loop with repeated inputs.",
-      "target_users": "Developers building live monitors, scheduled analysis loops, or long-running research agents."
-    }
+    },
+    "workflow_id": "demo_policy_feedback_optimization_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to author a MirrorNeuron workflow directly in Python and compile it into a runnable blueprint bundle.",
-    "graph_id": "python_sdk_research_pipeline_v1",
-    "id": "python_sdk_research_pipeline",
-    "job_name": "python-sdk-research-pipeline",
-    "name": "Python SDK Research Pipeline",
-    "path": "python_sdk_research_pipeline",
+    "id": "demo_python_sdk_research_pipeline",
+    "job_name": "demo-python-sdk-research-pipeline",
+    "name": "Demo: Python SDK Research Pipeline",
+    "path": "demo_python_sdk_research_pipeline",
     "product": {
       "agent_role": "Python-defined research agents.",
       "benefit": "The SDK path lowers adoption friction: teams can start from normal Python and graduate to runtime-managed agent graphs.",
@@ -1044,46 +645,47 @@
       ],
       "simulation_type": "Deterministic staged workflow.",
       "target_users": "Python developers who want agent workflows without hand-writing manifests."
-    }
+    },
+    "workflow_id": "demo_python_sdk_research_pipeline_v1"
   },
   {
-    "category": "Security",
-    "description": "Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result.",
-    "graph_id": "sandboxed_codegen_review_v1",
-    "id": "sandboxed_codegen_review",
-    "job_name": "sandboxed-codegen-review",
-    "name": "Sandboxed Codegen Review",
-    "path": "sandboxed_codegen_review",
+    "category": "Engineering",
+    "description": "Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns.",
+    "id": "demo_python_sdk_research_service",
+    "job_name": "demo-python-sdk-research-service",
+    "name": "Demo: Python SDK Research Service",
+    "path": "demo_python_sdk_research_service",
     "product": {
-      "agent_role": "Codegen agent, review agent, validator.",
-      "benefit": "This is a credible path to enterprise coding agents because it combines reasoning, iteration, and sandboxed execution controls.",
-      "customizable_for": "Internal developer tools, data scripts, code repair, controlled automation.",
-      "customize": "Change the coding task, validator tests, review rubric, sandbox policy, model, or allowed toolchain.",
-      "example": "The LLM writes a Python tool, another LLM review step critiques it, and a validator executes tests inside an OpenShell sandbox.",
-      "how_it_works": "The LLM writes a Python tool, another LLM review step critiques it, and a validator executes tests inside an OpenShell sandbox.",
-      "input": "Change the coding task, validator tests, review rubric, sandbox policy, model, or allowed toolchain.",
-      "investor": "This is a credible path to enterprise coding agents because it combines reasoning, iteration, and sandboxed execution controls.",
-      "one_line": "Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result.",
-      "output": "Generated code, review history, and validation result.",
-      "problem": "One-shot code generation is risky; production teams need review, validation, isolation, and iterative improvement before executing generated code.",
+      "agent_role": "Python service coordinator.",
+      "benefit": "Long-lived loops are a key difference between agent runtimes and chat interfaces; this blueprint shows that operating model directly.",
+      "customizable_for": "Incident monitors, market watchers, research crawlers.",
+      "customize": "Adjust service cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop.",
+      "example": "A service periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.",
+      "how_it_works": "A service periodically collects signals, decides whether more work is needed, and emits runtime events until cancelled.",
+      "input": "Adjust service cadence, add data sources, persist state, and specialize the Python agents for your monitor or research loop.",
+      "investor": "Long-lived loops are a key difference between agent runtimes and chat interfaces; this blueprint shows that operating model directly.",
+      "one_line": "Use this blueprint to run a Python-defined workflow as a long-lived research service with repeated stateful turns.",
+      "output": "Ongoing events and final cancellation-safe state.",
+      "problem": "Many agent workflows need to keep running, react to new events, and maintain operational state rather than finish after one request.",
       "runtime_features": [
-        "LLM agents",
-        "sandbox validation",
-        "multi-round loop",
-        "tool creation"
+        "Python SDK",
+        "service execution",
+        "live loop",
+        "runtime events"
       ],
-      "simulation_type": "Iterative code-review decision loop.",
-      "target_users": "Engineering teams evaluating safe LLM coding workflows."
-    }
+      "simulation_type": "Live service loop with repeated inputs.",
+      "target_users": "Developers building live monitors, scheduled analysis loops, or long-running research agents."
+    },
+    "type": "service",
+    "workflow_id": "demo_python_sdk_research_service_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to record simulation state changes so every agent decision can be inspected after the run.",
-    "graph_id": "state_audit_simulation_v1",
-    "id": "state_audit_simulation",
-    "job_name": "state-audit-simulation",
-    "name": "State Audit Simulation",
-    "path": "state_audit_simulation",
+    "id": "demo_state_audit_workflow",
+    "job_name": "demo-state-audit-workflow",
+    "name": "Demo: State Audit Workflow",
+    "path": "demo_state_audit_workflow",
     "product": {
       "agent_role": "State tracking analyst.",
       "benefit": "Traceability turns agent simulations into enterprise-grade decision records rather than black-box demos.",
@@ -1104,17 +706,16 @@
       ],
       "simulation_type": "State tracking and checkpoint simulation.",
       "target_users": "Developers and evaluators who need inspectable state transitions."
-    }
+    },
+    "workflow_id": "demo_state_audit_workflow_v1"
   },
   {
     "category": "Engineering",
     "description": "Use this blueprint to observe bounded queues, slow workers, and retry-later behavior before building live stream workflows.",
-    "graph_id": "stream_backpressure_simulation_v1",
-    "id": "stream_backpressure_simulation",
-    "job_name": "stream-backpressure-simulation",
-    "name": "Stream Backpressure Simulation",
-    "path": "stream_backpressure_simulation",
-    "type": "service",
+    "id": "demo_stream_backpressure_service",
+    "job_name": "demo-stream-backpressure-service",
+    "name": "Demo: Stream Backpressure Service",
+    "path": "demo_stream_backpressure_service",
     "product": {
       "agent_role": "Live source, slow processor, metrics sink.",
       "benefit": "Backpressure is production plumbing, not a demo flourish; this blueprint proves the runtime is built for real systems.",
@@ -1135,76 +736,17 @@
       ],
       "simulation_type": "Live stream with bounded queues.",
       "target_users": "Platform teams designing reliable live agent systems."
-    }
-  },
-  {
-    "category": "Science",
-    "description": "Use this blueprint to choose the next experiment from prior yield, toxicity, cost, and confidence signals before spending lab capacity.",
-    "graph_id": "adaptive_experiment_planning_v1",
-    "id": "adaptive_experiment_planning",
-    "job_name": "adaptive-experiment-planning",
-    "name": "Adaptive Experiment Planning",
-    "path": "adaptive_experiment_planning",
-    "product": {
-      "agent_role": "Experimental design scientist.",
-      "benefit": "Adaptive experimentation is a high-value scientific workflow where closed-loop agents can shorten discovery cycles.",
-      "customizable_for": "Biology, chemistry, materials, formulation, process optimization.",
-      "customize": "Replace synthetic outcomes with LIMS/ELN data, assay results, cost models, safety constraints, and Bayesian or active-learning tools.",
-      "example": "A synthetic enzyme candidate shows mixed yield and toxicity, and the scientist agent chooses pH refinement, temperature sweep, or catalyst switch.",
-      "how_it_works": "A synthetic enzyme candidate shows mixed yield and toxicity, and the scientist agent chooses pH refinement, temperature sweep, or catalyst switch.",
-      "input": "Replace synthetic outcomes with LIMS/ELN data, assay results, cost models, safety constraints, and Bayesian or active-learning tools.",
-      "investor": "Adaptive experimentation is a high-value scientific workflow where closed-loop agents can shorten discovery cycles.",
-      "one_line": "Use this blueprint to choose the next experiment from prior yield, toxicity, cost, and confidence signals before spending lab capacity.",
-      "output": "Experiment optimization plan with ranked experiment options.",
-      "problem": "Experiment planning is sequential; each result changes the next best experiment and the cost-risk tradeoff.",
-      "runtime_features": [
-        "iterative experiments",
-        "LLM scientist",
-        "optimization loop",
-        "structured plan"
-      ],
-      "simulation_type": "Iterative experiment outcome simulation.",
-      "target_users": "Lab researchers, R&D teams, computational scientists, and scientific AI builders."
-    }
-  },
-  {
-    "category": "Science",
-    "description": "Use this blueprint to compare local flood mitigation plans as rainfall, water levels, pump capacity, and vulnerable assets change.",
-    "graph_id": "climate_resilience_planning_simulation_v1",
-    "id": "climate_resilience_planning_simulation",
-    "job_name": "climate-resilience-planning-simulation",
-    "name": "Climate Resilience Planning Simulation",
-    "path": "climate_resilience_planning_simulation",
-    "product": {
-      "agent_role": "Climate resilience planning advisor.",
-      "benefit": "Climate adaptation budgets are growing, and this blueprint shows a credible planning engine for local infrastructure decisions.",
-      "customizable_for": "Cities, utilities, campuses, hospitals, industrial sites.",
-      "customize": "Replace synthetic weather with forecasts, flood maps, asset inventories, pump telemetry, road networks, and local cost assumptions.",
-      "example": "Rainfall intensifies in Riverton, flood levels rise, and the advisor chooses pumps, sandbags, or road closures.",
-      "how_it_works": "Rainfall intensifies in Riverton, flood levels rise, and the advisor chooses pumps, sandbags, or road closures.",
-      "input": "Replace synthetic weather with forecasts, flood maps, asset inventories, pump telemetry, road networks, and local cost assumptions.",
-      "investor": "Climate adaptation budgets are growing, and this blueprint shows a credible planning engine for local infrastructure decisions.",
-      "one_line": "Use this blueprint to compare local flood mitigation plans as rainfall, water levels, pump capacity, and vulnerable assets change.",
-      "output": "Local climate mitigation plan with ranked assets.",
-      "problem": "Climate events unfold over time and stress infrastructure unevenly; static risk maps do not recommend operational mitigations during a scenario.",
-      "runtime_features": [
-        "climate risk simulation",
-        "infrastructure state",
-        "mitigation planning",
-        "scenario testing"
-      ],
-      "simulation_type": "Weather, flooding, and infrastructure vulnerability simulation.",
-      "target_users": "Municipal resilience teams, infrastructure planners, utilities, and climate-risk analysts."
-    }
+    },
+    "type": "service",
+    "workflow_id": "demo_stream_backpressure_service_v1"
   },
   {
     "category": "Science",
     "description": "Use this blueprint to run a multi-stage drug discovery loop that generates, filters, and evaluates candidates with reviewable evidence.",
-    "graph_id": "drug_discovery_simulation_v1",
-    "id": "drug_discovery_simulation",
-    "job_name": "drug-discovery-simulation",
-    "name": "Drug Discovery Simulation",
-    "path": "drug_discovery_simulation",
+    "id": "drug_discovery_research_assistant",
+    "job_name": "drug-discovery-research-assistant",
+    "name": "Drug Discovery Research Assistant",
+    "path": "drug_discovery_research_assistant",
     "product": {
       "agent_role": "Scientific manager and staged worker agents.",
       "benefit": "Scientific discovery is a high-value vertical where closed-loop agent workflows can reduce cycle time if connected to validated models and labs.",
@@ -1225,16 +767,16 @@
       ],
       "simulation_type": "Long-running scientific pipeline loop.",
       "target_users": "Computational biology researchers and scientific AI platform evaluators."
-    }
+    },
+    "workflow_id": "drug_discovery_research_assistant_v1"
   },
   {
     "category": "Science",
     "description": "Use this blueprint to explore ecosystem interventions across regions and compare population effects before making policy or field decisions.",
-    "graph_id": "ecosystem_simulation_v1",
-    "id": "ecosystem_simulation",
-    "job_name": "ecosystem-simulation",
-    "name": "Ecosystem Simulation",
-    "path": "ecosystem_simulation",
+    "id": "ecosystem_intervention_planning_assistant",
+    "job_name": "ecosystem-intervention-planning-assistant",
+    "name": "Ecosystem Intervention Planning Assistant",
+    "path": "ecosystem_intervention_planning_assistant",
     "product": {
       "agent_role": "World coordinator, regional agents, leaderboard summarizer.",
       "benefit": "This demonstrates the runtime's ability to coordinate many local simulators into a global decision view, a pattern relevant beyond ecology.",
@@ -1255,46 +797,235 @@
       ],
       "simulation_type": "Multi-region population dynamics.",
       "target_users": "Ecologists, conservation analysts, simulation researchers, and education teams."
-    }
+    },
+    "type": "service",
+    "workflow_id": "ecosystem_intervention_planning_assistant_v1"
+  },
+  {
+    "category": "Engineering",
+    "description": "Use this blueprint to triage noisy event streams and see how anomaly pressure, queue depth, and false positives change decisions over time.",
+    "id": "event_stream_triage_assistant",
+    "job_name": "event-stream-triage-assistant-assistant",
+    "name": "Event Stream Triage Assistant",
+    "path": "event_stream_triage_assistant",
+    "product": {
+      "agent_role": "Event stream triage agent.",
+      "benefit": "This maps directly to commercial observability and security use cases where stateful triage is valuable.",
+      "customizable_for": "Security operations, payments monitoring, reliability engineering, fraud detection.",
+      "customize": "Replace synthetic events with logs, payments, telemetry, or security alerts; tune anomaly thresholds and routing actions.",
+      "example": "An event stream spikes, anomaly scores rise, and the triage agent tightens filters or escalates high-signal events.",
+      "how_it_works": "An event stream spikes, anomaly scores rise, and the triage agent tightens filters or escalates high-signal events.",
+      "input": "Replace synthetic events with logs, payments, telemetry, or security alerts; tune anomaly thresholds and routing actions.",
+      "investor": "This maps directly to commercial observability and security use cases where stateful triage is valuable.",
+      "one_line": "Use this blueprint to triage noisy event streams and see how anomaly pressure, queue depth, and false positives change decisions over time.",
+      "output": "Event stream report with queue state, triage actions, and ranked partitions.",
+      "problem": "Event streams are noisy and bursty; teams need agents that maintain state and route actions as conditions change.",
+      "runtime_features": [
+        "event stream processing",
+        "state machine",
+        "LLM triage",
+        "feedback loop"
+      ],
+      "simulation_type": "Stateful event stream simulation.",
+      "target_users": "Developers building alerting, stream processing, and incident triage agents."
+    },
+    "workflow_id": "event_stream_triage_assistant_v1"
+  },
+  {
+    "category": "Security",
+    "description": "Use this blueprint to watch an approved camera stream, detect visible people, summarize what is observable, and raise safety alerts with a reviewable event trail.",
+    "id": "facility_safety_monitor_assistant",
+    "job_name": "facility-safety-monitor-assistant",
+    "name": "Facility Safety Monitor Assistant",
+    "path": "facility_safety_monitor_assistant",
+    "product": {
+      "agent_role": "Safety observation and escalation agent.",
+      "benefit": "This illustrates vertical AI for physical operations: agents reason over evolving sensor state, preserve event trails, and trigger controlled review workflows.",
+      "customizable_for": "Door monitoring, restricted-area alerts, retail safety, warehouse operations.",
+      "customize": "Point the live camera stream at an approved facility source, tune sampling cadence and alert cooldown, add site-specific safety policies, and connect security notification channels.",
+      "example": "A door-camera stream is sampled, an Ollama-backed agent checks whether a person is visible, and alerts are throttled to avoid noise.",
+      "how_it_works": "A door-camera stream is sampled, a VL model checks whether a human face is visible, cooldown state suppresses duplicate alerts, and the run store records events and artifacts for review.",
+      "input": "Live video source URI, VL model endpoint, sampling cadence, cooldown policy, mock payloads, and optional notification destination.",
+      "investor": "This illustrates vertical AI for physical operations: agents reason over evolving sensor state and trigger controlled workflows.",
+      "one_line": "Use this blueprint to watch an approved camera stream, detect visible people, summarize what is observable, and raise safety alerts with a reviewable event trail.",
+      "output": "Human detection events, observable appearance and activity descriptions, alert decisions, and notification payloads.",
+      "problem": "Video monitoring is continuous, noisy, and operationally sensitive; teams need stateful alerts, cooldowns, and explainable observations rather than raw frames.",
+      "runtime_features": [
+        "video sampling",
+        "Ollama decision path",
+        "cooldown state",
+        "Slack alerting"
+      ],
+      "simulation_type": "Video stream sampling with alert state.",
+      "target_users": "Facilities, security, safety operations, and property management teams."
+    },
+    "type": "service",
+    "workflow_id": "facility_safety_monitor_assistant_v1"
+  },
+  {
+    "category": "Finance",
+    "description": "Use this blueprint to prioritize claim reviews by combining fraud signals, queue pressure, and adjuster capacity into an auditable triage recommendation.",
+    "id": "insurance_claim_risk_triage_assistant",
+    "job_name": "insurance-insurance-claim-risk-triage-assistant-assistant",
+    "name": "Insurance Claim Risk Triage Assistant",
+    "path": "insurance_claim_risk_triage_assistant",
+    "product": {
+      "agent_role": "Insurance claim risk triage agent.",
+      "benefit": "Claims triage has measurable ROI in leakage, cycle time, and customer satisfaction, making it a strong vertical agent workflow.",
+      "customizable_for": "Auto, property, health, warranty, and specialty claims.",
+      "customize": "Replace synthetic claims with FNOL, adjuster notes, photos, repair estimates, policy data, and fraud-model outputs.",
+      "example": "Auto claims volume rises, fraud signal spikes, and the agent chooses SIU escalation, fast-track, or evidence requests.",
+      "how_it_works": "Auto claims volume rises, fraud signal spikes, and the agent chooses SIU escalation, fast-track, or evidence requests.",
+      "input": "Replace synthetic claims with FNOL, adjuster notes, photos, repair estimates, policy data, and fraud-model outputs.",
+      "investor": "Claims triage has measurable ROI in leakage, cycle time, and customer satisfaction, making it a strong vertical agent workflow.",
+      "one_line": "Use this blueprint to prioritize claim reviews by combining fraud signals, queue pressure, and adjuster capacity into an auditable triage recommendation.",
+      "output": "Claim triage report with prioritized segments and review actions.",
+      "problem": "Claims queues evolve continuously; teams need to balance fast settlement, fraud risk, loss ratio, and adjuster capacity.",
+      "runtime_features": [
+        "claim stream simulation",
+        "risk triage",
+        "LLM prioritization",
+        "feedback loop"
+      ],
+      "simulation_type": "Claim queue and fraud-signal simulation.",
+      "target_users": "Insurance claims leaders, SIU teams, adjuster operations, and insurtech builders."
+    },
+    "workflow_id": "insurance_claim_risk_triage_assistant_v1"
   },
   {
     "category": "Science",
-    "description": "Use this blueprint to visualize shared-world motion planning so you can inspect coordination, conflicts, and route choices between agents.",
-    "graph_id": "motion_planning_simulation_v1",
-    "id": "motion_planning_simulation",
-    "job_name": "motion-planning-simulation",
-    "name": "Motion Planning Simulation",
-    "path": "motion_planning_simulation",
+    "description": "Use this blueprint to choose the next experiment from prior yield, toxicity, cost, and confidence signals before spending lab capacity.",
+    "id": "lab_experiment_planning_assistant",
+    "job_name": "lab-experiment-planning-assistant",
+    "name": "Lab Experiment Planning Assistant",
+    "path": "lab_experiment_planning_assistant",
     "product": {
-      "agent_role": "World simulator and visualization summarizer.",
-      "benefit": "Multi-agent physical simulation is a foundation for robotics and autonomy workflows where stateful agents must coordinate over time.",
-      "customizable_for": "Robotics, warehouse coordination, autonomous planning, teaching labs.",
-      "customize": "Change environment geometry, agent policies, reward structure, visualization output, and planning constraints.",
-      "example": "A shared-world particle environment is generated and summarized to show how agents coordinate around a target task.",
-      "how_it_works": "A shared-world particle environment is generated and summarized to show how agents coordinate around a target task.",
-      "input": "Change environment geometry, agent policies, reward structure, visualization output, and planning constraints.",
-      "investor": "Multi-agent physical simulation is a foundation for robotics and autonomy workflows where stateful agents must coordinate over time.",
-      "one_line": "Use this blueprint to visualize shared-world motion planning so you can inspect coordination, conflicts, and route choices between agents.",
-      "output": "Simulation summary and visual artifacts.",
-      "problem": "Multi-agent coordination depends on changing positions, goals, and collisions; users need visual traces, not only scalar metrics.",
+      "agent_role": "Experimental design scientist.",
+      "benefit": "Adaptive experimentation is a high-value scientific workflow where closed-loop agents can shorten discovery cycles.",
+      "customizable_for": "Biology, chemistry, materials, formulation, process optimization.",
+      "customize": "Replace synthetic outcomes with LIMS/ELN data, assay results, cost models, safety constraints, and Bayesian or active-learning tools.",
+      "example": "A synthetic enzyme candidate shows mixed yield and toxicity, and the scientist agent chooses pH refinement, temperature sweep, or catalyst switch.",
+      "how_it_works": "A synthetic enzyme candidate shows mixed yield and toxicity, and the scientist agent chooses pH refinement, temperature sweep, or catalyst switch.",
+      "input": "Replace synthetic outcomes with LIMS/ELN data, assay results, cost models, safety constraints, and Bayesian or active-learning tools.",
+      "investor": "Adaptive experimentation is a high-value scientific workflow where closed-loop agents can shorten discovery cycles.",
+      "one_line": "Use this blueprint to choose the next experiment from prior yield, toxicity, cost, and confidence signals before spending lab capacity.",
+      "output": "Experiment optimization plan with ranked experiment options.",
+      "problem": "Experiment planning is sequential; each result changes the next best experiment and the cost-risk tradeoff.",
       "runtime_features": [
-        "multi-agent simulation",
-        "visualization",
-        "shared-world state",
-        "summary generation"
+        "iterative experiments",
+        "LLM scientist",
+        "optimization loop",
+        "structured plan"
       ],
-      "simulation_type": "Multi-agent particle environment.",
-      "target_users": "Robotics researchers, simulation developers, and multi-agent systems educators."
-    }
+      "simulation_type": "Iterative experiment outcome simulation.",
+      "target_users": "Lab researchers, R&D teams, computational scientists, and scientific AI builders."
+    },
+    "workflow_id": "lab_experiment_planning_assistant_v1"
+  },
+  {
+    "category": "Business",
+    "description": "Use this blueprint to plan, generate, check, send, and track lifecycle emails so customer outreach stays timely, governed, and tied to customer state.",
+    "id": "lifecycle_email_growth_assistant",
+    "job_name": "lifecycle-email-growth-assistant",
+    "name": "Lifecycle Email Growth Assistant",
+    "path": "lifecycle_email_growth_assistant",
+    "product": {
+      "agent_role": "Campaign planner, copywriter, policy checker, delivery executor, inbox responder.",
+      "benefit": "This can become a vertical lifecycle-growth product because it connects agent reasoning to real delivery systems and customer state.",
+      "customizable_for": "Retention campaigns, onboarding journeys, renewal nudges, education sequences.",
+      "customize": "Replace the sample customer snapshot with CRM data, add lifecycle events, tune policy gates, and connect approved email or Slack providers.",
+      "example": "Synthetic customer snapshots flow through campaign planning, copy generation, policy checks, email execution, and reply handling.",
+      "how_it_works": "Synthetic customer snapshots flow through campaign planning, copy generation, policy checks, email execution, and reply handling.",
+      "input": "Replace the sample customer snapshot with CRM data, add lifecycle events, tune policy gates, and connect approved email or Slack providers.",
+      "investor": "This can become a vertical lifecycle-growth product because it connects agent reasoning to real delivery systems and customer state.",
+      "one_line": "Use this blueprint to plan, generate, check, send, and track lifecycle emails so customer outreach stays timely, governed, and tied to customer state.",
+      "output": "Prepared emails, sent-event logs, reply handling events, and campaign summaries.",
+      "problem": "Customer outreach changes as replies, segments, policies, and delivery state evolve; static templates miss timing, context, and governance.",
+      "runtime_features": [
+        "LLM messaging",
+        "delivery integration",
+        "policy checks",
+        "long-running campaign loop"
+      ],
+      "simulation_type": "Lifecycle campaign loop with inbox and delivery state.",
+      "target_users": "Growth, lifecycle marketing, and customer success teams."
+    },
+    "workflow_id": "lifecycle_email_growth_assistant_v1"
+  },
+  {
+    "category": "Finance",
+    "description": "Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile.",
+    "id": "liquidity_risk_monitoring_assistant",
+    "job_name": "liquidity-risk-monitoring-assistanting-assistant",
+    "name": "Liquidity Risk Monitoring Assistant",
+    "path": "liquidity_risk_monitoring_assistant",
+    "product": {
+      "agent_role": "Signal analyzer, market explainer, advisor agent.",
+      "benefit": "The blueprint is a credible wedge for trading-risk copilots because it combines streaming data, simulation, and explainable agent decisions.",
+      "customizable_for": "Equities, crypto, FX, liquidity monitoring, trading operations.",
+      "customize": "Replace the fake stock stream with exchange, broker, or market-data feeds; tune symbols, volatility, thresholds, and alert policy.",
+      "example": "A synthetic equity stream generates ticks, technical signals, market-advisor events, and LLM explanations for meaningful moves.",
+      "how_it_works": "A synthetic equity stream generates ticks, technical signals, market-advisor events, and LLM explanations for meaningful moves.",
+      "input": "Replace the fake stock stream with exchange, broker, or market-data feeds; tune symbols, volatility, thresholds, and alert policy.",
+      "investor": "The blueprint is a credible wedge for trading-risk copilots because it combines streaming data, simulation, and explainable agent decisions.",
+      "one_line": "Use this blueprint to monitor market microstructure signals and understand emerging liquidity risk before trades become expensive or fragile.",
+      "output": "Market signals, risk explanations, advice events, and optional Slack alerts.",
+      "problem": "Markets evolve tick by tick; spreads, depth, momentum, and volatility interact faster than static dashboards or one-shot summaries can capture.",
+      "runtime_features": [
+        "stream simulation",
+        "technical signals",
+        "LLM explanation",
+        "live advisor loop"
+      ],
+      "simulation_type": "Live market stream and exchange-style signal simulation.",
+      "target_users": "Trading teams, market-risk analysts, and fintech product evaluators."
+    },
+    "type": "service",
+    "workflow_id": "liquidity_risk_monitoring_assistant_v1"
+  },
+  {
+    "category": "Security",
+    "description": "Use this blueprint to monitor network events for suspected spyware or hacking behavior and raise evidence-backed alerts for security review.",
+    "id": "network_threat_response_assistant",
+    "job_name": "network-threat-response-assistant",
+    "name": "Network Threat Response Assistant",
+    "path": "network_threat_response_assistant",
+    "product": {
+      "agent_role": "Network Threat Response Assistant actor team.",
+      "benefit": "Use this blueprint to monitor network events for suspected spyware or hacking behavior and raise evidence-backed alerts for security review.",
+      "customizable_for": "Adapt the input contract, actor prompts, and output skills for a production workflow.",
+      "customize": "Replace the mock inputs with real adapters and tune actor responsibilities.",
+      "example": "Use this blueprint to monitor network events for suspected spyware or hacking behavior and raise evidence-backed alerts for security review.",
+      "how_it_works": "Use this blueprint to monitor network events for suspected spyware or hacking behavior and raise evidence-backed alerts for security review.",
+      "input": "alert_policy, network_events, risk_thresholds",
+      "investor": "Use this blueprint to monitor network events for suspected spyware or hacking behavior and raise evidence-backed alerts for security review.",
+      "one_line": "Use this blueprint to monitor network events for suspected spyware or hacking behavior and raise evidence-backed alerts for security review.",
+      "output": "Reviewable final_artifact.json and run-store events.",
+      "problem": "Use this blueprint to monitor network events for suspected spyware or hacking behavior and raise evidence-backed alerts for security review.",
+      "runtime_features": [
+        "network event normalization",
+        "deterministic suspicious-behavior scoring",
+        "dry-run alarm generation",
+        "human approval gate before response actions",
+        "local run-store artifacts",
+        "transparent run status",
+        "human control policy",
+        "artifact records",
+        "run-store observability dashboard",
+        "Membrane context memory optimization"
+      ],
+      "simulation_type": "Workflow-driven actor run.",
+      "target_users": "Blueprint users."
+    },
+    "workflow_id": "network_threat_response_assistant_v1"
   },
   {
     "category": "Science",
     "description": "Use this blueprint to compare outbreak response policies as infections, mobility, vaccination, and hospital load evolve.",
-    "graph_id": "outbreak_response_simulation_v1",
-    "id": "outbreak_response_simulation",
-    "job_name": "outbreak-response-simulation",
-    "name": "Outbreak Response Simulation",
-    "path": "outbreak_response_simulation",
+    "id": "outbreak_response_planning_assistant",
+    "job_name": "outbreak-response-planning-assistant",
+    "name": "Outbreak Response Planning Assistant",
+    "path": "outbreak_response_planning_assistant",
     "product": {
       "agent_role": "Public-health intervention advisor.",
       "benefit": "Public-sector and healthcare planning need explainable scenario tools; this shows an AI advisor inside a dynamic disease model.",
@@ -1315,16 +1046,289 @@
       ],
       "simulation_type": "Disease spread and intervention simulation.",
       "target_users": "Public-health planners, epidemiology teams, campus operations, and policy analysts."
-    }
+    },
+    "workflow_id": "outbreak_response_planning_assistant_v1"
+  },
+  {
+    "category": "Finance",
+    "description": "Use this blueprint to stress a portfolio against crash, rate, and liquidity shocks and review rebalancing choices before taking action.",
+    "id": "portfolio_risk_review_assistant",
+    "job_name": "portfolio-risk-review-assistant",
+    "name": "Portfolio Risk Review Assistant",
+    "path": "portfolio_risk_review_assistant",
+    "product": {
+      "agent_role": "Portfolio stress-test analyst.",
+      "benefit": "Asset-management risk copilots are commercially attractive because decisions are high-value and require explainable scenario reasoning.",
+      "customizable_for": "Wealth management, treasury, family offices, robo-advisory risk overlays.",
+      "customize": "Connect holdings, factor exposures, risk models, macro scenarios, tax constraints, and policy limits.",
+      "example": "A stagflation shock raises rates and drawdown while liquidity falls, and the agent chooses hedge, cash, or defensive rebalance actions.",
+      "how_it_works": "A stagflation shock raises rates and drawdown while liquidity falls, and the agent chooses hedge, cash, or defensive rebalance actions.",
+      "input": "Connect holdings, factor exposures, risk models, macro scenarios, tax constraints, and policy limits.",
+      "investor": "Asset-management risk copilots are commercially attractive because decisions are high-value and require explainable scenario reasoning.",
+      "one_line": "Use this blueprint to stress a portfolio against crash, rate, and liquidity shocks and review rebalancing choices before taking action.",
+      "output": "Portfolio risk report and rebalance recommendation.",
+      "problem": "Risk changes path-dependently during shocks; one summary cannot show how hedges, cash, and defensive moves alter the next state.",
+      "runtime_features": [
+        "macro shock simulation",
+        "portfolio risk",
+        "LLM risk report",
+        "decision feedback"
+      ],
+      "simulation_type": "Macro shock and portfolio risk simulation.",
+      "target_users": "Portfolio managers, wealth advisors, risk officers, and fintech evaluators."
+    },
+    "workflow_id": "portfolio_risk_review_assistant_v1"
+  },
+  {
+    "category": "Business",
+    "description": "Use this blueprint to compare pricing moves against demand, inventory, margin, and competitors before you change prices in the real world.",
+    "id": "pricing_profit_optimization_assistant",
+    "job_name": "pricing-profit-optimization-assistant",
+    "name": "Pricing Profit Optimization Assistant",
+    "path": "pricing_profit_optimization_assistant",
+    "product": {
+      "agent_role": "Pricing strategy agent.",
+      "benefit": "Dynamic pricing has direct profit impact and is a strong vertical for agentic simulation with human-reviewable recommendations.",
+      "customizable_for": "Retail, travel, marketplaces, subscriptions, manufacturing quotes.",
+      "customize": "Replace synthetic demand with commerce, competitor, inventory, and margin data; tune elasticity, guardrails, and promotion rules.",
+      "example": "A connected thermostat SKU faces competitor moves and inventory pressure, and the agent chooses price increase, discount, or match actions.",
+      "how_it_works": "A connected thermostat SKU faces competitor moves and inventory pressure, and the agent chooses price increase, discount, or match actions.",
+      "input": "Replace synthetic demand with commerce, competitor, inventory, and margin data; tune elasticity, guardrails, and promotion rules.",
+      "investor": "Dynamic pricing has direct profit impact and is a strong vertical for agentic simulation with human-reviewable recommendations.",
+      "one_line": "Use this blueprint to compare pricing moves against demand, inventory, margin, and competitors before you change prices in the real world.",
+      "output": "Pricing recommendation with revenue and inventory tradeoffs.",
+      "problem": "Pricing is dynamic and coupled: competitors, demand, inventory, and margin move together faster than static rules can explain.",
+      "runtime_features": [
+        "pricing simulation",
+        "competitor dynamics",
+        "revenue forecast",
+        "LLM recommendation"
+      ],
+      "simulation_type": "Demand, competitor price, inventory, and revenue simulation.",
+      "target_users": "Pricing teams, category managers, and revenue management leaders."
+    },
+    "workflow_id": "pricing_profit_optimization_assistant_v1"
+  },
+  {
+    "category": "Finance",
+    "description": "Use this blueprint to rank property opportunities while preserving useful deal memory across noisy ZIP-code history, broker flow, financing constraints, and past outcomes.",
+    "id": "property_deal_memory_research_assistant",
+    "job_name": "property-deal-memory-research-assistant",
+    "name": "Property Deal Memory Research Assistant",
+    "path": "property_deal_memory_research_assistant",
+    "product": {
+      "agent_role": "Real estate investment analyst with working memory.",
+      "benefit": "This shows memory as measurable decision-quality lift, which is a stronger wedge than a simple chat interface over real-estate data.",
+      "customizable_for": "Rental acquisitions, flipping pipelines, multifamily sourcing, market expansion, diligence memory, and capital-allocation committees.",
+      "customize": "Replace the synthetic history with MLS exports, county records, broker notes, rent comps, lender constraints, inspection summaries, insurance quotes, and prior decision outcomes.",
+      "example": "A noisy current snapshot favors Ivy Duplex, but working memory recalls flood and roof risk while connecting River Quad rent upside, financing, and seller motivation.",
+      "how_it_works": "A noisy current snapshot favors Ivy Duplex, but working memory recalls flood and roof risk while connecting River Quad rent upside, financing, and seller motivation.",
+      "input": "Replace the synthetic history with MLS exports, county records, broker notes, rent comps, lender constraints, inspection summaries, insurance quotes, and prior decision outcomes.",
+      "investor": "This shows memory as measurable decision-quality lift, which is a stronger wedge than a simple chat interface over real-estate data.",
+      "one_line": "Use this blueprint to rank property opportunities while preserving useful deal memory across noisy ZIP-code history, broker flow, financing constraints, and past outcomes.",
+      "output": "Ranked opportunities, source-grounded bid/watchlist recommendation, and memory decision-quality benchmark.",
+      "problem": "Property acquisition decisions often depend on older broker, lender, rent, insurance, and diligence facts that disappear inside large noisy deal flow.",
+      "runtime_features": [
+        "large synthetic finance context",
+        "working memory retrieval",
+        "source refs",
+        "decision quality benchmark",
+        "with/without memory comparison",
+        "LLM investment reasoning"
+      ],
+      "simulation_type": "ZIP-code property market simulation with large historical memory.",
+      "target_users": "Real-estate investors, acquisition analysts, property-tech teams, and diligence operators."
+    },
+    "workflow_id": "property_deal_memory_research_assistant_v1"
+  },
+  {
+    "category": "Finance",
+    "description": "Use this blueprint to rank property acquisition opportunities by ZIP-code demand, price, cap-rate, and risk signals before committing diligence time.",
+    "id": "property_deal_research_assistant",
+    "job_name": "property-deal-research-assistant",
+    "name": "Property Deal Research Assistant",
+    "path": "property_deal_research_assistant",
+    "product": {
+      "agent_role": "Real estate investment analyst.",
+      "benefit": "This is a credible vertical AI wedge for real-estate investors because the output is a ranked, actionable acquisition list.",
+      "customizable_for": "Rental acquisitions, flipping pipelines, multifamily sourcing, market expansion.",
+      "customize": "Replace synthetic listings with MLS, county records, broker flow, Redfin/Zillow exports, rent data, and investor constraints like DSCR or cap-rate floors.",
+      "example": "A target ZIP code sees demand tighten and risk widen, and the agent decides whether to bid, negotiate, or watchlist listings.",
+      "how_it_works": "A target ZIP code sees demand tighten and risk widen, and the agent decides whether to bid, negotiate, or watchlist listings.",
+      "input": "Replace synthetic listings with MLS, county records, broker flow, Redfin/Zillow exports, rent data, and investor constraints like DSCR or cap-rate floors.",
+      "investor": "This is a credible vertical AI wedge for real-estate investors because the output is a ranked, actionable acquisition list.",
+      "one_line": "Use this blueprint to rank property acquisition opportunities by ZIP-code demand, price, cap-rate, and risk signals before committing diligence time.",
+      "output": "Ranked opportunities and bid/watchlist recommendation.",
+      "problem": "Property opportunities change with rates, inventory, rents, neighborhood demand, and liquidity; static comps cannot rank next-best actions.",
+      "runtime_features": [
+        "market simulation",
+        "opportunity ranking",
+        "LLM investment reasoning",
+        "scenario testing"
+      ],
+      "simulation_type": "ZIP-code property market simulation.",
+      "target_users": "Real-estate investors, acquisition analysts, and property-tech teams."
+    },
+    "workflow_id": "property_deal_research_assistant_v1"
+  },
+  {
+    "category": "Business",
+    "description": "Use this blueprint to compare retention offers for at-risk customers and choose interventions with clear revenue, churn, and customer-experience tradeoffs.",
+    "id": "revenue_retention_planning_assistant",
+    "job_name": "revenue-retention-planning-assistant",
+    "name": "Revenue Retention Planning Assistant",
+    "path": "revenue_retention_planning_assistant",
+    "product": {
+      "agent_role": "Customer retention strategist.",
+      "benefit": "Retention is measurable and budgeted; this blueprint can evolve into a revenue-copilot product tied to CRM workflows.",
+      "customizable_for": "SaaS retention, subscription commerce, financial services, telecom.",
+      "customize": "Replace synthetic health metrics with CRM, product usage, support tickets, billing, and NPS data; tune action costs and segment rules.",
+      "example": "A mid-market SaaS segment deteriorates, and the agent chooses success calls, loyalty offers, or product-fix campaigns.",
+      "how_it_works": "A mid-market SaaS segment deteriorates, and the agent chooses success calls, loyalty offers, or product-fix campaigns.",
+      "input": "Replace synthetic health metrics with CRM, product usage, support tickets, billing, and NPS data; tune action costs and segment rules.",
+      "investor": "Retention is measurable and budgeted; this blueprint can evolve into a revenue-copilot product tied to CRM workflows.",
+      "one_line": "Use this blueprint to compare retention offers for at-risk customers and choose interventions with clear revenue, churn, and customer-experience tradeoffs.",
+      "output": "Retention intervention plan with expected churn and budget tradeoffs.",
+      "problem": "Churn risk changes with sentiment, product issues, and budget constraints; one-shot LLM suggestions do not show cost or state tradeoffs.",
+      "runtime_features": [
+        "customer behavior simulation",
+        "intervention planning",
+        "LLM strategy",
+        "feedback loop"
+      ],
+      "simulation_type": "Customer health and churn-risk simulation.",
+      "target_users": "Revenue operations, customer success, and growth teams."
+    },
+    "workflow_id": "revenue_retention_planning_assistant_v1"
+  },
+  {
+    "category": "Science",
+    "description": "Use this blueprint to visualize shared-world motion planning so you can inspect coordination, conflicts, and route choices between agents.",
+    "id": "robot_motion_planning_assistant",
+    "job_name": "robot-motion-planning-assistant",
+    "name": "Robot Motion Planning Assistant",
+    "path": "robot_motion_planning_assistant",
+    "product": {
+      "agent_role": "World simulator and visualization summarizer.",
+      "benefit": "Multi-agent physical simulation is a foundation for robotics and autonomy workflows where stateful agents must coordinate over time.",
+      "customizable_for": "Robotics, warehouse coordination, autonomous planning, teaching labs.",
+      "customize": "Change environment geometry, agent policies, reward structure, visualization output, and planning constraints.",
+      "example": "A shared-world particle environment is generated and summarized to show how agents coordinate around a target task.",
+      "how_it_works": "A shared-world particle environment is generated and summarized to show how agents coordinate around a target task.",
+      "input": "Change environment geometry, agent policies, reward structure, visualization output, and planning constraints.",
+      "investor": "Multi-agent physical simulation is a foundation for robotics and autonomy workflows where stateful agents must coordinate over time.",
+      "one_line": "Use this blueprint to visualize shared-world motion planning so you can inspect coordination, conflicts, and route choices between agents.",
+      "output": "Simulation summary and visual artifacts.",
+      "problem": "Multi-agent coordination depends on changing positions, goals, and collisions; users need visual traces, not only scalar metrics.",
+      "runtime_features": [
+        "multi-agent simulation",
+        "visualization",
+        "shared-world state",
+        "summary generation"
+      ],
+      "simulation_type": "Multi-agent particle environment.",
+      "target_users": "Robotics researchers, simulation developers, and multi-agent systems educators."
+    },
+    "workflow_id": "robot_motion_planning_assistant_v1"
+  },
+  {
+    "category": "Security",
+    "description": "Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result.",
+    "id": "sandboxed_codegen_review_assistant",
+    "job_name": "sandboxed-codegen-review-assistant-assistant",
+    "name": "Sandboxed Codegen Review Assistant",
+    "path": "sandboxed_codegen_review_assistant",
+    "product": {
+      "agent_role": "Codegen agent, review agent, validator.",
+      "benefit": "This is a credible path to enterprise coding agents because it combines reasoning, iteration, and sandboxed execution controls.",
+      "customizable_for": "Internal developer tools, data scripts, code repair, controlled automation.",
+      "customize": "Change the coding task, validator tests, review rubric, sandbox policy, model, or allowed toolchain.",
+      "example": "The LLM writes a Python tool, another LLM review step critiques it, and a validator executes tests inside an OpenShell sandbox.",
+      "how_it_works": "The LLM writes a Python tool, another LLM review step critiques it, and a validator executes tests inside an OpenShell sandbox.",
+      "input": "Change the coding task, validator tests, review rubric, sandbox policy, model, or allowed toolchain.",
+      "investor": "This is a credible path to enterprise coding agents because it combines reasoning, iteration, and sandboxed execution controls.",
+      "one_line": "Use this blueprint to generate, review, and validate code inside a sandboxed LLM loop before trusting the result.",
+      "output": "Generated code, review history, and validation result.",
+      "problem": "One-shot code generation is risky; production teams need review, validation, isolation, and iterative improvement before executing generated code.",
+      "runtime_features": [
+        "LLM agents",
+        "sandbox validation",
+        "multi-round loop",
+        "tool creation"
+      ],
+      "simulation_type": "Iterative code-review decision loop.",
+      "target_users": "Engineering teams evaluating safe LLM coding workflows."
+    },
+    "workflow_id": "sandboxed_codegen_review_assistant_v1"
+  },
+  {
+    "category": "Business",
+    "description": "Use this blueprint to test staffing, deflection, and escalation decisions before service queues miss SLA targets.",
+    "id": "service_capacity_planning_assistant",
+    "job_name": "service-capacity-planning-assistant",
+    "name": "Service Capacity Planning Assistant",
+    "path": "service_capacity_planning_assistant",
+    "product": {
+      "agent_role": "Workforce management agent.",
+      "benefit": "Service capacity is a concrete buyer problem with clear ROI in SLA, staffing cost, and customer satisfaction.",
+      "customizable_for": "Call centers, field service, support queues, hospital operations.",
+      "customize": "Connect ACD/WFM systems, interval forecasts, schedule data, abandonment curves, and skill-based routing constraints.",
+      "example": "Call arrivals rise, wait time crosses the SLA line, and the agent chooses overtime, staff shifting, or self-service deflection.",
+      "how_it_works": "Call arrivals rise, wait time crosses the SLA line, and the agent chooses overtime, staff shifting, or self-service deflection.",
+      "input": "Connect ACD/WFM systems, interval forecasts, schedule data, abandonment curves, and skill-based routing constraints.",
+      "investor": "Service capacity is a concrete buyer problem with clear ROI in SLA, staffing cost, and customer satisfaction.",
+      "one_line": "Use this blueprint to test staffing, deflection, and escalation decisions before service queues miss SLA targets.",
+      "output": "Staffing forecast and capacity action plan.",
+      "problem": "Staffing decisions are expensive and time-sensitive; dashboards show queue waits but do not simulate next-interval choices.",
+      "runtime_features": [
+        "queue simulation",
+        "staffing decision",
+        "SLA tracking",
+        "decision feedback"
+      ],
+      "simulation_type": "Queue, staffing, and SLA simulation.",
+      "target_users": "Contact-center leaders, workforce managers, and customer operations teams."
+    },
+    "workflow_id": "service_capacity_planning_assistant_v1"
+  },
+  {
+    "category": "Business",
+    "description": "Use this blueprint to rehearse supplier disruption responses and choose actions that protect inventory, fulfillment, and customer service levels.",
+    "id": "supply_chain_resilience_assistant",
+    "job_name": "supply-chain-resilience-assistant",
+    "name": "Supply Chain Resilience Assistant",
+    "path": "supply_chain_resilience_assistant",
+    "product": {
+      "agent_role": "Supply chain disruption response agent.",
+      "benefit": "Supply-chain resilience is a large enterprise pain point where optimization plus LLM recommendations can become an operations command center.",
+      "customizable_for": "Manufacturing, retail, healthcare supplies, logistics networks.",
+      "customize": "Connect ERP, supplier EDI, demand forecasts, inventory systems, and lane-level costs; tune the Pyomo objective, budget, lane capacities, service penalties, and delay assumptions.",
+      "example": "Industrial sensor inventory tightens in the Northeast while delays rise, and a Pyomo model allocates budget across expedite freight, supplier switching, and inventory allocation before the agent explains the plan.",
+      "how_it_works": "Industrial sensor inventory tightens in the Northeast while delays rise, and a Pyomo model allocates budget across expedite freight, supplier switching, and inventory allocation before the agent explains the plan.",
+      "input": "Connect ERP, supplier EDI, demand forecasts, inventory systems, and lane-level costs; tune the Pyomo objective, budget, lane capacities, service penalties, and delay assumptions.",
+      "investor": "Supply-chain resilience is a large enterprise pain point where optimization plus LLM recommendations can become an operations command center.",
+      "one_line": "Use this blueprint to rehearse supplier disruption responses and choose actions that protect inventory, fulfillment, and customer service levels.",
+      "output": "Disruption response plan with optimized mitigation quantities, action history, and supplier-lane ranking.",
+      "problem": "Demand spikes and supplier delays compound over time; static dashboards show the fire but do not optimize budget-constrained mitigation paths.",
+      "runtime_features": [
+        "dynamic simulation",
+        "Pyomo optimization model",
+        "LLM planner",
+        "time-varying inventory",
+        "decision loop"
+      ],
+      "simulation_type": "Inventory, demand, supplier-delay, and Pyomo optimization simulation.",
+      "target_users": "Supply chain operators, procurement leaders, and operations executives."
+    },
+    "workflow_id": "supply_chain_resilience_assistant_v1"
   },
   {
     "category": "Science",
     "description": "Use this blueprint to test traffic signal and rerouting controls against speed, incident, volume, and emissions tradeoffs.",
-    "graph_id": "traffic_control_simulation_v1",
-    "id": "traffic_control_simulation",
-    "job_name": "traffic-control-simulation",
-    "name": "Traffic Control Simulation",
-    "path": "traffic_control_simulation",
+    "id": "traffic_signal_control_assistant",
+    "job_name": "traffic-signal-control-assistant",
+    "name": "Traffic Signal Control Assistant",
+    "path": "traffic_signal_control_assistant",
     "product": {
       "agent_role": "Traffic systems control advisor.",
       "benefit": "Urban mobility is a visible vertical where simulation plus AI control recommendations can become a city operations product.",
@@ -1345,6 +1349,75 @@
       ],
       "simulation_type": "Traffic network and incident-control simulation.",
       "target_users": "City traffic teams, transportation researchers, smart-city operators, and mobility startups."
-    }
+    },
+    "workflow_id": "traffic_signal_control_assistant_v1"
+  },
+  {
+    "category": "Security",
+    "description": "Use this blueprint to review suspicious user activity, recommend safe step-up authentication, and produce RMF/ATO/cATO evidence artifacts.",
+    "id": "user_activity_rmf_triage_assistant",
+    "job_name": "user-activity-rmf-triage-assistant",
+    "name": "User Activity RMF Triage Assistant",
+    "path": "user_activity_rmf_triage_assistant",
+    "product": {
+      "agent_role": "User Activity RMF Triage Assistant actor team.",
+      "benefit": "Identity provider events, SaaS audit logs, GitHub audit logs, CloudTrail, and internal application activity streams.",
+      "customizable_for": "Identity provider events, SaaS audit logs, GitHub audit logs, CloudTrail, and internal application activity streams.",
+      "customize": "Replace the mock inputs with real adapters and tune actor responsibilities.",
+      "example": "Use this blueprint to review suspicious user activity, recommend safe step-up authentication, and produce RMF/ATO/cATO evidence artifacts.",
+      "how_it_works": "Use this blueprint to review suspicious user activity, recommend safe step-up authentication, and produce RMF/ATO/cATO evidence artifacts.",
+      "input": "sample_path",
+      "investor": "Identity provider events, SaaS audit logs, GitHub audit logs, CloudTrail, and internal application activity streams.",
+      "one_line": "Use this blueprint to review suspicious user activity, recommend safe step-up authentication, and produce RMF/ATO/cATO evidence artifacts.",
+      "output": "Reviewable final_artifact.json and run-store events.",
+      "problem": "Use this blueprint to review suspicious user activity, recommend safe step-up authentication, and produce RMF/ATO/cATO evidence artifacts.",
+      "runtime_features": [
+        "event stream normalization",
+        "state machine",
+        "deterministic risk scoring",
+        "dry-run response policy",
+        "candidate compliance evidence artifacts",
+        "transparent run status",
+        "human control policy",
+        "artifact records",
+        "run-store observability dashboard",
+        "Membrane context memory optimization"
+      ],
+      "simulation_type": "Workflow-driven actor run.",
+      "target_users": "Security-conscious SaaS, GovTech, defense-tech, compliance, and platform teams."
+    },
+    "workflow_id": "user_activity_rmf_triage_assistant_v1"
+  },
+  {
+    "category": "Business",
+    "description": "Use this blueprint to convert requirements and vendor responses into a scored recommendation, implementation plan, and reviewable decision record.",
+    "id": "vendor_selection_advisor_assistant",
+    "job_name": "vendor-selection-advisor-assistant",
+    "name": "Vendor Selection Advisor Assistant",
+    "path": "vendor_selection_advisor_assistant",
+    "product": {
+      "agent_role": "Vendor selection and implementation roadmap agent.",
+      "benefit": "Vendor selection is a repeatable high-value transformation workflow that can expand from RFP copilot into implementation readiness and procurement decision operations.",
+      "customizable_for": "ERP, CRM, cloud, cybersecurity, AI platform, robotics, outsourcing, and implementation partner selection.",
+      "customize": "Replace mock vendors with RFP exports, security questionnaires, pricing sheets, architecture constraints, stakeholder notes, and procurement policies; adjust criteria, weights, risk rules, and roadmap phases.",
+      "example": "A CIO team selects an AI-enabled field service platform by generating an RFP package, scoring vendors, profiling pricing, surfacing missing answers, and building an implementation roadmap.",
+      "how_it_works": "A CIO team selects an AI-enabled field service platform by generating an RFP package, scoring vendors, profiling pricing, surfacing missing answers, and building an implementation roadmap.",
+      "input": "Replace mock vendors with RFP exports, security questionnaires, pricing sheets, architecture constraints, stakeholder notes, and procurement policies; adjust criteria, weights, risk rules, and roadmap phases.",
+      "investor": "Vendor selection is a repeatable high-value transformation workflow that can expand from RFP copilot into implementation readiness and procurement decision operations.",
+      "one_line": "Use this blueprint to convert requirements and vendor responses into a scored recommendation, implementation plan, and reviewable decision record.",
+      "output": "Vendor comparison matrix, recommendation memo, implementation roadmap, cost/risk model, process map, and negotiation questions.",
+      "problem": "Companies need a repeatable way to turn requirements, RFP responses, pricing, security evidence, and stakeholder input into an executive vendor decision.",
+      "runtime_features": [
+        "RFP package generation",
+        "vendor response normalization",
+        "weighted scoring",
+        "spreadsheet cost profiling",
+        "implementation roadmap",
+        "process map generation"
+      ],
+      "simulation_type": "Vendor selection and implementation roadmap workflow.",
+      "target_users": "CIO offices, procurement, transformation offices, private-equity operating teams, and enterprise architecture teams."
+    },
+    "workflow_id": "vendor_selection_advisor_assistant_v1"
   }
 ]

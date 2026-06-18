@@ -1456,7 +1456,7 @@
   "policies": {
     "recovery_mode": "local_restart"
   },
-  "requiredContextEngine": true,
+  "requiredContextEngine": false,
   "requirements": {
     "cpu": {
       "min_cores": 1

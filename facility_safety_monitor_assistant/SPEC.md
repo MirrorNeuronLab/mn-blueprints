@@ -16,7 +16,7 @@ The prototype supports live VL model detection through an Ollama-compatible endp
 
 ## Input
 
-The prototype accepts a configurable live camera source. By default, it expects a local RTSP stream carrying H.264 video at `rtsp://host.docker.internal:8554/local-camera`; local runs should publish the Mac webcam through the bundled MediaMTX helper. The key runtime controls are the source URI, transport, codec, frame sampling interval, maximum frame width, human detection confidence threshold, alert cooldown window, and site-specific safety or escalation policy.
+The prototype accepts a configurable live camera source. By default, it expects a local RTSP stream carrying H.264 video at `rtsp://127.0.0.1:8554/local-camera`; local runs should publish the Mac webcam through the bundled MediaMTX helper. The key runtime controls are the source URI, transport, codec, frame sampling interval, maximum frame width, human detection confidence threshold, alert cooldown window, and site-specific safety or escalation policy.
 
 Notification inputs include Slack enablement, destination channel, message prefix, and any downstream alert routing that a deployment wants to replace Slack with later. Model inputs include the VL model base URL, VL model name, prompt behavior, temperature, timeout, and mock or quick-test mode for deterministic local evaluation. The default VL model location is `http://192.168.4.173:11434` with model `nemotron3:33b`, and deployments can override it through config, generator flags, or `VL_MODEL_BASE_URL` / `VL_MODEL_NAME`.
 

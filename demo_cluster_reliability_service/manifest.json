@@ -1112,18 +1112,6 @@
   },
   "name": "Demo: Cluster Reliability Service",
   "policies": {
-    "constraints": [
-      {
-        "attribute": "node_role",
-        "operator": "==",
-        "value": "runtime"
-      },
-      {
-        "attribute": "capabilities",
-        "operator": "contains",
-        "value": "cluster-reliability-demo"
-      }
-    ],
     "drain": {
       "completion_target": "maintenance",
       "deadline_ms": 30000,

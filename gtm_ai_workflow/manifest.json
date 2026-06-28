@@ -3,7 +3,7 @@
   "kind": "Workflow",
   "id": "gtm_ai_workflow",
   "name": "GTM AI Workflow",
-  "version": "1.0.0",
+  "version": 1,
   "manifest_version": "1.0",
   "description": "Long-running GTM AI service that finds and researches target accounts, drafts personalized outreach, tracks replies, updates a local CSV CRM, recommends next actions, and feeds market insight back to product and marketing.",
   "job_name": "gtm-ai-workflow",
@@ -1105,7 +1105,7 @@
       ]
     },
     "worker_defaults": {
-      "uses": "mn-agents.data_python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1",
       "runner": "MirrorNeuron.Runner.HostLocal",
       "pool": "default",
       "pool_slots": 1,
@@ -1133,7 +1133,7 @@
           {
             "id": "monitor_scheduler_agent",
             "role": "Monitor Scheduler Agent",
-            "uses": "mn-agents.data_module@1.0.0",
+            "uses": "mn-agents.data_module@1",
             "kind": "stream",
             "with": {
               "module": "Synaptic.MonitorScheduler",
@@ -1144,7 +1144,7 @@
           {
             "id": "account_research_agent",
             "role": "Account Research Agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "kind": "generic",
             "with": {
               "command": [
@@ -1217,7 +1217,7 @@
           {
             "id": "outreach_copywriter_agent",
             "role": "Outreach Copywriter Agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "kind": "generic",
             "with": {
               "command": [
@@ -1290,7 +1290,7 @@
           {
             "id": "email_designer_agent",
             "role": "Email Designer Agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "kind": "generic",
             "with": {
               "command": [
@@ -1363,7 +1363,7 @@
           {
             "id": "deliverability_ops_agent",
             "role": "Deliverability & Ops Specialist Agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "kind": "generic",
             "with": {
               "command": [
@@ -1436,7 +1436,7 @@
           {
             "id": "control_manager_agent",
             "role": "Control Manager Agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "kind": "generic",
             "with": {
               "command": [
@@ -1509,7 +1509,7 @@
           {
             "id": "gtm_automation_agent",
             "role": "GTM Automation Engineer Agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "kind": "generic",
             "with": {
               "command": [
@@ -1582,7 +1582,7 @@
           {
             "id": "inbox_reply_agent",
             "role": "Inbox Reply Agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "kind": "generic",
             "with": {
               "command": [
@@ -1654,7 +1654,7 @@
           {
             "id": "inbox_poller_agent",
             "role": "Inbox Poller",
-            "uses": "mn-agents.data_module@1.0.0",
+            "uses": "mn-agents.data_module@1",
             "kind": "stream",
             "with": {
               "module": "Synaptic.InboxPoller",
@@ -2074,7 +2074,7 @@
       "nodes": [
         {
           "node_id": "ingress",
-          "uses": "mn-agents.control_router@1.0.0",
+          "uses": "mn-agents.control_router@1",
           "with": {
             "role": "Service ingress",
             "beacon_enabled": true,
@@ -2085,7 +2085,7 @@
         },
         {
           "node_id": "monitor_scheduler_agent",
-          "uses": "mn-agents.data_module@1.0.0",
+          "uses": "mn-agents.data_module@1",
           "with": {
             "role": "Monitor Scheduler Agent",
             "node_type": "stream",
@@ -2100,7 +2100,7 @@
         },
         {
           "node_id": "account_research_agent",
-          "uses": "mn-agents.data_python_executor@1.0.0",
+          "uses": "mn-agents.data_python_executor@1",
           "with": {
             "command": [
               "python3.11",
@@ -2175,7 +2175,7 @@
         },
         {
           "node_id": "outreach_copywriter_agent",
-          "uses": "mn-agents.data_python_executor@1.0.0",
+          "uses": "mn-agents.data_python_executor@1",
           "with": {
             "command": [
               "python3.11",
@@ -2250,7 +2250,7 @@
         },
         {
           "node_id": "email_designer_agent",
-          "uses": "mn-agents.data_python_executor@1.0.0",
+          "uses": "mn-agents.data_python_executor@1",
           "with": {
             "command": [
               "python3.11",
@@ -2325,7 +2325,7 @@
         },
         {
           "node_id": "deliverability_ops_agent",
-          "uses": "mn-agents.data_python_executor@1.0.0",
+          "uses": "mn-agents.data_python_executor@1",
           "with": {
             "command": [
               "python3.11",
@@ -2400,7 +2400,7 @@
         },
         {
           "node_id": "control_manager_agent",
-          "uses": "mn-agents.data_python_executor@1.0.0",
+          "uses": "mn-agents.data_python_executor@1",
           "with": {
             "command": [
               "python3.11",
@@ -2475,7 +2475,7 @@
         },
         {
           "node_id": "gtm_automation_agent",
-          "uses": "mn-agents.data_python_executor@1.0.0",
+          "uses": "mn-agents.data_python_executor@1",
           "with": {
             "command": [
               "python3.11",
@@ -2550,7 +2550,7 @@
         },
         {
           "node_id": "inbox_reply_agent",
-          "uses": "mn-agents.data_python_executor@1.0.0",
+          "uses": "mn-agents.data_python_executor@1",
           "with": {
             "command": [
               "python3.11",
@@ -2624,7 +2624,7 @@
         },
         {
           "node_id": "inbox_poller_agent",
-          "uses": "mn-agents.data_module@1.0.0",
+          "uses": "mn-agents.data_module@1",
           "with": {
             "role": "Inbox Poller",
             "node_type": "stream",
@@ -2645,10 +2645,10 @@
         {
           "node_id": "ingress",
           "template_id": "mn-agents.control_router",
-          "version": "1.0.0",
+          "version": 1,
           "original_node": {
             "node_id": "ingress",
-            "uses": "mn-agents.control_router@1.0.0",
+            "uses": "mn-agents.control_router@1",
             "with": {
               "role": "Service ingress",
               "beacon_enabled": true,
@@ -2673,10 +2673,10 @@
         {
           "node_id": "monitor_scheduler_agent",
           "template_id": "mn-agents.data_module",
-          "version": "1.0.0",
+          "version": 1,
           "original_node": {
             "node_id": "monitor_scheduler_agent",
-            "uses": "mn-agents.data_module@1.0.0",
+            "uses": "mn-agents.data_module@1",
             "with": {
               "role": "Monitor Scheduler Agent",
               "node_type": "stream",
@@ -2708,10 +2708,10 @@
         {
           "node_id": "account_research_agent",
           "template_id": "mn-agents.data_python_executor",
-          "version": "1.0.0",
+          "version": 1,
           "original_node": {
             "node_id": "account_research_agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -2863,10 +2863,10 @@
         {
           "node_id": "outreach_copywriter_agent",
           "template_id": "mn-agents.data_python_executor",
-          "version": "1.0.0",
+          "version": 1,
           "original_node": {
             "node_id": "outreach_copywriter_agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -3018,10 +3018,10 @@
         {
           "node_id": "email_designer_agent",
           "template_id": "mn-agents.data_python_executor",
-          "version": "1.0.0",
+          "version": 1,
           "original_node": {
             "node_id": "email_designer_agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -3173,10 +3173,10 @@
         {
           "node_id": "deliverability_ops_agent",
           "template_id": "mn-agents.data_python_executor",
-          "version": "1.0.0",
+          "version": 1,
           "original_node": {
             "node_id": "deliverability_ops_agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -3328,10 +3328,10 @@
         {
           "node_id": "control_manager_agent",
           "template_id": "mn-agents.data_python_executor",
-          "version": "1.0.0",
+          "version": 1,
           "original_node": {
             "node_id": "control_manager_agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -3483,10 +3483,10 @@
         {
           "node_id": "gtm_automation_agent",
           "template_id": "mn-agents.data_python_executor",
-          "version": "1.0.0",
+          "version": 1,
           "original_node": {
             "node_id": "gtm_automation_agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -3637,10 +3637,10 @@
         {
           "node_id": "inbox_reply_agent",
           "template_id": "mn-agents.data_python_executor",
-          "version": "1.0.0",
+          "version": 1,
           "original_node": {
             "node_id": "inbox_reply_agent",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -3790,10 +3790,10 @@
         {
           "node_id": "inbox_poller_agent",
           "template_id": "mn-agents.data_module",
-          "version": "1.0.0",
+          "version": 1,
           "original_node": {
             "node_id": "inbox_poller_agent",
-            "uses": "mn-agents.data_module@1.0.0",
+            "uses": "mn-agents.data_module@1",
             "with": {
               "role": "Inbox Poller",
               "node_type": "stream",

@@ -801,31 +801,31 @@
       "nodes": [
         {
           "node_id": "memory_intake_coordinator",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "context_interpreter",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "memory_evidence_extractor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "memory_classifier_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "compression_policy_planner",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "compression_reviewer",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "report_sink",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -1537,7 +1537,7 @@
             "id": "input_adapter",
             "model": "ollama/nemotron3:33b",
             "role": "Resolve mock, JSON, file, or env_json inputs",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       },
@@ -1601,7 +1601,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "initializer",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "bash",
@@ -1680,7 +1680,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "context_researcher",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "bash",
@@ -1759,7 +1759,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "context_expander",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "bash",
@@ -1838,7 +1838,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "constraint_challenger",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "bash",
@@ -1917,7 +1917,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "context_compressor",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "bash",
@@ -1996,7 +1996,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "briefing_author",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "bash",
@@ -2082,7 +2082,7 @@
             "id": "artifact_writer",
             "model": "ollama/nemotron3:33b",
             "role": "Write result and final artifact to the local run store",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       }
@@ -2153,12 +2153,12 @@
       "pool": "default",
       "pool_slots": 1,
       "runner": "MirrorNeuron.Runner.HostLocal",
-      "uses": "mn-agents.data_python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1",
       "workdir": "/sandbox/job/workflow"
     }
   },
   "term": "TERM.md",
-  "version": "1.0.0",
+  "version": 1,
   "workflow": {
     "dynamic": {
       "apply_at": "between_steps",

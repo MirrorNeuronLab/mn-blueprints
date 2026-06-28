@@ -453,31 +453,31 @@
       "nodes": [
         {
           "node_id": "codegen_actor_round_1",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "review_actor_round_1",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "codegen_actor_round_2",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "review_actor_round_2",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "codegen_actor_round_3",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "candidate_validation_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "report_sink",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -1204,7 +1204,7 @@
             "id": "input_adapter",
             "model": "ollama/nemotron3:33b",
             "role": "Resolve mock, JSON, file, or env_json inputs",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       },
@@ -1313,42 +1313,42 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "root_coordinator",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           },
           {
             "id": "review_actor_round_1",
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Review Round 1",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           },
           {
             "id": "codegen_actor_round_2",
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Codegen Round 2",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           },
           {
             "id": "review_actor_round_2",
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Review Round 2",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           },
           {
             "id": "codegen_actor_round_3",
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Codegen Round 3",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           },
           {
             "id": "candidate_validation_actor",
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Validator",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -1401,7 +1401,7 @@
             "id": "artifact_writer",
             "model": "ollama/nemotron3:33b",
             "role": "Write result and final artifact to the local run store",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       }
@@ -1472,12 +1472,12 @@
       "pool": "default",
       "pool_slots": 1,
       "runner": "MirrorNeuron.Runner.HostLocal",
-      "uses": "mn-agents.data_python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1",
       "workdir": "/sandbox/job/workflow"
     }
   },
   "term": "TERM.md",
-  "version": "1.0.0",
+  "version": 1,
   "workflow": {
     "dynamic": {
       "apply_at": "between_steps",

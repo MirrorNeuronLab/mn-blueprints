@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
   "$id": "https://mirrorneuron.local/schemas/security-user-activity-event.schema.json",
   "title": "Security User Activity Event",
   "type": "object",
@@ -59,8 +60,10 @@
     "metadata": {
       "type": "object",
       "additionalProperties": true
+    },
+    "version": {
+      "const": 1
     }
   },
   "additionalProperties": true
 }
-

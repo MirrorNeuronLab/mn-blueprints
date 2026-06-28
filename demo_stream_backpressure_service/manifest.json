@@ -326,19 +326,19 @@
       "nodes": [
         {
           "node_id": "ingress",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "stream_source_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "slow_enrichment_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "stream_metrics_sink",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -1136,7 +1136,7 @@
             "id": "input_adapter",
             "model": "ollama/nemotron3:33b",
             "role": "Resolve mock, JSON, file, or env_json inputs",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       },
@@ -1183,14 +1183,14 @@
             "kind": "stream",
             "model": "ollama/nemotron3:33b",
             "role": "source",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "slow_enrichment_actor",
             "kind": "stream",
             "model": "ollama/nemotron3:33b",
             "role": "processor",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       },
@@ -1204,7 +1204,7 @@
             "id": "artifact_writer",
             "model": "ollama/nemotron3:33b",
             "role": "Write result and final artifact to the local run store",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       }
@@ -1279,13 +1279,13 @@
       "pool": "default",
       "pool_slots": 1,
       "runner": "MirrorNeuron.Runner.HostLocal",
-      "uses": "mn-agents.data_python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1",
       "workdir": "/sandbox/job/workflow"
     }
   },
   "term": "TERM.md",
   "type": "service",
-  "version": "1.0.0",
+  "version": 1,
   "workflow": {
     "dynamic": {
       "apply_at": "between_steps",

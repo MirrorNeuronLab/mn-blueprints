@@ -5350,419 +5350,419 @@
       "nodes": [
         {
           "node_id": "parallel_dispatch_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_result_collector",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_benchmark_reporter",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0001_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0002_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0003_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0004_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0005_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0006_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0007_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0008_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0009_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0010_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0011_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0012_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0013_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0014_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0015_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0016_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0017_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0018_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0019_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0020_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0021_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0022_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0023_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0024_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0025_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0026_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0027_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0028_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0029_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0030_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0031_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0032_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0033_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0034_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0035_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0036_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0037_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0038_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0039_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0040_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0041_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0042_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0043_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0044_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0045_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0046_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0047_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0048_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0049_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0050_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0051_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0052_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0053_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0054_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0055_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0056_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0057_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0058_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0059_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0060_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0061_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0062_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0063_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0064_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0065_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0066_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0067_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0068_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0069_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0070_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0071_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0072_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0073_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0074_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0075_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0076_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0077_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0078_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0079_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0080_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0081_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0082_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0083_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0084_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0085_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0086_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0087_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0088_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0089_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0090_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0091_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0092_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0093_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0094_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0095_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0096_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0097_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0098_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0099_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "parallel_prime_worker_0100_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "report_sink",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -6474,7 +6474,7 @@
             "id": "input_adapter",
             "model": "ollama/nemotron3:33b",
             "role": "Resolve mock, JSON, file, or env_json inputs",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       },
@@ -7712,7 +7712,7 @@
             "kind": "control",
             "model": "ollama/nemotron3:33b",
             "role": "Dispatcher",
-            "uses": "mn-agents.control_router@1.0.0",
+            "uses": "mn-agents.control_router@1",
             "with": {
               "emit_type": "prime_chunk_request",
               "node_type": "map",
@@ -7725,7 +7725,7 @@
             "kind": "control",
             "model": "ollama/nemotron3:33b",
             "role": "Collector",
-            "uses": "mn-agents.control_join@1.0.0",
+            "uses": "mn-agents.control_join@1",
             "with": {
               "complete_after": 100,
               "complete_on_message": false,
@@ -7739,7 +7739,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Summarizer",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -7760,7 +7760,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0001",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -7793,7 +7793,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0002",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -7826,7 +7826,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0003",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -7859,7 +7859,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0004",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -7892,7 +7892,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0005",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -7925,7 +7925,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0006",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -7958,7 +7958,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0007",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -7991,7 +7991,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0008",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8024,7 +8024,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0009",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8057,7 +8057,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0010",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8090,7 +8090,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0011",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8123,7 +8123,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0012",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8156,7 +8156,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0013",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8189,7 +8189,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0014",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8222,7 +8222,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0015",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8255,7 +8255,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0016",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8288,7 +8288,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0017",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8321,7 +8321,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0018",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8354,7 +8354,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0019",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8387,7 +8387,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0020",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8420,7 +8420,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0021",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8453,7 +8453,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0022",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8486,7 +8486,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0023",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8519,7 +8519,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0024",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8552,7 +8552,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0025",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8585,7 +8585,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0026",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8618,7 +8618,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0027",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8651,7 +8651,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0028",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8684,7 +8684,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0029",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8717,7 +8717,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0030",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8750,7 +8750,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0031",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8783,7 +8783,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0032",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8816,7 +8816,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0033",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8849,7 +8849,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0034",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8882,7 +8882,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0035",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8915,7 +8915,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0036",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8948,7 +8948,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0037",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -8981,7 +8981,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0038",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9014,7 +9014,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0039",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9047,7 +9047,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0040",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9080,7 +9080,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0041",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9113,7 +9113,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0042",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9146,7 +9146,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0043",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9179,7 +9179,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0044",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9212,7 +9212,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0045",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9245,7 +9245,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0046",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9278,7 +9278,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0047",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9311,7 +9311,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0048",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9344,7 +9344,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0049",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9377,7 +9377,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0050",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9410,7 +9410,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0051",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9443,7 +9443,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0052",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9476,7 +9476,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0053",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9509,7 +9509,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0054",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9542,7 +9542,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0055",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9575,7 +9575,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0056",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9608,7 +9608,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0057",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9641,7 +9641,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0058",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9674,7 +9674,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0059",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9707,7 +9707,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0060",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9740,7 +9740,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0061",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9773,7 +9773,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0062",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9806,7 +9806,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0063",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9839,7 +9839,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0064",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9872,7 +9872,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0065",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9905,7 +9905,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0066",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9938,7 +9938,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0067",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -9971,7 +9971,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0068",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10004,7 +10004,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0069",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10037,7 +10037,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0070",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10070,7 +10070,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0071",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10103,7 +10103,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0072",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10136,7 +10136,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0073",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10169,7 +10169,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0074",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10202,7 +10202,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0075",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10235,7 +10235,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0076",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10268,7 +10268,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0077",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10301,7 +10301,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0078",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10334,7 +10334,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0079",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10367,7 +10367,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0080",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10400,7 +10400,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0081",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10433,7 +10433,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0082",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10466,7 +10466,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0083",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10499,7 +10499,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0084",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10532,7 +10532,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0085",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10565,7 +10565,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0086",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10598,7 +10598,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0087",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10631,7 +10631,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0088",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10664,7 +10664,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0089",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10697,7 +10697,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0090",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10730,7 +10730,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0091",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10763,7 +10763,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0092",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10796,7 +10796,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0093",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10829,7 +10829,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0094",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10862,7 +10862,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0095",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10895,7 +10895,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0096",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10928,7 +10928,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0097",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10961,7 +10961,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0098",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -10994,7 +10994,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0099",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -11027,7 +11027,7 @@
             "kind": "generic",
             "model": "ollama/nemotron3:33b",
             "role": "Prime Worker 0100",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "command": [
                 "python3.11",
@@ -11067,7 +11067,7 @@
             "id": "artifact_writer",
             "model": "ollama/nemotron3:33b",
             "role": "Write result and final artifact to the local run store",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       }
@@ -11138,12 +11138,12 @@
       "pool": "default",
       "pool_slots": 1,
       "runner": "MirrorNeuron.Runner.HostLocal",
-      "uses": "mn-agents.data_python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1",
       "workdir": "/sandbox/job/workflow"
     }
   },
   "term": "TERM.md",
-  "version": "1.0.0",
+  "version": 1,
   "workflow": {
     "dynamic": {
       "apply_at": "between_steps",

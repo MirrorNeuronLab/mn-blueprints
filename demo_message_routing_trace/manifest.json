@@ -317,19 +317,19 @@
       "nodes": [
         {
           "node_id": "ingress",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "routing_retriever_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "routing_review_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "report_sink",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -1041,7 +1041,7 @@
             "id": "input_adapter",
             "model": "ollama/nemotron3:33b",
             "role": "Resolve mock, JSON, file, or env_json inputs",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       },
@@ -1080,19 +1080,19 @@
             "id": "ingress",
             "model": "ollama/nemotron3:33b",
             "role": "Ingress",
-            "uses": "mn-agents.control_router@1.0.0"
+            "uses": "mn-agents.control_router@1"
           },
           {
             "id": "routing_retriever_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Retriever",
-            "uses": "mn-agents.control_router@1.0.0"
+            "uses": "mn-agents.control_router@1"
           },
           {
             "id": "routing_review_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Reviewer",
-            "uses": "mn-agents.control_join@1.0.0"
+            "uses": "mn-agents.control_join@1"
           }
         ]
       },
@@ -1106,7 +1106,7 @@
             "id": "artifact_writer",
             "model": "ollama/nemotron3:33b",
             "role": "Write result and final artifact to the local run store",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       }
@@ -1177,12 +1177,12 @@
       "pool": "default",
       "pool_slots": 1,
       "runner": "MirrorNeuron.Runner.HostLocal",
-      "uses": "mn-agents.data_python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1",
       "workdir": "/sandbox/job/workflow"
     }
   },
   "term": "TERM.md",
-  "version": "1.0.0",
+  "version": 1,
   "workflow": {
     "dynamic": {
       "apply_at": "between_steps",

@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
   "$id": "https://mirrorneuron.local/schemas/security-user-activity-evidence-report.schema.json",
   "title": "Security User Activity Evidence Report",
   "type": "object",
@@ -71,8 +72,10 @@
     },
     "compliance_caveat": {
       "type": "string"
+    },
+    "version": {
+      "const": 1
     }
   },
   "additionalProperties": true
 }
-

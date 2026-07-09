@@ -1,0 +1,1217 @@
+{
+  "apiVersion": "mn.workflow.source/v1",
+  "kind": "WorkflowSource",
+  "standard": {
+    "profile": "document_workflow",
+    "profile_version": 1,
+    "source_schema": "mn.workflow.source/v1",
+    "target_schema": "mn.workflow/v1",
+    "migration_policy": "sdk_managed"
+  },
+  "identity": {
+    "category": "finance",
+    "id": "vc_assistant",
+    "job_name": "vc-assistant",
+    "manifest_version": "1.0",
+    "name": "VC Assistant",
+    "version": 1
+  },
+  "intent": {
+    "description": "A VC analysis co-worker for early startup screening reports. Put pitch decks, memos, financial snippets, company folders, or other startup documents in the input folder; it groups documents by company, performs privacy-safe public research, applies seven VC heuristic scoring methods, audits the math and evidence, and writes score-only per-company reports and batch indexes to the output folder.",
+    "problem": "Early startup packets are noisy and inconsistent; analysts need quick heuristic reports with evidence, assumptions, and missing-information flags while retaining the final decision.",
+    "safety": {
+      "allowed_decisions": [
+        "approve",
+        "revise",
+        "reject"
+      ],
+      "blocked_actions": [
+        "make_investment_decision",
+        "send_investment_recommendation",
+        "share_confidential_documents",
+        "submit_term_sheet",
+        "contact_founder_without_review",
+        "mark_scores_as_final_valuation"
+      ],
+      "decision_event": "human_decision_applied",
+      "default_action": "reject",
+      "enabled": true,
+      "events": [
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied"
+      ],
+      "mode": "approval_required",
+      "reason": "Human approval is required before any external sharing, investment action, founder contact, valuation use, or downstream decision.",
+      "request_event": "human_input_requested",
+      "response_event": "human_input_received",
+      "timeout_event": "human_input_timeout",
+      "timeout_seconds": 3600
+    },
+    "target_users": "VC analysts, angel investors, accelerator reviewers, startup scouts, and founder-led investment teams."
+  },
+  "config": {
+    "default": "config/default.json",
+    "embed": true
+  },
+  "defaults": {
+    "worker": {
+      "with": {
+        "image": "mirror-neuron/vc-assistant:local"
+      }
+    }
+  },
+  "workers": {
+    "groups": [
+      {
+        "steps": [
+          "company_identity_researcher",
+          "funding_researcher",
+          "market_comp_researcher",
+          "traction_verifier",
+          "rendered_page_researcher"
+        ],
+        "with": {
+          "stereotype": "public_browser_worker"
+        }
+      },
+      {
+        "steps": [
+          "company_report_writer",
+          "batch_index_writer"
+        ],
+        "with": {
+          "stereotype": "internal_write_worker"
+        }
+      }
+    ]
+  },
+  "agents": {
+    "extra_templates": [
+      {
+        "node_id": "report_sink",
+        "uses": "mn-agents.control.terminal_sink@1",
+        "with": {
+          "stereotype": "terminal_report_sink"
+        }
+      }
+    ],
+    "extra_edges": [
+      {
+        "edge_id": "batch_index_writer_to_report_sink",
+        "from_node": "batch_index_writer",
+        "message_type": "batch_index_writer_completed",
+        "to_node": "report_sink"
+      }
+    ]
+  },
+  "workflow": {
+    "workflow_id": "vc_assistant_v1",
+    "execution": {
+      "strategy": "parallel"
+    },
+    "dynamic": {
+      "apply_at": "between_steps",
+      "enabled": false,
+      "patch_events": []
+    },
+    "state": {
+      "document_folder": {
+        "from": "$inputs.document_folder"
+      },
+      "final_report": {},
+      "output_folder": {
+        "from": "$inputs.output_folder"
+      },
+      "workflow": {}
+    },
+    "policy": {
+      "failure": {
+        "default": "fail_closed"
+      },
+      "human": {
+        "allowed_decisions": [
+          "approve",
+          "revise",
+          "reject"
+        ],
+        "blocked_actions": [
+          "make_investment_decision",
+          "send_investment_recommendation",
+          "share_confidential_documents",
+          "submit_term_sheet",
+          "contact_founder_without_review",
+          "mark_scores_as_final_valuation"
+        ],
+        "decision_event": "human_decision_applied",
+        "default_action": "reject",
+        "enabled": true,
+        "events": [
+          "human_notice",
+          "human_input_requested",
+          "human_input_received",
+          "human_input_timeout",
+          "human_decision_applied"
+        ],
+        "mode": "approval_required",
+        "reason": "Human approval is required before any external sharing, investment action, founder contact, valuation use, or downstream decision.",
+        "request_event": "human_input_requested",
+        "response_event": "human_input_received",
+        "timeout_event": "human_input_timeout",
+        "timeout_seconds": 3600
+      }
+    },
+    "steps": [
+      {
+        "id": "startup_folder_watcher",
+        "kind": "source",
+        "label": "Startup Folder Watcher",
+        "goal": "Detect changed files, create company work queue, fingerprint packets, and mark unchanged packets.",
+        "requires": [],
+        "provides": [
+          "vc_assistant.startup_folder_watcher.ready"
+        ],
+        "in": {
+          "document_folder": "$state.document_folder",
+          "monitoring": "$inputs.monitoring"
+        },
+        "out": {
+          "startup_folder_watcher": "$state.workflow.startup_folder_watcher"
+        }
+      },
+      {
+        "id": "company_packet_grouper",
+        "kind": "stage",
+        "label": "Company Packet Grouper",
+        "goal": "Group startup documents by company, resolve aliases, and create stable company ids and slugs.",
+        "requires": [
+          "vc_assistant.startup_folder_watcher.ready"
+        ],
+        "provides": [
+          "vc_assistant.company_packet_grouper.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "company_packet_grouper": "$state.workflow.company_packet_grouper"
+        }
+      },
+      {
+        "id": "document_evidence_extractor",
+        "kind": "stage",
+        "label": "Document Evidence Extractor",
+        "goal": "Extract local text, structured claims, tables, dates, amounts, founder names, traction claims, product/IP claims, and source refs.",
+        "requires": [
+          "vc_assistant.company_packet_grouper.ready"
+        ],
+        "provides": [
+          "vc_assistant.document_evidence_extractor.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "document_evidence_extractor": "$state.workflow.document_evidence_extractor"
+        }
+      },
+      {
+        "id": "claim_normalizer",
+        "kind": "stage",
+        "label": "Claim Normalizer",
+        "goal": "Build deterministic team, market, traction, financial, risk, IP asset, and comparable-candidate fact tables.",
+        "requires": [
+          "vc_assistant.document_evidence_extractor.ready"
+        ],
+        "provides": [
+          "vc_assistant.claim_normalizer.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "claim_normalizer": "$state.workflow.claim_normalizer"
+        }
+      },
+      {
+        "id": "research_planner",
+        "kind": "stage",
+        "label": "Research Planner",
+        "goal": "Create privacy-safe public research queries from company name, domain, category, and non-confidential claims.",
+        "requires": [
+          "vc_assistant.claim_normalizer.ready"
+        ],
+        "provides": [
+          "vc_assistant.research_planner.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "research_planner": "$state.workflow.research_planner"
+        }
+      },
+      {
+        "id": "company_identity_researcher",
+        "kind": "stage",
+        "label": "Company Identity Researcher",
+        "goal": "Research company website, Crunchbase/profile pages, LinkedIn/company pages, and identity signals.",
+        "requires": [
+          "vc_assistant.research_planner.ready"
+        ],
+        "provides": [
+          "vc_assistant.company_identity_researcher.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "company_identity_researcher": "$state.workflow.company_identity_researcher"
+        }
+      },
+      {
+        "id": "funding_researcher",
+        "kind": "stage",
+        "label": "Funding Researcher",
+        "goal": "Research funding rounds, investors, accelerator mentions, and press.",
+        "requires": [
+          "vc_assistant.company_identity_researcher.ready"
+        ],
+        "provides": [
+          "vc_assistant.funding_researcher.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "funding_researcher": "$state.workflow.funding_researcher"
+        }
+      },
+      {
+        "id": "market_comp_researcher",
+        "kind": "stage",
+        "label": "Market And Comparable Researcher",
+        "goal": "Research market size, competitors, and public comparable companies.",
+        "requires": [
+          "vc_assistant.funding_researcher.ready"
+        ],
+        "provides": [
+          "vc_assistant.market_comp_researcher.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "market_comp_researcher": "$state.workflow.market_comp_researcher"
+        }
+      },
+      {
+        "id": "traction_verifier",
+        "kind": "stage",
+        "label": "Traction Verifier",
+        "goal": "Verify public customer, partnership, revenue, product launch, and traction claims.",
+        "requires": [
+          "vc_assistant.market_comp_researcher.ready"
+        ],
+        "provides": [
+          "vc_assistant.traction_verifier.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "traction_verifier": "$state.workflow.traction_verifier"
+        }
+      },
+      {
+        "id": "rendered_page_researcher",
+        "kind": "stage",
+        "label": "Rendered Page Researcher",
+        "goal": "Optionally use rendered browser verification for JavaScript-heavy public pages and record blocked outcomes.",
+        "requires": [
+          "vc_assistant.traction_verifier.ready"
+        ],
+        "provides": [
+          "vc_assistant.rendered_page_researcher.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "rendered_page_researcher": "$state.workflow.rendered_page_researcher"
+        }
+      },
+      {
+        "id": "research_reconciler",
+        "kind": "stage",
+        "label": "Research Reconciler",
+        "goal": "Merge public findings with local claims and flag confirmations, contradictions, missing evidence, and source-quality warnings.",
+        "requires": [
+          "vc_assistant.rendered_page_researcher.ready"
+        ],
+        "provides": [
+          "vc_assistant.research_reconciler.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "research_reconciler": "$state.workflow.research_reconciler"
+        },
+        "join": {
+          "mode": "all_required"
+        }
+      },
+      {
+        "id": "berkus_scorer",
+        "kind": "stage",
+        "label": "Berkus Scorer",
+        "goal": "Apply Berkus Method 5 bucket scoring with deterministic calculations.",
+        "requires": [
+          "vc_assistant.research_reconciler.ready"
+        ],
+        "provides": [
+          "vc_assistant.berkus_scorer.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "berkus_scorer": "$state.workflow.berkus_scorer"
+        }
+      },
+      {
+        "id": "scorecard_bill_payne_scorer",
+        "kind": "stage",
+        "label": "Scorecard Bill Payne Scorer",
+        "goal": "Apply weighted Scorecard / Bill Payne factor scoring.",
+        "requires": [
+          "vc_assistant.berkus_scorer.ready"
+        ],
+        "provides": [
+          "vc_assistant.scorecard_bill_payne_scorer.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "scorecard_bill_payne_scorer": "$state.workflow.scorecard_bill_payne_scorer"
+        }
+      },
+      {
+        "id": "risk_factor_summation_scorer",
+        "kind": "stage",
+        "label": "Risk Factor Summation Scorer",
+        "goal": "Apply 12-risk checklist scoring and adjustments.",
+        "requires": [
+          "vc_assistant.scorecard_bill_payne_scorer.ready"
+        ],
+        "provides": [
+          "vc_assistant.risk_factor_summation_scorer.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "risk_factor_summation_scorer": "$state.workflow.risk_factor_summation_scorer"
+        }
+      },
+      {
+        "id": "venture_capital_method_scorer",
+        "kind": "stage",
+        "label": "Venture Capital Method Scorer",
+        "goal": "Apply exit-back valuation assumptions and VC return math scoring.",
+        "requires": [
+          "vc_assistant.risk_factor_summation_scorer.ready"
+        ],
+        "provides": [
+          "vc_assistant.venture_capital_method_scorer.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "venture_capital_method_scorer": "$state.workflow.venture_capital_method_scorer"
+        }
+      },
+      {
+        "id": "first_chicago_scorer",
+        "kind": "stage",
+        "label": "First Chicago Scorer",
+        "goal": "Apply bear/base/bull case scoring with probability weighting.",
+        "requires": [
+          "vc_assistant.venture_capital_method_scorer.ready"
+        ],
+        "provides": [
+          "vc_assistant.first_chicago_scorer.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "first_chicago_scorer": "$state.workflow.first_chicago_scorer"
+        }
+      },
+      {
+        "id": "comparables_market_multiple_scorer",
+        "kind": "stage",
+        "label": "Comparables Market Multiple Scorer",
+        "goal": "Apply public comparable and market multiple evidence scoring when available.",
+        "requires": [
+          "vc_assistant.first_chicago_scorer.ready"
+        ],
+        "provides": [
+          "vc_assistant.comparables_market_multiple_scorer.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "comparables_market_multiple_scorer": "$state.workflow.comparables_market_multiple_scorer"
+        }
+      },
+      {
+        "id": "cost_to_duplicate_scorer",
+        "kind": "stage",
+        "label": "Cost To Duplicate Scorer",
+        "goal": "Estimate rebuild-cost floor from team, R&D, IP, hardware, data, and infrastructure evidence.",
+        "requires": [
+          "vc_assistant.comparables_market_multiple_scorer.ready"
+        ],
+        "provides": [
+          "vc_assistant.cost_to_duplicate_scorer.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "cost_to_duplicate_scorer": "$state.workflow.cost_to_duplicate_scorer"
+        }
+      },
+      {
+        "id": "score_consistency_auditor",
+        "kind": "stage",
+        "label": "Score Consistency Auditor",
+        "goal": "Check math, missing evidence handling, contradictory assumptions, unsupported valuation claims, and formula completeness.",
+        "requires": [
+          "vc_assistant.cost_to_duplicate_scorer.ready"
+        ],
+        "provides": [
+          "vc_assistant.score_consistency_auditor.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "score_consistency_auditor": "$state.workflow.score_consistency_auditor"
+        },
+        "join": {
+          "mode": "all_required"
+        }
+      },
+      {
+        "id": "company_report_writer",
+        "kind": "stage",
+        "label": "Company Report Writer",
+        "goal": "Write per-company reports: analysis, method scores, research sources, evidence, and warnings.",
+        "requires": [
+          "vc_assistant.score_consistency_auditor.ready"
+        ],
+        "provides": [
+          "vc_assistant.company_report_writer.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "company_report_writer": "$state.workflow.company_report_writer"
+        }
+      },
+      {
+        "id": "batch_index_writer",
+        "kind": "sink",
+        "label": "Batch Index Writer",
+        "goal": "Write root-level company index, research coverage, method coverage, queue, and run summary artifacts.",
+        "requires": [
+          "vc_assistant.company_report_writer.ready"
+        ],
+        "provides": [
+          "vc_assistant.batch_index_writer.ready"
+        ],
+        "in": {
+          "previous": "$state.workflow"
+        },
+        "out": {
+          "batch_index_writer": "$state.workflow.batch_index_writer"
+        }
+      }
+    ]
+  },
+  "contracts": {
+    "events": {
+      "human_stream": "human.jsonl",
+      "stream": "events.jsonl",
+      "types": [
+        "blueprint_status",
+        "blueprint_phase_started",
+        "blueprint_phase_completed",
+        "blueprint_phase_failed",
+        "artifact_written",
+        "human_notice",
+        "human_input_requested",
+        "human_input_received",
+        "human_input_timeout",
+        "human_decision_applied",
+        "output_skill_started",
+        "output_skill_completed",
+        "output_skill_failed",
+        "tool_call_started",
+        "tool_call_completed",
+        "tool_call_failed",
+        "startup_folder_watcher_completed",
+        "company_packet_grouper_completed",
+        "document_evidence_extractor_completed",
+        "claim_normalizer_completed",
+        "research_planner_completed",
+        "company_identity_researcher_completed",
+        "funding_researcher_completed",
+        "market_comp_researcher_completed",
+        "traction_verifier_completed",
+        "rendered_page_researcher_completed",
+        "research_reconciler_completed",
+        "berkus_scorer_completed",
+        "scorecard_bill_payne_scorer_completed",
+        "risk_factor_summation_scorer_completed",
+        "venture_capital_method_scorer_completed",
+        "first_chicago_scorer_completed",
+        "comparables_market_multiple_scorer_completed",
+        "cost_to_duplicate_scorer_completed",
+        "score_consistency_auditor_completed",
+        "company_report_writer_completed",
+        "batch_index_writer_completed",
+        "watch_cycle_started",
+        "watch_cycle_completed"
+      ]
+    },
+    "input_adapters": {
+      "default": "mock",
+      "resolved_artifact": "inputs.json",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ]
+    },
+    "inputs": {
+      "document_folder": {
+        "description": "Local folder monitored for startup documents; first-level folders are treated as companies.",
+        "example": "vc_assistant/examples/sample_inputs",
+        "path_kind": "directory",
+        "privacy": "confidential",
+        "required": true,
+        "type": "local_path"
+      },
+      "field_profile": {
+        "description": "Startup evidence fields captured by the analyzer.",
+        "example": [
+          "company_name",
+          "founder_team",
+          "market",
+          "product",
+          "traction",
+          "strategic_relationships",
+          "risks"
+        ],
+        "privacy": "internal",
+        "required": false,
+        "type": "domain_value"
+      },
+      "input_folder": {
+        "description": "Default local input folder for sample files or user-provided files.",
+        "example": "vc_assistant/examples/sample_inputs",
+        "path_kind": "directory",
+        "privacy": "confidential",
+        "required": false,
+        "type": "local_path"
+      },
+      "monitoring": {
+        "description": "Folder monitoring configuration for one-shot or continuous polling runs.",
+        "example": {
+          "enabled": true,
+          "max_cycles": 1,
+          "poll_interval_seconds": 60
+        },
+        "privacy": "internal",
+        "required": false,
+        "type": "domain_value"
+      },
+      "output_folder": {
+        "description": "Local folder where per-company reports and the company index should be written.",
+        "example": "~/Downloads/vc_assistant",
+        "path_kind": "directory",
+        "privacy": "confidential",
+        "required": true,
+        "type": "local_path"
+      }
+    },
+    "outputs": {
+      "artifacts": [
+        {
+          "artifact_id": "run_metadata",
+          "mime_type": "application/json",
+          "path": "run.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.artifact.run_summary.v1",
+          "source_refs": [],
+          "type": "run_summary"
+        },
+        {
+          "artifact_id": "resolved_config",
+          "mime_type": "application/json",
+          "path": "config.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.config.v1",
+          "source_refs": [],
+          "type": "config"
+        },
+        {
+          "artifact_id": "resolved_inputs",
+          "mime_type": "application/json",
+          "path": "inputs.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.inputs.v1",
+          "source_refs": [],
+          "type": "inputs"
+        },
+        {
+          "artifact_id": "event_stream",
+          "mime_type": "application/x-jsonlines",
+          "path": "events.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.events.v1",
+          "source_refs": [],
+          "type": "events"
+        },
+        {
+          "artifact_id": "result",
+          "mime_type": "application/json",
+          "path": "result.json",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.response.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl"
+          ],
+          "type": "result"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "mime_type": "application/json",
+          "path": "final_artifact.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.final_artifact.v1",
+          "source_refs": [
+            "inputs.json",
+            "events.jsonl",
+            "result.json"
+          ],
+          "type": "final_artifact"
+        },
+        {
+          "artifact_id": "action_ledger",
+          "mime_type": "application/json",
+          "path": "action_ledger.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.action_ledger.v1",
+          "source_refs": [
+            "final_artifact.json"
+          ],
+          "type": "action_ledger"
+        },
+        {
+          "artifact_id": "artifact_quality",
+          "mime_type": "application/json",
+          "path": "artifact_quality.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.artifact_quality.v1",
+          "source_refs": [
+            "final_artifact.json"
+          ],
+          "type": "artifact_quality"
+        },
+        {
+          "artifact_id": "run_health",
+          "mime_type": "application/json",
+          "path": "run_health.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.run_health.v1",
+          "source_refs": [
+            "final_artifact.json",
+            "action_ledger.json",
+            "artifact_quality.json"
+          ],
+          "type": "run_health"
+        },
+        {
+          "artifact_id": "logs",
+          "mime_type": "application/x-jsonlines",
+          "path": "logs.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.logs.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "logs"
+        },
+        {
+          "artifact_id": "resources",
+          "mime_type": "application/x-jsonlines",
+          "path": "resources.jsonl",
+          "producer": "local_run_store",
+          "schema_version": "mn.blueprint.resources.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "resource_samples"
+        },
+        {
+          "artifact_id": "web_ui",
+          "mime_type": "application/json",
+          "path": "web_ui.json",
+          "producer": "web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "source_refs": [
+            "run.json"
+          ],
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "human_events",
+          "mime_type": "application/x-jsonlines",
+          "path": "human.jsonl",
+          "producer": "human_control",
+          "schema_version": "mn.blueprint.human_events.v1",
+          "source_refs": [
+            "events.jsonl"
+          ],
+          "type": "human_events"
+        },
+        {
+          "artifact_id": "company_index",
+          "mime_type": "application/json",
+          "path": "<outputs.folder_path>/company_index.json",
+          "producer": "workflow",
+          "schema_version": "mn.blueprint.generated_report.v1",
+          "source_refs": [
+            "final_artifact.json"
+          ],
+          "type": "generated_report"
+        }
+      ],
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "required_fields": [
+          "type",
+          "executive_summary",
+          "recommended_action",
+          "confidence",
+          "evidence",
+          "next_steps",
+          "source_refs",
+          "research_summary",
+          "research_sources",
+          "research_warnings"
+        ],
+        "schema_version": "mn.blueprint.final_artifact_contract.v1",
+        "type": "final_artifact"
+      },
+      "profile": "standard_run_store"
+    },
+    "status": {
+      "heartbeat": true
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "disk": {
+      "min_gb": 1
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 2
+    }
+  },
+  "llm": {
+    "agents": {
+      "batch_index_writer": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Write batch indexes.",
+          "Write coverage summaries.",
+          "Keep output report-only."
+        ],
+        "role": "Batch Index Writer"
+      },
+      "berkus_scorer": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Score five Berkus buckets.",
+          "Use deterministic formulas.",
+          "Record assumptions."
+        ],
+        "role": "Berkus Scorer"
+      },
+      "claim_normalizer": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Build fact tables.",
+          "Normalize numeric evidence.",
+          "Separate local and public facts."
+        ],
+        "role": "Claim Normalizer"
+      },
+      "company_identity_researcher": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Research company identity.",
+          "Check Crunchbase/profile targets.",
+          "Record blocked outcomes."
+        ],
+        "role": "Company Identity Researcher"
+      },
+      "company_packet_grouper": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Group files by company.",
+          "Resolve stable company ids.",
+          "Preserve source refs."
+        ],
+        "role": "Company Packet Grouper"
+      },
+      "company_report_writer": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Write per-company folders.",
+          "Preserve method sections.",
+          "Write warnings and evidence files."
+        ],
+        "role": "Company Report Writer"
+      },
+      "comparables_market_multiple_scorer": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Use comparable evidence.",
+          "Record market multiple assumptions.",
+          "Mark insufficient evidence."
+        ],
+        "role": "Comparables Market Multiple Scorer"
+      },
+      "cost_to_duplicate_scorer": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Estimate rebuild-cost floor.",
+          "Use asset evidence.",
+          "Flag missing asset details."
+        ],
+        "role": "Cost To Duplicate Scorer"
+      },
+      "document_evidence_extractor": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Extract local evidence.",
+          "Capture structured claims.",
+          "Mark unreadable files."
+        ],
+        "role": "Document Evidence Extractor"
+      },
+      "first_chicago_scorer": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Build bear/base/bull cases.",
+          "Apply probabilities.",
+          "Record scenario warnings."
+        ],
+        "role": "First Chicago Scorer"
+      },
+      "funding_researcher": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Research funding mentions.",
+          "Check investor and accelerator signals.",
+          "Record source quality."
+        ],
+        "role": "Funding Researcher"
+      },
+      "market_comp_researcher": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Research market context.",
+          "Find comparable candidates.",
+          "Capture source references."
+        ],
+        "role": "Market And Comparable Researcher"
+      },
+      "rendered_page_researcher": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Use rendered browser when enabled.",
+          "Respect robots and blocked pages.",
+          "Record JS-heavy page status."
+        ],
+        "role": "Rendered Page Researcher"
+      },
+      "research_planner": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Create safe queries.",
+          "Avoid confidential excerpts.",
+          "Plan profile and market lookups."
+        ],
+        "role": "Research Planner"
+      },
+      "research_reconciler": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Merge local and public evidence.",
+          "Flag confirmations.",
+          "Flag conflicts and missing evidence."
+        ],
+        "role": "Research Reconciler"
+      },
+      "risk_factor_summation_scorer": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Run 12-risk checklist.",
+          "Record adjustments.",
+          "Mark missing risk evidence."
+        ],
+        "role": "Risk Factor Summation Scorer"
+      },
+      "score_consistency_auditor": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Check score math.",
+          "Check missing-evidence handling.",
+          "Flag unsupported assumptions."
+        ],
+        "role": "Score Consistency Auditor"
+      },
+      "scorecard_bill_payne_scorer": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Apply weighted factors.",
+          "Record inputs used.",
+          "Keep scores report-only."
+        ],
+        "role": "Scorecard Bill Payne Scorer"
+      },
+      "startup_folder_watcher": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Detect changed files.",
+          "Build company fingerprints.",
+          "Identify unchanged company packets."
+        ],
+        "role": "Startup Folder Watcher"
+      },
+      "traction_verifier": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Verify customer and launch claims.",
+          "Check public traction signals.",
+          "Flag missing evidence."
+        ],
+        "role": "Traction Verifier"
+      },
+      "venture_capital_method_scorer": {
+        "llm_config": "primary",
+        "responsibilities": [
+          "Run exit-back math.",
+          "Record assumptions.",
+          "Avoid valuation recommendations."
+        ],
+        "role": "Venture Capital Method Scorer"
+      }
+    },
+    "backend": "llama.cpp",
+    "configs": {
+      "primary": {
+        "api_base": "auto",
+        "backend": "llama.cpp",
+        "context_size": 8192,
+        "fallback_model": "small",
+        "max_tokens": 1200,
+        "mock_mode": "fake",
+        "mode": "live",
+        "model": "medium",
+        "num_retries": 1,
+        "parameter_count_b": 31.58,
+        "provider": "docker_model_runner",
+        "quantization": "MOSTLY_Q4_K_M",
+        "runtime_model": "medium",
+        "timeout_seconds": 60
+      }
+    },
+    "context_size": 8192,
+    "default_config": "primary",
+    "enabled": true,
+    "fallback_model": "small",
+    "live_model_profile": {
+      "backend": "llama.cpp",
+      "context_size": 8192,
+      "fallback_model": "small",
+      "hardware": {
+        "gpu": {
+          "memory_operator": ">=",
+          "min_count": 1,
+          "min_memory_mb": 49152
+        }
+      },
+      "model": "medium",
+      "parameter_count_b": 31.58,
+      "provider": "docker_model_runner",
+      "quantization": "MOSTLY_Q4_K_M",
+      "runtime_model": "medium"
+    },
+    "mock_mode": "fake",
+    "mode": "live",
+    "model": "medium",
+    "parameter_count_b": 31.58,
+    "prefer_shared_skill": true,
+    "provider": "docker_model_runner",
+    "quantization": "MOSTLY_Q4_K_M",
+    "quick_test_uses_fake": true,
+    "require_live": true,
+    "responsibilities": [
+      "Keep VC outputs report-only and source-grounded.",
+      "Use specialist agents for research, scoring, audit, and report writing.",
+      "Avoid automated investment decisions or confidential-data web disclosure."
+    ],
+    "runtime_model": "medium",
+    "strict_json": true
+  },
+  "knowledge_rag": {
+    "chunk_overlap": 80,
+    "chunk_size": 800,
+    "embedding_api_base": "http://host.docker.internal:12434/engines/v1",
+    "embedding_document_prefix": "Document: ",
+    "embedding_healthcheck_enabled": true,
+    "embedding_model": "rag-embedding",
+    "embedding_provider": "docker_model_runner",
+    "embedding_query_prefix": "Query: ",
+    "embedding_start_command": "",
+    "enabled": true,
+    "index_on_startup": true,
+    "knowledge_dir": "payloads/knowledge",
+    "max_context_chars": 6000,
+    "namespace": "",
+    "redis_url": "",
+    "required": true,
+    "top_k": 5,
+    "vector_dim": 1024
+  },
+  "agentic_research": {
+    "agent_ids": [
+      "research_planner",
+      "company_identity_researcher",
+      "funding_researcher",
+      "market_comp_researcher",
+      "traction_verifier",
+      "rendered_page_researcher"
+    ],
+    "allowed_tools": [
+      "browser_search",
+      "browser_page",
+      "rendered_browser_page",
+      "finish"
+    ],
+    "default_mode": "bounded_llm_guided_public_tool_research",
+    "enabled": true,
+    "max_iterations_per_agent": 1,
+    "max_tool_calls_per_agent": 2,
+    "note": "Default batch research uses bounded LLM tool-decision loops for public-safe evidence collection; browser failures remain warnings and are recorded.",
+    "quick_test_behavior": "disabled_for_default_smoke_run"
+  },
+  "skill_dependencies": [
+    {
+      "name": "mirrorneuron-blueprint-support-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.8"
+    },
+    {
+      "name": "mirrorneuron-litellm-communicate-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.7"
+    },
+    {
+      "name": "mirrorneuron-evidence-engine-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.7"
+    },
+    {
+      "name": "mirrorneuron-actor-review-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.7"
+    },
+    {
+      "name": "mirrorneuron-client-report-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.7"
+    },
+    {
+      "name": "mirrorneuron-document-reading-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.7"
+    },
+    {
+      "name": "mirrorneuron-public-research-orchestrator-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.7"
+    },
+    {
+      "name": "mirrorneuron-scoring-framework-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.7"
+    },
+    {
+      "name": "mirrorneuron-llm-ocr-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.7"
+    },
+    {
+      "name": "mirrorneuron-rag-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.14"
+    },
+    {
+      "name": "mirrorneuron-w3m-browser-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.7"
+    },
+    {
+      "name": "mirrorneuron-web-browser-skill",
+      "source": "gar",
+      "type": "pip",
+      "version": "1.2.7"
+    }
+  ]
+}

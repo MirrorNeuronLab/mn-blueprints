@@ -590,7 +590,7 @@
       "enabled": true,
       "kind": "video",
       "transport": "rtsp",
-      "uri": "rtsp://host.docker.internal:8554/local-camera"
+      "uri": "rtsp://127.0.0.1:8554/local-camera"
     }
   },
   "triggers": {
@@ -603,11 +603,12 @@
   "video_source": {
     "camera_id": "front-door",
     "codec": "h264",
+    "demo_video": "data/sample.mp4",
     "description": "Configurable facility video stream. The default expects a local RTSP camera publishing H.264 video.",
     "frame_jpeg_max_width": 896,
     "frame_sample_seconds": 10.0,
     "transport": "rtsp",
-    "uri": "rtsp://host.docker.internal:8554/local-camera"
+    "uri": "rtsp://127.0.0.1:8554/local-camera"
   },
   "vl_model": {
     "base_url": "http://192.168.4.173:11434",
@@ -628,7 +629,7 @@
       "browser_publish_source": "http://127.0.0.1:8889/local-camera/publish?video-codec=h264%2F90000&audio-device=none&video-width=1280&video-height=720&video-framerate=30",
       "browser_video_source": "http://127.0.0.1:8889/local-camera/",
       "data_source": "local_run_store",
-      "default_video_source": "rtsp://host.docker.internal:8554/local-camera",
+      "default_video_source": "rtsp://127.0.0.1:8554/local-camera",
       "event_feed": {
         "default_path": "~/.mn/runs/<run_id>/events.jsonl",
         "format": "jsonl"

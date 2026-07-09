@@ -789,83 +789,83 @@
       "nodes": [
         {
           "node_id": "ingress",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_world_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_signal_collector",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_report_writer",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_00_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_01_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_02_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_03_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_04_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_05_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_06_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_07_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_08_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_09_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_10_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_11_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_12_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_13_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_14_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "ecosystem_region_15_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -1635,7 +1635,7 @@
             "id": "input_adapter",
             "model": "ollama/nemotron3:33b",
             "role": "Resolve mock, JSON, file, or env_json inputs",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       },
@@ -1871,121 +1871,121 @@
             "id": "ingress",
             "model": "ollama/nemotron3:33b",
             "role": "Ingress",
-            "uses": "mn-agents.control_router@1.0.0"
+            "uses": "mn-agents.control_router@1"
           },
           {
             "id": "ecosystem_world_actor",
             "model": "ollama/nemotron3:33b",
             "role": "World",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_signal_collector",
             "model": "ollama/nemotron3:33b",
             "role": "Collector",
-            "uses": "mn-agents.control_join@1.0.0"
+            "uses": "mn-agents.control_join@1"
           },
           {
             "id": "ecosystem_report_writer",
             "model": "ollama/nemotron3:33b",
             "role": "Summarizer",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_00_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 00",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_01_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 01",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_02_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 02",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_03_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 03",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_04_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 04",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_05_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 05",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_06_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 06",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_07_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 07",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_08_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 08",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_09_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 09",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_10_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 10",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_11_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 11",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_12_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 12",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_13_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 13",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_14_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 14",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "ecosystem_region_15_actor",
             "model": "ollama/nemotron3:33b",
             "role": "Region 15",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           }
         ]
       },
@@ -1999,7 +1999,7 @@
             "id": "artifact_writer",
             "model": "ollama/nemotron3:33b",
             "role": "Write result and final artifact to the local run store",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       }
@@ -2070,13 +2070,13 @@
       "pool": "default",
       "pool_slots": 1,
       "runner": "MirrorNeuron.Runner.HostLocal",
-      "uses": "mn-agents.data_python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1",
       "workdir": "/sandbox/job/workflow"
     }
   },
   "term": "TERM.md",
   "type": "service",
-  "version": "1.0.0",
+  "version": 1,
   "workflow": {
     "dynamic": {
       "apply_at": "between_steps",

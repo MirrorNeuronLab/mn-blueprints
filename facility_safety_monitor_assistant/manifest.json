@@ -79,7 +79,8 @@
             "SLACK_MESSAGE_PREFIX": "Door camera human alert",
             "VIDEO_SOURCE_CODEC": "h264",
             "VIDEO_SOURCE_TRANSPORT": "rtsp",
-            "VIDEO_SOURCE_URI": "rtsp://host.docker.internal:8554/local-camera",
+            "VIDEO_SOURCE_URI": "rtsp://127.0.0.1:8554/local-camera",
+            "DEMO_VIDEO_FILE": "data/sample.mp4",
             "VL_MODEL_BASE_URL": "http://192.168.4.173:11434",
             "VL_MODEL_NAME": "nemotron3:33b"
           },
@@ -168,7 +169,7 @@
       },
       "door_camera_video": {
         "description": "Approved facility video stream or bundled demo feed.",
-        "example": "rtsp://host.docker.internal:8554/local-camera",
+        "example": "rtsp://127.0.0.1:8554/local-camera",
         "privacy": "internal",
         "required": true,
         "type": "video_stream"
@@ -390,15 +391,15 @@
       "nodes": [
         {
           "node_id": "ingress",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "camera_frame_sampler",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         },
         {
           "node_id": "safety_observer_actor",
-          "uses": "mn-agents.data_python_executor@1.0.0"
+          "uses": "mn-agents.data_python_executor@1"
         }
       ],
       "render_tool": "../mn-agents/tools/render_agent_templates.py",
@@ -452,7 +453,7 @@
     "init_config_review": {
       "fields": [
         {
-          "default": "rtsp://host.docker.internal:8554/local-camera",
+          "default": "rtsp://127.0.0.1:8554/local-camera",
           "description": "Facility camera or video stream URI. Default is a local RTSP/H.264 camera stream.",
           "label": "Video source",
           "path": "video_source.uri"
@@ -512,7 +513,7 @@
           "path": "llm.configs.primary.model"
         },
         {
-          "default": "rtsp://host.docker.internal:8554/local-camera",
+          "default": "rtsp://127.0.0.1:8554/local-camera",
           "description": "Live or replayed stream endpoint consumed by the blueprint.",
           "label": "door_camera_video stream",
           "path": "streams.door_camera_video.uri"
@@ -566,7 +567,7 @@
       "required_inputs": [
         {
           "description": "Approved facility video stream or bundled demo feed.",
-          "example": "rtsp://host.docker.internal:8554/local-camera",
+          "example": "rtsp://127.0.0.1:8554/local-camera",
           "name": "door_camera_video",
           "type": "video_stream"
         },
@@ -1134,13 +1135,14 @@
     "target_user": "Facilities, security, safety operations, and property management teams.",
     "video_source": {
       "codec": "h264",
+      "demo_video": "data/sample.mp4",
       "config_env": [
         "VIDEO_SOURCE_URI",
         "VIDEO_SOURCE_TRANSPORT",
         "VIDEO_SOURCE_CODEC"
       ],
       "transport": "rtsp",
-      "uri": "rtsp://host.docker.internal:8554/local-camera"
+      "uri": "rtsp://127.0.0.1:8554/local-camera"
     },
     "vl_model": {
       "base_url": "http://192.168.4.173:11434",
@@ -1258,7 +1260,7 @@
             "id": "input_adapter",
             "model": "ollama/nemotron3:33b",
             "role": "Resolve mock, JSON, file, or env_json inputs",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       },
@@ -1287,8 +1289,9 @@
               "scenario": "door_camera_safety_monitor",
               "slack_optional": true,
               "video_source_codec": "h264",
+              "video_source_demo_video": "data/sample.mp4",
               "video_source_transport": "rtsp",
-              "video_source_uri": "rtsp://host.docker.internal:8554/local-camera",
+              "video_source_uri": "rtsp://127.0.0.1:8554/local-camera",
               "vl_model_base_url": "http://192.168.4.173:11434",
               "vl_model_name": "nemotron3:33b"
             }
@@ -1306,14 +1309,14 @@
             "kind": "stream",
             "model": "ollama/nemotron3:33b",
             "role": "door_camera_sampler",
-            "uses": "mn-agents.data_module@1.0.0"
+            "uses": "mn-agents.data_module@1"
           },
           {
             "id": "safety_observer_actor",
             "kind": "stream",
             "model": "ollama/nemotron3:33b",
             "role": "vl_model_video_safety_detector",
-            "uses": "mn-agents.data_python_executor@1.0.0",
+            "uses": "mn-agents.data_python_executor@1",
             "with": {
               "cleanup_remote_dir": true,
               "command": [
@@ -1340,7 +1343,8 @@
                 "SLACK_MESSAGE_PREFIX": "Door camera human alert",
                 "VIDEO_SOURCE_CODEC": "h264",
                 "VIDEO_SOURCE_TRANSPORT": "rtsp",
-                "VIDEO_SOURCE_URI": "rtsp://host.docker.internal:8554/local-camera",
+                "VIDEO_SOURCE_URI": "rtsp://127.0.0.1:8554/local-camera",
+                "DEMO_VIDEO_FILE": "data/sample.mp4",
                 "VL_MODEL_BASE_URL": "http://192.168.4.173:11434",
                 "VL_MODEL_NAME": "nemotron3:33b"
               },
@@ -1377,7 +1381,7 @@
             "id": "artifact_writer",
             "model": "ollama/nemotron3:33b",
             "role": "Write result and final artifact to the local run store",
-            "uses": "mn-agents.data_python_executor@1.0.0"
+            "uses": "mn-agents.data_python_executor@1"
           }
         ]
       }
@@ -1452,13 +1456,13 @@
       "pool": "default",
       "pool_slots": 1,
       "runner": "MirrorNeuron.Runner.HostLocal",
-      "uses": "mn-agents.data_python_executor@1.0.0",
+      "uses": "mn-agents.data_python_executor@1",
       "workdir": "/sandbox/job/workflow"
     }
   },
   "term": "TERM.md",
   "type": "service",
-  "version": "1.0.0",
+  "version": 1,
   "workflow": {
     "dynamic": {
       "apply_at": "between_steps",

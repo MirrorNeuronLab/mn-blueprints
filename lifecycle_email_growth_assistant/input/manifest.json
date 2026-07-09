@@ -1,4 +1,5 @@
 {
+  "version": 1,
   "product_name": "Bibblio",
   "database": {
     "connection_string": "sqlite:///var/synaptic.db"
@@ -13,7 +14,12 @@
         "job_title": "Parent",
         "source": "seed",
         "stage": "new_signup",
-        "tags": ["parent", "caregiver", "bedtime", "big-feelings"],
+        "tags": [
+          "parent",
+          "caregiver",
+          "bedtime",
+          "big-feelings"
+        ],
         "opt_in_status": "subscribed",
         "suppression_status": "active",
         "engagement_score": 0.62,
@@ -24,7 +30,11 @@
           "child_name": "Luca"
         },
         "inferred_attributes": {
-          "preferred_topics": ["bedtime", "routine", "feelings"]
+          "preferred_topics": [
+            "bedtime",
+            "routine",
+            "feelings"
+          ]
         }
       },
       {
@@ -35,18 +45,28 @@
         "job_title": "Teacher",
         "source": "seed",
         "stage": "repeat_creator",
-        "tags": ["teacher", "classroom", "reading", "education"],
+        "tags": [
+          "teacher",
+          "classroom",
+          "reading",
+          "education"
+        ],
         "opt_in_status": "subscribed",
         "suppression_status": "active",
         "engagement_score": 0.85,
-        "intent_score": 0.90,
+        "intent_score": 0.9,
         "profile": "2nd grade teacher using Bibblio to create personalized stories for his classroom to encourage reading. Needs bulk creation or classroom-oriented stories.",
         "factual_attributes": {
           "favorite_age_range": "7-8",
           "student_count": 24
         },
         "inferred_attributes": {
-          "preferred_topics": ["classroom", "learning", "teamwork", "reading"]
+          "preferred_topics": [
+            "classroom",
+            "learning",
+            "teamwork",
+            "reading"
+          ]
         }
       }
     ],

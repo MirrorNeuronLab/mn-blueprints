@@ -1,4 +1,5 @@
 {
+  "version": 1,
   "product_name": "Bibblio",
   "database": {
     "connection_string": "sqlite:///var/synaptic.db"
@@ -13,7 +14,12 @@
         "job_title": "Parent",
         "source": "seed",
         "stage": "new_signup",
-        "tags": ["parent", "caregiver", "bedtime", "big-feelings"],
+        "tags": [
+          "parent",
+          "caregiver",
+          "bedtime",
+          "big-feelings"
+        ],
         "opt_in_status": "subscribed",
         "suppression_status": "active",
         "engagement_score": 0.62,
@@ -24,7 +30,11 @@
           "child_name": "Luca"
         },
         "inferred_attributes": {
-          "preferred_topics": ["bedtime", "routine", "feelings"]
+          "preferred_topics": [
+            "bedtime",
+            "routine",
+            "feelings"
+          ]
         }
       },
       {
@@ -35,7 +45,12 @@
         "job_title": "Parent",
         "source": "seed",
         "stage": "draft_abandoned",
-        "tags": ["parent", "draft", "friendship", "resume"],
+        "tags": [
+          "parent",
+          "draft",
+          "friendship",
+          "resume"
+        ],
         "opt_in_status": "subscribed",
         "suppression_status": "active",
         "engagement_score": 0.79,
@@ -46,7 +61,11 @@
           "child_name": "Noah"
         },
         "inferred_attributes": {
-          "preferred_topics": ["friendship", "kindness", "conflict"]
+          "preferred_topics": [
+            "friendship",
+            "kindness",
+            "conflict"
+          ]
         }
       },
       {
@@ -57,7 +76,12 @@
         "job_title": "Parent",
         "source": "seed",
         "stage": "repeat_creator",
-        "tags": ["parent", "repeat", "credits", "referral"],
+        "tags": [
+          "parent",
+          "repeat",
+          "credits",
+          "referral"
+        ],
         "opt_in_status": "subscribed",
         "suppression_status": "active",
         "engagement_score": 0.91,
@@ -68,7 +92,12 @@
           "children_count": 2
         },
         "inferred_attributes": {
-          "preferred_topics": ["bravery", "school", "keepsake", "credits"]
+          "preferred_topics": [
+            "bravery",
+            "school",
+            "keepsake",
+            "credits"
+          ]
         }
       }
     ],

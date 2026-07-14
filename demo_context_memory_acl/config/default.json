@@ -1,0 +1,212 @@
+{
+  "agent_handoffs": {},
+  "backpressure": {
+    "drop_policy": "block",
+    "max_concurrency": 4,
+    "max_events_per_second": 20,
+    "queue_size": 32
+  },
+  "budgets": {
+    "max_disk_mb": 8,
+    "max_llm_calls": 0,
+    "max_llm_tokens": 0,
+    "max_runtime_seconds": 20,
+    "max_stream_duration_seconds": 10
+  },
+  "capabilities": {
+    "optional": [],
+    "required": [
+      "filesystem.write"
+    ]
+  },
+  "demo": {
+    "primary_feature": "Context Engine role ACLs"
+  },
+  "determinism": {
+    "enabled": true,
+    "replay": {
+      "from_events": "events.jsonl",
+      "from_inputs": "inputs.json",
+      "llm_mode": "mock"
+    },
+    "seed_field": "seed"
+  },
+  "error_handling": {
+    "default_mode": "stop",
+    "policies": {
+      "optional": {
+        "mode": "skip"
+      },
+      "recoverable": {
+        "max_attempts": 2,
+        "mode": "retry"
+      }
+    }
+  },
+  "execution_model": [
+    "load_metadata",
+    "resolve_config",
+    "load_inputs",
+    "start_run_store",
+    "run_workflow",
+    "emit_events",
+    "write_final_artifact"
+  ],
+  "human_control": {
+    "enabled": false,
+    "mode": "disabled",
+    "reason": "The default demo is deterministic and only writes local artifacts."
+  },
+  "identity": {
+    "blueprint_id": "demo_context_memory_acl",
+    "name": "Context Memory ACL"
+  },
+  "inputs": {
+    "adapter": "mock",
+    "description": "Bundled deterministic input; override with json, file, or env_json.",
+    "env": "MN_BLUEPRINT_INPUT_JSON",
+    "path": null,
+    "payload": {
+      "scenario": "demo_context_memory_acl",
+      "seed": 42
+    }
+  },
+  "interfaces": {
+    "config_sections": [
+      "standard_version",
+      "identity",
+      "mode",
+      "metadata",
+      "inputs",
+      "simulation",
+      "llm",
+      "outputs",
+      "logging",
+      "resources",
+      "human_control",
+      "real_adapters",
+      "interfaces",
+      "execution_model"
+    ],
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ],
+    "run_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "errors.jsonl",
+      "timeline.jsonl",
+      "observability_summary.json",
+      "result.json",
+      "final_artifact.json"
+    ]
+  },
+  "llm": {
+    "agents": {},
+    "enabled": false,
+    "mock_mode": "fake"
+  },
+  "logging": {
+    "events_jsonl": true,
+    "level": "INFO",
+    "logs_jsonl": true,
+    "redact_env_secrets": true
+  },
+  "metadata": {
+    "category": "Memory",
+    "customizable_for": "Small deterministic runtime experiments and training demos.",
+    "problem_solved": "Prove that a restricted role cannot retrieve private memory.",
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  },
+  "mode": "mock",
+  "outputs": {
+    "adapter": "local_run_store",
+    "required_artifacts": [
+      "run.json",
+      "config.json",
+      "inputs.json",
+      "events.jsonl",
+      "errors.jsonl",
+      "timeline.jsonl",
+      "observability_summary.json",
+      "result.json",
+      "final_artifact.json"
+    ],
+    "run_root": "~/.mn/runs",
+    "write_run_store": true
+  },
+  "privacy": {
+    "default_classification": "internal",
+    "redact_fields": [
+      "api_key",
+      "token",
+      "password",
+      "authorization"
+    ]
+  },
+  "real_adapters": {
+    "environment_json": {
+      "adapter": "env_json",
+      "env": "MN_BLUEPRINT_INPUT_JSON"
+    },
+    "inline_json": {
+      "adapter": "json",
+      "payload": {}
+    },
+    "input_file": {
+      "adapter": "file",
+      "path": null
+    }
+  },
+  "resources": {
+    "enabled": true,
+    "gpu_enabled": false,
+    "gpu_sample_interval_seconds": 60,
+    "sample_interval_seconds": 1
+  },
+  "schemas": {
+    "config": "mn.blueprint.config.v1",
+    "events": "mn.blueprint.events.v1",
+    "final_artifact": "mn.blueprint.final_artifact.v1",
+    "inputs": "mn.blueprint.inputs.v1"
+  },
+  "simulation": {
+    "deterministic": true,
+    "enabled": true,
+    "seed_field": "seed"
+  },
+  "standard_version": "1.0",
+  "state": {
+    "checkpoint_interval": {
+      "events": 100,
+      "seconds": 60
+    },
+    "enabled": false,
+    "idempotency_key_fields": [
+      "event_id"
+    ],
+    "resume_mode": "none"
+  },
+  "triggers": {
+    "schedule": null,
+    "sources": [],
+    "type": "manual"
+  },
+  "web_ui": {
+    "enabled": false,
+    "input": {
+      "adapter": "none"
+    },
+    "output": {
+      "adapter": "none"
+    }
+  }
+}

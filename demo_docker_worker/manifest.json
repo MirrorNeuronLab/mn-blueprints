@@ -1,0 +1,427 @@
+{
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "run_to_publish",
+        "from_node": "run",
+        "message_type": "run_done",
+        "to_node": "publish"
+      },
+      {
+        "edge_id": "publish_to_report_sink",
+        "from_node": "publish",
+        "message_type": "final_result",
+        "to_node": "report_sink"
+      }
+    ],
+    "entrypoints": [
+      "run"
+    ],
+    "nodes": [
+      {
+        "agent_type": "executor",
+        "alias": "run",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "sh",
+            "docker_worker.sh"
+          ],
+          "docker_worker_image": "worker/docker_worker",
+          "environment": {
+            "MN_DEMO_ID": "demo_docker_worker",
+            "MN_WORKFLOW_STEP_ID": "run"
+          },
+          "idempotent": true,
+          "image": "mirror-neuron/demo-docker-worker:local",
+          "max_attempts": 1,
+          "output_message_type": "run_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "reuse_shared_container": true,
+          "runner_module": "MirrorNeuron.Runner.DockerWorker",
+          "safe_to_retry": true,
+          "shared_container": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/mn/job/worker"
+        },
+        "display_name": "Run",
+        "node_id": "run",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "docker_worker"
+        },
+        "role": "root_coordinator",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "publish",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_DEMO_ID": "demo_docker_worker",
+            "MN_WORKFLOW_STEP_ID": "publish",
+            "MN_DEMO_FINAL_STEP": "1"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "final_result",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Publish",
+        "node_id": "publish",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "aggregator",
+        "alias": "result_sink",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        },
+        "node_id": "report_sink",
+        "role": "result_sink",
+        "type": "reduce"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "apiVersion": "mn.workflow/v1",
+  "contract": {
+    "events": {
+      "stream": "events.jsonl",
+      "types": [
+        "run_started",
+        "inputs_loaded",
+        "workflow_step_started",
+        "workflow_step_completed",
+        "run_completed",
+        "run_failed"
+      ]
+    },
+    "input_adapters": {
+      "default": "mock",
+      "resolved_artifact": "inputs.json",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ]
+    },
+    "inputs": {
+      "scenario": {
+        "description": "Small deterministic demo payload.",
+        "required": true,
+        "type": "object"
+      }
+    },
+    "outputs": {
+      "artifacts": [
+        {
+          "artifact_id": "run_json",
+          "path": "run.json"
+        },
+        {
+          "artifact_id": "config_json",
+          "path": "config.json"
+        },
+        {
+          "artifact_id": "inputs_json",
+          "path": "inputs.json"
+        },
+        {
+          "artifact_id": "events_jsonl",
+          "path": "events.jsonl"
+        },
+        {
+          "artifact_id": "errors_jsonl",
+          "path": "errors.jsonl"
+        },
+        {
+          "artifact_id": "timeline_jsonl",
+          "path": "timeline.jsonl"
+        },
+        {
+          "artifact_id": "observability_summary_json",
+          "path": "observability_summary.json"
+        },
+        {
+          "artifact_id": "result_json",
+          "path": "result.json"
+        },
+        {
+          "artifact_id": "final_artifact_json",
+          "path": "final_artifact.json"
+        }
+      ],
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "schema_version": "mn.blueprint.final_artifact.v1",
+        "type": "final_artifact"
+      },
+      "profile": "standard_run_store"
+    },
+    "privacy": {
+      "classification": "internal"
+    },
+    "summary": "Compute and verify a checksum in a minimal Alpine container.",
+    "users": [
+      "MirrorNeuron developers and runtime evaluators."
+    ]
+  },
+  "description": "Compute and verify a checksum in a minimal Alpine container.",
+  "id": "demo_docker_worker",
+  "input_validation": {
+    "rules": []
+  },
+  "job_name": "demo-docker-worker",
+  "kind": "Workflow",
+  "license": "LICENSE.md",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "demo_docker_worker",
+    "category": "Execution",
+    "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+    "description": "Compute and verify a checksum in a minimal Alpine container.",
+    "input_contract": {
+      "optional_inputs": [
+        {
+          "description": "Replay seed.",
+          "example": 42,
+          "name": "seed",
+          "type": "integer"
+        }
+      ],
+      "privacy_classification": "internal",
+      "required_inputs": [
+        {
+          "description": "Deterministic demo input.",
+          "name": "scenario",
+          "type": "object"
+        }
+      ],
+      "resolved_artifact": "inputs.json",
+      "schema_version": "mn.blueprint.input_contract.v1",
+      "supported_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "validation_rules": []
+    },
+    "interfaces": {
+      "config": "config/default.json",
+      "payloads": "payloads/"
+    },
+    "name": "Docker Worker",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "output_contract": "mn.blueprint.final_artifact.v1",
+    "problem_solved": "Compute and verify a checksum in a minimal Alpine container.",
+    "quick_test": {
+      "command": "mn blueprint run --folder . --offline --fake-llm --detached",
+      "enabled": true,
+      "expected_seconds_warm": 10
+    },
+    "runtime_features": [
+      "DockerWorker execution"
+    ],
+    "simulation_type": "Deterministic synthetic runtime scenario.",
+    "standard": "1.0",
+    "target_user": "MirrorNeuron developers and runtime evaluators."
+  },
+  "name": "Docker Worker",
+  "policies": {
+    "recovery_mode": "local_restart",
+    "restart": {
+      "attempts": 2,
+      "delay_function": "constant",
+      "delay_ms": 100,
+      "interval_ms": 60000,
+      "max_delay_ms": 100,
+      "mode": "fail"
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 0.1
+    },
+    "disk": {
+      "min_gb": 0.01
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 0.05
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "publish": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "publish",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "run": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "run",
+            "role": "Run this workflow step."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "run": [
+        {
+          "records": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "scenario": "demo_docker_worker",
+          "seed": 42
+        }
+      ]
+    },
+    "store": {
+      "path": "~/.mn/runs/${run_id}",
+      "type": "local_run_store"
+    },
+    "workflow_control": {
+      "enabled": true,
+      "liveness": {
+        "event": "agent_beacon",
+        "interval_ms": 1000,
+        "missed_action": "fail_attempt",
+        "required": false,
+        "timeout_ms": 5000
+      },
+      "schema_version": "mn.workflow.runtime_control.v1",
+      "source_of_truth": "workflow.steps",
+      "state_ledger": {
+        "delivery_semantics": "at_least_once_with_idempotency",
+        "enabled": true,
+        "message_ledger": true,
+        "persisted_field": "workflow_state"
+      }
+    }
+  },
+  "standard_version": "1.0",
+  "term": "TERM.md",
+  "version": 1,
+  "workflow": {
+    "dynamic": {
+      "enabled": false
+    },
+    "edges": [
+      {
+        "accepts": [
+          "done"
+        ],
+        "from": "run",
+        "id": "run_to_publish",
+        "required": true,
+        "to": "publish"
+      }
+    ],
+    "entrypoint": "run",
+    "execution": {
+      "max_parallel_steps": 4,
+      "strategy": "serial"
+    },
+    "mode": "static_dag",
+    "schema": "mn.workflow.problem_graph/v1",
+    "sink": "publish",
+    "source": "run",
+    "steps": [
+      {
+        "action": "run_worker",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 0.1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 10
+        },
+        "emits": [
+          "run_done"
+        ],
+        "goal": "Run the run stage.",
+        "id": "run",
+        "kind": "task",
+        "label": "Run",
+        "run": "run"
+      },
+      {
+        "action": "run_worker",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 0.1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 10
+        },
+        "emits": [
+          "publish_done"
+        ],
+        "goal": "Run the publish stage.",
+        "id": "publish",
+        "kind": "task",
+        "label": "Publish",
+        "run": "publish"
+      }
+    ],
+    "workflow_id": "demo_docker_worker_v1"
+  }
+}

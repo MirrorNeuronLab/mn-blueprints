@@ -1,0 +1,611 @@
+{
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "route_to_low_risk",
+        "from_node": "route",
+        "message_type": "route_done",
+        "to_node": "low_risk"
+      },
+      {
+        "edge_id": "route_to_high_risk",
+        "from_node": "route",
+        "message_type": "route_done",
+        "to_node": "high_risk"
+      },
+      {
+        "edge_id": "low_risk_to_join",
+        "from_node": "low_risk",
+        "message_type": "low_risk_done",
+        "to_node": "join"
+      },
+      {
+        "edge_id": "high_risk_to_join",
+        "from_node": "high_risk",
+        "message_type": "high_risk_done",
+        "to_node": "join"
+      },
+      {
+        "edge_id": "join_to_report_sink",
+        "from_node": "join",
+        "message_type": "final_result",
+        "to_node": "report_sink"
+      }
+    ],
+    "entrypoints": [
+      "route"
+    ],
+    "nodes": [
+      {
+        "agent_type": "executor",
+        "alias": "route",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_DEMO_ID": "demo_dag_conditional_branch",
+            "MN_WORKFLOW_STEP_ID": "route"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "route_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Route",
+        "node_id": "route",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "root_coordinator",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "low_risk",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_DEMO_ID": "demo_dag_conditional_branch",
+            "MN_WORKFLOW_STEP_ID": "low_risk"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "low_risk_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Low Risk",
+        "node_id": "low_risk",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "high_risk",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_DEMO_ID": "demo_dag_conditional_branch",
+            "MN_WORKFLOW_STEP_ID": "high_risk"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "high_risk_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "High Risk",
+        "node_id": "high_risk",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "join",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_DEMO_ID": "demo_dag_conditional_branch",
+            "MN_WORKFLOW_STEP_ID": "join",
+            "MN_DEMO_FINAL_STEP": "1"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "final_result",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Join",
+        "node_id": "join",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "aggregator",
+        "alias": "result_sink",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        },
+        "node_id": "report_sink",
+        "role": "result_sink",
+        "type": "reduce"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "apiVersion": "mn.workflow/v1",
+  "contract": {
+    "events": {
+      "stream": "events.jsonl",
+      "types": [
+        "run_started",
+        "inputs_loaded",
+        "workflow_step_started",
+        "workflow_step_completed",
+        "run_completed",
+        "run_failed"
+      ]
+    },
+    "input_adapters": {
+      "default": "mock",
+      "resolved_artifact": "inputs.json",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ]
+    },
+    "inputs": {
+      "scenario": {
+        "description": "Small deterministic demo payload.",
+        "required": true,
+        "type": "object"
+      }
+    },
+    "outputs": {
+      "artifacts": [
+        {
+          "artifact_id": "run_json",
+          "path": "run.json"
+        },
+        {
+          "artifact_id": "config_json",
+          "path": "config.json"
+        },
+        {
+          "artifact_id": "inputs_json",
+          "path": "inputs.json"
+        },
+        {
+          "artifact_id": "events_jsonl",
+          "path": "events.jsonl"
+        },
+        {
+          "artifact_id": "errors_jsonl",
+          "path": "errors.jsonl"
+        },
+        {
+          "artifact_id": "timeline_jsonl",
+          "path": "timeline.jsonl"
+        },
+        {
+          "artifact_id": "observability_summary_json",
+          "path": "observability_summary.json"
+        },
+        {
+          "artifact_id": "result_json",
+          "path": "result.json"
+        },
+        {
+          "artifact_id": "final_artifact_json",
+          "path": "final_artifact.json"
+        }
+      ],
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "schema_version": "mn.blueprint.final_artifact.v1",
+        "type": "final_artifact"
+      },
+      "profile": "standard_run_store"
+    },
+    "privacy": {
+      "classification": "internal"
+    },
+    "summary": "Route one transaction through exactly one risk branch and rejoin.",
+    "users": [
+      "MirrorNeuron developers and runtime evaluators."
+    ]
+  },
+  "description": "Route one transaction through exactly one risk branch and rejoin.",
+  "id": "demo_dag_conditional_branch",
+  "input_validation": {
+    "rules": []
+  },
+  "job_name": "demo-dag-conditional-branch",
+  "kind": "Workflow",
+  "license": "LICENSE.md",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "demo_dag_conditional_branch",
+    "category": "Workflow DAG",
+    "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+    "description": "Route one transaction through exactly one risk branch and rejoin.",
+    "input_contract": {
+      "optional_inputs": [
+        {
+          "description": "Replay seed.",
+          "example": 42,
+          "name": "seed",
+          "type": "integer"
+        }
+      ],
+      "privacy_classification": "internal",
+      "required_inputs": [
+        {
+          "description": "Deterministic demo input.",
+          "name": "scenario",
+          "type": "object"
+        }
+      ],
+      "resolved_artifact": "inputs.json",
+      "schema_version": "mn.blueprint.input_contract.v1",
+      "supported_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "validation_rules": []
+    },
+    "interfaces": {
+      "config": "config/default.json",
+      "payloads": "payloads/"
+    },
+    "name": "DAG Conditional Branch",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "output_contract": "mn.blueprint.final_artifact.v1",
+    "problem_solved": "Route one transaction through exactly one risk branch and rejoin.",
+    "quick_test": {
+      "command": "mn blueprint run --folder . --offline --fake-llm --detached",
+      "enabled": true,
+      "expected_seconds_warm": 10
+    },
+    "runtime_features": [
+      "Conditional branching"
+    ],
+    "simulation_type": "Deterministic synthetic runtime scenario.",
+    "standard": "1.0",
+    "target_user": "MirrorNeuron developers and runtime evaluators."
+  },
+  "name": "DAG Conditional Branch",
+  "policies": {
+    "recovery_mode": "local_restart",
+    "restart": {
+      "attempts": 2,
+      "delay_function": "constant",
+      "delay_ms": 100,
+      "interval_ms": 60000,
+      "max_delay_ms": 100,
+      "mode": "fail"
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 0.1
+    },
+    "disk": {
+      "min_gb": 0.01
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 0.05
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "high_risk": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "high_risk",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "join": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "join",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "low_risk": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "low_risk",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "route": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "route",
+            "role": "Run this workflow step."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "route": [
+        {
+          "records": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "scenario": "demo_dag_conditional_branch",
+          "seed": 42
+        }
+      ]
+    },
+    "store": {
+      "path": "~/.mn/runs/${run_id}",
+      "type": "local_run_store"
+    },
+    "workflow_control": {
+      "enabled": true,
+      "liveness": {
+        "event": "agent_beacon",
+        "interval_ms": 1000,
+        "missed_action": "fail_attempt",
+        "required": false,
+        "timeout_ms": 5000
+      },
+      "schema_version": "mn.workflow.runtime_control.v1",
+      "source_of_truth": "workflow.steps",
+      "state_ledger": {
+        "delivery_semantics": "at_least_once_with_idempotency",
+        "enabled": true,
+        "message_ledger": true,
+        "persisted_field": "workflow_state"
+      }
+    }
+  },
+  "standard_version": "1.0",
+  "term": "TERM.md",
+  "version": 1,
+  "workflow": {
+    "dynamic": {
+      "enabled": false
+    },
+    "edges": [
+      {
+        "accepts": [
+          "done"
+        ],
+        "from": "route",
+        "id": "route_to_low_risk",
+        "required": true,
+        "to": "low_risk"
+      },
+      {
+        "accepts": [
+          "done"
+        ],
+        "from": "route",
+        "id": "route_to_high_risk",
+        "required": true,
+        "to": "high_risk"
+      },
+      {
+        "accepts": [
+          "done"
+        ],
+        "from": "low_risk",
+        "id": "low_risk_to_join",
+        "required": true,
+        "to": "join"
+      },
+      {
+        "accepts": [
+          "done"
+        ],
+        "from": "high_risk",
+        "id": "high_risk_to_join",
+        "required": true,
+        "to": "join"
+      }
+    ],
+    "entrypoint": "route",
+    "execution": {
+      "max_parallel_steps": 4,
+      "strategy": "serial"
+    },
+    "mode": "static_dag",
+    "schema": "mn.workflow.problem_graph/v1",
+    "sink": "join",
+    "source": "route",
+    "steps": [
+      {
+        "action": "run_worker",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 0.1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 10
+        },
+        "emits": [
+          "route_done"
+        ],
+        "goal": "Run the route stage.",
+        "id": "route",
+        "kind": "task",
+        "label": "Route",
+        "run": "route"
+      },
+      {
+        "action": "run_worker",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 0.1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 10
+        },
+        "emits": [
+          "low_risk_done"
+        ],
+        "goal": "Run the low_risk stage.",
+        "id": "low_risk",
+        "kind": "task",
+        "label": "Low Risk",
+        "run": "low_risk"
+      },
+      {
+        "action": "run_worker",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 0.1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 10
+        },
+        "emits": [
+          "high_risk_done"
+        ],
+        "goal": "Run the high_risk stage.",
+        "id": "high_risk",
+        "kind": "task",
+        "label": "High Risk",
+        "run": "high_risk"
+      },
+      {
+        "action": "run_worker",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 0.1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 10
+        },
+        "emits": [
+          "join_done"
+        ],
+        "goal": "Run the join stage.",
+        "id": "join",
+        "kind": "task",
+        "label": "Join",
+        "run": "join",
+        "trigger_rule": "none_failed_min_one_success"
+      }
+    ],
+    "workflow_id": "demo_dag_conditional_branch_v1"
+  }
+}

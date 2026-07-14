@@ -1,0 +1,459 @@
+{
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "serve_to_close",
+        "from_node": "serve",
+        "message_type": "serve_done",
+        "to_node": "close"
+      },
+      {
+        "edge_id": "close_to_report_sink",
+        "from_node": "close",
+        "message_type": "final_result",
+        "to_node": "report_sink"
+      }
+    ],
+    "entrypoints": [
+      "serve"
+    ],
+    "nodes": [
+      {
+        "agent_type": "executor",
+        "alias": "serve",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_DEMO_ID": "demo_service_health",
+            "MN_DEMO_SERVICE_SECONDS": "15",
+            "MN_WORKFLOW_STEP_ID": "serve"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "serve_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Serve",
+        "node_id": "serve",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "ports": [
+            {
+              "label": "health",
+              "port": 18081,
+              "protocol": "http"
+            }
+          ],
+          "runtime_driver": "host_local"
+        },
+        "role": "root_coordinator",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "close",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_DEMO_ID": "demo_service_health",
+            "MN_WORKFLOW_STEP_ID": "close",
+            "MN_DEMO_FINAL_STEP": "1"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "final_result",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Close",
+        "node_id": "close",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "aggregator",
+        "alias": "result_sink",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        },
+        "node_id": "report_sink",
+        "role": "result_sink",
+        "type": "reduce"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "apiVersion": "mn.workflow/v1",
+  "contract": {
+    "events": {
+      "stream": "events.jsonl",
+      "types": [
+        "run_started",
+        "inputs_loaded",
+        "workflow_step_started",
+        "workflow_step_completed",
+        "run_completed",
+        "run_failed"
+      ]
+    },
+    "input_adapters": {
+      "default": "mock",
+      "resolved_artifact": "inputs.json",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ]
+    },
+    "inputs": {
+      "scenario": {
+        "description": "Small deterministic demo payload.",
+        "required": true,
+        "type": "object"
+      }
+    },
+    "outputs": {
+      "artifacts": [
+        {
+          "artifact_id": "run_json",
+          "path": "run.json"
+        },
+        {
+          "artifact_id": "config_json",
+          "path": "config.json"
+        },
+        {
+          "artifact_id": "inputs_json",
+          "path": "inputs.json"
+        },
+        {
+          "artifact_id": "events_jsonl",
+          "path": "events.jsonl"
+        },
+        {
+          "artifact_id": "errors_jsonl",
+          "path": "errors.jsonl"
+        },
+        {
+          "artifact_id": "timeline_jsonl",
+          "path": "timeline.jsonl"
+        },
+        {
+          "artifact_id": "observability_summary_json",
+          "path": "observability_summary.json"
+        },
+        {
+          "artifact_id": "result_json",
+          "path": "result.json"
+        },
+        {
+          "artifact_id": "final_artifact_json",
+          "path": "final_artifact.json"
+        }
+      ],
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "schema_version": "mn.blueprint.final_artifact.v1",
+        "type": "final_artifact"
+      },
+      "profile": "standard_run_store"
+    },
+    "privacy": {
+      "classification": "internal"
+    },
+    "summary": "Register and resolve a tiny HTTP health service.",
+    "users": [
+      "MirrorNeuron developers and runtime evaluators."
+    ]
+  },
+  "description": "Register and resolve a tiny HTTP health service.",
+  "id": "demo_service_health",
+  "input_validation": {
+    "rules": []
+  },
+  "job_name": "demo-service-health",
+  "kind": "Workflow",
+  "license": "LICENSE.md",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "demo_service_health",
+    "category": "Runtime Operations",
+    "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+    "description": "Register and resolve a tiny HTTP health service.",
+    "input_contract": {
+      "optional_inputs": [
+        {
+          "description": "Replay seed.",
+          "example": 42,
+          "name": "seed",
+          "type": "integer"
+        }
+      ],
+      "privacy_classification": "internal",
+      "required_inputs": [
+        {
+          "description": "Deterministic demo input.",
+          "name": "scenario",
+          "type": "object"
+        }
+      ],
+      "resolved_artifact": "inputs.json",
+      "schema_version": "mn.blueprint.input_contract.v1",
+      "supported_adapters": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ],
+      "validation_rules": []
+    },
+    "interfaces": {
+      "config": "config/default.json",
+      "payloads": "payloads/"
+    },
+    "name": "Service Health",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "output_contract": "mn.blueprint.final_artifact.v1",
+    "problem_solved": "Register and resolve a tiny HTTP health service.",
+    "quick_test": {
+      "command": "mn blueprint run --folder . --offline --fake-llm --detached",
+      "enabled": true,
+      "expected_seconds_warm": 10
+    },
+    "runtime_features": [
+      "Service registration and health"
+    ],
+    "simulation_type": "Deterministic synthetic runtime scenario.",
+    "standard": "1.0",
+    "target_user": "MirrorNeuron developers and runtime evaluators."
+  },
+  "name": "Service Health",
+  "policies": {
+    "recovery_mode": "local_restart",
+    "restart": {
+      "attempts": 2,
+      "delay_function": "constant",
+      "delay_ms": 100,
+      "interval_ms": 60000,
+      "max_delay_ms": 100,
+      "mode": "fail"
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 0.1
+    },
+    "disk": {
+      "min_gb": 0.01
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 0.05
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "close": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "close",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "serve": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "serve",
+            "role": "Run this workflow step."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "serve": [
+        {
+          "records": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "scenario": "demo_service_health",
+          "seed": 42
+        }
+      ]
+    },
+    "store": {
+      "path": "~/.mn/runs/${run_id}",
+      "type": "local_run_store"
+    },
+    "workflow_control": {
+      "enabled": true,
+      "liveness": {
+        "event": "agent_beacon",
+        "interval_ms": 1000,
+        "missed_action": "fail_attempt",
+        "required": false,
+        "timeout_ms": 5000
+      },
+      "schema_version": "mn.workflow.runtime_control.v1",
+      "source_of_truth": "workflow.steps",
+      "state_ledger": {
+        "delivery_semantics": "at_least_once_with_idempotency",
+        "enabled": true,
+        "message_ledger": true,
+        "persisted_field": "workflow_state"
+      }
+    }
+  },
+  "services": [
+    {
+      "address": "127.0.0.1",
+      "checks": [
+        {
+          "address": "127.0.0.1",
+          "expected_status": 200,
+          "failures_before_critical": 2,
+          "interval_ms": 500,
+          "name": "http-health",
+          "path": "/health",
+          "port": 18081,
+          "required": true,
+          "timeout_ms": 500,
+          "type": "http"
+        }
+      ],
+      "id": "demo-health",
+      "name": "demo-health",
+      "origin": "internal",
+      "port": 18081,
+      "tags": [
+        "blueprint",
+        "demo_service_health"
+      ]
+    }
+  ],
+  "standard_version": "1.0",
+  "term": "TERM.md",
+  "type": "service",
+  "version": 1,
+  "workflow": {
+    "dynamic": {
+      "enabled": false
+    },
+    "edges": [
+      {
+        "accepts": [
+          "done"
+        ],
+        "from": "serve",
+        "id": "serve_to_close",
+        "required": true,
+        "to": "close"
+      }
+    ],
+    "entrypoint": "serve",
+    "execution": {
+      "max_parallel_steps": 4,
+      "strategy": "serial"
+    },
+    "mode": "static_dag",
+    "schema": "mn.workflow.problem_graph/v1",
+    "sink": "close",
+    "source": "serve",
+    "steps": [
+      {
+        "action": "run_worker",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 0.1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 10
+        },
+        "emits": [
+          "serve_done"
+        ],
+        "goal": "Run the serve stage.",
+        "id": "serve",
+        "kind": "task",
+        "label": "Serve",
+        "run": "serve"
+      },
+      {
+        "action": "run_worker",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 0.1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 10
+        },
+        "emits": [
+          "close_done"
+        ],
+        "goal": "Run the close stage.",
+        "id": "close",
+        "kind": "task",
+        "label": "Close",
+        "run": "close"
+      }
+    ],
+    "workflow_id": "demo_service_health_v1"
+  }
+}

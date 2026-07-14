@@ -1,0 +1,2 @@
+version: 1
+# No named egress capability is granted, so outbound access remains denied.

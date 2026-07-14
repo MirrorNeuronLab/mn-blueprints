@@ -59,9 +59,15 @@ EVIDENCE = {
 }
 
 
-def run(command: list[str], *, timeout: float = 60, check: bool = True) -> subprocess.CompletedProcess[str]:
-    env = {**os.environ, "NO_COLOR": "1", "MN_CLI_OUTPUT": "plain"}
-    proc = subprocess.run(command, text=True, capture_output=True, timeout=timeout, env=env)
+def run(
+    command: list[str],
+    *,
+    timeout: float = 60,
+    check: bool = True,
+    env: dict[str, str] | None = None,
+) -> subprocess.CompletedProcess[str]:
+    process_env = {**os.environ, **(env or {}), "NO_COLOR": "1", "MN_CLI_OUTPUT": "plain"}
+    proc = subprocess.run(command, text=True, capture_output=True, timeout=timeout, env=process_env)
     if check and proc.returncode:
         raise RuntimeError(
             f"command failed ({proc.returncode}): {' '.join(command)}\n{proc.stdout}\n{proc.stderr}"
@@ -254,9 +260,19 @@ def python_sdk_demo(mn: str, folder: Path, timeout: float):
             python = first_line[2:].strip().split()[0]
     except (OSError, IndexError):
         pass
+    workspace_sdk = executable.parents[3] / "mn-python-sdk"
+    if not (workspace_sdk / "mn_sdk").is_dir():
+        raise RuntimeError(f"current workspace Python SDK not found at {workspace_sdk}")
+    pythonpath = os.pathsep.join(
+        value for value in (str(workspace_sdk), os.environ.get("PYTHONPATH", "")) if value
+    )
     with tempfile.TemporaryDirectory(prefix="mn-python-sdk-demo-") as temp:
         bundle = Path(temp) / "bundle"
-        run([python, str(folder / "compile_demo.py"), str(bundle)], timeout=timeout)
+        run(
+            [python, str(folder / "compile_demo.py"), str(bundle)],
+            timeout=timeout,
+            env={"PYTHONPATH": pythonpath},
+        )
         run([mn, "blueprint", "validate", str(bundle), "--output", "json"], timeout=timeout)
         run_id = f"demo-python-sdk-{uuid.uuid4().hex[:8]}"
         proc = launch(mn, bundle, run_id, timeout)

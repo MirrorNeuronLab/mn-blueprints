@@ -252,6 +252,7 @@ def generic_demo(mn: str, blueprint_id: str, folder: Path, timeout: float):
 
 
 def python_sdk_demo(mn: str, folder: Path, timeout: float):
+    folder = folder.resolve()
     executable = Path(shutil.which(mn) or mn)
     python = sys.executable
     try:
@@ -260,11 +261,42 @@ def python_sdk_demo(mn: str, folder: Path, timeout: float):
             python = first_line[2:].strip().split()[0]
     except (OSError, IndexError):
         pass
-    workspace_sdk = executable.parents[3] / "mn-python-sdk"
-    if not (workspace_sdk / "mn_sdk").is_dir():
-        raise RuntimeError(f"current workspace Python SDK not found at {workspace_sdk}")
+
+    sdk_candidates = []
+    configured_sdk = os.environ.get("MN_PYTHON_SDK_ROOT")
+    if configured_sdk:
+        sdk_candidates.append(Path(configured_sdk).expanduser())
+    # The CLI is commonly installed in an isolated venv, so its launcher path
+    # is not a reliable indicator of the editable SDK checkout.  Prefer the
+    # sibling workspace checkout used by this catalog, then fall back to the
+    # installed package in the CLI's interpreter.
+    sdk_candidates.append(folder.parents[1] / "mirror-neuron-set" / "mn-python-sdk")
+    sdk_candidates.extend(
+        parent / "mn-python-sdk"
+        for parent in executable.resolve().parents
+    )
+    workspace_sdk = next(
+        (candidate for candidate in sdk_candidates if (candidate / "mn_sdk").is_dir()),
+        None,
+    )
+    if workspace_sdk is None:
+        probe = run(
+            [python, "-c", "import mn_sdk"],
+            timeout=timeout,
+            check=False,
+        )
+        if probe.returncode:
+            raise RuntimeError(
+                "current workspace Python SDK is unavailable; set MN_PYTHON_SDK_ROOT "
+                "or install mn_sdk in the mn CLI interpreter"
+            )
     pythonpath = os.pathsep.join(
-        value for value in (str(workspace_sdk), os.environ.get("PYTHONPATH", "")) if value
+        value
+        for value in (
+            str(workspace_sdk) if workspace_sdk is not None else "",
+            os.environ.get("PYTHONPATH", ""),
+        )
+        if value
     )
     with tempfile.TemporaryDirectory(prefix="mn-python-sdk-demo-") as temp:
         bundle = Path(temp) / "bundle"
@@ -384,9 +416,27 @@ def periodic_demo(mn: str, folder: Path, timeout: float):
         if not match:
             raise RuntimeError("periodic schedule was not registered")
         schedule_id = identifier(match, "schedule_id", "id")
-        dispatched = run([mn, "schedule", "run-now", schedule_id], timeout=timeout)
-        if "Job ID" not in dispatched.stdout:
-            raise RuntimeError("periodic run-now did not create a child job")
+        dispatched = run(
+            [mn, "schedule", "run-now", schedule_id],
+            timeout=timeout,
+            check=False,
+        )
+        status = read_json_output(run([mn, "schedule", "status", schedule_id]))
+        dispatches = status.get("dispatches") or []
+        submitted = any(
+            dispatch.get("job_id")
+            and dispatch.get("status") in {"submitted", "running", "completed"}
+            for dispatch in dispatches
+            if isinstance(dispatch, dict)
+        )
+        # Some current Core versions submit the child job successfully but
+        # fail while formatting the DispatchSchedule RPC response.  The
+        # schedule status/dispatch ledger is authoritative in that case.
+        if not submitted and (dispatched.returncode or "Job ID" not in dispatched.stdout):
+            raise RuntimeError(
+                "periodic run-now did not create a child job\n"
+                f"{dispatched.stdout}\n{dispatched.stderr}"
+            )
     finally:
         if schedule_id:
             run([mn, "schedule", "delete", schedule_id, "--reason", "demo suite cleanup"], check=False)

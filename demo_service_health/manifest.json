@@ -26,7 +26,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 30000,
           "command": [
             "python3.11",
             "worker.py"
@@ -44,7 +44,7 @@
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 30,
           "upload_as": "worker",
           "upload_path": "worker",
           "workdir": "/sandbox/job/worker"
@@ -75,7 +75,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 30000,
           "command": [
             "python3.11",
             "worker.py"
@@ -93,7 +93,7 @@
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 30,
           "upload_as": "worker",
           "upload_path": "worker",
           "workdir": "/sandbox/job/worker"
@@ -345,7 +345,7 @@
         "interval_ms": 1000,
         "missed_action": "fail_attempt",
         "required": false,
-        "timeout_ms": 5000
+        "timeout_ms": 30000
       },
       "schema_version": "mn.workflow.runtime_control.v1",
       "source_of_truth": "workflow.steps",
@@ -422,7 +422,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 30
         },
         "emits": [
           "serve_done"
@@ -442,7 +442,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 30
         },
         "emits": [
           "close_done"

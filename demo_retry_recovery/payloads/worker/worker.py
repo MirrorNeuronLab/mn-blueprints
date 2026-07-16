@@ -41,6 +41,12 @@ result = {
 
 events = [{"type": "demo_step_observed", "payload": {"demo": demo, "step": step, "attempt": attempt}}]
 
+
+def retry_marker() -> Path:
+    key = f"{demo}:{step}:{os.environ.get('MN_JOB_ID', '')}"
+    digest = hashlib.sha256(key.encode("utf-8")).hexdigest()[:20]
+    return Path("/tmp") / f"mn-blueprint-retry-{digest}.marker"
+
 if demo == "demo_dag_scatter_gather" and step == "scatter":
     events.append({"type": "workflow_step_scatter", "payload": {"targets": ["worker"], "items": [{"record_id": f"r-{i}", "value": i} for i in range(1, 6)]}})
     result["mapped_items"] = 5
@@ -53,9 +59,30 @@ elif demo == "demo_dag_failure_fallback" and step == "primary":
 elif demo == "demo_dag_quorum" and step == "sensor_c":
     print(json.dumps({"events": events + [{"type": "workflow_step_failed", "payload": {"reason": "intentional dissenting sensor"}}], "next_state": result}, sort_keys=True))
     raise SystemExit(0)
-elif demo == "demo_retry_recovery" and step == "run" and attempt == 1:
-    print(json.dumps({"events": events, "next_state": result}, sort_keys=True))
-    raise SystemExit(23)
+elif demo == "demo_retry_recovery" and step == "run":
+    marker = retry_marker()
+    if not marker.exists():
+        marker.write_text("retry requested\n", encoding="utf-8")
+        result["retry_attempts"] = 1
+        print(
+            json.dumps(
+                {
+                    "events": events,
+                    "next_state": result,
+                    "retry_reason": "simulated transport error",
+                },
+                sort_keys=True,
+            )
+        )
+        raise SystemExit(23)
+    marker.unlink(missing_ok=True)
+    result["retry_attempts"] = 2
+    events.append(
+        {
+            "type": "workflow_step_retry_recovered",
+            "payload": {"attempts": 2, "reason": "simulated transport error"},
+        }
+    )
 elif demo == "demo_human_approval" and step == "run":
     events.extend([
         {"type": "human_input_requested", "payload": {"request_id": "demo-approval", "prompt": "Approve harmless local artifact write?", "allowed_decisions": ["approve", "reject"]}},

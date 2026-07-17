@@ -1,6 +1,102 @@
 [
   {
-    "category": "Runtime Operations",
+    "category": "Finance",
+    "description": "A VC analysis co-worker for early startup screening reports. Put pitch decks, memos, financial snippets, company folders, or other startup documents in the input folder; it groups documents by company, performs privacy-safe public research, applies seven VC heuristic scoring methods, audits the math and evidence, and writes score-only per-company reports and batch indexes to the output folder.",
+    "id": "vc_assistant",
+    "job_name": "vc-assistant",
+    "name": "VC Assistant",
+    "path": "vc_assistant",
+    "product": {
+      "agent_role": "VC analysis coworker that prepares source-grounded score reports without issuing investment decisions.",
+      "benefit": "Turns mixed startup document packets into organized per-company heuristic reports, method-score files, research ledgers, and batch coverage summaries so the user can decide what deserves deeper diligence.",
+      "customizable_for": "Pre-seed screening, accelerator batches, angel deal flow, founder note review, and early diligence packet triage.",
+      "how_it_works": "On each scheduled batch run, checks a local folder, groups documents by company, extracts source evidence, normalizes deterministic fact tables, runs staged browser research, applies seven specialist numerical scorers in parallel, audits score consistency, and writes per-company and batch-level reports.",
+      "input": "Local folder with one or more startup document packets, preferably grouped by first-level company folders.",
+      "output": "Per-company analysis folders with scores, evidence, assumptions, public source refs, and missing-evidence flags.",
+      "problem": "Early startup review is noisy; analysts need a quick score-only report across common VC heuristics without fake precision or automated decisions.",
+      "runtime_features": [
+        "daily scheduled folder scan",
+        "folder-first startup company grouping",
+        "company work queue generation",
+        "deterministic fact table normalization",
+        "privacy-safe public web research",
+        "Nemotron 3 Docker Model Runner LLM",
+        "parallel specialist web research",
+        "w3m_browser_skill lightweight source research",
+        "web_browser_skill optional rendered-page verification",
+        "Crunchbase and public profile verification planning",
+        "parallel numerical method scoring",
+        "Berkus Method scoring",
+        "Scorecard Bill Payne Method scoring",
+        "Risk Factor Summation Method scoring",
+        "Venture Capital Method scoring",
+        "First Chicago Method scoring",
+        "Comparables Market Multiple Method scoring",
+        "Cost-to-Duplicate Method scoring",
+        "score consistency auditing",
+        "per-company Markdown and JSON reports",
+        "research coverage reports",
+        "method coverage reports",
+        "product input contract",
+        "transparent run status",
+        "human control policy",
+        "artifact records",
+        "run-store observability dashboard",
+        "Membrane context memory optimization"
+      ],
+      "simulation_type": "Scheduled batch startup packet review with score-only VC heuristic reports.",
+      "target_users": "VC analysts, angel investors, accelerator reviewers, startup scouts, and founder-led investment teams."
+    },
+    "type": "batch",
+    "workflow_id": "vc_assistant_v1",
+    "requirements": {
+      "gpu": {
+        "min_count": 1,
+        "min_memory_mb": 49152,
+        "memory_operator": ">=",
+        "enforcement": "hard"
+      }
+    }
+  },
+  {
+    "category": "Science",
+    "description": "Run a deterministic 16-region ecosystem through distributed native BEAM actors and use one LLM only to explain the frozen result.",
+    "id": "ecosystem_science_research",
+    "job_name": "ecosystem-science-research",
+    "name": "Ecosystem Science Research",
+    "path": "ecosystem_science_research",
+    "product": {
+      "agent_role": "Distributed native-actor ecosystem simulation and scientific explanation assistant.",
+      "benefit": "Produces deterministic regional and lineage measurements while keeping the LLM boundary limited to explaining the frozen scientific result.",
+      "customizable_for": "Population ecology, migration studies, inherited behavior experiments, and native actor benchmarks.",
+      "how_it_works": "Runs a DNA-driven population simulation across exactly 16 native region actors, aggregates immutable measurements, and uses one LLM only for the final explanation.",
+      "input": "Scenario label and deterministic ecosystem parameters such as population, timing, food, migration, mutation, and region settings.",
+      "output": "Immutable regional and lineage measurements plus a non-authoritative explanation.",
+      "problem": "Explore deterministic multi-region population dynamics without using LLMs as simulation agents.",
+      "runtime_features": [
+        "Distributed native BEAM actor simulation"
+      ],
+      "simulation_type": "Deterministic multi-region agent-based ecosystem.",
+      "target_users": "Ecologists, simulation researchers, distributed-systems evaluators, and science educators."
+    },
+    "workflow_id": "ecosystem_science_research_v1",
+    "requirements": {
+      "cpu": {
+        "min_cores": 0.5
+      },
+      "memory": {
+        "min_gb": 0.5
+      },
+      "disk": {
+        "min_gb": 0.05
+      },
+      "gpu": {
+        "min_count": 0
+      }
+    }
+  },
+  {
+    "category": "Runtime",
     "description": "Promote a healthy candidate revision of a tiny service.",
     "id": "demo_canary_deployment",
     "job_name": "demo-canary-deployment",
@@ -20,7 +116,7 @@
     "workflow_id": "demo_canary_deployment_v1"
   },
   {
-    "category": "Runtime Operations",
+    "category": "Runtime",
     "description": "Checkpoint processed event IDs and ignore replayed duplicates.",
     "id": "demo_checkpoint_replay",
     "job_name": "demo-checkpoint-replay",
@@ -40,7 +136,7 @@
     "workflow_id": "demo_checkpoint_replay_v1"
   },
   {
-    "category": "Memory",
+    "category": "Runtime",
     "description": "Compress a context packet while preserving goals and source references.",
     "id": "demo_context_compression",
     "job_name": "demo-context-compression",
@@ -60,7 +156,7 @@
     "workflow_id": "demo_context_compression_v1"
   },
   {
-    "category": "Memory",
+    "category": "Runtime",
     "description": "Prove that a restricted role cannot retrieve private memory.",
     "id": "demo_context_memory_acl",
     "job_name": "demo-context-memory-acl",
@@ -80,7 +176,7 @@
     "workflow_id": "demo_context_memory_acl_v1"
   },
   {
-    "category": "Workflow DAG",
+    "category": "Runtime",
     "description": "Route one transaction through exactly one risk branch and rejoin.",
     "id": "demo_dag_conditional_branch",
     "job_name": "demo-dag-conditional-branch",
@@ -100,7 +196,7 @@
     "workflow_id": "demo_dag_conditional_branch_v1"
   },
   {
-    "category": "Workflow DAG",
+    "category": "Runtime",
     "description": "Fail a primary lookup and recover through a fallback step.",
     "id": "demo_dag_failure_fallback",
     "job_name": "demo-dag-failure-fallback",
@@ -120,7 +216,7 @@
     "workflow_id": "demo_dag_failure_fallback_v1"
   },
   {
-    "category": "Workflow DAG",
+    "category": "Runtime",
     "description": "Check three synthetic regions concurrently and aggregate their status.",
     "id": "demo_dag_fork_join",
     "job_name": "demo-dag-fork-join",
@@ -140,7 +236,7 @@
     "workflow_id": "demo_dag_fork_join_v1"
   },
   {
-    "category": "Workflow DAG",
+    "category": "Runtime",
     "description": "Parse, score, and report one support ticket in strict order.",
     "id": "demo_dag_linear",
     "job_name": "demo-dag-linear",
@@ -160,7 +256,7 @@
     "workflow_id": "demo_dag_linear_v1"
   },
   {
-    "category": "Workflow DAG",
+    "category": "Runtime",
     "description": "Accept two successful sensor votes while one controlled vote fails.",
     "id": "demo_dag_quorum",
     "job_name": "demo-dag-quorum",
@@ -180,7 +276,7 @@
     "workflow_id": "demo_dag_quorum_v1"
   },
   {
-    "category": "Workflow DAG",
+    "category": "Runtime",
     "description": "Dynamically map five records and collect their scores.",
     "id": "demo_dag_scatter_gather",
     "job_name": "demo-dag-scatter-gather",
@@ -200,7 +296,7 @@
     "workflow_id": "demo_dag_scatter_gather_v1"
   },
   {
-    "category": "Execution",
+    "category": "Runtime",
     "description": "Compute and verify a checksum in a minimal Alpine container.",
     "id": "demo_docker_worker",
     "job_name": "demo-docker-worker",
@@ -220,7 +316,7 @@
     "workflow_id": "demo_docker_worker_v1"
   },
   {
-    "category": "Runtime Operations",
+    "category": "Runtime",
     "description": "Launch only when a matching dataset event is emitted.",
     "id": "demo_event_trigger",
     "job_name": "demo-event-trigger",
@@ -240,7 +336,7 @@
     "workflow_id": "demo_event_trigger_v1"
   },
   {
-    "category": "Runtime Operations",
+    "category": "Runtime",
     "description": "Run four logical workers through a two-slot executor pool.",
     "id": "demo_executor_pool",
     "job_name": "demo-executor-pool",
@@ -260,7 +356,7 @@
     "workflow_id": "demo_executor_pool_v1"
   },
   {
-    "category": "Execution",
+    "category": "Runtime",
     "description": "Normalize a small incident record in a HostLocal Python worker.",
     "id": "demo_hostlocal_worker",
     "job_name": "demo-hostlocal-worker",
@@ -280,7 +376,7 @@
     "workflow_id": "demo_hostlocal_worker_v1"
   },
   {
-    "category": "Collaboration",
+    "category": "Runtime",
     "description": "Request and audit approval for a harmless mock action.",
     "id": "demo_human_approval",
     "job_name": "demo-human-approval",
@@ -300,7 +396,7 @@
     "workflow_id": "demo_human_approval_v1"
   },
   {
-    "category": "Collaboration",
+    "category": "Runtime",
     "description": "Use a deterministic fake model decision to call a local forecast tool.",
     "id": "demo_llm_tool_call",
     "job_name": "demo-llm-tool-call",
@@ -320,7 +416,7 @@
     "workflow_id": "demo_llm_tool_call_v1"
   },
   {
-    "category": "Execution",
+    "category": "Runtime",
     "description": "Classify three synthetic runtime signals without starting an OS worker.",
     "id": "demo_native_beam_agent",
     "job_name": "demo-native-beam-agent",
@@ -340,7 +436,7 @@
     "workflow_id": "demo_native_beam_agent_v1"
   },
   {
-    "category": "Runtime Operations",
+    "category": "Runtime",
     "description": "Emit trace-linked events and inspect the standard run artifacts.",
     "id": "demo_observability_trace",
     "job_name": "demo-observability-trace",
@@ -360,7 +456,7 @@
     "workflow_id": "demo_observability_trace_v1"
   },
   {
-    "category": "Execution",
+    "category": "Runtime",
     "description": "Validate a small configuration in a deny-network OpenShell sandbox.",
     "id": "demo_openshell_worker",
     "job_name": "demo-openshell-worker",
@@ -380,7 +476,7 @@
     "workflow_id": "demo_openshell_worker_v1"
   },
   {
-    "category": "Runtime Operations",
+    "category": "Runtime",
     "description": "Register a periodic child job that can be dispatched immediately.",
     "id": "demo_periodic_schedule",
     "job_name": "demo-periodic-schedule",
@@ -400,7 +496,7 @@
     "workflow_id": "demo_periodic_schedule_v1"
   },
   {
-    "category": "Execution",
+    "category": "Runtime",
     "description": "Compile and run a decorated two-agent incident workflow.",
     "id": "demo_python_sdk_workflow",
     "job_name": "demo-python-sdk-workflow",
@@ -420,7 +516,7 @@
     "workflow_id": "demo_python_sdk_workflow_v1"
   },
   {
-    "category": "Runtime Operations",
+    "category": "Runtime",
     "description": "Request small HostLocal resources and report the concrete allocation.",
     "id": "demo_resource_allocation",
     "job_name": "demo-resource-allocation",
@@ -440,7 +536,7 @@
     "workflow_id": "demo_resource_allocation_v1"
   },
   {
-    "category": "Runtime Operations",
+    "category": "Runtime",
     "description": "Fail attempt one and succeed on attempt two through the durable ledger.",
     "id": "demo_retry_recovery",
     "job_name": "demo-retry-recovery",
@@ -460,7 +556,7 @@
     "workflow_id": "demo_retry_recovery_v1"
   },
   {
-    "category": "Runtime Operations",
+    "category": "Runtime",
     "description": "Register and resolve a tiny HTTP health service.",
     "id": "demo_service_health",
     "job_name": "demo-service-health",
@@ -480,7 +576,7 @@
     "workflow_id": "demo_service_health_v1"
   },
   {
-    "category": "Runtime Operations",
+    "category": "Runtime",
     "description": "Process a finite burst through a bounded queue and report pressure handling.",
     "id": "demo_stream_backpressure",
     "job_name": "demo-stream-backpressure",

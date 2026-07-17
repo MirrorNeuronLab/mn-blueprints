@@ -1,60 +1,16 @@
 {
   "categories": [
     {
-      "blueprints": [
-        "demo_native_beam_agent",
-        "demo_hostlocal_worker",
-        "demo_docker_worker",
-        "demo_openshell_worker",
-        "demo_python_sdk_workflow"
-      ],
-      "id": "execution",
-      "name": "Execution"
+      "name": "Finance",
+      "slug": "finance"
     },
     {
-      "blueprints": [
-        "demo_dag_linear",
-        "demo_dag_fork_join",
-        "demo_dag_scatter_gather",
-        "demo_dag_conditional_branch",
-        "demo_dag_failure_fallback",
-        "demo_dag_quorum"
-      ],
-      "id": "workflow_dag",
-      "name": "Workflow DAG"
+      "name": "Science",
+      "slug": "science"
     },
     {
-      "blueprints": [
-        "demo_human_approval",
-        "demo_llm_tool_call"
-      ],
-      "id": "collaboration",
-      "name": "Collaboration"
-    },
-    {
-      "blueprints": [
-        "demo_context_memory_acl",
-        "demo_context_compression"
-      ],
-      "id": "memory",
-      "name": "Memory"
-    },
-    {
-      "blueprints": [
-        "demo_stream_backpressure",
-        "demo_executor_pool",
-        "demo_service_health",
-        "demo_resource_allocation",
-        "demo_retry_recovery",
-        "demo_checkpoint_replay",
-        "demo_periodic_schedule",
-        "demo_event_trigger",
-        "demo_observability_trace",
-        "demo_canary_deployment"
-      ],
-      "id": "runtime_operations",
-      "name": "Runtime Operations"
+      "name": "Runtime",
+      "slug": "runtime_demo"
     }
-  ],
-  "schema_version": "1.0"
+  ]
 }

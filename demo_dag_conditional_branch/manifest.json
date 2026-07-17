@@ -2,15 +2,23 @@
   "agents": {
     "edges": [
       {
+        "conditions": {
+          "expr": "${payload.outputs.selected_branch} == \"low_risk\""
+        },
         "edge_id": "route_to_low_risk",
         "from_node": "route",
         "message_type": "route_done",
+        "routing_mode": "first_match",
         "to_node": "low_risk"
       },
       {
+        "conditions": {
+          "expr": "${payload.outputs.selected_branch} == \"high_risk\""
+        },
         "edge_id": "route_to_high_risk",
         "from_node": "route",
         "message_type": "route_done",
+        "routing_mode": "first_match",
         "to_node": "high_risk"
       },
       {
@@ -44,7 +52,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 60000,
           "command": [
             "python3.11",
             "worker.py"
@@ -61,7 +69,7 @@
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 60,
           "upload_as": "worker",
           "upload_path": "worker",
           "workdir": "/sandbox/job/worker"
@@ -85,7 +93,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 60000,
           "command": [
             "python3.11",
             "worker.py"
@@ -102,7 +110,7 @@
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 60,
           "upload_as": "worker",
           "upload_path": "worker",
           "workdir": "/sandbox/job/worker"
@@ -126,7 +134,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 60000,
           "command": [
             "python3.11",
             "worker.py"
@@ -143,7 +151,7 @@
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 60,
           "upload_as": "worker",
           "upload_path": "worker",
           "workdir": "/sandbox/job/worker"
@@ -167,7 +175,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 60000,
           "command": [
             "python3.11",
             "worker.py"
@@ -185,7 +193,7 @@
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 60,
           "upload_as": "worker",
           "upload_path": "worker",
           "workdir": "/sandbox/job/worker"
@@ -533,7 +541,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 60
         },
         "emits": [
           "route_done"
@@ -553,7 +561,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 60
         },
         "emits": [
           "low_risk_done"
@@ -573,7 +581,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 60
         },
         "emits": [
           "high_risk_done"
@@ -593,7 +601,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 60
         },
         "emits": [
           "join_done"

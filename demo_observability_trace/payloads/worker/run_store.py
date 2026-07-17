@@ -163,24 +163,26 @@ def write_run_store(result: dict, events: list[dict], *, status: str = "complete
     blueprint_id = os.environ.get("MN_DEMO_ID", "unknown")
     job_id = os.environ.get("MN_JOB_ID", "")
     ts = _now()
-    trace_id = "trc_" + hashlib.sha256(f"{run_id}:{job_id}".encode()).hexdigest()[:20]
-    span_id = "spn_" + hashlib.sha256(f"{run_id}:final".encode()).hexdigest()[:16]
+    trace_context = result.get("trace_context") if isinstance(result.get("trace_context"), dict) else {}
+    trace_id = str(trace_context.get("trace_id") or "trc_" + hashlib.sha256(f"{run_id}:{job_id}".encode()).hexdigest()[:20])
+    span_id = str(trace_context.get("span_id") or "spn_" + hashlib.sha256(f"{run_id}:final".encode()).hexdigest()[:16])
     inputs = _load_json_file(os.environ.get("MN_INPUT_FILE"), {})
     config = _load_json_value(os.environ.get("MN_BLUEPRINT_CONFIG_JSON"), {})
 
     normalized_events = []
     for index, event in enumerate(events):
-        normalized_events.append(
-            {
-                "ts": ts,
-                "run_id": run_id,
-                "blueprint_id": blueprint_id,
-                "trace_id": trace_id,
-                "span_id": f"{span_id}_{index}",
-                "type": event.get("type", "demo_event"),
-                "payload": event.get("payload", {}),
-            }
-        )
+        normalized_event = {
+            "ts": ts,
+            "run_id": run_id,
+            "blueprint_id": blueprint_id,
+            "trace_id": event.get("trace_id", trace_id),
+            "span_id": event.get("span_id", f"{span_id}_{index}"),
+            "type": event.get("type", "demo_event"),
+            "payload": event.get("payload", {}),
+        }
+        if event.get("parent_span_id"):
+            normalized_event["parent_span_id"] = event["parent_span_id"]
+        normalized_events.append(normalized_event)
     normalized_events.append(
         {
             "ts": ts,
@@ -202,6 +204,7 @@ def write_run_store(result: dict, events: list[dict], *, status: str = "complete
             "blueprint_id": blueprint_id,
             "status": status,
             "trace_id": trace_id,
+            "span_id": span_id,
             "updated_at": ts,
         },
     )
@@ -238,6 +241,7 @@ def write_run_store(result: dict, events: list[dict], *, status: str = "complete
             "run_id": run_id,
             "trace_id": trace_id,
             "status": status,
+            "span_id": span_id,
             "event_count": len(normalized_events),
             "error_count": 0,
             "artifacts": list(REQUIRED_ARTIFACTS),

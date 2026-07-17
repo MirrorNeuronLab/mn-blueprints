@@ -24,31 +24,33 @@
         "config": {
           "agent_beacon_required": false,
           "backpressure": {
-            "drop_policy": "sample",
+            "drop_policy": "block",
             "max_concurrency": 1,
             "max_queue_depth": 3
           },
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 300000,
           "command": [
             "python3.11",
             "worker.py"
           ],
           "environment": {
             "MN_DEMO_ID": "demo_stream_backpressure",
+            "MN_STREAM_BURST_SIZE": "10",
+            "MN_STREAM_QUEUE_BOUND": "3",
             "MN_WORKFLOW_STEP_ID": "produce"
           },
           "idempotent": true,
           "max_attempts": 1,
-          "output_message_type": "produce_done",
+          "output_message_type": null,
           "pool": "default",
           "pool_slots": 1,
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 300,
           "upload_as": "worker",
           "upload_path": "worker",
           "workdir": "/sandbox/job/worker"
@@ -70,14 +72,14 @@
         "config": {
           "agent_beacon_required": false,
           "backpressure": {
-            "drop_policy": "sample",
+            "drop_policy": "block",
             "max_concurrency": 1,
             "max_queue_depth": 3
           },
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 300000,
           "command": [
             "python3.11",
             "worker.py"
@@ -85,19 +87,23 @@
           "environment": {
             "MN_DEMO_ID": "demo_stream_backpressure",
             "MN_WORKFLOW_STEP_ID": "consume",
-            "MN_DEMO_FINAL_STEP": "1"
+            "MN_DEMO_FINAL_STEP": "1",
+            "MN_STREAM_BURST_SIZE": "10",
+            "MN_STREAM_CONSUME_DELAY_MS": "60",
+            "MN_STREAM_QUEUE_BOUND": "3"
           },
           "idempotent": true,
           "max_attempts": 1,
-          "output_message_type": "final_result",
+          "output_message_type": null,
           "pool": "default",
           "pool_slots": 1,
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 300,
           "upload_as": "worker",
           "upload_path": "worker",
+          "workflow_complete_step": false,
           "workdir": "/sandbox/job/worker"
         },
         "display_name": "Consume",
@@ -396,7 +402,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 300
         },
         "emits": [
           "produce_done"
@@ -416,7 +422,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 300
         },
         "emits": [
           "consume_done"

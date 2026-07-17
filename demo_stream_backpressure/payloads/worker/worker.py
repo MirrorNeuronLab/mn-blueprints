@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
+"""Emit a burst, let the runtime queue it, and drain it through one consumer."""
 from __future__ import annotations
 
-import hashlib
 import json
 import os
-import sys
 import time
 from pathlib import Path
 
@@ -21,94 +20,69 @@ def load_json(path_env: str, default):
         return default
 
 
-demo = os.environ.get("MN_DEMO_ID", "unknown")
-step = os.environ.get("MN_WORKFLOW_STEP_ID", "run")
-payload = load_json("MN_INPUT_FILE", {})
-context = load_json("MN_CONTEXT_FILE", {})
-workflow = context.get("workflow") or {}
-attempt = int(workflow.get("attempt") or 1)
-sleep_ms = int(os.environ.get("MN_DEMO_SLEEP_MS", "0"))
-if sleep_ms:
-    time.sleep(sleep_ms / 1000)
+def mapping(value):
+    return value if isinstance(value, dict) else {}
 
-result = {
-    "demo": demo,
-    "step": step,
-    "input": payload,
-    "attempt": attempt,
-    "deterministic": True,
-}
 
-events = [{"type": "demo_step_observed", "payload": {"demo": demo, "step": step, "attempt": attempt}}]
+step = os.environ.get("MN_WORKFLOW_STEP_ID", "produce")
+payload = mapping(load_json("MN_INPUT_FILE", {}))
+context = mapping(load_json("MN_CONTEXT_FILE", {}))
+events = [{"type": "demo_step_observed", "payload": {"step": step}}]
+result = {"demo": "demo_stream_backpressure", "step": step, "deterministic": True}
+next_state = mapping(context.get("agent_state"))
+emit_messages = []
+complete = True
+burst_size = int(os.environ.get("MN_STREAM_BURST_SIZE", "10"))
+queue_bound = int(os.environ.get("MN_STREAM_QUEUE_BOUND", "3"))
 
-if demo == "demo_dag_scatter_gather" and step == "scatter":
-    events.append({"type": "workflow_step_scatter", "payload": {"targets": ["worker"], "items": [{"record_id": f"r-{i}", "value": i} for i in range(1, 6)]}})
-    result["mapped_items"] = 5
-elif demo == "demo_dag_conditional_branch" and step == "route":
-    events.append({"type": "workflow_step_branch", "payload": {"branches": ["high_risk"]}})
-    result["selected_branch"] = "high_risk"
-elif demo == "demo_dag_failure_fallback" and step == "primary":
-    print(json.dumps({"events": events + [{"type": "workflow_step_failed", "payload": {"reason": "intentional primary outage"}}], "next_state": result}, sort_keys=True))
-    raise SystemExit(0)
-elif demo == "demo_dag_quorum" and step == "sensor_c":
-    print(json.dumps({"events": events + [{"type": "workflow_step_failed", "payload": {"reason": "intentional dissenting sensor"}}], "next_state": result}, sort_keys=True))
-    raise SystemExit(0)
-elif demo == "demo_retry_recovery" and step == "run" and attempt == 1:
-    print(json.dumps({"events": events, "next_state": result}, sort_keys=True))
-    raise SystemExit(23)
-elif demo == "demo_human_approval" and step == "run":
-    events.extend([
-        {"type": "human_input_requested", "payload": {"request_id": "demo-approval", "prompt": "Approve harmless local artifact write?", "allowed_decisions": ["approve", "reject"]}},
-        {"type": "human_input_received", "payload": {"request_id": "demo-approval", "decision": "approve", "reviewer": "deterministic-fixture"}},
-        {"type": "human_decision_applied", "payload": {"request_id": "demo-approval", "decision": "approve"}},
-    ])
-    result["approved"] = True
-elif demo == "demo_llm_tool_call" and step == "run":
-    tool_args = {"city": "Boston", "day": "tomorrow"}
-    tool_result = {"high_c": 22, "condition": "clear"}
-    events.extend([
-        {"type": "llm_tool_selected", "payload": {"model": "deterministic-tool-fixture", "tool": "local_forecast", "arguments": tool_args}},
-        {"type": "llm_tool_completed", "payload": {"tool": "local_forecast", "result": tool_result}},
-    ])
-    result["tool_trace"] = {"tool": "local_forecast", "arguments": tool_args, "result": tool_result}
-elif demo == "demo_context_memory_acl" and step == "run":
-    from context_demo import run_acl_demo
-    result.update(run_acl_demo(context))
-elif demo == "demo_context_compression" and step == "run":
-    from context_demo import run_compression_demo
-    result.update(run_compression_demo(context))
-elif demo == "demo_stream_backpressure":
-    result.update({"produced": 10, "queue_size": 3, "drop_policy": "sample", "processed": [0, 3, 6, 9]})
-    events.append({"type": "stream_sampled", "payload": {"received": 10, "processed": 4, "queue_size": 3}})
-elif demo == "demo_executor_pool" and step.startswith("worker_"):
-    result.update({"pool": "demo", "pool_slots": 1, "worker": step})
-elif demo == "demo_resource_allocation" and step == "run":
-    raw = os.environ.get("MN_ALLOCATION_JSON", "{}")
-    try:
-        allocation = json.loads(raw)
-    except json.JSONDecodeError:
-        allocation = {"raw": raw}
-    result["allocation"] = allocation
-elif demo == "demo_checkpoint_replay" and step == "run":
-    ids = ["evt-1", "evt-2", "evt-2", "evt-3", "evt-4", "evt-5"]
-    seen = []
-    for event_id in ids:
-        if event_id not in seen:
-            seen.append(event_id)
-    result.update({"seen_ids": seen, "duplicates_ignored": len(ids) - len(seen), "checkpoint_after": 2})
-    events.append({"type": "checkpoint_written", "payload": {"processed_messages": 2, "seen_ids": seen[:2]}})
-elif demo == "demo_observability_trace" and step == "run":
-    result["trace_probe"] = {"parent": "run", "child": "worker", "linked": True}
-    events.append({"type": "trace_probe", "payload": {"parent_span": "run", "child_span": "worker"}})
-elif demo == "demo_docker_worker" and step == "run":
-    value = b"mirror-neuron-demo"
-    result["sha256"] = hashlib.sha256(value).hexdigest()
-elif demo == "demo_openshell_worker" and step == "run":
-    result["sandbox_validation"] = {"config_valid": True, "network_policy": "deny-all"}
+if step == "produce":
+    stream_id = "bounded-burst-v1"
+    emit_messages = [
+        {
+            "to": "consume",
+            "type": "stream_item",
+            "payload": {"stream_id": stream_id, "sequence": sequence, "value": sequence * 10, "terminal": sequence == burst_size - 1},
+            "stream": {"stream_id": stream_id, "sequence": sequence, "end": sequence == burst_size - 1},
+        }
+        for sequence in range(burst_size)
+    ]
+    result["producer"] = {"emitted": burst_size, "stream_id": stream_id, "queue_bound": queue_bound}
+    events.append({"type": "stream_burst_emitted", "payload": result["producer"]})
+elif step == "consume":
+    item = mapping(payload.get("stream_item")) or payload
+    if "sequence" not in item or "stream_id" not in item:
+        result["consumer"] = {"status": "waiting_for_stream_items"}
+        events.append({"type": "stream_control_message_ignored", "payload": result["consumer"]})
+        complete = False
+    else:
+        time.sleep(int(os.environ.get("MN_STREAM_CONSUME_DELAY_MS", "60")) / 1_000)
+        stream = mapping(next_state.get("stream_backpressure"))
+        processed = list(stream.get("processed_sequences") or [])
+        sequence = item["sequence"]
+        duplicate = sequence in processed
+        if not duplicate:
+            processed.append(sequence)
+        stream = {"stream_id": item["stream_id"], "processed_sequences": sorted(processed), "duplicates": int(stream.get("duplicates", 0)) + int(duplicate)}
+        next_state = {"stream_backpressure": stream}
+        events.append({"type": "stream_item_processed", "payload": {"sequence": sequence, "processed_count": len(processed), "queue_bound": queue_bound, "duplicate": duplicate}})
+        if item.get("terminal") and len(processed) == burst_size:
+            result["backpressure"] = {"producer_emitted": burst_size, "consumer_processed": len(processed), "queue_bound": queue_bound, "policy": "block", "drained_sequences": sorted(processed), "duplicates": stream["duplicates"]}
+            events.append({"type": "stream_drain_completed", "payload": result["backpressure"]})
+        else:
+            result["backpressure"] = {"processed": len(processed), "waiting_for": burst_size - len(processed), "queue_bound": queue_bound}
+            complete = False
 else:
     result["status"] = "ok"
 
-if is_final_step(demo, step):
+if step == "consume" and complete and is_final_step("demo_stream_backpressure", step):
     write_run_store(result, events)
 
-print(json.dumps({"events": events, "complete_step": result, "next_state": result}, sort_keys=True))
+output = {"events": events, "next_state": next_state}
+if emit_messages:
+    output["emit_messages"] = emit_messages
+if complete:
+    output["complete_step"] = result
+    if step == "consume":
+        # The sink receives one terminal result after the full burst has drained.
+        output["emit_messages"] = [{"to": "report_sink", "type": "final_result", "payload": result}]
+print(json.dumps(output, sort_keys=True))

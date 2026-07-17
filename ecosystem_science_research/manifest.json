@@ -1,0 +1,342 @@
+{
+  "apiVersion": "mn.workflow/v1",
+  "kind": "Workflow",
+  "manifest_version": "1.0",
+  "id": "ecosystem_science_research",
+  "name": "Ecosystem Science Research",
+  "job_name": "ecosystem-science-research",
+  "description": "Run a deterministic 16-region ecosystem through distributed native BEAM actors and use one LLM only to explain the frozen result.",
+  "license": "LICENSE.md",
+  "metadata": {
+    "blueprint_id": "ecosystem_science_research",
+    "standard": "1.0",
+    "name": "Ecosystem Science Research",
+    "category": "Science",
+    "description": "Distributed native-actor ecosystem simulation with DNA-driven behavior and a final explanatory LLM boundary.",
+    "problem_solved": "Explore deterministic multi-region population dynamics without using LLMs as simulation agents.",
+    "target_user": "Ecologists, simulation researchers, distributed-systems evaluators, and science educators.",
+    "customizable_for": "Population ecology, migration studies, inherited behavior experiments, and native actor benchmarks.",
+    "simulation_type": "Deterministic multi-region agent-based ecosystem.",
+    "runtime_features": [
+      "Distributed native BEAM actor simulation"
+    ],
+    "output": "Immutable regional and lineage measurements plus a non-authoritative explanation.",
+    "output_contract": "mn.blueprint.final_artifact.v1",
+    "interfaces": {
+      "config": "config/default.json",
+      "payloads": "payloads/"
+    },
+    "quick_test": {
+      "enabled": true,
+      "command": "mn blueprint run --folder . --offline --fake-llm --detached",
+      "expected_seconds_warm": 30
+    }
+  },
+  "agents": {
+    "schema": "mn.agents.communication_graph/v1",
+    "entrypoints": [
+      "world"
+    ],
+    "nodes": [
+      {
+        "node_id": "world",
+        "alias": "world",
+        "display_name": "Native Ecosystem World",
+        "role": "root_coordinator",
+        "agent_type": "module",
+        "type": "generic",
+        "config": {
+          "module": "MnBlueprints.EcosystemScience.V1.BlueprintAgent",
+          "module_source": "beam/60_blueprint_agent.ex",
+          "output_message_type": "simulation_done",
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_timeout_ms": 120000,
+          "beacon_missed_action": "fail_attempt"
+        },
+        "resources": {
+          "cpu_cores": 0.5,
+          "memory_mb": 512,
+          "disk_mb": 32
+        }
+      },
+      {
+        "node_id": "publish",
+        "alias": "publish",
+        "display_name": "Publish Ecosystem Artifact",
+        "role": "terminal_publisher",
+        "agent_type": "module",
+        "type": "generic",
+        "config": {
+          "module": "MnBlueprints.EcosystemScience.V1.FinalPublisherAgent",
+          "module_source": "beam/70_final_publisher_agent.ex",
+          "output_message_type": "final_result"
+        },
+        "resources": {
+          "cpu_cores": 0.1,
+          "memory_mb": 32,
+          "disk_mb": 4
+        }
+      },
+      {
+        "node_id": "report_sink",
+        "alias": "result_sink",
+        "role": "result_sink",
+        "agent_type": "aggregator",
+        "type": "reduce",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        }
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "world_to_publish",
+        "from_node": "world",
+        "to_node": "publish",
+        "message_type": "simulation_done"
+      },
+      {
+        "edge_id": "publish_to_report_sink",
+        "from_node": "publish",
+        "to_node": "report_sink",
+        "message_type": "final_result"
+      }
+    ]
+  },
+  "workflow": {
+    "schema": "mn.workflow.problem_graph/v1",
+    "workflow_id": "ecosystem_science_research_v1",
+    "mode": "static_dag",
+    "source": "world",
+    "sink": "publish",
+    "entrypoint": "world",
+    "dynamic": {
+      "enabled": false
+    },
+    "execution": {
+      "strategy": "serial",
+      "max_parallel_steps": 1
+    },
+    "steps": [
+      {
+        "id": "world",
+        "label": "Run Native Ecosystem",
+        "kind": "task",
+        "action": "run_worker",
+        "run": "world",
+        "goal": "Run the 16-region direct-BEAM simulation, aggregate it, and explain the frozen result.",
+        "emits": [
+          "simulation_done"
+        ],
+        "control": {
+          "required": true,
+          "failure_policy": "fail_workflow",
+          "timeout_seconds": 120,
+          "retry": {
+            "max_attempts": 2,
+            "backoff_seconds": 0.25
+          }
+        }
+      },
+      {
+        "id": "publish",
+        "label": "Publish Final Artifact",
+        "kind": "task",
+        "action": "run_worker",
+        "run": "publish",
+        "goal": "Accept the immutable final artifact and complete the run.",
+        "emits": [],
+        "control": {
+          "required": true,
+          "failure_policy": "fail_workflow",
+          "timeout_seconds": 30,
+          "retry": {
+            "max_attempts": 1,
+            "backoff_seconds": 0.1
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "world_to_publish",
+        "from": "world",
+        "to": "publish",
+        "required": true,
+        "accepts": [
+          "done"
+        ]
+      }
+    ]
+  },
+  "runtime": {
+    "bindings": {
+      "world": {
+        "type": "worker",
+        "strategy": "single",
+        "workers": [
+          {
+            "id": "world",
+            "role": "Coordinate native ecosystem actors."
+          }
+        ]
+      },
+      "publish": {
+        "type": "worker",
+        "strategy": "single",
+        "workers": [
+          {
+            "id": "publish",
+            "role": "Publish the already-written immutable final artifact."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "world": [
+        {
+          "scenario": "ecosystem_competition",
+          "ecosystem": {
+            "seed": 517498978,
+            "total_animals": 2000,
+            "duration_seconds": 300,
+            "tick_seconds": 5,
+            "max_food": 420.0,
+            "food_regen_per_tick": 72.0,
+            "max_region_population": 220,
+            "migration_rate": 0.035,
+            "mutation_rate": 0.05,
+            "tick_delay_ms": 0,
+            "local_top_k": 20,
+            "require_multi_node": false
+          }
+        }
+      ]
+    },
+    "store": {
+      "type": "local_run_store",
+      "path": "~/.mn/runs/${run_id}"
+    },
+    "workflow_control": {
+      "enabled": true,
+      "schema_version": "mn.workflow.runtime_control.v1",
+      "source_of_truth": "workflow.steps",
+      "liveness": {
+        "event": "agent_beacon",
+        "interval_ms": 1000,
+        "timeout_ms": 120000,
+        "missed_action": "fail_attempt",
+        "required": false
+      },
+      "state_ledger": {
+        "enabled": true,
+        "message_ledger": true,
+        "delivery_semantics": "at_least_once_with_idempotency",
+        "persisted_field": "workflow_state"
+      }
+    }
+  },
+  "contract": {
+    "summary": "Simulate deterministic DNA-driven populations across exactly 16 native region actors.",
+    "users": [
+      "Ecologists and simulation researchers",
+      "MirrorNeuron distributed-runtime evaluators"
+    ],
+    "privacy": {
+      "classification": "internal"
+    },
+    "input_adapters": {
+      "default": "mock",
+      "resolved_artifact": "inputs.json",
+      "supported": [
+        "mock",
+        "json",
+        "file",
+        "env_json"
+      ]
+    },
+    "inputs": {
+      "scenario": {
+        "type": "string",
+        "required": true,
+        "description": "Scenario label."
+      },
+      "ecosystem": {
+        "type": "object",
+        "required": true,
+        "description": "Deterministic ecosystem parameters; region count is fixed at 16."
+      }
+    },
+    "events": {
+      "stream": "events.jsonl",
+      "types": [
+        "run_started",
+        "inputs_loaded",
+        "native_ecosystem_started",
+        "native_ecosystem_completed",
+        "ecosystem_explanation_completed",
+        "ecosystem_explanation_fallback",
+        "ecosystem_artifacts_written",
+        "run_completed",
+        "run_failed"
+      ]
+    },
+    "outputs": {
+      "profile": "standard_run_store",
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "type": "final_artifact",
+        "schema_version": "mn.blueprint.final_artifact.v1"
+      },
+      "artifacts": [
+        {
+          "artifact_id": "simulation_result",
+          "path": "simulation_result.json"
+        },
+        {
+          "artifact_id": "actor_topology",
+          "path": "actor_topology.json"
+        },
+        {
+          "artifact_id": "final_artifact",
+          "path": "final_artifact.json"
+        }
+      ]
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 0.5
+    },
+    "memory": {
+      "min_gb": 0.5
+    },
+    "disk": {
+      "min_gb": 0.05
+    },
+    "gpu": {
+      "min_count": 0
+    }
+  },
+  "policies": {
+    "recovery_mode": "local_restart",
+    "scheduler": {
+      "strategy": "spread"
+    },
+    "restart": {
+      "mode": "fail",
+      "attempts": 2,
+      "delay_function": "constant",
+      "delay_ms": 250,
+      "max_delay_ms": 250,
+      "interval_ms": 60000
+    }
+  },
+  "input_validation": {
+    "rules": []
+  }
+}

@@ -43,19 +43,19 @@ EVIDENCE = {
     "demo_python_sdk_workflow": ("demo_python_sdk_workflow",),
     "demo_dag_linear": ("parse", "score", "report"),
     "demo_dag_fork_join": ("east", "west", "central", "join"),
-    "demo_dag_scatter_gather": ("mapped_items", "collect"),
+    "demo_dag_scatter_gather": ("workflow_step_scattered", "workflow_gather_completed", "mapped_items"),
     "demo_dag_conditional_branch": ("high_risk", "join"),
     "demo_dag_failure_fallback": ("intentional primary outage", "fallback"),
     "demo_dag_quorum": ("sensor_a", "sensor_b", "approve"),
     "demo_llm_tool_call": ("local_forecast", "tool_trace"),
     "demo_context_memory_acl": ("private_hidden",),
     "demo_context_compression": ("source_refs",),
-    "demo_stream_backpressure": ("queue_size", "drop_policy"),
+    "demo_stream_backpressure": ("stream_burst_emitted", "stream_drain_completed", "consumer_processed"),
     "demo_executor_pool": ("pool_slots",),
     "demo_resource_allocation": ("allocation",),
     "demo_retry_recovery": ("attempt",),
-    "demo_checkpoint_replay": ("duplicates_ignored", "evt-5"),
-    "demo_observability_trace": ("trace_id", "span_id"),
+    "demo_checkpoint_replay": ("checkpoint_replay_completed", "replayed_duplicate_ignored", "persisted_executor_agent_state"),
+    "demo_observability_trace": ("trace_span_started", "trace_span_linked", "parent_span_id"),
 }
 
 

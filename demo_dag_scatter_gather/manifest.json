@@ -32,7 +32,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 300000,
           "command": [
             "python3.11",
             "worker.py"
@@ -43,13 +43,13 @@
           },
           "idempotent": true,
           "max_attempts": 1,
-          "output_message_type": "scatter_done",
+          "output_message_type": null,
           "pool": "default",
           "pool_slots": 1,
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 300,
           "upload_as": "worker",
           "upload_path": "worker",
           "workdir": "/sandbox/job/worker"
@@ -73,7 +73,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 300000,
           "command": [
             "python3.11",
             "worker.py"
@@ -90,7 +90,7 @@
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 300,
           "upload_as": "worker",
           "upload_path": "worker",
           "workdir": "/sandbox/job/worker"
@@ -114,7 +114,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 300000,
           "command": [
             "python3.11",
             "worker.py"
@@ -122,19 +122,21 @@
           "environment": {
             "MN_DEMO_ID": "demo_dag_scatter_gather",
             "MN_WORKFLOW_STEP_ID": "collect",
-            "MN_DEMO_FINAL_STEP": "1"
+            "MN_DEMO_FINAL_STEP": "1",
+            "MN_SCATTER_EXPECTED_ITEMS": "5"
           },
           "idempotent": true,
           "max_attempts": 1,
-          "output_message_type": "final_result",
+          "output_message_type": null,
           "pool": "default",
           "pool_slots": 1,
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
-          "timeout_seconds": 10,
+          "timeout_seconds": 300,
           "upload_as": "worker",
           "upload_path": "worker",
+          "workflow_complete_step": false,
           "workdir": "/sandbox/job/worker"
         },
         "display_name": "Collect",
@@ -452,7 +454,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 300
         },
         "emits": [
           "scatter_done"
@@ -472,7 +474,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 300
         },
         "emits": [
           "worker_done"
@@ -492,7 +494,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 300
         },
         "emits": [
           "collect_done"

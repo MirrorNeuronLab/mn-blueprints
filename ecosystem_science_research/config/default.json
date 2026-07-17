@@ -1,0 +1,152 @@
+{
+  "standard_version": "1.0",
+  "identity": {
+    "blueprint_id": "ecosystem_science_research",
+    "name": "Ecosystem Science Research"
+  },
+  "mode": "mock",
+  "inputs": {
+    "adapter": "mock",
+    "description": "Deterministic 16-region ecosystem scenario.",
+    "env": "MN_BLUEPRINT_INPUT_JSON",
+    "path": null,
+    "payload": {
+      "scenario": "ecosystem_competition",
+      "ecosystem": {
+        "seed": 517498978,
+        "total_animals": 2000,
+        "duration_seconds": 300,
+        "tick_seconds": 5,
+        "max_food": 420.0,
+        "food_regen_per_tick": 72.0,
+        "max_region_population": 220,
+        "migration_rate": 0.035,
+        "mutation_rate": 0.05,
+        "tick_delay_ms": 0,
+        "local_top_k": 20,
+        "require_multi_node": false
+      }
+    }
+  },
+  "manifest_config_bindings": [
+    {
+      "config_path": "inputs.payload",
+      "manifest_path": "runtime.initial_inputs.world.0"
+    }
+  ],
+  "simulation": {
+    "enabled": true,
+    "deterministic": true,
+    "region_count": 16,
+    "transport": "direct_beam_pid",
+    "seed_field": "seed"
+  },
+  "llm": {
+    "enabled": true,
+    "mode": "fake",
+    "provider": "fake",
+    "model": "fake-deterministic-blueprint-agent",
+    "runtime_model": null,
+    "api_base": "auto",
+    "timeout_seconds": 60,
+    "max_tokens": 700,
+    "num_retries": 0,
+    "mock_mode": "fake",
+    "quick_test_uses_fake": true,
+    "require_live": false,
+    "default_config": "primary",
+    "configs": {
+      "primary": {
+        "provider": "fake",
+        "model": "fake-deterministic-blueprint-agent",
+        "runtime_model": null,
+        "api_base": "auto",
+        "mode": "fake",
+        "timeout_seconds": 60,
+        "max_tokens": 700,
+        "num_retries": 0,
+        "mock_mode": "fake"
+      }
+    },
+    "agents": {
+      "ecosystem_explainer": {
+        "llm_config": "primary",
+        "role": "Ecosystem Result Explainer",
+        "responsibilities": [
+          "Explain only the supplied deterministic measurements.",
+          "Identify regional, migration, and inherited-trait patterns.",
+          "State scientific limitations and avoid field recommendations."
+        ]
+      }
+    }
+  },
+  "budgets": {
+    "max_runtime_seconds": 120,
+    "max_disk_mb": 32,
+    "max_llm_calls": 1,
+    "max_llm_tokens": 700
+  },
+  "capabilities": {
+    "required": [
+      "filesystem.write"
+    ],
+    "optional": [
+      "llm.call"
+    ]
+  },
+  "outputs": {
+    "adapter": "local_run_store",
+    "run_root": "~/.mn/runs",
+    "write_run_store": true,
+    "required_artifacts": [
+      "simulation_result.json",
+      "actor_topology.json",
+      "final_artifact.json"
+    ]
+  },
+  "interfaces": {
+    "input_adapters": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "output_adapters": [
+      "local_run_store"
+    ]
+  },
+  "determinism": {
+    "enabled": true,
+    "seed_field": "seed",
+    "replay": {
+      "from_inputs": "inputs.json",
+      "llm_mode": "mock"
+    }
+  },
+  "error_handling": {
+    "default_mode": "stop",
+    "policies": {
+      "simulation": {
+        "mode": "retry",
+        "max_attempts": 2
+      },
+      "llm": {
+        "mode": "fallback"
+      }
+    }
+  },
+  "human_control": {
+    "enabled": false,
+    "mode": "disabled",
+    "reason": "The blueprint is a deterministic synthetic research demonstration."
+  },
+  "web_ui": {
+    "enabled": false,
+    "input": {
+      "adapter": "none"
+    },
+    "output": {
+      "adapter": "none"
+    }
+  }
+}

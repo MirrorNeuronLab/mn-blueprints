@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
+"""Dynamically fan out records, score each mapped item, then gather them."""
 from __future__ import annotations
 
-import hashlib
 import json
 import os
-import sys
-import time
 from pathlib import Path
 
 from run_store import is_final_step, write_run_store
@@ -21,94 +19,71 @@ def load_json(path_env: str, default):
         return default
 
 
-demo = os.environ.get("MN_DEMO_ID", "unknown")
-step = os.environ.get("MN_WORKFLOW_STEP_ID", "run")
-payload = load_json("MN_INPUT_FILE", {})
-context = load_json("MN_CONTEXT_FILE", {})
-workflow = context.get("workflow") or {}
-attempt = int(workflow.get("attempt") or 1)
-sleep_ms = int(os.environ.get("MN_DEMO_SLEEP_MS", "0"))
-if sleep_ms:
-    time.sleep(sleep_ms / 1000)
+def mapping(value):
+    return value if isinstance(value, dict) else {}
 
-result = {
-    "demo": demo,
-    "step": step,
-    "input": payload,
-    "attempt": attempt,
-    "deterministic": True,
-}
 
-events = [{"type": "demo_step_observed", "payload": {"demo": demo, "step": step, "attempt": attempt}}]
+configured_step = os.environ.get("MN_WORKFLOW_STEP_ID", "scatter")
+payload = mapping(load_json("MN_INPUT_FILE", {}))
+context = mapping(load_json("MN_CONTEXT_FILE", {}))
+runtime_step = str(mapping(context.get("workflow")).get("step_id") or configured_step)
+step = runtime_step.split("[", 1)[0]
+events = [{"type": "demo_step_observed", "payload": {"step": runtime_step}}]
+result = {"demo": "demo_dag_scatter_gather", "step": runtime_step, "deterministic": True}
+next_state = mapping(context.get("agent_state"))
+complete = True
 
-if demo == "demo_dag_scatter_gather" and step == "scatter":
-    events.append({"type": "workflow_step_scatter", "payload": {"targets": ["worker"], "items": [{"record_id": f"r-{i}", "value": i} for i in range(1, 6)]}})
-    result["mapped_items"] = 5
-elif demo == "demo_dag_conditional_branch" and step == "route":
-    events.append({"type": "workflow_step_branch", "payload": {"branches": ["high_risk"]}})
-    result["selected_branch"] = "high_risk"
-elif demo == "demo_dag_failure_fallback" and step == "primary":
-    print(json.dumps({"events": events + [{"type": "workflow_step_failed", "payload": {"reason": "intentional primary outage"}}], "next_state": result}, sort_keys=True))
-    raise SystemExit(0)
-elif demo == "demo_dag_quorum" and step == "sensor_c":
-    print(json.dumps({"events": events + [{"type": "workflow_step_failed", "payload": {"reason": "intentional dissenting sensor"}}], "next_state": result}, sort_keys=True))
-    raise SystemExit(0)
-elif demo == "demo_retry_recovery" and step == "run" and attempt == 1:
-    print(json.dumps({"events": events, "next_state": result}, sort_keys=True))
-    raise SystemExit(23)
-elif demo == "demo_human_approval" and step == "run":
-    events.extend([
-        {"type": "human_input_requested", "payload": {"request_id": "demo-approval", "prompt": "Approve harmless local artifact write?", "allowed_decisions": ["approve", "reject"]}},
-        {"type": "human_input_received", "payload": {"request_id": "demo-approval", "decision": "approve", "reviewer": "deterministic-fixture"}},
-        {"type": "human_decision_applied", "payload": {"request_id": "demo-approval", "decision": "approve"}},
-    ])
-    result["approved"] = True
-elif demo == "demo_llm_tool_call" and step == "run":
-    tool_args = {"city": "Boston", "day": "tomorrow"}
-    tool_result = {"high_c": 22, "condition": "clear"}
-    events.extend([
-        {"type": "llm_tool_selected", "payload": {"model": "deterministic-tool-fixture", "tool": "local_forecast", "arguments": tool_args}},
-        {"type": "llm_tool_completed", "payload": {"tool": "local_forecast", "result": tool_result}},
-    ])
-    result["tool_trace"] = {"tool": "local_forecast", "arguments": tool_args, "result": tool_result}
-elif demo == "demo_context_memory_acl" and step == "run":
-    from context_demo import run_acl_demo
-    result.update(run_acl_demo(context))
-elif demo == "demo_context_compression" and step == "run":
-    from context_demo import run_compression_demo
-    result.update(run_compression_demo(context))
-elif demo == "demo_stream_backpressure":
-    result.update({"produced": 10, "queue_size": 3, "drop_policy": "sample", "processed": [0, 3, 6, 9]})
-    events.append({"type": "stream_sampled", "payload": {"received": 10, "processed": 4, "queue_size": 3}})
-elif demo == "demo_executor_pool" and step.startswith("worker_"):
-    result.update({"pool": "demo", "pool_slots": 1, "worker": step})
-elif demo == "demo_resource_allocation" and step == "run":
-    raw = os.environ.get("MN_ALLOCATION_JSON", "{}")
-    try:
-        allocation = json.loads(raw)
-    except json.JSONDecodeError:
-        allocation = {"raw": raw}
-    result["allocation"] = allocation
-elif demo == "demo_checkpoint_replay" and step == "run":
-    ids = ["evt-1", "evt-2", "evt-2", "evt-3", "evt-4", "evt-5"]
-    seen = []
-    for event_id in ids:
-        if event_id not in seen:
-            seen.append(event_id)
-    result.update({"seen_ids": seen, "duplicates_ignored": len(ids) - len(seen), "checkpoint_after": 2})
-    events.append({"type": "checkpoint_written", "payload": {"processed_messages": 2, "seen_ids": seen[:2]}})
-elif demo == "demo_observability_trace" and step == "run":
-    result["trace_probe"] = {"parent": "run", "child": "worker", "linked": True}
-    events.append({"type": "trace_probe", "payload": {"parent_span": "run", "child_span": "worker"}})
-elif demo == "demo_docker_worker" and step == "run":
-    value = b"mirror-neuron-demo"
-    result["sha256"] = hashlib.sha256(value).hexdigest()
-elif demo == "demo_openshell_worker" and step == "run":
-    result["sandbox_validation"] = {"config_valid": True, "network_policy": "deny-all"}
+if step == "scatter":
+    records = payload.get("records") if isinstance(payload.get("records"), list) else [1, 2, 3, 4, 5]
+    items = [{"record_id": f"r-{index}", "value": value} for index, value in enumerate(records, start=1)]
+    events.append(
+        {
+            "type": "workflow_step_scatter",
+            "payload": {"targets": ["worker"], "items": items, "max_items": len(items)},
+        }
+    )
+    result["scatter"] = {"requested_items": len(items), "target": "worker"}
+elif step == "worker":
+    item = mapping(payload.get("item"))
+    value = item.get("value", 0)
+    if not isinstance(value, (int, float)):
+        raise ValueError("mapped record value must be numeric")
+    score = value * value
+    result["mapped_score"] = {"record_id": item.get("record_id"), "map_index": payload.get("map_index"), "score": score}
+    events.append({"type": "mapped_record_scored", "payload": result["mapped_score"]})
+elif step == "collect":
+    source = mapping(payload.get("input")) or payload
+    item = mapping(source.get("item"))
+    map_index = source.get("map_index")
+    gather = mapping(next_state.get("gather"))
+    scores = mapping(gather.get("scores"))
+    if item and isinstance(item.get("value"), (int, float)) and map_index is not None:
+        score = item["value"] * item["value"]
+        scores[str(map_index)] = {"record_id": item.get("record_id"), "score": score}
+        events.append({"type": "gather_item_received", "payload": {"map_index": map_index, **scores[str(map_index)]}})
+    else:
+        events.append({"type": "gather_control_message_ignored", "payload": {"reason": "no mapped item"}})
+    next_state = {"gather": {"scores": scores}}
+    expected = int(os.environ.get("MN_SCATTER_EXPECTED_ITEMS", "5"))
+    if len(scores) >= expected:
+        collected = [scores[key] for key in sorted(scores, key=int)]
+        result["gather"] = {"mapped_items": len(collected), "collected_scores": collected, "score_total": sum(item["score"] for item in collected)}
+        events.append({"type": "workflow_gather_completed", "payload": result["gather"]})
+    else:
+        result["gather"] = {"waiting_for": expected - len(scores), "received": len(scores)}
+        events.append({"type": "workflow_gather_waiting", "payload": result["gather"]})
+        complete = False
 else:
     result["status"] = "ok"
 
-if is_final_step(demo, step):
+if step == "collect" and complete and is_final_step("demo_dag_scatter_gather", step):
     write_run_store(result, events)
 
-print(json.dumps({"events": events, "complete_step": result, "next_state": result}, sort_keys=True))
+output = {"events": events, "next_state": next_state}
+if complete:
+    output["complete_step"] = result
+    if step == "collect":
+        # Only the completed gather may notify the terminal result sink; earlier
+        # collection passes intentionally persist state without finishing the run.
+        output["emit_messages"] = [{"to": "report_sink", "type": "final_result", "payload": result}]
+print(json.dumps(output, sort_keys=True))

@@ -1,0 +1,24 @@
+{
+  "llm": {
+    "enabled": true,
+    "mode": "live",
+    "provider": "docker_model_runner",
+    "model": "default",
+    "runtime_model": "default",
+    "api_base": "auto",
+    "require_live": false,
+    "configs": {
+      "primary": {
+        "provider": "docker_model_runner",
+        "model": "default",
+        "runtime_model": "default",
+        "api_base": "auto",
+        "mode": "live",
+        "timeout_seconds": 60,
+        "max_tokens": 700,
+        "num_retries": 0,
+        "mock_mode": "fake"
+      }
+    }
+  }
+}

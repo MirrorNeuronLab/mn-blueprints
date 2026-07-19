@@ -7,19 +7,19 @@ Checks a local folder of startup documents on each scheduled batch run, builds a
 
 ## What It Does
 
-This blueprint is a report-only early diligence assistant. It helps a reviewer inspect one or more startup document packets with a specialist agent crew for grouping, evidence extraction, fact normalization, public research, seven deterministic scoring methods, score auditing, and batch report writing. MirrorNeuron routes each assigned agent through acknowledged Redis Streams while durable evidence and reports remain filesystem artifacts.
+This blueprint is a report-only early diligence assistant. It helps a reviewer inspect one or more startup document packets with a specialist agent crew for grouping, evidence extraction, fact normalization, public research, seven deterministic scoring methods, score auditing, and batch report writing. MirrorNeuron routes each assigned agent through acknowledged Redis Streams while durable evidence and reports remain filesystem artifacts. The workflow uses `manual_recover`: after a runtime interruption, relaunch the blueprint from its durable inputs instead of repeatedly reconstructing the full agent graph from Redis snapshots.
 
 It does not decide whether to invest, pass, watch, or reject. It writes scores, evidence, assumptions, missing-evidence flags, and source references so the user can decide.
 
 All actor-style LLM analysis uses the local Docker Model Runner default model `small` for ordinary local launches. A `medium` profile is also recorded for deployments that explicitly select a 48GB-or-above runtime node with GPU or integrated-GPU memory, including NVIDIA, Apple, AMD, and DGX Spark / GB10 unified-memory nodes reported by `mn status`. Numerical formulas and missing-evidence gates remain deterministic.
 
-PDF startup packets are extracted through the shared `llm_ocr_skill` LightOnOCR path. TXT, Markdown, JSON, and CSV files are read directly; PDF files must produce embedded or OCR text for the batch run to continue.
+PDF startup packets are extracted through the shared `llm_ocr_skill`. TXT, Markdown, JSON, and CSV files are read directly; the skill prepares its private OCR model lazily only when a PDF needs OCR, and PDF files must produce embedded or OCR text for the batch run to continue.
 
 ## Online Research Skills
 
 The research phase is configured to use:
 
-- `web_browser_skill` as the single public-browser capability. Standard mode handles discovery, readable-text extraction, retries, throttling, and automatic local engine selection; deep mode is reserved for explicitly rendered profile checks.
+- `web_browser_skill` as the single public-browser capability. Standard mode handles discovery, readable-text extraction, retries, throttling, and automatic local engine selection; deep mode uses the constrained `agent-browser` actuator for explicitly rendered profile checks.
 
 The workflow plans privacy-safe searches for company websites, Crunchbase, founder public profiles, funding mentions, competitors, press, and market context. It consumes plain-text results only. Blocked, login-required, CAPTCHA, robots, or rate-limit responses are recorded in `sources.json`; the blueprint does not bypass them.
 
@@ -85,8 +85,8 @@ mn blueprint monitor --follow
 - `document_folder`: folder containing startup documents. Each first-level subfolder is treated as one company; loose files are grouped by inferred company name.
 - `output_folder`: folder where per-company analysis folders and root index files are written.
 - `monitoring`: bounded single-run scan controls; the runtime scheduler decides when to launch the batch.
-- `input_skills.llm_ocr`: shared local LightOnOCR OCR settings for PDF startup packets.
-- `input_skills.web_browser`: unified adaptive public research provided by the `docker_worker` image.
+- `input_skills.llm_ocr`: shared OCR enablement and document thresholds for PDF startup packets; model details stay in the skill.
+- `input_skills.web_browser`: unified public research with lightweight w3m support in the `docker_worker` image and policy-governed agent-browser/Chrome rendering supplied by the selected browser execution environment. The job image does not install Playwright or its Chromium/system dependency bundle.
 - `skill_runtime`: shared DockerWorker image settings for skills that need system binaries.
 - `execution.max_company_workers`: maximum changed-company packets processed concurrently; defaults to one for local Docker Model Runner stability.
 - `backpressure.llm`: serializes and spaces local LLM calls so agentic research does not overwhelm Docker Model Runner.
@@ -107,7 +107,7 @@ Each company receives a subfolder containing:
 - `evidence.json`
 - `warnings.json`
 
-The output root also contains `company_index.json`, `company_index.md`, `company_work_queue.json`, `research_coverage.json`, `method_coverage.json`, `run_summary.md`, and internal artifact folders for fact tables, research ledgers, method scores, and audit findings.
+The output root also contains `company_index.json`, `company_index.md`, `company_work_queue.json`, `research_coverage.json`, `method_coverage.json`, `run_summary.md`, and internal artifact folders for fact tables, research ledgers, method scores, and audit findings. When rendered browsing runs, `browser_audit.jsonl` and bounded files under `browser_artifacts/` record the actuator trail and captured artifacts.
 
 ## Safety Checklist
 

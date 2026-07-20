@@ -12,6 +12,7 @@
     "path": null,
     "payload": {
       "scenario": "ecosystem_competition",
+      "output_folder": "~/Downloads/ecosystem_science_research",
       "ecosystem": {
         "seed": 517498978,
         "total_animals": 2000,
@@ -32,6 +33,10 @@
     {
       "config_path": "inputs.payload",
       "manifest_path": "runtime.initial_inputs.world.0"
+    },
+    {
+      "config_path": "outputs.folder_path",
+      "manifest_path": "runtime.initial_inputs.world.0.output_folder"
     }
   ],
   "simulation": {
@@ -96,12 +101,14 @@
   },
   "outputs": {
     "adapter": "local_run_store",
-    "run_root": "~/.mn/runs",
+    "folder_path": "~/Downloads/ecosystem_science_research",
     "write_run_store": true,
     "required_artifacts": [
       "simulation_result.json",
       "actor_topology.json",
-      "final_artifact.json"
+      "final_artifact.json",
+      "web_ui.json",
+      "web/index.html"
     ]
   },
   "interfaces": {
@@ -141,12 +148,33 @@
     "reason": "The blueprint is a deterministic synthetic research demonstration."
   },
   "web_ui": {
-    "enabled": false,
+    "enabled": true,
     "input": {
       "adapter": "none"
     },
     "output": {
-      "adapter": "none"
+      "adapter": "static_html",
+      "auto_generate": false,
+      "title": "Ecosystem Simulation Replay"
+    },
+    "dashboard": {
+      "data_source": "embedded_final_artifact",
+      "reads": [
+        "simulation_result.json",
+        "actor_topology.json",
+        "final_artifact.json",
+        "web_ui.json"
+      ],
+      "panels": [
+        "timeline_playback",
+        "global_ecology_metrics",
+        "regional_population_grid",
+        "regional_detail",
+        "lineage_ranking",
+        "invariants",
+        "scientific_explanation",
+        "actor_topology"
+      ]
     }
   }
 }

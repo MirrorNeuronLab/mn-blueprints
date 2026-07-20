@@ -70,6 +70,18 @@ defmodule MnBlueprints.EcosystemScience.V1.ActorSystemTest do
     assert result.simulation.migration_batches == result.simulation.migration_acks
     assert result.simulation.births > 0
     assert result.simulation.mutations > 0
+    assert length(result.simulation.ecology_timeline) == 7
+    assert Enum.map(result.simulation.ecology_timeline, & &1.tick) == Enum.to_list(0..6)
+    assert Enum.sum(Enum.map(result.simulation.ecology_timeline, & &1.births)) == result.simulation.births
+    assert Enum.sum(Enum.map(result.simulation.ecology_timeline, & &1.deaths)) == result.simulation.deaths
+    assert Enum.sum(Enum.map(result.simulation.ecology_timeline, & &1.migrants_in)) == result.simulation.migrants_in
+    assert Enum.sum(Enum.map(result.simulation.ecology_timeline, & &1.migrants_out)) == result.simulation.migrants_out
+
+    Enum.each(result.simulation.region_timelines, fn {_region_id, timeline} ->
+      assert length(timeline) == 7
+      assert Enum.map(timeline, & &1.tick) == Enum.to_list(0..6)
+      assert Enum.all?(timeline, &Map.has_key?(&1, :food_ratio))
+    end)
   end
 
   test "one live OpenAI-compatible response explains but cannot mutate the simulation" do

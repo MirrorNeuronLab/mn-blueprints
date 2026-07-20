@@ -13,5 +13,5 @@ if rg -n '"agent_type"\s*:\s*"(docker|openshell|host_local)"|"runner"\s*:\s*"(do
   exit 1
 fi
 
-test "$(find "$ROOT/payloads/beam" -name '*.ex' -type f | wc -l | tr -d ' ')" -eq 8
+test "$(find "$ROOT/payloads/beam" -name '*.ex' -type f | wc -l | tr -d ' ')" -eq 9
 echo "static guard passed"

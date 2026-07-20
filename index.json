@@ -60,21 +60,22 @@
   },
   {
     "category": "Science",
-    "description": "Run a deterministic 16-region ecosystem through distributed native BEAM actors and use one LLM only to explain the frozen result.",
+    "description": "Run a deterministic 16-region ecosystem through distributed native BEAM actors, publish a replayable static visualization, and use one LLM only to explain the frozen result.",
     "id": "ecosystem_science_research",
     "job_name": "ecosystem-science-research",
     "name": "Ecosystem Science Research",
     "path": "ecosystem_science_research",
     "product": {
       "agent_role": "Distributed native-actor ecosystem simulation and scientific explanation assistant.",
-      "benefit": "Produces deterministic regional and lineage measurements while keeping the LLM boundary limited to explaining the frozen scientific result.",
+      "benefit": "Produces deterministic regional and lineage measurements plus an offline replay UI while keeping the LLM boundary limited to explaining the frozen scientific result.",
       "customizable_for": "Population ecology, migration studies, inherited behavior experiments, and native actor benchmarks.",
-      "how_it_works": "Runs a DNA-driven population simulation across exactly 16 native region actors, aggregates immutable measurements, and uses one LLM only for the final explanation.",
+      "how_it_works": "Runs a DNA-driven population simulation across exactly 16 native region actors, aggregates immutable measurements, generates a self-contained static timeline replay, and uses one LLM only for the final explanation.",
       "input": "Scenario label and deterministic ecosystem parameters such as population, timing, food, migration, mutation, and region settings.",
-      "output": "Immutable regional and lineage measurements plus a non-authoritative explanation.",
+      "output": "Immutable regional and lineage measurements, a static web simulation replay, and a non-authoritative explanation.",
       "problem": "Explore deterministic multi-region population dynamics without using LLMs as simulation agents.",
       "runtime_features": [
-        "Distributed native BEAM actor simulation"
+        "Distributed native BEAM actor simulation",
+        "Self-contained static timeline visualization"
       ],
       "simulation_type": "Deterministic multi-region agent-based ecosystem.",
       "target_users": "Ecologists, simulation researchers, distributed-systems evaluators, and science educators."

@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ecosystem Simulation Replay</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #081312;
+      --panel: #0d1d1a;
+      --panel-2: #112622;
+      --line: #23423b;
+      --ink: #e8f4ec;
+      --muted: #8da99d;
+      --accent: #72d5a2;
+      --accent-2: #f2b66f;
+      --blue: #83b9e8;
+      --danger: #ee8b82;
+      --shadow: 0 16px 36px rgba(0, 0, 0, .22);
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 10% 0%, #173a30 0, var(--bg) 34rem); color: var(--ink); font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    button, select, input { font: inherit; }
+    button, select { color: var(--ink); border: 1px solid var(--line); border-radius: 8px; background: #10231f; }
+    button { min-height: 38px; padding: 0 12px; cursor: pointer; }
+    button:hover, button:focus-visible, select:focus-visible, input:focus-visible { border-color: var(--accent); outline: 2px solid rgba(114, 213, 162, .25); outline-offset: 2px; }
+    button.primary { color: #062016; background: var(--accent); border-color: var(--accent); font-weight: 800; }
+    button.small { min-height: 30px; padding: 0 9px; font-size: 12px; }
+    select { min-height: 36px; padding: 0 9px; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 1.3rem; letter-spacing: -.02em; }
+    h2 { font-size: 1rem; }
+    h3 { font-size: .78rem; text-transform: uppercase; letter-spacing: .11em; color: var(--muted); }
+    .shell { min-height: 100vh; display: grid; grid-template-columns: 300px minmax(0, 1fr); }
+    aside { padding: 22px 18px; border-right: 1px solid var(--line); background: rgba(8, 20, 18, .72); display: grid; align-content: start; gap: 18px; }
+    main { min-width: 0; padding: 24px; display: grid; gap: 18px; align-content: start; }
+    .brand { display: flex; align-items: center; gap: 11px; }
+    .mark { width: 38px; height: 38px; border-radius: 10px; border: 1px solid #4d9f7c; background: radial-gradient(circle at 32% 28%, #f2b66f 0 11%, transparent 12%), radial-gradient(circle at 64% 60%, #83b9e8 0 12%, transparent 13%), linear-gradient(135deg, #214f40, #0d211d); }
+    .subtle, .muted { color: var(--muted); }
+    .subtle { font-size: 12px; }
+    .status { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-size: 12px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 14px var(--accent); }
+    .side-card, .card { border: 1px solid var(--line); border-radius: 12px; background: linear-gradient(145deg, rgba(17, 38, 34, .97), rgba(10, 25, 22, .97)); box-shadow: var(--shadow); }
+    .side-card { padding: 13px; display: grid; gap: 10px; }
+    .card { padding: 17px; min-width: 0; }
+    .stack { display: grid; gap: 8px; }
+    .kv { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .kv span:first-child { color: var(--muted); }
+    .kv strong { font-variant-numeric: tabular-nums; }
+    .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
+    .topbar-copy { display: grid; gap: 5px; }
+    .badges { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
+    .badge { display: inline-flex; align-items: center; min-height: 27px; padding: 0 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); background: rgba(13, 29, 26, .8); font-size: 12px; }
+    .badge.good { color: var(--accent); border-color: rgba(114, 213, 162, .45); }
+    .metrics { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 10px; }
+    .metric { padding: 13px; border: 1px solid var(--line); border-radius: 10px; background: rgba(17, 38, 34, .78); }
+    .metric .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+    .metric .value { margin-top: 4px; font-size: 1.45rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .grid-2 { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(300px, .85fr); gap: 18px; }
+    .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .card-head .tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .chart-wrap { min-height: 280px; border: 1px solid var(--line); border-radius: 9px; background: #091714; overflow: hidden; }
+    svg { display: block; width: 100%; height: 280px; }
+    .chart-grid { stroke: #1a3932; stroke-width: 1; }
+    .chart-axis { fill: var(--muted); font-size: 11px; }
+    .chart-line { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .chart-fill { fill: url(#area); opacity: .24; }
+    .chart-marker { fill: var(--accent-2); stroke: #07120f; stroke-width: 2; }
+    .chart-cursor { stroke: var(--accent-2); stroke-dasharray: 4 4; }
+    .controls { margin-top: 13px; display: grid; gap: 11px; }
+    .control-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .control-row .grow { flex: 1 1 180px; }
+    input[type="range"] { width: 100%; accent-color: var(--accent); }
+    .tick-readout { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; }
+    .region-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .region { text-align: left; padding: 10px; min-height: 88px; background: #0c201c; }
+    .region.selected { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+    .region-title { display: flex; justify-content: space-between; gap: 6px; font-weight: 800; }
+    .region-band { color: var(--accent-2); font-size: 11px; }
+    .region-pop { margin-top: 8px; font-size: 1.15rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .region-meta { color: var(--muted); font-size: 11px; }
+    .detail-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(250px, .8fr); gap: 14px; align-items: start; }
+    .detail-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .detail-stat { padding: 9px; border-radius: 8px; background: #0a1b18; border: 1px solid var(--line); }
+    .detail-stat span { display: block; color: var(--muted); font-size: 11px; }
+    .detail-stat strong { display: block; margin-top: 2px; font-size: 1rem; font-variant-numeric: tabular-nums; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 9px 8px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+    th { color: var(--muted); font-weight: 600; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .invariants { display: grid; gap: 7px; }
+    .invariant { display: flex; align-items: flex-start; gap: 8px; padding: 8px; border-radius: 7px; background: #0a1b18; font-size: 12px; }
+    .check { color: var(--accent); font-weight: 900; }
+    .warning { border-left: 3px solid var(--accent-2); padding: 8px 10px; color: #e4caa3; background: rgba(72, 49, 25, .25); font-size: 12px; }
+    .copy { white-space: pre-wrap; color: #cce3d6; font-size: 13px; }
+    .footer-note { color: var(--muted); font-size: 11px; }
+    @media (max-width: 1100px) { .shell { grid-template-columns: 240px minmax(0, 1fr); } .metrics { grid-template-columns: repeat(3, 1fr); } .grid-2, .detail-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 760px) { .shell { display: block; } aside { border-right: 0; border-bottom: 1px solid var(--line); } main { padding: 16px; } .topbar { display: grid; } .badges { justify-content: flex-start; } .metrics { grid-template-columns: repeat(2, 1fr); } .region-grid { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <script id="ecosystem-data" type="application/json">__ECOSYSTEM_UI_DATA__</script>
+  <div class="shell">
+    <aside>
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div><h1>Ecosystem Replay</h1><p class="subtle">Deterministic science workspace</p></div>
+      </div>
+      <div class="status"><span class="dot" aria-hidden="true"></span><span id="run-status">Frozen result · replay ready</span></div>
+      <section class="side-card" aria-labelledby="run-summary-heading">
+        <h3 id="run-summary-heading">Run summary</h3>
+        <div id="run-summary" class="stack"></div>
+      </section>
+      <section class="side-card" aria-labelledby="invariants-heading">
+        <h3 id="invariants-heading">Deterministic checks</h3>
+        <div id="invariants" class="invariants"></div>
+      </section>
+      <p class="footer-note">Synthetic research aid. The simulation measurements are authoritative for this run; interpretation is non-authoritative.</p>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div class="topbar-copy"><h1>How the ecosystem evolves</h1><p class="subtle">Scrub the frozen simulation one tick at a time, then inspect a region or lineage.</p></div>
+        <div class="badges"><span class="badge good">16 regions</span><span class="badge" id="seed-badge"></span><span class="badge" id="duration-badge"></span></div>
+      </header>
+
+      <section id="metrics" class="metrics" aria-label="Simulation totals"></section>
+
+      <section class="grid-2">
+        <article class="card">
+          <div class="card-head">
+            <div><h2 id="global-chart-title">Global population</h2><p class="subtle" id="chart-subtitle">All regions · aggregate timeline</p></div>
+            <div class="tools"><label class="subtle" for="metric-select">Metric</label><select id="metric-select" aria-label="Global metric"><option value="population">Population</option><option value="food_ratio">Food ratio</option><option value="births">Births</option><option value="deaths">Deaths</option><option value="migration">Migration</option></select></div>
+          </div>
+          <div class="chart-wrap"><svg id="global-chart" viewBox="0 0 760 280" role="img" aria-label="Global ecosystem timeline"></svg></div>
+          <div class="controls">
+            <div class="control-row"><button id="play-button" class="primary" type="button" aria-label="Play simulation">Play</button><button id="previous-button" class="small" type="button" aria-label="Previous tick">◀</button><button id="next-button" class="small" type="button" aria-label="Next tick">▶</button><label class="subtle" for="speed-select">Speed</label><select id="speed-select" aria-label="Playback speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select><span class="grow"></span><span id="current-value" class="badge"></span></div>
+            <input id="timeline-slider" type="range" min="0" max="0" value="0" step="1" aria-label="Simulation timeline" />
+            <div class="tick-readout"><span id="tick-label">Tick 0</span><span id="time-label">0 s elapsed</span><span id="tick-total"></span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><div><h2>Regional populations</h2><p class="subtle">Select a region to open its timeline.</p></div><span id="region-count" class="badge"></span></div>
+          <div id="region-grid" class="region-grid" aria-label="Regional population grid"></div>
+        </article>
+      </section>
+
+      <section class="card">
+        <div class="card-head"><div><h2 id="region-title">Region detail</h2><p class="subtle" id="region-subtitle"></p></div><div class="tools"><label class="subtle" for="region-metric-select">Metric</label><select id="region-metric-select" aria-label="Regional metric"><option value="population">Population</option><option value="food_ratio">Food ratio</option><option value="births">Births</option><option value="deaths">Deaths</option><option value="migration">Migration</option></select></div></div>
+        <div class="detail-grid"><div class="chart-wrap"><svg id="region-chart" viewBox="0 0 760 280" role="img" aria-label="Selected regional timeline"></svg></div><div id="region-stats" class="detail-stats"></div></div>
+      </section>
+
+      <section class="grid-2">
+        <article class="card"><div class="card-head"><div><h2>Retained DNA lineages</h2><p class="subtle">Final-state ranking from the deterministic collector.</p></div></div><div class="table-wrap"><table><thead><tr><th>Lineage</th><th class="num">Alive</th><th class="num">Generation</th><th class="num">Energy</th><th>Regions</th></tr></thead><tbody id="lineage-table"></tbody></table></div></article>
+        <article class="card"><div class="card-head"><div><h2>Scientific reading</h2><p class="subtle">Explanation and model boundary</p></div></div><div id="explanation" class="stack"></div></article>
+      </section>
+
+      <section class="card"><div class="card-head"><div><h2>Actor topology</h2><p class="subtle">Runtime evidence recorded with the frozen result.</p></div></div><div id="topology" class="stack"></div></section>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+      const DATA = JSON.parse(document.getElementById("ecosystem-data").textContent);
+      const VIS = DATA.visualization || {};
+      const globalTimeline = VIS.global_timeline || [];
+      const regions = VIS.regions || {};
+      const regionIds = Object.keys(regions).sort();
+      const tickSeconds = Number(VIS.tick_seconds || 1);
+      const metricInfo = {
+        population: { label: "Population", key: "population", color: "#72d5a2", format: value => formatNumber(value) },
+        food_ratio: { label: "Food ratio", key: "food_ratio", color: "#83b9e8", format: value => `${Math.round(Number(value || 0) * 100)}%` },
+        births: { label: "Births", key: "births", color: "#f2b66f", format: value => formatNumber(value) },
+        deaths: { label: "Deaths", key: "deaths", color: "#ee8b82", format: value => formatNumber(value) },
+        migration: { label: "Migration", key: "migration", color: "#b89fea", format: value => formatNumber(value) }
+      };
+      let currentIndex = 0;
+      let selectedRegion = regionIds[0] || null;
+      let playing = false;
+      let timer = null;
+
+      const $ = id => document.getElementById(id);
+      const formatNumber = value => Number(value || 0).toLocaleString();
+      const formatMetric = (metric, value) => metricInfo[metric].format(value);
+      const escapeHtml = value => String(value ?? "").replace(/[&<>\"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[char]));
+      const recordForMetric = (record, metric) => metric === "migration" ? Number(record.migrants_in || 0) + Number(record.migrants_out || 0) : Number(record[metricInfo[metric].key] || 0);
+      const currentGlobal = () => globalTimeline[currentIndex] || globalTimeline[globalTimeline.length - 1] || {};
+      const currentRegion = id => (regions[id] && regions[id].timeline && regions[id].timeline[currentIndex]) || {};
+      const profileFor = id => regions[id] && regions[id].profile || {};
+
+      function renderSummary() {
+        const last = globalTimeline[globalTimeline.length - 1] || {};
+        const initial = globalTimeline[0] || {};
+        $("run-summary").innerHTML = [
+          ["Seed", VIS.simulation_seed], ["Duration", `${VIS.duration_seconds || 0} s`], ["Ticks", VIS.simulated_ticks || 0],
+          ["Initial population", formatNumber(initial.population)], ["Final population", formatNumber(last.population)],
+          ["Births / deaths", `${formatNumber(VIS.births)} / ${formatNumber(VIS.deaths)}`]
+        ].map(([label, value]) => `<div class="kv"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+        $("seed-badge").textContent = `seed ${VIS.simulation_seed}`;
+        $("duration-badge").textContent = `${VIS.duration_seconds || 0}s · ${VIS.simulated_ticks || 0} ticks`;
+        $("region-count").textContent = `${regionIds.length} regions`;
+      }
+
+      function renderMetrics() {
+        const record = currentGlobal();
+        const items = [["Population", record.population], ["Food ratio", `${Math.round(Number(record.food_ratio || 0) * 100)}%`], ["Births", record.births], ["Deaths", record.deaths], ["Migration", Number(record.migrants_in || 0) + Number(record.migrants_out || 0)]];
+        $("metrics").innerHTML = items.map(([label, value]) => `<div class="metric"><div class="label">${escapeHtml(label)}</div><div class="value">${escapeHtml(typeof value === "number" ? formatNumber(value) : value)}</div></div>`).join("");
+      }
+
+      function renderRegions() {
+        $("region-grid").innerHTML = regionIds.map(id => {
+          const record = currentRegion(id);
+          const profile = profileFor(id);
+          const selected = id === selectedRegion ? " selected" : "";
+          return `<button class="region${selected}" type="button" data-region="${escapeHtml(id)}" aria-label="Select ${escapeHtml(id)}" aria-pressed="${id === selectedRegion}"><span class="region-title"><span>${escapeHtml(id.replace("region_", "R"))}</span><span class="region-band">${escapeHtml(profile.band || "")}</span></span><div class="region-pop">${formatNumber(record.population)}</div><div class="region-meta">food ${Math.round(Number(record.food_ratio || 0) * 100)}% · ${formatNumber(Number(record.migrants_in || 0) + Number(record.migrants_out || 0))} migrants</div></button>`;
+        }).join("");
+        document.querySelectorAll("[data-region]").forEach(button => button.addEventListener("click", () => { selectedRegion = button.dataset.region; renderAll(); }));
+      }
+
+      function renderSvg(svg, timeline, metric, title) {
+        const width = 760, height = 280, left = 52, right = 18, top = 20, bottom = 34;
+        const plotWidth = width - left - right, plotHeight = height - top - bottom;
+        const info = metricInfo[metric];
+        const values = timeline.map(record => recordForMetric(record, metric));
+        const maxValue = Math.max(...values, 1);
+        const minValue = Math.min(...values, 0);
+        const range = maxValue - minValue || 1;
+        const x = index => left + (timeline.length <= 1 ? 0 : index / (timeline.length - 1)) * plotWidth;
+        const y = value => top + (1 - (value - minValue) / range) * plotHeight;
+        const points = values.map((value, index) => `${x(index).toFixed(1)},${y(value).toFixed(1)}`).join(" ");
+        const area = `${left},${height - bottom} ${points} ${x(values.length - 1)},${height - bottom}`;
+        const cursorX = x(currentIndex);
+        const grid = [0, .25, .5, .75, 1].map(ratio => { const yy = top + ratio * plotHeight; const value = maxValue - ratio * range; return `<line class="chart-grid" x1="${left}" y1="${yy}" x2="${width - right}" y2="${yy}" /><text class="chart-axis" x="${left - 8}" y="${yy + 4}" text-anchor="end">${escapeHtml(info.format(value))}</text>`; }).join("");
+        const firstTick = timeline[0] && timeline[0].tick || 0, lastTick = timeline[timeline.length - 1] && timeline[timeline.length - 1].tick || 0;
+        const currentValue = values[currentIndex] ?? 0;
+        svg.innerHTML = `<defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${info.color}" /><stop offset="1" stop-color="${info.color}" stop-opacity="0" /></linearGradient></defs>${grid}<line class="chart-cursor" x1="${cursorX}" y1="${top}" x2="${cursorX}" y2="${height - bottom}" /><polygon class="chart-fill" points="${area}" /><polyline class="chart-line" style="stroke:${info.color}" points="${points}" /><circle class="chart-marker" cx="${cursorX}" cy="${y(currentValue)}" r="5" style="fill:${info.color}" /><text class="chart-axis" x="${left}" y="${height - 10}">tick ${firstTick}</text><text class="chart-axis" x="${width - right}" y="${height - 10}" text-anchor="end">tick ${lastTick}</text><title>${escapeHtml(title)}: ${escapeHtml(info.format(currentValue))}</title>`;
+      }
+
+      function renderCharts() {
+        const globalMetric = $("metric-select").value;
+        const regionMetric = $("region-metric-select").value;
+        const region = regions[selectedRegion] || {};
+        $("global-chart-title").textContent = `Global ${metricInfo[globalMetric].label.toLowerCase()}`;
+        $("chart-subtitle").textContent = `All regions · ${globalTimeline.length} recorded frames`;
+        renderSvg($("global-chart"), globalTimeline, globalMetric, "Global ecosystem timeline");
+        renderSvg($("region-chart"), region.timeline || [], regionMetric, `${selectedRegion || "Region"} timeline`);
+        $("current-value").textContent = `${metricInfo[globalMetric].label}: ${formatMetric(globalMetric, recordForMetric(currentGlobal(), globalMetric))}`;
+      }
+
+      function renderRegionDetail() {
+        const profile = profileFor(selectedRegion), record = currentRegion(selectedRegion);
+        $("region-title").textContent = selectedRegion ? `${selectedRegion} detail` : "Region detail";
+        $("region-subtitle").textContent = selectedRegion ? `${profile.band || "balanced"} resource profile · node ${profile.assigned_node || "local"}` : "No region selected";
+        const stats = [["Population", formatNumber(record.population)], ["Food", `${formatNumber(record.food)} / ${formatNumber(record.food_capacity)}`], ["Food ratio", `${Math.round(Number(record.food_ratio || 0) * 100)}%`], ["Births", formatNumber(record.births)], ["Deaths", formatNumber(record.deaths)], ["Migration", formatNumber(Number(record.migrants_in || 0) + Number(record.migrants_out || 0))]];
+        $("region-stats").innerHTML = stats.map(([label, value]) => `<div class="detail-stat"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+      }
+
+      function renderLineages() {
+        const lineages = VIS.top_lineages || [];
+        $("lineage-table").innerHTML = lineages.length ? lineages.map(lineage => `<tr><td title="${escapeHtml(lineage.dna_key)}">${escapeHtml((lineage.dna_key || "").slice(0, 22))}</td><td class="num">${formatNumber(lineage.alive)}</td><td class="num">${formatNumber(lineage.generation_max)}</td><td class="num">${Number(lineage.avg_energy || 0).toFixed(1)}</td><td>${escapeHtml((lineage.regions_present || []).join(", "))}</td></tr>`).join("") : `<tr><td colspan="5" class="muted">No living lineage remained to rank.</td></tr>`;
+      }
+
+      function renderExplanation() {
+        const explanation = DATA.explanation || {};
+        const findings = explanation.findings || [];
+        const limitations = explanation.limitations || VIS.scientific_limitations || [];
+        $("explanation").innerHTML = `<p class="copy">${escapeHtml(explanation.summary || "No explanation was recorded.")}</p>${findings.map(item => `<div class="warning">${escapeHtml(item)}</div>`).join("")}<h3>Limitations</h3>${limitations.map(item => `<div class="warning">${escapeHtml(item)}</div>`).join("")}${(DATA.warnings || []).map(item => `<div class="warning">${escapeHtml(item)}</div>`).join("")}`;
+      }
+
+      function renderInvariants() {
+        const invariants = VIS.invariants || {};
+        const labels = { exactly_16_regions: "Exactly 16 regions", all_regions_completed_every_tick: "All tick barriers completed", population_conservation: "Population conserved", migration_conserves_global_population: "Migration conserved globally", migration_batches_acknowledged_exactly_once: "Migration batches acknowledged", dna_within_trait_bounds: "DNA within declared bounds", direct_pid_transport_only: "Direct PID transport only" };
+        $("invariants").innerHTML = Object.entries(labels).map(([key, label]) => `<div class="invariant"><span class="check">${invariants[key] ? "✓" : "!"}</span><span>${escapeHtml(label)}</span></div>`).join("");
+      }
+
+      function renderTopology() {
+        const topology = VIS.topology || {};
+        const domains = topology.domain_actors || {};
+        $("topology").innerHTML = [["Transport", topology.transport || "native_beam_direct_pid"], ["Connected nodes", (topology.connected_nodes || []).join(", ") || "local"], ["Actors", `world ${domains.world || 1} · regions ${domains.regions || regionIds.length} · collector ${domains.collector || 1} · explainer ${domains.final_explainer || 1}`], ["Cross-node placement", topology.cross_node_region_placement ? "yes" : "no"], ["Cleanup", topology.actors_cleaned_up ? "all temporary actors stopped" : "not recorded"]].map(([label, value]) => `<div class="kv"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+      }
+
+      function setIndex(index) {
+        currentIndex = Math.max(0, Math.min(globalTimeline.length - 1, index));
+        $("timeline-slider").value = String(currentIndex);
+        const record = currentGlobal();
+        $("tick-label").textContent = `Tick ${record.tick || 0}`;
+        $("time-label").textContent = `${formatNumber((record.tick || 0) * tickSeconds)} s elapsed`;
+        $("tick-total").textContent = `${globalTimeline.length} frames`;
+        renderMetrics(); renderRegions(); renderRegionDetail(); renderCharts();
+      }
+
+      function setPlaying(value) {
+        playing = value;
+        $("play-button").textContent = playing ? "Pause" : "Play";
+        $("play-button").setAttribute("aria-label", playing ? "Pause simulation" : "Play simulation");
+        if (timer) clearInterval(timer);
+        timer = playing ? setInterval(() => { if (currentIndex >= globalTimeline.length - 1) { setPlaying(false); return; } setIndex(currentIndex + 1); }, 600 / Number($("speed-select").value)) : null;
+      }
+
+      function renderAll() { renderSummary(); renderMetrics(); renderRegions(); renderRegionDetail(); renderLineages(); renderExplanation(); renderInvariants(); renderTopology(); setIndex(currentIndex); }
+      $("metric-select").addEventListener("change", renderCharts);
+      $("region-metric-select").addEventListener("change", renderCharts);
+      $("timeline-slider").addEventListener("input", event => setIndex(Number(event.target.value)));
+      $("play-button").addEventListener("click", () => setPlaying(!playing));
+      $("previous-button").addEventListener("click", () => setIndex(currentIndex - 1));
+      $("next-button").addEventListener("click", () => setIndex(currentIndex + 1));
+      $("speed-select").addEventListener("change", () => { if (playing) setPlaying(true); });
+      $("timeline-slider").max = String(Math.max(globalTimeline.length - 1, 0));
+      renderAll();
+    })();
+  </script>
+</body>
+</html>

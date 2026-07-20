@@ -108,7 +108,18 @@ defmodule MnBlueprints.EcosystemScience.V1.Core do
       migration_inbox: %{}, births: 0, deaths: 0, mutations: 0,
       migrants_in: 0, migrants_out: 0,
       next_serial: length(animals), history: [],
-      population_series: [%{tick: 0, population: length(animals)}]
+      population_series: [%{tick: 0, population: length(animals)}],
+      ecology_series: [%{
+        tick: 0,
+        population: length(animals),
+        food: round2(bootstrap.initial_food),
+        food_capacity: round2(bootstrap.food_capacity),
+        food_ratio: round2(bootstrap.initial_food / max(bootstrap.food_capacity, 1.0)),
+        births: 0,
+        deaths: 0,
+        migrants_in: 0,
+        migrants_out: 0
+      }]
     }
   end
 
@@ -135,9 +146,21 @@ defmodule MnBlueprints.EcosystemScience.V1.Core do
       |> Map.update!(:history, fn history -> append_history_tail(history, %{
         tick: tick, population: length(state.animals), food: round2(state.food),
         food_capacity: round2(state.food_capacity),
-        food_ratio: round2(state.food / max(state.food_capacity, 1.0)), births: births, deaths: dead
+        food_ratio: round2(state.food / max(state.food_capacity, 1.0)), births: births, deaths: dead,
+        migrants_in: length(arrivals), migrants_out: outgoing
       }) end)
       |> Map.update!(:population_series, &(&1 ++ [%{tick: tick, population: length(state.animals)}]))
+      |> Map.update!(:ecology_series, &(&1 ++ [%{
+        tick: tick,
+        population: length(state.animals),
+        food: round2(state.food),
+        food_capacity: round2(state.food_capacity),
+        food_ratio: round2(state.food / max(state.food_capacity, 1.0)),
+        births: births,
+        deaths: dead,
+        migrants_in: length(arrivals),
+        migrants_out: outgoing
+      }]))
 
     {state, length(arrivals), births, dead, migration_payloads, outgoing}
   end
@@ -169,6 +192,7 @@ defmodule MnBlueprints.EcosystemScience.V1.Core do
       migrants_in: state.migrants_in,
       migrants_out: state.migrants_out, resource_profile: state.resource_profile,
       history_tail: Enum.take(state.history, -3), population_series: state.population_series,
+      ecology_series: state.ecology_series,
       top_lineages: top_lineages, dna_within_bounds: dna_within_bounds?(state.animals)
     }
   end
@@ -211,7 +235,10 @@ defmodule MnBlueprints.EcosystemScience.V1.Core do
       resource_profiles: Enum.into(region_summaries, %{}, &{&1.region_id, &1.resource_profile}),
       region_history_tail: Enum.into(region_summaries, %{}, &{&1.region_id, Enum.take(&1.history_tail, -3)}),
       region_nodes: Enum.into(region_summaries, %{}, &{&1.region_id, &1.assigned_node}),
-      population_timeline: aggregate_population_timeline(region_summaries), top_10_dna: ranked
+      population_timeline: aggregate_population_timeline(region_summaries),
+      region_timelines: Enum.into(region_summaries, %{}, &{&1.region_id, &1.ecology_series}),
+      ecology_timeline: aggregate_ecology_timeline(region_summaries),
+      top_10_dna: ranked
     }
   end
 
@@ -390,6 +417,29 @@ defmodule MnBlueprints.EcosystemScience.V1.Core do
       |> Enum.map(fn {tick, entries} ->
         %{tick: tick, population: Enum.sum(Enum.map(entries, & &1.population))}
       end) |> Enum.sort_by(& &1.tick)
+  end
+
+  defp aggregate_ecology_timeline(summaries) do
+    summaries
+    |> Enum.flat_map(fn summary -> summary.ecology_series end)
+    |> Enum.group_by(& &1.tick)
+    |> Enum.map(fn {tick, entries} ->
+      food = Enum.sum(Enum.map(entries, & &1.food))
+      food_capacity = Enum.sum(Enum.map(entries, & &1.food_capacity))
+
+      %{
+        tick: tick,
+        population: Enum.sum(Enum.map(entries, & &1.population)),
+        food: round2(food),
+        food_capacity: round2(food_capacity),
+        food_ratio: round2(food / max(food_capacity, 1.0)),
+        births: Enum.sum(Enum.map(entries, & &1.births)),
+        deaths: Enum.sum(Enum.map(entries, & &1.deaths)),
+        migrants_in: Enum.sum(Enum.map(entries, & &1.migrants_in)),
+        migrants_out: Enum.sum(Enum.map(entries, & &1.migrants_out))
+      }
+    end)
+    |> Enum.sort_by(& &1.tick)
   end
 
   defp rand_between(seed, index, salt, low, high) do

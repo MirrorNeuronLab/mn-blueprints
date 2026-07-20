@@ -1,7 +1,7 @@
-defmodule MnBlueprints.EcosystemScience.V1.BlueprintAgent do
+defmodule MnBlueprints.EcosystemScience.V1.ReplayBlueprintAgent do
   use MirrorNeuron.AgentTemplate
 
-  alias MnBlueprints.EcosystemScience.V1.{Core, WorldActor}
+  alias MnBlueprints.EcosystemScience.V1.{Core, WebUI, WorldActor}
 
   @defaults %{
     seed: 517_498_978,
@@ -15,7 +15,8 @@ defmodule MnBlueprints.EcosystemScience.V1.BlueprintAgent do
     mutation_rate: 0.05,
     tick_delay_ms: 0,
     local_top_k: 20,
-    require_multi_node: false
+    require_multi_node: false,
+    output_folder: "~/Downloads/ecosystem_science_research"
   }
 
   @impl true
@@ -33,7 +34,7 @@ defmodule MnBlueprints.EcosystemScience.V1.BlueprintAgent do
     with {:ok, config} <- normalize_config(input),
          options <- world_options(state.node_config),
          {:ok, result} <- WorldActor.run(config, options, 120_000),
-         {:ok, artifact_paths, final_artifact} <- write_artifacts(result, state.node_config, context) do
+         {:ok, artifact_paths, final_artifact} <- write_artifacts(result, config, state.node_config, context) do
       event_type = if result.llm_usage.mode == "fallback",
         do: :ecosystem_explanation_fallback, else: :ecosystem_explanation_completed
 
@@ -51,7 +52,9 @@ defmodule MnBlueprints.EcosystemScience.V1.BlueprintAgent do
          {:emit, "simulation_done", output},
          {:complete_step, output},
          {:event, :ecosystem_artifacts_written,
-          %{"artifacts" => Map.values(artifact_paths)}}
+          %{"artifacts" => Map.values(artifact_paths)}},
+         {:event, :ecosystem_web_ui_written,
+          %{"adapter" => "static_html", "path" => artifact_paths["web_index"]}}
        ]}
     else
       {:error, reason} -> {:error, reason, state}
@@ -72,6 +75,7 @@ defmodule MnBlueprints.EcosystemScience.V1.BlueprintAgent do
     requested_regions = fetch(ecosystem, "region_count", 16)
 
     config = %{
+      output_folder: string(input, "output_folder", @defaults.output_folder),
       seed: integer(ecosystem, "seed", @defaults.seed),
       total_animals: integer(ecosystem, "total_animals", @defaults.total_animals),
       duration_seconds: integer(ecosystem, "duration_seconds", @defaults.duration_seconds),
@@ -117,24 +121,32 @@ defmodule MnBlueprints.EcosystemScience.V1.BlueprintAgent do
     }
   end
 
-  defp write_artifacts(result, node_config, context) do
+  defp write_artifacts(result, config, node_config, context) do
     environment = Map.get(node_config, "environment", %{})
-    runs_root = Map.get(environment, "MN_RUNS_ROOT", Path.expand("~/.mn/runs"))
+    output_folder =
+      environment
+      |> Map.get("MN_JOB_OUTPUT_DIR", config.output_folder)
+      |> Path.expand()
     run_id = Map.get(environment, "MN_RUN_ID", context.job_id)
-    run_dir = if Path.basename(runs_root) == run_id, do: runs_root, else: Path.join(runs_root, run_id)
+    run_dir = output_folder
     File.mkdir_p!(run_dir)
+
+    visualization = build_visualization(result.simulation, result.topology, config)
+    simulation = Map.put(result.simulation, :visualization, visualization)
 
     paths = %{
       "simulation_result" => Path.join(run_dir, "simulation_result.json"),
       "actor_topology" => Path.join(run_dir, "actor_topology.json"),
-      "final_artifact" => Path.join(run_dir, "final_artifact.json")
+      "final_artifact" => Path.join(run_dir, "final_artifact.json"),
+      "web_ui" => Path.join(run_dir, "web_ui.json"),
+      "web_index" => Path.join(run_dir, "web/index.html")
     }
 
     final_artifact = %{
       "schema_version" => "mn.blueprint.final_artifact.v1",
       "blueprint_id" => "ecosystem_science_research",
       "status" => "complete",
-      "simulation" => result.simulation,
+      "simulation" => simulation,
       "topology" => result.topology,
       "explanation" => result.explanation,
       "llm_usage" => result.llm_usage,
@@ -145,7 +157,28 @@ defmodule MnBlueprints.EcosystemScience.V1.BlueprintAgent do
       }
     }
 
-    atomic_json!(paths["simulation_result"], result.simulation)
+    ui_data = %{
+      "schema_version" => "mn.ecosystem.web_ui_data.v1",
+      "blueprint_id" => "ecosystem_science_research",
+      "visualization" => visualization,
+      "explanation" => result.explanation,
+      "llm_usage" => result.llm_usage,
+      "warnings" => result.warnings,
+      "authority_boundary" => final_artifact["authority_boundary"]
+    }
+
+    {:ok, web_handle, _web_index_path, _web_handle_path} =
+      WebUI.write!(
+        Map.fetch!(node_config, "__payloads_path"),
+        run_dir,
+        run_id,
+        "ecosystem_science_research",
+        ui_data
+      )
+
+    final_artifact = Map.put(final_artifact, "web_ui", web_handle)
+
+    atomic_json!(paths["simulation_result"], simulation)
     atomic_json!(paths["actor_topology"], result.topology)
     atomic_json!(paths["final_artifact"], final_artifact)
 
@@ -160,6 +193,35 @@ defmodule MnBlueprints.EcosystemScience.V1.BlueprintAgent do
     File.rename!(temporary, path)
   end
 
+  defp build_visualization(simulation, topology, config) do
+    regions = Enum.into(Core.region_ids(), %{}, fn region_id ->
+      profile = Map.get(simulation.resource_profiles, region_id, %{})
+      profile = Map.put(profile, :assigned_node, Map.get(simulation.region_nodes, region_id, "local"))
+
+      {region_id, %{
+        profile: profile,
+        timeline: Map.get(simulation.region_timelines, region_id, [])
+      }}
+    end)
+
+    %{
+      schema_version: "mn.ecosystem.visualization.v1",
+      simulation_seed: simulation.simulation_seed,
+      tick_seconds: config.tick_seconds,
+      duration_seconds: config.duration_seconds,
+      simulated_ticks: simulation.simulated_ticks,
+      population_alive: simulation.population_alive,
+      births: simulation.births,
+      deaths: simulation.deaths,
+      global_timeline: simulation.ecology_timeline,
+      regions: regions,
+      top_lineages: simulation.top_10_dna,
+      invariants: simulation.invariants,
+      topology: topology,
+      scientific_limitations: simulation.scientific_limitations
+    }
+  end
+
   defp fetch(map, key, default) when is_map(map) do
     Map.get(map, key, Map.get(map, String.to_atom(key), default))
   end
@@ -169,6 +231,19 @@ defmodule MnBlueprints.EcosystemScience.V1.BlueprintAgent do
       value when is_integer(value) -> value
       value when is_float(value) -> trunc(value)
       value when is_binary(value) -> String.to_integer(value)
+    end
+  end
+
+  defp string(map, key, default) do
+    case fetch(map, key, default) do
+      value when is_binary(value) ->
+        case String.trim(value) do
+          "" -> default
+          trimmed -> trimmed
+        end
+
+      _ ->
+        default
     end
   end
 

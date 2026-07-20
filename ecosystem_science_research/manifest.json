@@ -5,22 +5,23 @@
   "id": "ecosystem_science_research",
   "name": "Ecosystem Science Research",
   "job_name": "ecosystem-science-research",
-  "description": "Run a deterministic 16-region ecosystem through distributed native BEAM actors and use one LLM only to explain the frozen result.",
+  "description": "Run a deterministic 16-region ecosystem through distributed native BEAM actors, publish a replayable static visualization, and use one LLM only to explain the frozen result.",
   "license": "LICENSE.md",
   "metadata": {
     "blueprint_id": "ecosystem_science_research",
     "standard": "1.0",
     "name": "Ecosystem Science Research",
     "category": "Science",
-    "description": "Distributed native-actor ecosystem simulation with DNA-driven behavior and a final explanatory LLM boundary.",
+    "description": "Distributed native-actor ecosystem simulation with DNA-driven behavior, a replayable static web visualization, and a final explanatory LLM boundary.",
     "problem_solved": "Explore deterministic multi-region population dynamics without using LLMs as simulation agents.",
     "target_user": "Ecologists, simulation researchers, distributed-systems evaluators, and science educators.",
     "customizable_for": "Population ecology, migration studies, inherited behavior experiments, and native actor benchmarks.",
     "simulation_type": "Deterministic multi-region agent-based ecosystem.",
     "runtime_features": [
-      "Distributed native BEAM actor simulation"
+      "Distributed native BEAM actor simulation",
+      "Self-contained static timeline visualization"
     ],
-    "output": "Immutable regional and lineage measurements plus a non-authoritative explanation.",
+    "output": "Immutable regional and lineage measurements, a self-contained static simulation replay, and a non-authoritative explanation.",
     "output_contract": "mn.blueprint.final_artifact.v1",
     "interfaces": {
       "config": "config/default.json",
@@ -46,7 +47,7 @@
         "agent_type": "module",
         "type": "generic",
         "config": {
-          "module": "MnBlueprints.EcosystemScience.V1.BlueprintAgent",
+          "module": "MnBlueprints.EcosystemScience.V1.ReplayBlueprintAgent",
           "module_source": "beam/60_blueprint_agent.ex",
           "output_message_type": "simulation_done",
           "beacon_enabled": true,
@@ -199,6 +200,7 @@
       "world": [
         {
           "scenario": "ecosystem_competition",
+          "output_folder": "~/Downloads/ecosystem_science_research",
           "ecosystem": {
             "seed": 517498978,
             "total_animals": 2000,
@@ -264,6 +266,14 @@
         "required": true,
         "description": "Scenario label."
       },
+      "output_folder": {
+        "description": "Local folder where the completed simulation artifacts and replay UI are written.",
+        "example": "~/Downloads/ecosystem_science_research",
+        "path_kind": "directory",
+        "privacy": "confidential",
+        "required": true,
+        "type": "local_path"
+      },
       "ecosystem": {
         "type": "object",
         "required": true,
@@ -280,6 +290,7 @@
         "ecosystem_explanation_completed",
         "ecosystem_explanation_fallback",
         "ecosystem_artifacts_written",
+        "ecosystem_web_ui_written",
         "run_completed",
         "run_failed"
       ]
@@ -288,22 +299,36 @@
       "profile": "standard_run_store",
       "primary": {
         "id": "final_artifact",
-        "path": "final_artifact.json",
+        "path": "<outputs.folder_path>/final_artifact.json",
         "type": "final_artifact",
         "schema_version": "mn.blueprint.final_artifact.v1"
       },
       "artifacts": [
         {
           "artifact_id": "simulation_result",
-          "path": "simulation_result.json"
+          "path": "<outputs.folder_path>/simulation_result.json"
         },
         {
           "artifact_id": "actor_topology",
-          "path": "actor_topology.json"
+          "path": "<outputs.folder_path>/actor_topology.json"
         },
         {
           "artifact_id": "final_artifact",
-          "path": "final_artifact.json"
+          "path": "<outputs.folder_path>/final_artifact.json"
+        },
+        {
+          "artifact_id": "web_ui",
+          "path": "<outputs.folder_path>/web_ui.json",
+          "producer": "native_web_ui",
+          "schema_version": "mn.blueprint.web_ui.v1",
+          "type": "web_ui"
+        },
+        {
+          "artifact_id": "web_index",
+          "path": "<outputs.folder_path>/web/index.html",
+          "producer": "native_web_ui",
+          "schema_version": "mn.ecosystem.visualization.v1",
+          "type": "static_html"
         }
       ]
     }

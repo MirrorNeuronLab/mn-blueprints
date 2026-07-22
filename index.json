@@ -97,6 +97,39 @@
     }
   },
   {
+    "category": "Science",
+    "description": "A continuously running drug-discovery research service. Give it a disease or target profile, screening criteria, optional candidate seeds, literature notes, and an input folder; it uses BioTarget and the custom homerquan/DrugClip text-to-molecular-graph model for continuous candidate generation, folding, evaluation, and review-only cycle reports until manually stopped.",
+    "id": "drug_discovery_research_assistant",
+    "job_name": "drug-discovery-research-assistant",
+    "name": "Drug Discovery Research Assistant",
+    "path": "drug_discovery_research_assistant",
+    "product": {
+      "agent_role": "Continuous native service coordinator for BioTarget and custom DrugClip graph-text candidate generation, folding, simulation, and evidence review.",
+      "benefit": "Keeps BioTarget computational discovery cycles moving while distributing DrugClip graph-text screening, folding, and simulation across cluster boxes with reviewable evidence.",
+      "customizable_for": "Drug discovery, target-focused virtual screening, molecular-generation pipelines, folding, simulation, and scientific research operations.",
+      "how_it_works": "Runs a manual-stop native service that dispatches BioTarget Stage C candidate generation, DrugClip graph-text screening, folding, and simulation across worker pools before fanning results into cycle reports.",
+      "input": "Disease or target profile, screening criteria, candidate seeds, literature notes, adapter commands, native dispatcher configuration, and local supporting files.",
+      "output": "Per-cycle candidate, folding, DrugCLIP, simulation, state, risk, and human-review artifacts.",
+      "problem": "Discovery work needs continuous, traceable candidate generation and scientific screening without collapsing cluster-scale folding and simulation into a single serial worker.",
+      "runtime_features": [
+        "manual-stop continuous service",
+        "native host workers",
+        "cross-box fanout/fanin",
+        "custom DrugClip text-molecular-graph alignment",
+        "parallel folding and simulation",
+        "product input contract",
+        "transparent run status",
+        "human control policy",
+        "artifact records",
+        "run-store observability dashboard"
+      ],
+      "simulation_type": "Continuous distributed BioTarget computational discovery service with custom DrugClip graph-text alignment.",
+      "target_users": "Computational biology researchers, scientific AI platform teams, and research operations groups."
+    },
+    "type": "service",
+    "workflow_id": "drug_discovery_research_assistant_v1"
+  },
+  {
     "category": "Runtime",
     "description": "Promote a healthy candidate revision of a tiny service.",
     "id": "demo_canary_deployment",

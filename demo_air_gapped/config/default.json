@@ -1,0 +1,40 @@
+{
+  "budgets": {
+    "max_llm_calls": 1,
+    "max_llm_tokens": 600,
+    "max_runtime_seconds": 180
+  },
+  "identity": {
+    "blueprint_id": "demo_air_gapped",
+    "name": "Air-Gapped Payload Demo"
+  },
+  "inputs": {
+    "adapter": "mock",
+    "env": "MN_BLUEPRINT_INPUT_JSON",
+    "payload": {
+      "note": "A field gateway reported intermittent latency after a cache rollout. No data left the site. Operators want likely causes and three safe checks."
+    }
+  },
+  "llm": {
+    "backend": "llama.cpp",
+    "context_size": 4096,
+    "enabled": false,
+    "max_tokens": 500,
+    "model": "demo-air-gapped/gemma4-e2b:latest",
+    "provider": "docker_model_runner",
+    "required": false,
+    "runtime_model": "demo-air-gapped/gemma4-e2b:latest",
+    "timeout_seconds": 120
+  },
+  "mode": "real",
+  "outputs": {
+    "adapter": "local_run_store",
+    "run_root": "~/.mn/runs",
+    "write_run_store": true
+  },
+  "privacy": {
+    "default_classification": "internal",
+    "network": "forbidden"
+  },
+  "standard_version": "1.0"
+}

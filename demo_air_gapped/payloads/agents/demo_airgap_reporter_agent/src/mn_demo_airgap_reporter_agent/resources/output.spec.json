@@ -1,0 +1,21 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "final_artifact",
+      "mime_type": "application/json",
+      "schema": "mn.blueprint.final_artifact.v1"
+    }
+  ],
+  "description": "Standard final artifact.",
+  "emitted_message_types": [
+    "final_result"
+  ],
+  "parts": [
+    {
+      "kind": "data",
+      "schema": "demo-airgap.reporter.output.v1"
+    }
+  ],
+  "schema_version": "mn.agent.output.v1",
+  "version": 1
+}

@@ -1,0 +1,15 @@
+[project]
+name = "mn-demo-airgap-skill"
+version = "1.0.0"
+description = "Blueprint-owned note analysis helpers for the air-gapped demo."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = []
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

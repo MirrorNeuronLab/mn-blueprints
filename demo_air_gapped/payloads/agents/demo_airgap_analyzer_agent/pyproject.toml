@@ -1,0 +1,21 @@
+[project]
+name = "mn-demo-airgap-analyzer-agent"
+version = "1.0.0"
+description = "Blueprint-owned analyzer agent for the air-gapped demo."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = []
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mn_demo_airgap_analyzer_agent = ["resources/*.json"]
+
+[project.entry-points."mn.agents"]
+"demo-airgap.agent.analyzer" = "mn_demo_airgap_analyzer_agent:load_agent_definition"

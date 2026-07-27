@@ -47,16 +47,16 @@
       "simulation_type": "Scheduled batch startup packet review with score-only VC heuristic reports.",
       "target_users": "VC analysts, angel investors, accelerator reviewers, startup scouts, and founder-led investment teams."
     },
-    "type": "batch",
-    "workflow_id": "vc_assistant_v1",
     "requirements": {
       "gpu": {
-        "min_count": 1,
-        "min_memory_mb": 49152,
+        "enforcement": "hard",
         "memory_operator": ">=",
-        "enforcement": "hard"
+        "min_count": 1,
+        "min_memory_mb": 49152
       }
-    }
+    },
+    "type": "batch",
+    "workflow_id": "vc_assistant_v1"
   },
   {
     "category": "Science",
@@ -80,21 +80,21 @@
       "simulation_type": "Deterministic multi-region agent-based ecosystem.",
       "target_users": "Ecologists, simulation researchers, distributed-systems evaluators, and science educators."
     },
-    "workflow_id": "ecosystem_science_research_v1",
     "requirements": {
       "cpu": {
         "min_cores": 0.5
-      },
-      "memory": {
-        "min_gb": 0.5
       },
       "disk": {
         "min_gb": 0.05
       },
       "gpu": {
         "min_count": 0
+      },
+      "memory": {
+        "min_gb": 0.5
       }
-    }
+    },
+    "workflow_id": "ecosystem_science_research_v1"
   },
   {
     "category": "Science",
@@ -448,6 +448,26 @@
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
     "workflow_id": "demo_llm_tool_call_v1"
+  },
+  {
+    "category": "Runtime",
+    "description": "Launch two jobs under one shared goal and exchange status, knowledge, and staged or final results through job-scoped MCP servers.",
+    "id": "demo_mcp_collaboration",
+    "job_name": "demo-mcp-collaboration",
+    "name": "MCP Job Collaboration",
+    "path": "demo_mcp_collaboration",
+    "product": {
+      "benefit": "Demonstrates Cross-job MCP collaboration with minimal setup.",
+      "how_it_works": "Launch two jobs under one shared goal and exchange status, knowledge, and staged or final results through job-scoped MCP servers.",
+      "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+      "output": "Peer MCP snapshots, update journals, and standard run-store evidence.",
+      "problem": "Launch two jobs under one shared goal and exchange status, knowledge, and staged or final results through job-scoped MCP servers.",
+      "runtime_features": [
+        "Cross-job MCP collaboration"
+      ],
+      "target_users": "MirrorNeuron developers and runtime evaluators."
+    },
+    "workflow_id": "demo_mcp_collaboration_v1"
   },
   {
     "category": "Runtime",

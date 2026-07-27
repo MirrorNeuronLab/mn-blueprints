@@ -1,6 +1,6 @@
 # MirrorNeuron Runtime Demo Blueprints
 
-Twenty-five focused, deterministic blueprints for learning and testing one MirrorNeuron runtime feature at a time.
+Twenty-six focused, deterministic blueprints for learning and testing one MirrorNeuron runtime feature at a time.
 
 | Blueprint | Category | Primary feature |
 |---|---|---|
@@ -17,6 +17,7 @@ Twenty-five focused, deterministic blueprints for learning and testing one Mirro
 | `demo_dag_quorum` | Workflow DAG | Quorum trigger |
 | `demo_human_approval` | Collaboration | Human-control gate |
 | `demo_llm_tool_call` | Collaboration | LLM tool orchestration |
+| `demo_mcp_collaboration` | Collaboration | Cross-job MCP collaboration |
 | `demo_context_memory_acl` | Memory | Context Engine role ACLs |
 | `demo_context_compression` | Memory | CompileContext compression |
 | `demo_stream_backpressure` | Runtime Operations | Stream backpressure |

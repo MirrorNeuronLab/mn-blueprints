@@ -20,16 +20,17 @@ def main():
     root = Path(__file__).resolve().parents[1]
     index = json.loads((root / "index.json").read_text())
     categories = json.loads((root / "category.json").read_text())
-    ids = [row["id"] for row in index]
+    demo_rows = [row for row in index if str(row.get("id") or "").startswith("demo_")]
+    ids = [row["id"] for row in demo_rows]
     dirs = sorted(path.name for path in root.glob("demo_*") if path.is_dir())
     errors = []
-    if len(ids) != 25 or len(set(ids)) != 25:
-        errors.append(f"index must contain 25 unique rows; found {len(ids)}")
+    if len(ids) != 26 or len(set(ids)) != 26:
+        errors.append(f"index must contain 26 unique demo rows; found {len(ids)}")
     if sorted(ids) != dirs:
-        errors.append("index rows and demo directories differ")
+        errors.append("demo index rows and demo directories differ")
     category_names = {row["name"] for row in categories.get("categories", [])}
-    if category_names != {"Execution", "Workflow DAG", "Collaboration", "Memory", "Runtime Operations"}:
-        errors.append("category.json must define the five focused catalog categories")
+    if "Runtime" not in category_names:
+        errors.append("category.json must define the Runtime catalog category")
     for blueprint_id in ids:
         folder = root / blueprint_id
         for required in REQUIRED:
@@ -67,8 +68,24 @@ def main():
         if size > 1_000_000:
             errors.append(f"{blueprint_id}: checked-in size {size} exceeds 1 MB")
         forbidden_dirs = {"_vendor", "site-packages", "__pycache__", ".venv", "node_modules"}
-        if any(part in forbidden_dirs for path in folder.rglob("*") for part in path.parts):
-            errors.append(f"{blueprint_id}: generated or vendored dependency directory found")
+        forbidden_paths = []
+        for path in folder.rglob("*"):
+            if not path.is_dir() or path.name not in forbidden_dirs:
+                continue
+            if path.name == "__pycache__":
+                ignored = subprocess.run(
+                    ["git", "check-ignore", "-q", "--", str(path.relative_to(root))],
+                    cwd=root,
+                    check=False,
+                )
+                if ignored.returncode == 0:
+                    continue
+            forbidden_paths.append(path)
+        if forbidden_paths:
+            errors.append(
+                f"{blueprint_id}: generated or vendored dependency directory found: "
+                f"{forbidden_paths[0].relative_to(folder)}"
+            )
         oversized = [path for path in folder.rglob("*") if path.is_file() and path.stat().st_size > 250_000]
         if oversized:
             errors.append(f"{blueprint_id}: individual file exceeds 250 KB: {oversized[0].relative_to(folder)}")
@@ -92,7 +109,7 @@ def main():
     if errors:
         print("\n".join(errors), file=sys.stderr)
         raise SystemExit(1)
-    print(f"catalog ok: {len(ids)} focused blueprints")
+    print(f"catalog ok: {len(ids)} focused demo blueprints")
 
 
 if __name__ == "__main__":

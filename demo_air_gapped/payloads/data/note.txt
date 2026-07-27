@@ -1,0 +1,2 @@
+A field gateway reported intermittent latency after a cache rollout.
+No data left the site. Operators want likely causes and three safe checks.

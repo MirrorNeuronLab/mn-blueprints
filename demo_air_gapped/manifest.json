@@ -1,0 +1,317 @@
+{
+  "agent_dependencies": [
+    {
+      "format": "source",
+      "name": "mn-demo-airgap-analyzer-agent",
+      "path": "agents/demo_airgap_analyzer_agent",
+      "source": "payload",
+      "type": "pip",
+      "version": "1.0.0"
+    },
+    {
+      "format": "source",
+      "name": "mn-demo-airgap-reporter-agent",
+      "path": "agents/demo_airgap_reporter_agent",
+      "source": "payload",
+      "type": "pip",
+      "version": "1.0.0"
+    }
+  ],
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "analyze_to_report",
+        "from_node": "analyze",
+        "message_type": "analysis_ready",
+        "to_node": "report"
+      },
+      {
+        "edge_id": "report_to_sink",
+        "from_node": "report",
+        "message_type": "final_result",
+        "to_node": "report_sink"
+      }
+    ],
+    "entrypoints": [
+      "analyze"
+    ],
+    "nodes": [
+      {
+        "alias": "analyze",
+        "display_name": "Bundled Model Analyzer",
+        "node_id": "analyze",
+        "role": "root_coordinator",
+        "uses": "demo-airgap.agent.analyzer@1",
+        "with": {
+          "environment": {
+            "MN_DEMO_ID": "demo_air_gapped",
+            "MN_LLM_API_BASE": "http://127.0.0.1:12434/engines/v1",
+            "MN_LLM_BACKEND": "llama.cpp",
+            "MN_LLM_CONTEXT_SIZE": "4096",
+            "MN_LLM_MODEL": "demo-air-gapped/gemma4-e2b:latest",
+            "MN_LLM_PROVIDER": "docker_model_runner",
+            "MN_WORKFLOW_STEP_ID": "analyze"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "analysis_ready",
+          "safe_to_retry": true,
+          "script": "worker.py",
+          "timeout_seconds": 180,
+          "upload_path": "worker"
+        }
+      },
+      {
+        "alias": "report",
+        "display_name": "Bundled Offline Reporter",
+        "node_id": "report",
+        "role": "worker",
+        "uses": "demo-airgap.agent.reporter@1",
+        "with": {
+          "environment": {
+            "MN_DEMO_FINAL_STEP": "1",
+            "MN_DEMO_ID": "demo_air_gapped",
+            "MN_WORKFLOW_STEP_ID": "report"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "final_result",
+          "safe_to_retry": true,
+          "script": "worker.py",
+          "timeout_seconds": 30,
+          "upload_path": "worker"
+        }
+      },
+      {
+        "agent_type": "aggregator",
+        "alias": "result_sink",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        },
+        "node_id": "report_sink",
+        "role": "result_sink",
+        "type": "reduce"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "apiVersion": "mn.workflow/v1",
+  "contract": {
+    "events": {
+      "stream": "events.jsonl",
+      "types": [
+        "payload_skill_loaded",
+        "payload_model_called",
+        "airgap_report_written",
+        "run_completed",
+        "run_failed"
+      ]
+    },
+    "inputs": {
+      "note": {
+        "description": "A local operational note to analyze without external network access.",
+        "required": true,
+        "type": "string"
+      }
+    },
+    "outputs": {
+      "artifacts": [
+        {
+          "artifact_id": "result_json",
+          "path": "result.json"
+        },
+        {
+          "artifact_id": "final_artifact_json",
+          "path": "final_artifact.json"
+        }
+      ],
+      "primary": {
+        "id": "final_artifact",
+        "path": "final_artifact.json",
+        "schema_version": "mn.blueprint.final_artifact.v1",
+        "type": "final_artifact"
+      },
+      "profile": "standard_run_store"
+    },
+    "privacy": {
+      "classification": "internal",
+      "network": "forbidden"
+    },
+    "summary": "Analyze one local note with blueprint-owned code and a blueprint-owned model."
+  },
+  "description": "Self-contained blueprint payload and air-gapped backup demonstration.",
+  "id": "demo_air_gapped",
+  "input_validation": {
+    "rules": []
+  },
+  "job_name": "demo-air-gapped",
+  "kind": "Workflow",
+  "license": "LICENSE.md",
+  "manifest_version": "1.0",
+  "metadata": {
+    "blueprint_id": "demo_air_gapped",
+    "category": "Air-Gapped Execution",
+    "interfaces": {
+      "config": "config/default.json",
+      "payloads": "payloads/"
+    },
+    "name": "Air-Gapped Payload Demo",
+    "runtime_features": [
+      "Blueprint-owned skill",
+      "Blueprint-owned agents",
+      "Blueprint-owned model",
+      "Streaming large payload staging",
+      "Air-gapped backup and restore"
+    ]
+  },
+  "name": "Air-Gapped Payload Demo",
+  "requirements": {
+    "cpu": {
+      "min_cores": 2
+    },
+    "disk": {
+      "min_gb": 12
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 8
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "analyze": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "analyze",
+            "model": "primary",
+            "role": "Analyze the local note with the bundled model."
+          }
+        ]
+      },
+      "report": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "report",
+            "role": "Write the final local report."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "analyze": [
+        {
+          "note": "A field gateway reported intermittent latency after a cache rollout. No data left the site. Operators want likely causes and three safe checks."
+        }
+      ]
+    },
+    "models": {
+      "primary": {
+        "backend": "llama.cpp",
+        "context_size": 4096,
+        "provider": "docker_model_runner",
+        "required": true,
+        "runtime_model": "demo-air-gapped/gemma4-e2b:latest",
+        "source": {
+          "format": "gguf",
+          "license_path": "models/gemma4-e2b/LICENSE",
+          "mmproj_path": "models/gemma4-e2b/model.mmproj",
+          "path": "models/gemma4-e2b/gemma-4-E2B-it-UD-Q4_K_XL.gguf",
+          "type": "payload"
+        }
+      }
+    },
+    "store": {
+      "path": "~/.mn/runs/${run_id}",
+      "type": "local_run_store"
+    }
+  },
+  "skill_dependencies": [
+    {
+      "format": "source",
+      "name": "mn-demo-airgap-skill",
+      "path": "skills/demo_airgap_skill",
+      "source": "payload",
+      "type": "pip",
+      "version": "1.0.0"
+    }
+  ],
+  "standard_version": "1.0",
+  "term": "TERM.md",
+  "version": 1,
+  "workflow": {
+    "dynamic": {
+      "enabled": false
+    },
+    "edges": [
+      {
+        "accepts": [
+          "done"
+        ],
+        "from": "analyze",
+        "id": "analyze_to_report",
+        "required": true,
+        "to": "report"
+      }
+    ],
+    "entrypoint": "analyze",
+    "execution": {
+      "max_parallel_steps": 1,
+      "strategy": "serial"
+    },
+    "mode": "static_dag",
+    "schema": "mn.workflow.problem_graph/v1",
+    "sink": "report",
+    "source": "analyze",
+    "steps": [
+      {
+        "action": "call_bundled_model",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 180
+        },
+        "emits": [
+          "analysis_ready"
+        ],
+        "goal": "Use the bundled skill and model to analyze the local note.",
+        "id": "analyze",
+        "kind": "task",
+        "label": "Analyze",
+        "run": "analyze"
+      },
+      {
+        "action": "write_local_report",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 30
+        },
+        "emits": [
+          "final_result"
+        ],
+        "goal": "Normalize the model response and write standard run artifacts.",
+        "id": "report",
+        "kind": "task",
+        "label": "Report",
+        "run": "report"
+      }
+    ],
+    "workflow_id": "demo_air_gapped_v1"
+  }
+}

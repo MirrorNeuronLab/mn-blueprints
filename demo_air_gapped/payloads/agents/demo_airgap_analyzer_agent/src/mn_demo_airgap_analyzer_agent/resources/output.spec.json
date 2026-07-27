@@ -1,0 +1,21 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "analysis",
+      "mime_type": "application/json",
+      "schema": "demo-airgap.analysis.v1"
+    }
+  ],
+  "description": "Offline model analysis.",
+  "emitted_message_types": [
+    "analysis_ready"
+  ],
+  "parts": [
+    {
+      "kind": "data",
+      "schema": "demo-airgap.analyzer.output.v1"
+    }
+  ],
+  "schema_version": "mn.agent.output.v1",
+  "version": 1
+}

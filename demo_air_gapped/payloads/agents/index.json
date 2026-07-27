@@ -1,0 +1,29 @@
+{
+  "agents": [
+    {
+      "agent_id": "demo-airgap.agent.analyzer",
+      "distribution": "mn-demo-airgap-analyzer-agent",
+      "kind": "executor",
+      "module": "mn_demo_airgap_analyzer_agent",
+      "package_kind": "runtime_node",
+      "path": "demo_airgap_analyzer_agent",
+      "resource_path": "demo_airgap_analyzer_agent/src/mn_demo_airgap_analyzer_agent/resources/agent.json",
+      "template_category": "data",
+      "template_id": "demo-airgap.agent.analyzer",
+      "version": 1
+    },
+    {
+      "agent_id": "demo-airgap.agent.reporter",
+      "distribution": "mn-demo-airgap-reporter-agent",
+      "kind": "executor",
+      "module": "mn_demo_airgap_reporter_agent",
+      "package_kind": "runtime_node",
+      "path": "demo_airgap_reporter_agent",
+      "resource_path": "demo_airgap_reporter_agent/src/mn_demo_airgap_reporter_agent/resources/agent.json",
+      "template_category": "data",
+      "template_id": "demo-airgap.agent.reporter",
+      "version": 1
+    }
+  ],
+  "schema_version": "mn-agents.index.v2"
+}

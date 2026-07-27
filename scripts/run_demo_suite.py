@@ -15,6 +15,7 @@ import json
 import os
 import re
 import shutil
+import socket
 import subprocess
 import sys
 import tempfile
@@ -48,6 +49,7 @@ EVIDENCE = {
     "demo_dag_failure_fallback": ("intentional primary outage", "fallback"),
     "demo_dag_quorum": ("sensor_a", "sensor_b", "approve"),
     "demo_llm_tool_call": ("local_forecast", "tool_trace"),
+    "demo_mcp_collaboration": ("peer_exchange", "publication_state", "staged"),
     "demo_context_memory_acl": ("private_hidden",),
     "demo_context_compression": ("source_refs",),
     "demo_stream_backpressure": ("stream_burst_emitted", "stream_drain_completed", "consumer_processed"),
@@ -166,10 +168,35 @@ def assert_run(blueprint_id: str, run_id: str, timeout: float) -> Path:
     return run_dir
 
 
-def launch(mn: str, folder: Path, run_id: str, timeout: float, *, follow: int = 2):
+def launch(
+    mn: str,
+    folder: Path,
+    run_id: str,
+    timeout: float,
+    *,
+    follow: int = 2,
+    set_values: list[str] | None = None,
+    detached: bool = False,
+):
+    command = [
+        mn,
+        "blueprint",
+        "run",
+        "--folder",
+        str(folder),
+        "--offline",
+        "--fake-llm",
+        "--run-id",
+        run_id,
+        "--follow-seconds",
+        str(follow),
+    ]
+    if detached:
+        command.append("--detached")
+    for value in set_values or []:
+        command.extend(["--set", value])
     return run(
-        [mn, "blueprint", "run", "--folder", str(folder), "--offline", "--fake-llm", "--run-id", run_id,
-         "--follow-seconds", str(follow)],
+        command,
         timeout=timeout,
         check=False,
     )
@@ -249,6 +276,48 @@ def generic_demo(mn: str, blueprint_id: str, folder: Path, timeout: float):
     if proc.returncode and not locate_run_dir(run_id):
         raise RuntimeError(proc.stdout + proc.stderr)
     assert_run(blueprint_id, run_id, timeout)
+
+
+def _free_port() -> int:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+        probe.bind(("127.0.0.1", 0))
+        return int(probe.getsockname()[1])
+
+
+def mcp_collaboration_demo(mn: str, folder: Path, timeout: float):
+    goal_id = f"demo-mcp-goal-{uuid.uuid4().hex[:8]}"
+    run_ids = [
+        f"demo-mcp-a-{uuid.uuid4().hex[:8]}",
+        f"demo-mcp-b-{uuid.uuid4().hex[:8]}",
+    ]
+    ports = [_free_port(), _free_port()]
+    roles = ["research", "synthesis"]
+    for run_id, port, role in zip(run_ids, ports, roles):
+        proc = launch(
+            mn,
+            folder,
+            run_id,
+            timeout,
+            follow=1,
+            detached=True,
+            set_values=[
+                f"collaboration.goal_id={goal_id}",
+                f"collaboration.port={port}",
+                f"collaboration.role={role}",
+                "collaboration.require_peer=true",
+            ],
+        )
+        if proc.returncode and not locate_run_dir(run_id):
+            raise RuntimeError(proc.stdout + proc.stderr)
+    for run_id in run_ids:
+        run_dir = assert_run("demo_mcp_collaboration", run_id, timeout)
+        peer_exchange = json.loads(
+            (run_dir / "peer_exchange.json").read_text(encoding="utf-8")
+        )
+        if int(peer_exchange.get("peer_count") or 0) < 1:
+            raise RuntimeError(f"{run_id}: no collaborating MCP peer was recorded")
+        if not peer_exchange.get("saw_staged_peer_result"):
+            raise RuntimeError(f"{run_id}: staged peer results were not observed")
 
 
 def python_sdk_demo(mn: str, folder: Path, timeout: float):
@@ -567,6 +636,7 @@ def main():
         "demo_human_approval": human_demo,
         "demo_periodic_schedule": periodic_demo,
         "demo_event_trigger": event_demo,
+        "demo_mcp_collaboration": mcp_collaboration_demo,
         "demo_service_health": service_demo,
         "demo_canary_deployment": canary_demo,
     }

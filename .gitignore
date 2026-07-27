@@ -3,3 +3,5 @@
 __pycache__/
 *.pyc
 runs/
+demo_air_gapped/payloads/models/gemma4-e2b/gemma-4-E2B-it-UD-Q4_K_XL.gguf
+demo_air_gapped/payloads/models/gemma4-e2b/model.mmproj

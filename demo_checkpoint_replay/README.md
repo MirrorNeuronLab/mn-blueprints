@@ -15,4 +15,8 @@ Default inputs are deterministic and require no GPU, external API, downloaded mo
 
 ## Expected evidence
 
-The run finishes with `final_artifact.json` plus the standard run-store lifecycle, error, timeline, and observability artifacts. Inspect `workflow_state` and `events.jsonl` for the feature-specific runtime evidence.
+The run finishes with `final_artifact.json` plus the standard run-store
+lifecycle, error, timeline, and observability artifacts. The terminal
+checkpoint summary records the persisted executor state and the number of
+replayed duplicates ignored, so the evidence remains durable after output
+copy-back.

@@ -105,6 +105,18 @@ elif demo == "demo_docker_worker" and step == "run":
     result["sha256"] = hashlib.sha256(value).hexdigest()
 elif demo == "demo_openshell_worker" and step == "run":
     result["sandbox_validation"] = {"config_valid": True, "network_policy": "deny-all"}
+elif demo == "demo_native_beam_agent" and step == "publish":
+    events.append(
+        {
+            "type": "native_signal_classified",
+            "payload": {
+                "runner": payload.get("runner"),
+                "signals": payload.get("signals"),
+                "classes": payload.get("classes"),
+            },
+        }
+    )
+    result["status"] = "ok"
 else:
     result["status"] = "ok"
 

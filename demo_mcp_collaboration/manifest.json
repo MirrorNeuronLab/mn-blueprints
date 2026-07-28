@@ -140,6 +140,12 @@
           "output_message_type": "collaborate_done",
           "pool": "default",
           "pool_slots": 1,
+          "python_environment": {
+            "packages": [
+              "grpcio>=1.82.1,<2",
+              "protobuf>=7.35.1,<8"
+            ]
+          },
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
@@ -511,13 +517,17 @@
   "skill_dependencies": [
     {
       "name": "mirrorneuron-mcp-server-skill",
-      "source": "gar",
+      "format": "source",
+      "path": "skills/mcp_server_skill",
+      "source": "payload",
       "type": "pip",
       "version": "1.2.30"
     },
     {
       "name": "mirrorneuron-mcp-client-skill",
-      "source": "gar",
+      "format": "source",
+      "path": "skills/mcp_client_skill",
+      "source": "payload",
       "type": "pip",
       "version": "1.2.30"
     }

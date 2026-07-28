@@ -84,7 +84,7 @@
           },
           "idempotent": true,
           "max_attempts": 1,
-          "output_message_type": "worker_done",
+          "output_message_type": null,
           "pool": "default",
           "pool_slots": 1,
           "retry_backoff_ms": 100,

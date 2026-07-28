@@ -18,6 +18,13 @@ def generated(root: Path):
         if not folder.is_dir():
             continue
         manifest = json.loads((folder / "manifest.json").read_text())
+        if (
+            manifest.get("metadata", {})
+            .get("quick_test", {})
+            .get("enabled")
+            is not True
+        ):
+            continue
         meta = manifest["metadata"]
         rows.append({
             "id": manifest["id"], "name": manifest["name"], "path": folder.name,

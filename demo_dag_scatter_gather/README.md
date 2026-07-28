@@ -15,4 +15,7 @@ Default inputs are deterministic and require no GPU, external API, downloaded mo
 
 ## Expected evidence
 
-The run finishes with `final_artifact.json` plus the standard run-store lifecycle, error, timeline, and observability artifacts. Inspect `workflow_state` and `events.jsonl` for the feature-specific runtime evidence.
+The run finishes with `final_artifact.json` plus the standard run-store lifecycle,
+error, timeline, and observability artifacts. `events.jsonl` records the
+observed scatter and completed gather, while `result.json` contains five
+ordered mapped scores and their deterministic total.

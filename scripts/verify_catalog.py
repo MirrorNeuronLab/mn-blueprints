@@ -22,7 +22,16 @@ def main():
     categories = json.loads((root / "category.json").read_text())
     demo_rows = [row for row in index if str(row.get("id") or "").startswith("demo_")]
     ids = [row["id"] for row in demo_rows]
-    dirs = sorted(path.name for path in root.glob("demo_*") if path.is_dir())
+    dirs = sorted(
+        path.name
+        for path in root.glob("demo_*")
+        if path.is_dir()
+        and json.loads((path / "manifest.json").read_text())
+        .get("metadata", {})
+        .get("quick_test", {})
+        .get("enabled")
+        is True
+    )
     errors = []
     if len(ids) != 26 or len(set(ids)) != 26:
         errors.append(f"index must contain 26 unique demo rows; found {len(ids)}")

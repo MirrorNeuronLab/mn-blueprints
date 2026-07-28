@@ -93,6 +93,19 @@ elif demo == "demo_resource_allocation" and step == "run":
         allocation = {"raw": raw}
     result["allocation"] = allocation
 elif demo == "demo_service_health" and step == "serve":
+    try:
+        blueprint_config = json.loads(
+            os.environ.get("MN_BLUEPRINT_CONFIG_JSON", "{}")
+        )
+    except json.JSONDecodeError:
+        blueprint_config = {}
+    service_config = (
+        blueprint_config.get("service")
+        if isinstance(blueprint_config.get("service"), dict)
+        else {}
+    )
+    service_port = int(service_config.get("port") or 18081)
+
     class HealthHandler(http.server.BaseHTTPRequestHandler):
         def do_GET(self):
             if self.path == "/health":
@@ -107,13 +120,16 @@ elif demo == "demo_service_health" and step == "serve":
         def log_message(self, _format, *_args):
             return
 
-    with socketserver.TCPServer(("0.0.0.0", 18081), HealthHandler) as server:
+    class ReusableTCPServer(socketserver.TCPServer):
+        allow_reuse_address = True
+
+    with ReusableTCPServer(("0.0.0.0", service_port), HealthHandler) as server:
         thread = threading.Thread(target=server.serve_forever, daemon=True)
         thread.start()
-        events.append({"type": "demo_health_service_ready", "payload": {"port": 18081, "path": "/health"}})
+        events.append({"type": "demo_health_service_ready", "payload": {"port": service_port, "path": "/health"}})
         time.sleep(float(os.environ.get("MN_DEMO_SERVICE_SECONDS", "15")))
         server.shutdown()
-    result["service"] = {"name": "demo-health", "port": 18081, "healthy": True}
+    result["service"] = {"name": "demo-health", "port": service_port, "healthy": True}
 elif demo == "demo_checkpoint_replay" and step == "run":
     ids = ["evt-1", "evt-2", "evt-2", "evt-3", "evt-4", "evt-5"]
     seen = []

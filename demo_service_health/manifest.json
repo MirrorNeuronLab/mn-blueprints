@@ -55,13 +55,6 @@
           "cpu_cores": 0.1,
           "disk_mb": 4,
           "memory_mb": 32,
-          "ports": [
-            {
-              "label": "health",
-              "port": 18081,
-              "protocol": "http"
-            }
-          ],
           "runtime_driver": "host_local"
         },
         "role": "root_coordinator",
@@ -368,7 +361,7 @@
           "interval_ms": 500,
           "name": "http-health",
           "path": "/health",
-          "port": 18081,
+          "port": "${config.service.port}",
           "required": true,
           "timeout_ms": 500,
           "type": "http"
@@ -377,7 +370,7 @@
       "id": "demo-health",
       "name": "demo-health",
       "origin": "internal",
-      "port": 18081,
+      "port": "${config.service.port}",
       "tags": [
         "blueprint",
         "demo_service_health"

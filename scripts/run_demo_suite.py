@@ -124,12 +124,25 @@ def wait_until(predicate, timeout: float, description: str):
 
 def locate_run_dir(run_id: str) -> Path | None:
     canonical = Path(os.path.expanduser("~/.mn/runs")) / run_id
-    if (canonical / "run.json").is_file():
-        return canonical
+    candidates = [canonical] if (canonical / "run.json").is_file() else []
     shared = Path(os.path.expanduser("~/.mn/shared/submissions"))
-    candidates = list(shared.glob(f"{run_id}-*/outputs/runs/{run_id}")) if shared.is_dir() else []
-    candidates = [path for path in candidates if path.is_dir()]
-    return max(candidates, key=lambda path: path.stat().st_mtime) if candidates else None
+    if shared.is_dir():
+        candidates.extend(
+            path
+            for path in shared.glob(f"{run_id}-*/outputs/runs/{run_id}")
+            if path.is_dir() and (path / "run.json").is_file()
+        )
+    return (
+        max(
+            candidates,
+            key=lambda path: (
+                sum((path / name).is_file() for name in REQUIRED_ARTIFACTS),
+                path.stat().st_mtime,
+            ),
+        )
+        if candidates
+        else None
+    )
 
 
 def wait_run(run_id: str, timeout: float) -> tuple[Path, dict]:
@@ -203,7 +216,7 @@ def launch(
 
 
 def job_id_from_output(proc: subprocess.CompletedProcess[str]) -> str:
-    match = re.search(r"Job ID\s+([A-Za-z0-9_-]+)", proc.stdout or "")
+    match = re.search(r"Job ID:?\s+([A-Za-z0-9_-]+)", proc.stdout or "")
     return match.group(1) if match else ""
 
 
@@ -557,7 +570,15 @@ def event_demo(mn: str, folder: Path, timeout: float):
 
 def service_demo(mn: str, folder: Path, timeout: float):
     run_id = f"demo-service-{uuid.uuid4().hex[:8]}"
-    proc = launch(mn, folder, run_id, timeout, follow=1)
+    proc = launch(
+        mn,
+        folder,
+        run_id,
+        timeout,
+        follow=1,
+        detached=True,
+        set_values=[f"service.port={_free_port()}"],
+    )
     job_id = job_id_from_output(proc)
     if not job_id:
         raise RuntimeError(proc.stdout + proc.stderr)
@@ -619,6 +640,11 @@ def main():
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     rows = json.loads((root / "index.json").read_text(encoding="utf-8"))
+    rows = [
+        row
+        for row in rows
+        if str(row.get("id") or "").startswith("demo_")
+    ]
     selected = set(args.blueprint)
     rows = [row for row in rows if not selected or row["id"] in selected]
     run([sys.executable, str(root / "scripts/verify_catalog.py"), "--validate"], timeout=180)

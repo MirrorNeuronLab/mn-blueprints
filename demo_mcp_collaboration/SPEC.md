@@ -7,6 +7,8 @@
   each, discover each other through runtime service registration, and exchange
   job status, knowledge, staged results, and final results.
 - Storage: one bounded job-scoped SQLite exchange per run.
+- Dependencies: the canonical MCP client/server skill source packages are
+  blueprint payloads; no MirrorNeuron skill index lookup is required.
 - MCP authority: peer access is read-only; only the owning job publishes to its
   local store.
 - Discovery: passing `mn-job-collaboration` services filtered by `goal_id` and

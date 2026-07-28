@@ -67,6 +67,16 @@ elif step == "consume":
         events.append({"type": "stream_item_processed", "payload": {"sequence": sequence, "processed_count": len(processed), "queue_bound": queue_bound, "duplicate": duplicate}})
         if item.get("terminal") and len(processed) == burst_size:
             result["backpressure"] = {"producer_emitted": burst_size, "consumer_processed": len(processed), "queue_bound": queue_bound, "policy": "block", "drained_sequences": sorted(processed), "duplicates": stream["duplicates"]}
+            events.append(
+                {
+                    "type": "stream_burst_emitted",
+                    "payload": {
+                        "emitted": burst_size,
+                        "stream_id": item["stream_id"],
+                        "queue_bound": queue_bound,
+                    },
+                }
+            )
             events.append({"type": "stream_drain_completed", "payload": result["backpressure"]})
         else:
             result["backpressure"] = {"processed": len(processed), "waiting_for": burst_size - len(processed), "queue_bound": queue_bound}

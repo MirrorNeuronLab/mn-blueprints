@@ -178,6 +178,9 @@
     "final_artifact": "mn.blueprint.final_artifact.v1",
     "inputs": "mn.blueprint.inputs.v1"
   },
+  "service": {
+    "port": 18081
+  },
   "simulation": {
     "deterministic": true,
     "enabled": true,

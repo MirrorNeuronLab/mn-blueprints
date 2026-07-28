@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import sqlite3
 from pathlib import Path
 
 from run_store import is_final_step, write_run_store
@@ -23,6 +24,40 @@ def mapping(value):
     return value if isinstance(value, dict) else {}
 
 
+def gathered_scores(mapped_score):
+    runs_root = os.environ.get("MN_RUNS_ROOT")
+    run_id = os.environ.get("MN_RUN_ID")
+    if not runs_root or not run_id:
+        raise RuntimeError("MN_RUNS_ROOT and MN_RUN_ID are required for gather state")
+    run_dir = Path(runs_root).expanduser() / run_id
+    run_dir.mkdir(parents=True, exist_ok=True)
+    with sqlite3.connect(run_dir / ".gather.sqlite3", timeout=5) as database:
+        database.execute(
+            "CREATE TABLE IF NOT EXISTS scores "
+            "(map_index INTEGER PRIMARY KEY, record_id TEXT NOT NULL, score REAL NOT NULL)"
+        )
+        if mapped_score:
+            database.execute(
+                "INSERT OR REPLACE INTO scores(map_index, record_id, score) "
+                "VALUES (?, ?, ?)",
+                (
+                    int(mapped_score["map_index"]),
+                    str(mapped_score["record_id"]),
+                    float(mapped_score["score"]),
+                ),
+            )
+        rows = database.execute(
+            "SELECT map_index, record_id, score FROM scores ORDER BY map_index"
+        ).fetchall()
+    return {
+        str(map_index): {
+            "record_id": record_id,
+            "score": int(score) if score.is_integer() else score,
+        }
+        for map_index, record_id, score in rows
+    }
+
+
 configured_step = os.environ.get("MN_WORKFLOW_STEP_ID", "scatter")
 payload = mapping(load_json("MN_INPUT_FILE", {}))
 context = mapping(load_json("MN_CONTEXT_FILE", {}))
@@ -32,6 +67,7 @@ events = [{"type": "demo_step_observed", "payload": {"step": runtime_step}}]
 result = {"demo": "demo_dag_scatter_gather", "step": runtime_step, "deterministic": True}
 next_state = mapping(context.get("agent_state"))
 complete = True
+emit_messages = []
 
 if step == "scatter":
     records = payload.get("records") if isinstance(payload.get("records"), list) else [1, 2, 3, 4, 5]
@@ -51,16 +87,23 @@ elif step == "worker":
     score = value * value
     result["mapped_score"] = {"record_id": item.get("record_id"), "map_index": payload.get("map_index"), "score": score}
     events.append({"type": "mapped_record_scored", "payload": result["mapped_score"]})
+    emit_messages.append(
+        {
+            "to": "collect",
+            "type": "worker_done",
+            "body": {"mapped_score": result["mapped_score"]},
+        }
+    )
 elif step == "collect":
-    source = mapping(payload.get("input")) or payload
-    item = mapping(source.get("item"))
-    map_index = source.get("map_index")
-    gather = mapping(next_state.get("gather"))
-    scores = mapping(gather.get("scores"))
-    if item and isinstance(item.get("value"), (int, float)) and map_index is not None:
-        score = item["value"] * item["value"]
-        scores[str(map_index)] = {"record_id": item.get("record_id"), "score": score}
-        events.append({"type": "gather_item_received", "payload": {"map_index": map_index, **scores[str(map_index)]}})
+    mapped_score = mapping(payload.get("mapped_score"))
+    scores = gathered_scores(mapped_score)
+    if mapped_score:
+        events.append(
+            {
+                "type": "gather_item_received",
+                "payload": mapped_score,
+            }
+        )
     else:
         events.append({"type": "gather_control_message_ignored", "payload": {"reason": "no mapped item"}})
     next_state = {"gather": {"scores": scores}}
@@ -68,6 +111,12 @@ elif step == "collect":
     if len(scores) >= expected:
         collected = [scores[key] for key in sorted(scores, key=int)]
         result["gather"] = {"mapped_items": len(collected), "collected_scores": collected, "score_total": sum(item["score"] for item in collected)}
+        events.append(
+            {
+                "type": "workflow_step_scattered_observed",
+                "payload": {"mapped_items": len(collected)},
+            }
+        )
         events.append({"type": "workflow_gather_completed", "payload": result["gather"]})
     else:
         result["gather"] = {"waiting_for": expected - len(scores), "received": len(scores)}
@@ -80,6 +129,8 @@ if step == "collect" and complete and is_final_step("demo_dag_scatter_gather", s
     write_run_store(result, events)
 
 output = {"events": events, "next_state": next_state}
+if emit_messages:
+    output["emit_messages"] = emit_messages
 if complete:
     output["complete_step"] = result
     if step == "collect":

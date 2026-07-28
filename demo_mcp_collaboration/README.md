@@ -6,6 +6,8 @@ Every launched instance publishes its own status, knowledge, and staged or
 final results to a job-scoped SQLite exchange, serves that exchange through a
 read-only Streamable HTTP MCP server, discovers matching peer services through
 the runtime registry, and reads peer snapshots plus revisioned updates.
+The matching MCP client and server skill sources are bundled as payload
+packages so the demo does not depend on an unpublished package-index version.
 
 ## Validate
 

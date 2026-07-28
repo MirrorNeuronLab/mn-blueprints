@@ -63,6 +63,16 @@ elif step == "run":
     next_state = {"checkpoint_replay": {"seen_ids": seen_ids, "processed_deliveries": processed, "duplicates_ignored": duplicates, "checkpoint_count": checkpoint_count}}
     if payload.get("terminal"):
         result["checkpoint_replay"] = {**next_state["checkpoint_replay"], "resume_source": "persisted_executor_agent_state"}
+        if duplicates:
+            events.append(
+                {
+                    "type": "replayed_duplicate_ignored",
+                    "payload": {
+                        "count": duplicates,
+                        "source": "persisted_executor_agent_state",
+                    },
+                }
+            )
         events.append({"type": "checkpoint_replay_completed", "payload": result["checkpoint_replay"]})
     else:
         result["checkpoint_replay"] = next_state["checkpoint_replay"]

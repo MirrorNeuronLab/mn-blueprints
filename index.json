@@ -1,6 +1,74 @@
 [
   {
     "category": "Finance",
+    "description": "A unified personal financial advisor co-worker. Put bank statements, receipts, bills, income records, W-2s, 1099s, tax-form images with answer files, brokerage statements, portfolio files, and related finance documents in the input folder; it extracts document evidence, captures tax-form OCR fields for review, prepares review-only tax and household finance summaries, runs portfolio risk analysis, and writes integrated advisor reports to the output folder.",
+    "id": "financial_advisor",
+    "job_name": "financial-advisor",
+    "name": "Financial Advisor",
+    "path": "financial_advisor",
+    "product": {
+      "agent_role": "Integrated financial advisor team for bank statement extraction, tax-form OCR capture, household cash-flow review, draft tax workpapers, portfolio risk analysis, and review-only report writing.",
+      "benefit": "Turns one local finance folder into a source-grounded advisor packet that combines statement, tax-form OCR, tax, cash-flow, and portfolio evidence before any human-approved downstream action.",
+      "customizable_for": "Household finance review, bank statement extraction, tax-form OCR capture, tax document intake, freelancer finance organization, portfolio risk review, and advisor workbenches.",
+      "how_it_works": "Reads a local folder, extracts statement and document evidence, captures tax-form image/answer-file fields, normalizes cash flow, routes tax documents into draft workpapers, loads portfolio context, computes deterministic risk metrics, uses privacy-safe public guidance, audits review boundaries, and writes an integrated report.",
+      "input": "Local folder with bank statements, receipts, bills, income records, W-2s, 1099s, tax-form images with answer files, brokerage statements, optional portfolio JSON, and related finance documents.",
+      "output": "Review-only financial_advisor_report with bank statement extraction, tax-form OCR capture, household finance summary, draft tax review packet, portfolio risk review, public guidance sources, and Markdown report output.",
+      "problem": "Personal finance work is fragmented across statement review, tax preparation, household advice, and portfolio risk checks; users need one local assistant that keeps evidence and review boundaries together.",
+      "runtime_features": [
+        "source-format WorkflowSource manifest",
+        "bank statement extraction",
+        "household cash-flow normalization",
+        "tax-form OCR capture",
+        "draft tax workpaper preparation",
+        "portfolio risk review",
+        "privacy-safe public finance research",
+        "small default model profile",
+        "optional medium review profile",
+        "shared mn-agents DockerWorker stereotypes",
+        "human approval policy",
+        "artifact records",
+        "run-store observability dashboard"
+      ],
+      "simulation_type": "Unified local financial-advisor document workflow with deterministic finance math and review-only reporting.",
+      "target_users": "Individuals, households, freelancers, financial coaches, tax preparers, and advisors reviewing personal finance folders."
+    },
+    "type": "batch",
+    "workflow_id": "financial_advisor_v1"
+  },
+  {
+    "category": "Finance",
+    "description": "A purchase research co-worker for property, rental property, car, airline ticket, and custom purchases. Put a plain-text note describing what you want to buy in the input folder, plus unfinished research, public links, or supporting evidence; it performs bounded research and writes a review-ready recommendation.",
+    "id": "purchase_research_assistant",
+    "job_name": "purchase-research-assistant",
+    "name": "Purchase Research Assistant",
+    "path": "purchase_research_assistant",
+    "product": {
+      "agent_role": "Purchase research co-worker that prepares source-grounded comparisons without transacting.",
+      "benefit": "Turns scattered local evidence and public purchase facts into a clear comparison, risk review, and human-checkable recommendation.",
+      "customizable_for": "Property, rental property, car, airline ticket, travel, equipment, and custom purchase research.",
+      "how_it_works": "Classifies the request, retrieves local guidance and evidence, performs bounded public research, checks total cost and policies, and writes a review packet.",
+      "input": "Plain-text purchase request, unfinished public research links, and optional local evidence; structured purchase type, budget, location, priorities, and constraints remain available as fallbacks.",
+      "output": "Purchase comparison, deterministic evidence, public-source ledger, RAG citations, risk flags, evidence gaps, and review-only recommendation.",
+      "problem": "Purchase decisions depend on scattered prices, fees, policies, condition, availability, and source quality that are easy to miss across documents and public pages.",
+      "runtime_features": [
+        "local and user-document RAG",
+        "privacy-safe public research",
+        "total-cost and policy review",
+        "source_refs",
+        "bounded specialist agents",
+        "product input contract",
+        "transparent run status",
+        "human control policy",
+        "artifact records",
+        "run-store observability dashboard"
+      ],
+      "simulation_type": "General purchase research with local RAG and public-source comparison.",
+      "target_users": "Consumers, travelers, vehicle buyers, property buyers, renters, and purchase analysts."
+    },
+    "workflow_id": "purchase_research_assistant_v1"
+  },
+  {
+    "category": "Finance",
     "description": "A VC analysis co-worker for early startup screening reports. Put pitch decks, memos, financial snippets, company folders, or other startup documents in the input folder; it groups documents by company, performs privacy-safe public research, applies seven VC heuristic scoring methods, audits the math and evidence, and writes score-only per-company reports and batch indexes to the output folder.",
     "id": "vc_assistant",
     "job_name": "vc-assistant",
@@ -47,16 +115,111 @@
       "simulation_type": "Scheduled batch startup packet review with score-only VC heuristic reports.",
       "target_users": "VC analysts, angel investors, accelerator reviewers, startup scouts, and founder-led investment teams."
     },
+    "type": "batch",
+    "workflow_id": "vc_assistant_v1",
     "requirements": {
       "gpu": {
-        "enforcement": "hard",
-        "memory_operator": ">=",
         "min_count": 1,
-        "min_memory_mb": 49152
+        "min_memory_mb": 49152,
+        "memory_operator": ">=",
+        "enforcement": "hard"
       }
+    }
+  },
+  {
+    "category": "Science",
+    "description": "A continuously running drug-discovery research service. Give it a disease or target profile, screening criteria, optional candidate seeds, literature notes, and an input folder; it uses BioTarget and the custom homerquan/DrugClip text-to-molecular-graph model for continuous candidate generation, folding, evaluation, and review-only cycle reports until manually stopped.",
+    "id": "drug_discovery_research_assistant",
+    "job_name": "drug-discovery-research-assistant",
+    "name": "Drug Discovery Research Assistant",
+    "path": "drug_discovery_research_assistant",
+    "product": {
+      "agent_role": "Continuous native service coordinator for BioTarget and custom DrugClip graph-text candidate generation, folding, simulation, and evidence review.",
+      "benefit": "Keeps BioTarget computational discovery cycles moving while distributing DrugClip graph-text screening, folding, and simulation across cluster boxes with reviewable evidence.",
+      "customizable_for": "Drug discovery, target-focused virtual screening, molecular-generation pipelines, folding, simulation, and scientific research operations.",
+      "how_it_works": "Runs a manual-stop native service that dispatches BioTarget Stage C candidate generation, DrugClip graph-text screening, folding, and simulation across worker pools before fanning results into cycle reports.",
+      "input": "Disease or target profile, screening criteria, candidate seeds, literature notes, adapter commands, native dispatcher configuration, and local supporting files.",
+      "output": "Per-cycle candidate, folding, DrugCLIP, simulation, state, risk, and human-review artifacts.",
+      "problem": "Discovery work needs continuous, traceable candidate generation and scientific screening without collapsing cluster-scale folding and simulation into a single serial worker.",
+      "runtime_features": [
+        "manual-stop continuous service",
+        "native host workers",
+        "cross-box fanout/fanin",
+        "custom DrugClip text-molecular-graph alignment",
+        "parallel folding and simulation",
+        "product input contract",
+        "transparent run status",
+        "human control policy",
+        "artifact records",
+        "run-store observability dashboard"
+      ],
+      "simulation_type": "Continuous distributed BioTarget computational discovery service with custom DrugClip graph-text alignment.",
+      "target_users": "Computational biology researchers, scientific AI platform teams, and research operations groups."
+    },
+    "type": "service",
+    "workflow_id": "drug_discovery_research_assistant_v1"
+  },
+  {
+    "category": "Legal",
+    "description": "A legal document co-worker for invoice, bill, and contract review. Put invoices, bills, contracts, clause notes, labels, or supporting files in the input folder; it extracts payable fields, maps contract clauses, compares playbook expectations, flags review issues, and writes a source-grounded review packet to the output folder.",
+    "id": "legal_assistant",
+    "job_name": "legal-assistant",
+    "name": "Legal Assistant",
+    "path": "legal_assistant",
+    "product": {
+      "agent_role": "Local legal document assistant that extracts invoice and contract evidence while keeping conclusions review-only.",
+      "benefit": "Combines payable extraction and contract clause review into one local, source-grounded review packet.",
+      "customizable_for": "Individual legal intake, small-business invoice review, vendor contract review, CLM intake, payable approval support, and attorney review preparation.",
+      "how_it_works": "Stages a local document folder, extracts embedded text, flags OCR-required documents, extracts invoice fields, maps contract clauses, compares playbook expectations, and writes a human-review packet.",
+      "input": "Invoices, bills, contracts, clause notes, labels, and supporting files.",
+      "output": "Review-only legal_assistant_report with invoice extraction, contract clause review, issue register, action ledger, and Markdown report output.",
+      "problem": "Personal and small-business legal work often mixes payable documents with contracts and obligations; users need one local review assistant that keeps invoice facts, contract clauses, evidence, and approval boundaries together.",
+      "runtime_features": [
+        "local document folder intake",
+        "shared llm_ocr_skill OCR fallback",
+        "invoice and bill field extraction",
+        "contract clause extraction",
+        "playbook comparison",
+        "human approval policy",
+        "product input contract",
+        "transparent run status",
+        "artifact records",
+        "run-store observability dashboard"
+      ],
+      "simulation_type": "Document automation workflow with local OCR and review-gated legal/payable extraction.",
+      "target_users": "Individuals, founders, small-business operators, legal operations teams, in-house reviewers, and attorneys preparing first-pass document packets."
+    },
+    "workflow_id": "legal_assistant_v1"
+  },
+  {
+    "category": "Science",
+    "description": "A research co-scientist that combines deterministic evidence and verification stages with one isolated OpenShell worker for autonomous, tool-driven exploration and bounded generated-code experiments.",
+    "id": "research_coscientist",
+    "job_name": "research-coscientist",
+    "name": "Research Co-Scientist",
+    "path": "research_coscientist",
+    "product": {
+      "agent_role": "Multi-agent research team that finds, evaluates, critiques, and drafts evidence-grounded research directions.",
+      "benefit": "Turns a research goal and approved evidence into a traceable, adversarially reviewed research packet before any experiment or claim is made.",
+      "customizable_for": "Scientific research, engineering investigations, product discovery, policy analysis, literature synthesis, and experiment planning.",
+      "how_it_works": "Frames the goal, retrieves local and bounded public evidence, generates hypotheses, runs skeptical and novelty review, plans experiments and benchmarks, and drafts a review-only brief.",
+      "input": "Research goal, domain, question, constraints, seed hypotheses, and an approved local input folder.",
+      "output": "Research packet with evidence ledger, ranked hypotheses, critiques, experiment concepts, evidence gaps, and a Markdown brief.",
+      "problem": "Research teams need to explore competing explanations while preserving evidence and human control over experiments and public claims.",
+      "runtime_features": [
+        "local and user-document RAG",
+        "privacy-safe public research",
+        "specialized research roles",
+        "generation, reflection, ranking, evolution, proximity, and meta-review loop",
+        "adversarial hypothesis review",
+        "experiment and benchmark planning",
+        "human review gate"
+      ],
+      "simulation_type": "Bounded multi-agent research workflow with evidence evaluation and adversarial hypothesis review.",
+      "target_users": "Researchers, scientists, engineers, analysts, and research leads."
     },
     "type": "batch",
-    "workflow_id": "vc_assistant_v1"
+    "workflow_id": "research_coscientist_v1"
   },
   {
     "category": "Science",
@@ -95,39 +258,6 @@
       }
     },
     "workflow_id": "ecosystem_science_research_v1"
-  },
-  {
-    "category": "Science",
-    "description": "A continuously running drug-discovery research service. Give it a disease or target profile, screening criteria, optional candidate seeds, literature notes, and an input folder; it uses BioTarget and the custom homerquan/DrugClip text-to-molecular-graph model for continuous candidate generation, folding, evaluation, and review-only cycle reports until manually stopped.",
-    "id": "drug_discovery_research_assistant",
-    "job_name": "drug-discovery-research-assistant",
-    "name": "Drug Discovery Research Assistant",
-    "path": "drug_discovery_research_assistant",
-    "product": {
-      "agent_role": "Continuous native service coordinator for BioTarget and custom DrugClip graph-text candidate generation, folding, simulation, and evidence review.",
-      "benefit": "Keeps BioTarget computational discovery cycles moving while distributing DrugClip graph-text screening, folding, and simulation across cluster boxes with reviewable evidence.",
-      "customizable_for": "Drug discovery, target-focused virtual screening, molecular-generation pipelines, folding, simulation, and scientific research operations.",
-      "how_it_works": "Runs a manual-stop native service that dispatches BioTarget Stage C candidate generation, DrugClip graph-text screening, folding, and simulation across worker pools before fanning results into cycle reports.",
-      "input": "Disease or target profile, screening criteria, candidate seeds, literature notes, adapter commands, native dispatcher configuration, and local supporting files.",
-      "output": "Per-cycle candidate, folding, DrugCLIP, simulation, state, risk, and human-review artifacts.",
-      "problem": "Discovery work needs continuous, traceable candidate generation and scientific screening without collapsing cluster-scale folding and simulation into a single serial worker.",
-      "runtime_features": [
-        "manual-stop continuous service",
-        "native host workers",
-        "cross-box fanout/fanin",
-        "custom DrugClip text-molecular-graph alignment",
-        "parallel folding and simulation",
-        "product input contract",
-        "transparent run status",
-        "human control policy",
-        "artifact records",
-        "run-store observability dashboard"
-      ],
-      "simulation_type": "Continuous distributed BioTarget computational discovery service with custom DrugClip graph-text alignment.",
-      "target_users": "Computational biology researchers, scientific AI platform teams, and research operations groups."
-    },
-    "type": "service",
-    "workflow_id": "drug_discovery_research_assistant_v1"
   },
   {
     "category": "Runtime",

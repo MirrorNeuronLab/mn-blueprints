@@ -115,16 +115,16 @@
       "simulation_type": "Scheduled batch startup packet review with score-only VC heuristic reports.",
       "target_users": "VC analysts, angel investors, accelerator reviewers, startup scouts, and founder-led investment teams."
     },
-    "type": "batch",
-    "workflow_id": "vc_assistant_v1",
     "requirements": {
       "gpu": {
-        "min_count": 1,
-        "min_memory_mb": 49152,
+        "enforcement": "hard",
         "memory_operator": ">=",
-        "enforcement": "hard"
+        "min_count": 1,
+        "min_memory_mb": 49152
       }
-    }
+    },
+    "type": "batch",
+    "workflow_id": "vc_assistant_v1"
   },
   {
     "category": "Science",
@@ -478,6 +478,26 @@
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
     "workflow_id": "demo_docker_worker_v1"
+  },
+  {
+    "category": "Runtime",
+    "description": "Safely insert admitted follow-up work when runtime evidence is incomplete.",
+    "id": "demo_dynamic_workflow",
+    "job_name": "demo-dynamic-workflow",
+    "name": "Dynamic Workflow",
+    "path": "demo_dynamic_workflow",
+    "product": {
+      "benefit": "Demonstrates Bounded dynamic DAG patching with minimal setup.",
+      "how_it_works": "Safely insert admitted follow-up work when runtime evidence is incomplete.",
+      "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+      "output": "A final artifact containing fixed and inserted paths, graph revision, verified evidence, and patch identity.",
+      "problem": "Safely add bounded follow-up work after runtime evidence changes.",
+      "runtime_features": [
+        "Bounded dynamic DAG patching"
+      ],
+      "target_users": "MirrorNeuron developers and runtime evaluators."
+    },
+    "workflow_id": "demo_dynamic_workflow_v1"
   },
   {
     "category": "Runtime",

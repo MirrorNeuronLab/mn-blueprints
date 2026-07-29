@@ -33,8 +33,8 @@ def main():
         is True
     )
     errors = []
-    if len(ids) != 26 or len(set(ids)) != 26:
-        errors.append(f"index must contain 26 unique demo rows; found {len(ids)}")
+    if len(ids) != 27 or len(set(ids)) != 27:
+        errors.append(f"index must contain 27 unique demo rows; found {len(ids)}")
     if sorted(ids) != dirs:
         errors.append("demo index rows and demo directories differ")
     category_names = {row["name"] for row in categories.get("categories", [])}

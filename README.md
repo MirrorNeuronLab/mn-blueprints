@@ -1,6 +1,6 @@
 # MirrorNeuron Runtime Demo Blueprints
 
-Twenty-six focused, deterministic blueprints for learning and testing one MirrorNeuron runtime feature at a time.
+Twenty-seven focused, deterministic blueprints for learning and testing one MirrorNeuron runtime feature at a time.
 
 | Blueprint | Category | Primary feature |
 |---|---|---|
@@ -13,6 +13,7 @@ Twenty-six focused, deterministic blueprints for learning and testing one Mirror
 | `demo_dag_fork_join` | Workflow DAG | Parallel fork/join |
 | `demo_dag_scatter_gather` | Workflow DAG | Runtime scatter/gather |
 | `demo_dag_conditional_branch` | Workflow DAG | Conditional branching |
+| `demo_dynamic_workflow` | Workflow DAG | Bounded dynamic DAG patching |
 | `demo_dag_failure_fallback` | Workflow DAG | Failure-triggered fallback |
 | `demo_dag_quorum` | Workflow DAG | Quorum trigger |
 | `demo_human_approval` | Collaboration | Human-control gate |

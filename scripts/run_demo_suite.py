@@ -46,6 +46,7 @@ EVIDENCE = {
     "demo_dag_fork_join": ("east", "west", "central", "join"),
     "demo_dag_scatter_gather": ("workflow_step_scattered", "workflow_gather_completed", "mapped_items"),
     "demo_dag_conditional_branch": ("high_risk", "join"),
+    "demo_dynamic_workflow": ("workflow_graph_patch_applied", "evidence-gap-1", "verified_evidence"),
     "demo_dag_failure_fallback": ("intentional primary outage", "fallback"),
     "demo_dag_quorum": ("sensor_a", "sensor_b", "approve"),
     "demo_llm_tool_call": ("local_forecast", "tool_trace"),

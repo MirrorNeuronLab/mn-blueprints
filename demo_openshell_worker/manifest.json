@@ -120,7 +120,7 @@
     ],
     "schema": "mn.agents.communication_graph/v1"
   },
-  "apiVersion": "mn.workflow/v1",
+  "apiVersion": "mn.workflow/v2",
   "contract": {
     "events": {
       "stream": "events.jsonl",
@@ -422,6 +422,6 @@
         "run": "publish"
       }
     ],
-    "workflow_id": "demo_openshell_worker_v1"
+    "workflow_id": "demo_openshell_worker_v2"
   }
 }

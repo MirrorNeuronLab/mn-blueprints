@@ -1237,7 +1237,7 @@
       ],
       "run_store": "~/.mn/runs/<run_id>/",
       "version": "1.0",
-      "workflow_api_version": "mn.workflow/v1",
+      "workflow_api_version": "mn.workflow/v2",
       "workflow_model": "contract -> workflow -> agents/runtime"
     },
     "status_contract": {
@@ -1402,7 +1402,7 @@
     "profile": "blueprint",
     "profile_version": 1,
     "source_schema": "mn.workflow.source/v2",
-    "target_schema": "mn.workflow/v1"
+    "target_schema": "mn.workflow/v2"
   },
   "type": "service",
   "workers": {
@@ -1550,6 +1550,6 @@
         }
       }
     ],
-    "workflow_id": "drug_discovery_research_assistant_v1"
+    "workflow_id": "drug_discovery_research_assistant_v2"
   }
 }

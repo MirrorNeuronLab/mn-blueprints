@@ -840,7 +840,7 @@
     "profile": "blueprint",
     "profile_version": 1,
     "source_schema": "mn.workflow.source/v2",
-    "target_schema": "mn.workflow/v1"
+    "target_schema": "mn.workflow/v2"
   },
   "workers": {
     "groups": [
@@ -1072,6 +1072,6 @@
         }
       }
     ],
-    "workflow_id": "vc_assistant_v1"
+    "workflow_id": "vc_assistant_v2"
   }
 }

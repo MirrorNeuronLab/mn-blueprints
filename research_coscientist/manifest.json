@@ -662,10 +662,10 @@
     "migration_policy": "sdk_managed",
     "profile": "blueprint",
     "source_schema": "mn.workflow.source/v2",
-    "target_schema": "mn.workflow/v1"
+    "target_schema": "mn.workflow/v2"
   },
   "workflow": {
-    "workflow_id": "research_coscientist_v1",
+    "workflow_id": "research_coscientist_v2",
     "execution": {
       "strategy": "parallel"
     },

@@ -1,5 +1,5 @@
 {
-  "apiVersion": "mn.workflow/v1",
+  "apiVersion": "mn.workflow/v2",
   "kind": "Workflow",
   "manifest_version": "1.0",
   "id": "ecosystem_science_research",
@@ -109,7 +109,7 @@
   },
   "workflow": {
     "schema": "mn.workflow.problem_graph/v1",
-    "workflow_id": "ecosystem_science_research_v1",
+    "workflow_id": "ecosystem_science_research_v2",
     "mode": "static_dag",
     "source": "world",
     "sink": "publish",

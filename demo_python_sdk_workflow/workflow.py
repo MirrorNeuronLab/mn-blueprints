@@ -59,7 +59,7 @@ class IncidentAgents:
         return result
 
 
-@workflow.defn(name="demo_python_sdk_workflow_v1", recovery_mode="local_restart")
+@workflow.defn(name="demo_python_sdk_workflow_v2", recovery_mode="local_restart")
 class DemoPythonSdkWorkflow:
     def __init__(self):
         self.agents = IncidentAgents()

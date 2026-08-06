@@ -224,7 +224,7 @@
     ],
     "schema": "mn.agents.communication_graph/v1"
   },
-  "apiVersion": "mn.workflow/v1",
+  "apiVersion": "mn.workflow/v2",
   "contract": {
     "events": {
       "stream": "events.jsonl",
@@ -614,6 +614,6 @@
         "trigger_rule": "none_failed_min_one_success"
       }
     ],
-    "workflow_id": "demo_dag_conditional_branch_v1"
+    "workflow_id": "demo_dag_conditional_branch_v2"
   }
 }

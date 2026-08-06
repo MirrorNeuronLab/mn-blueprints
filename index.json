@@ -33,7 +33,7 @@
       "target_users": "Individuals, households, freelancers, financial coaches, tax preparers, and advisors reviewing personal finance folders."
     },
     "type": "batch",
-    "workflow_id": "financial_advisor_v1"
+    "workflow_id": "financial_advisor_v2"
   },
   {
     "category": "Finance",
@@ -65,7 +65,7 @@
       "simulation_type": "General purchase research with local RAG and public-source comparison.",
       "target_users": "Consumers, travelers, vehicle buyers, property buyers, renters, and purchase analysts."
     },
-    "workflow_id": "purchase_research_assistant_v1"
+    "workflow_id": "purchase_research_assistant_v2"
   },
   {
     "category": "Finance",
@@ -124,7 +124,7 @@
       }
     },
     "type": "batch",
-    "workflow_id": "vc_assistant_v1"
+    "workflow_id": "vc_assistant_v2"
   },
   {
     "category": "Science",
@@ -157,7 +157,7 @@
       "target_users": "Computational biology researchers, scientific AI platform teams, and research operations groups."
     },
     "type": "service",
-    "workflow_id": "drug_discovery_research_assistant_v1"
+    "workflow_id": "drug_discovery_research_assistant_v2"
   },
   {
     "category": "Legal",
@@ -189,7 +189,7 @@
       "simulation_type": "Document automation workflow with local OCR and review-gated legal/payable extraction.",
       "target_users": "Individuals, founders, small-business operators, legal operations teams, in-house reviewers, and attorneys preparing first-pass document packets."
     },
-    "workflow_id": "legal_assistant_v1"
+    "workflow_id": "legal_assistant_v2"
   },
   {
     "category": "Science",
@@ -219,7 +219,7 @@
       "target_users": "Researchers, scientists, engineers, analysts, and research leads."
     },
     "type": "batch",
-    "workflow_id": "research_coscientist_v1"
+    "workflow_id": "research_coscientist_v2"
   },
   {
     "category": "Science",
@@ -257,7 +257,7 @@
         "min_gb": 0.5
       }
     },
-    "workflow_id": "ecosystem_science_research_v1"
+    "workflow_id": "ecosystem_science_research_v2"
   },
   {
     "category": "Runtime",
@@ -277,7 +277,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_canary_deployment_v1"
+    "workflow_id": "demo_canary_deployment_v2"
   },
   {
     "category": "Runtime",
@@ -297,7 +297,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_checkpoint_replay_v1"
+    "workflow_id": "demo_checkpoint_replay_v2"
   },
   {
     "category": "Runtime",
@@ -317,7 +317,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_context_compression_v1"
+    "workflow_id": "demo_context_compression_v2"
   },
   {
     "category": "Runtime",
@@ -337,7 +337,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_context_memory_acl_v1"
+    "workflow_id": "demo_context_memory_acl_v2"
   },
   {
     "category": "Runtime",
@@ -357,7 +357,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_dag_conditional_branch_v1"
+    "workflow_id": "demo_dag_conditional_branch_v2"
   },
   {
     "category": "Runtime",
@@ -377,7 +377,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_dag_failure_fallback_v1"
+    "workflow_id": "demo_dag_failure_fallback_v2"
   },
   {
     "category": "Runtime",
@@ -397,7 +397,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_dag_fork_join_v1"
+    "workflow_id": "demo_dag_fork_join_v2"
   },
   {
     "category": "Runtime",
@@ -417,7 +417,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_dag_linear_v1"
+    "workflow_id": "demo_dag_linear_v2"
   },
   {
     "category": "Runtime",
@@ -437,7 +437,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_dag_quorum_v1"
+    "workflow_id": "demo_dag_quorum_v2"
   },
   {
     "category": "Runtime",
@@ -457,7 +457,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_dag_scatter_gather_v1"
+    "workflow_id": "demo_dag_scatter_gather_v2"
   },
   {
     "category": "Runtime",
@@ -477,7 +477,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_docker_worker_v1"
+    "workflow_id": "demo_docker_worker_v2"
   },
   {
     "category": "Runtime",
@@ -497,7 +497,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_dynamic_workflow_v1"
+    "workflow_id": "demo_dynamic_workflow_v2"
   },
   {
     "category": "Runtime",
@@ -517,7 +517,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_event_trigger_v1"
+    "workflow_id": "demo_event_trigger_v2"
   },
   {
     "category": "Runtime",
@@ -537,7 +537,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_executor_pool_v1"
+    "workflow_id": "demo_executor_pool_v2"
   },
   {
     "category": "Runtime",
@@ -557,7 +557,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_hostlocal_worker_v1"
+    "workflow_id": "demo_hostlocal_worker_v2"
   },
   {
     "category": "Runtime",
@@ -577,7 +577,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_human_approval_v1"
+    "workflow_id": "demo_human_approval_v2"
   },
   {
     "category": "Runtime",
@@ -597,7 +597,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_llm_tool_call_v1"
+    "workflow_id": "demo_llm_tool_call_v2"
   },
   {
     "category": "Runtime",
@@ -617,7 +617,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_mcp_collaboration_v1"
+    "workflow_id": "demo_mcp_collaboration_v2"
   },
   {
     "category": "Runtime",
@@ -637,7 +637,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_native_beam_agent_v1"
+    "workflow_id": "demo_native_beam_agent_v2"
   },
   {
     "category": "Runtime",
@@ -657,7 +657,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_observability_trace_v1"
+    "workflow_id": "demo_observability_trace_v2"
   },
   {
     "category": "Runtime",
@@ -677,7 +677,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_openshell_worker_v1"
+    "workflow_id": "demo_openshell_worker_v2"
   },
   {
     "category": "Runtime",
@@ -697,7 +697,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_periodic_schedule_v1"
+    "workflow_id": "demo_periodic_schedule_v2"
   },
   {
     "category": "Runtime",
@@ -717,7 +717,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_python_sdk_workflow_v1"
+    "workflow_id": "demo_python_sdk_workflow_v2"
   },
   {
     "category": "Runtime",
@@ -737,7 +737,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_resource_allocation_v1"
+    "workflow_id": "demo_resource_allocation_v2"
   },
   {
     "category": "Runtime",
@@ -757,7 +757,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_retry_recovery_v1"
+    "workflow_id": "demo_retry_recovery_v2"
   },
   {
     "category": "Runtime",
@@ -777,7 +777,7 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_service_health_v1"
+    "workflow_id": "demo_service_health_v2"
   },
   {
     "category": "Runtime",
@@ -797,6 +797,6 @@
       ],
       "target_users": "MirrorNeuron developers and runtime evaluators."
     },
-    "workflow_id": "demo_stream_backpressure_v1"
+    "workflow_id": "demo_stream_backpressure_v2"
   }
 ]

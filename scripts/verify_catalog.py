@@ -61,8 +61,8 @@ def main():
             errors.append(f"{blueprint_id}: index and manifest feature differ")
         if row.get("category") not in category_names:
             errors.append(f"{blueprint_id}: unknown category {row.get('category')}")
-        if manifest.get("apiVersion") != "mn.workflow/v1" or not isinstance(manifest.get("workflow"), dict):
-            errors.append(f"{blueprint_id}: current mn.workflow/v1 workflow contract is required")
+        if manifest.get("apiVersion") != "mn.workflow/v2" or not isinstance(manifest.get("workflow"), dict):
+            errors.append(f"{blueprint_id}: current mn.workflow/v2 workflow contract is required")
         if "flow" in manifest or "graph_id" in manifest:
             errors.append(f"{blueprint_id}: obsolete root flow/graph_id field found")
         if not isinstance(manifest.get("runtime", {}).get("bindings"), dict):

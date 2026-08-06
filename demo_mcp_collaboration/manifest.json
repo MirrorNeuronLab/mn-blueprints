@@ -222,7 +222,7 @@
     ],
     "schema": "mn.agents.communication_graph/v1"
   },
-  "apiVersion": "mn.workflow/v1",
+  "apiVersion": "mn.workflow/v2",
   "contract": {
     "events": {
       "stream": "events.jsonl",
@@ -669,6 +669,6 @@
         "run": "join"
       }
     ],
-    "workflow_id": "demo_mcp_collaboration_v1"
+    "workflow_id": "demo_mcp_collaboration_v2"
   }
 }

@@ -26,7 +26,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 60000,
                     "command": [
                         "/bin/sh",
                         "openshell_worker.sh"
@@ -47,7 +47,7 @@
                     "runner_module": "MirrorNeuron.Runner.OpenShell",
           "safe_to_retry": true,
           "sandbox_upload_path": "/sandbox/job",
-          "timeout_seconds": 10,
+          "timeout_seconds": 60,
           "upload_as": "worker",
           "upload_path": "worker",
           "workdir": "/sandbox/job/worker"
@@ -71,7 +71,7 @@
           "beacon_enabled": true,
           "beacon_interval_ms": 1000,
           "beacon_missed_action": "fail_attempt",
-          "beacon_timeout_ms": 5000,
+          "beacon_timeout_ms": 30000,
           "command": [
             "python3.11",
             "worker.py"
@@ -257,7 +257,7 @@
     "quick_test": {
       "command": "mn blueprint run --folder . --offline --fake-llm --detached",
       "enabled": true,
-      "expected_seconds_warm": 10
+      "expected_seconds_warm": 30
     },
     "runtime_features": [
       "OpenShell isolation"
@@ -390,7 +390,7 @@
             "backoff_seconds": 0.1,
             "max_attempts": 1
           },
-          "timeout_seconds": 10
+          "timeout_seconds": 60
         },
         "emits": [
           "run_done"

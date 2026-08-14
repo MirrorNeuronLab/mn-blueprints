@@ -112,7 +112,11 @@ def main():
         if SECRET_RE.search(content):
             errors.append(f"{blueprint_id}: secret-like value found")
         if args.validate:
-            proc = subprocess.run(["mn", "blueprint", "validate", str(folder), "--output", "json"], text=True, capture_output=True)
+            proc = subprocess.run(
+                ["mn", "blueprint", "validate", str(folder), "--json"],
+                text=True,
+                capture_output=True,
+            )
             if proc.returncode:
                 errors.append(f"{blueprint_id}: mn validation failed\n{proc.stdout or proc.stderr}")
     if errors:

@@ -81,7 +81,7 @@ elif demo == "demo_stream_backpressure":
     result.update({"produced": 10, "queue_size": 3, "drop_policy": "sample", "processed": [0, 3, 6, 9]})
     events.append({"type": "stream_sampled", "payload": {"received": 10, "processed": 4, "queue_size": 3}})
 elif demo == "demo_executor_pool" and step.startswith("worker_"):
-    result.update({"pool": "demo", "pool_slots": 1, "worker": step})
+    result.update({"pool": "default", "pool_slots": 2, "worker": step})
 elif demo == "demo_resource_allocation" and step == "run":
     raw = os.environ.get("MN_ALLOCATION_JSON", "{}")
     try:

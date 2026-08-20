@@ -97,7 +97,7 @@
     ],
     "schema": "mn.agents.communication_graph/v1"
   },
-  "apiVersion": "mn.workflow/v2",
+  "apiVersion": "mn.workflow/v1",
   "contract": {
     "events": {
       "stream": "events.jsonl",

@@ -1,5 +1,5 @@
 {
-  "apiVersion": "mn.workflow/v2",
+  "apiVersion": "mn.workflow/v1",
   "kind": "Workflow",
   "manifest_version": "1.0",
   "id": "ecosystem_science_research",

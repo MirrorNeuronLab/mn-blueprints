@@ -29,7 +29,7 @@ PDFs and document images use `mirrorneuron-llm-ocr-skill`. Embedded PDF text is 
 
 Actor-style LLM analysis requests the Docker Model Runner proxy's managed
 `default` model. Runtime model preparation maps that default to the medium
-`nemotron3` catalog model on a qualifying high-memory endpoint, including a
+`nemotron-3.5-lightning:latest` catalog model on a qualifying high-memory endpoint, including a
 128 GB DGX Spark, and may use the portable small model on less capable
 machines. The blueprint does not pin a concrete runtime model or hard-require a
 GPU. Live model output is still required during normal runs; deterministic

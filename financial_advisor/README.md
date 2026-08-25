@@ -62,7 +62,7 @@ Outputs are review-only. The blueprint does not file tax returns, make trades, m
 ## Model Profiles
 
 Normal runs request the Docker Model Runner proxy's managed `default` model.
-The runtime selects and prepares the medium `nemotron3` catalog model when a
+The runtime selects and prepares the medium `nemotron-3.5-lightning:latest` catalog model when a
 capable endpoint is advertised, including a DGX Spark with 128 GB of unified
 memory. On smaller machines, the catalog may select the portable small model.
 The blueprint does not pin a concrete runtime model or impose a hard GPU

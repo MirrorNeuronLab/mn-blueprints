@@ -37,7 +37,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_stream_backpressure",
+            "MN_BLUEPRINT_ID": "demo_stream_backpressure",
             "MN_STREAM_BURST_SIZE": "10",
             "MN_STREAM_QUEUE_BOUND": "3",
             "MN_WORKFLOW_STEP_ID": "produce"
@@ -85,7 +85,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_stream_backpressure",
+            "MN_BLUEPRINT_ID": "demo_stream_backpressure",
             "MN_WORKFLOW_STEP_ID": "consume",
             "MN_DEMO_FINAL_STEP": "1",
             "MN_STREAM_BURST_SIZE": "10",

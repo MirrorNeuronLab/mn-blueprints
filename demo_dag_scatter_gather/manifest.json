@@ -38,7 +38,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_scatter_gather",
+            "MN_BLUEPRINT_ID": "demo_dag_scatter_gather",
             "MN_WORKFLOW_STEP_ID": "scatter"
           },
           "idempotent": true,
@@ -79,7 +79,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_scatter_gather",
+            "MN_BLUEPRINT_ID": "demo_dag_scatter_gather",
             "MN_WORKFLOW_STEP_ID": "worker"
           },
           "idempotent": true,
@@ -120,7 +120,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_scatter_gather",
+            "MN_BLUEPRINT_ID": "demo_dag_scatter_gather",
             "MN_WORKFLOW_STEP_ID": "collect",
             "MN_DEMO_FINAL_STEP": "1",
             "MN_SCATTER_EXPECTED_ITEMS": "5"

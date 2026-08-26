@@ -33,7 +33,7 @@
           ],
           "environment": {
             "MN_CHECKPOINT_EVENT_COUNT": "6",
-            "MN_DEMO_ID": "demo_checkpoint_replay",
+            "MN_BLUEPRINT_ID": "demo_checkpoint_replay",
             "MN_WORKFLOW_STEP_ID": "run"
           },
           "idempotent": true,
@@ -75,7 +75,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_checkpoint_replay",
+            "MN_BLUEPRINT_ID": "demo_checkpoint_replay",
             "MN_WORKFLOW_STEP_ID": "publish",
             "MN_DEMO_FINAL_STEP": "1"
           },

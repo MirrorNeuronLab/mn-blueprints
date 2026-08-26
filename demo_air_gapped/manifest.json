@@ -44,7 +44,7 @@
         "uses": "demo-airgap.agent.analyzer@1",
         "with": {
           "environment": {
-            "MN_DEMO_ID": "demo_air_gapped",
+            "MN_BLUEPRINT_ID": "demo_air_gapped",
             "MN_LLM_API_BASE": "http://127.0.0.1:12434/engines/v1",
             "MN_LLM_BACKEND": "llama.cpp",
             "MN_LLM_CONTEXT_SIZE": "4096",
@@ -70,7 +70,7 @@
         "with": {
           "environment": {
             "MN_DEMO_FINAL_STEP": "1",
-            "MN_DEMO_ID": "demo_air_gapped",
+            "MN_BLUEPRINT_ID": "demo_air_gapped",
             "MN_WORKFLOW_STEP_ID": "report"
           },
           "idempotent": true,

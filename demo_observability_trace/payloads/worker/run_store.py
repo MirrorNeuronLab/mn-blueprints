@@ -68,7 +68,7 @@ def request_human_approval(
         raise RuntimeError("MN_RUN_ID and MN_RUNS_ROOT are required for human approval")
     run_dir = Path(runs_root).expanduser() / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
-    blueprint_id = os.environ.get("MN_DEMO_ID", "demo_human_approval")
+    blueprint_id = os.environ.get("MN_BLUEPRINT_ID", "demo_human_approval")
     trace_id = "trc_" + secrets.token_hex(10)
     if not (run_dir / "run.json").exists():
         _write_json(
@@ -160,7 +160,7 @@ def write_run_store(result: dict, events: list[dict], *, status: str = "complete
 
     run_dir = Path(runs_root).expanduser() / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
-    blueprint_id = os.environ.get("MN_DEMO_ID", "unknown")
+    blueprint_id = os.environ.get("MN_BLUEPRINT_ID", "unknown")
     job_id = os.environ.get("MN_JOB_ID", "")
     ts = _now()
     trace_context = result.get("trace_context") if isinstance(result.get("trace_context"), dict) else {}

@@ -43,7 +43,7 @@ def exchange_store() -> JobExchangeStore:
         root / "mcp_exchange.sqlite3",
         allowed_root=root,
         job_id=os.environ.get("MN_JOB_ID") or os.environ.get("MN_RUN_ID") or "local-job",
-        blueprint_id=os.environ.get("MN_DEMO_ID", "demo_mcp_collaboration"),
+        blueprint_id=os.environ.get("MN_BLUEPRINT_ID", "demo_mcp_collaboration"),
         run_id=os.environ.get("MN_RUN_ID"),
         goal_id=str(collaboration["goal_id"]),
     )

@@ -51,7 +51,7 @@ class IncidentAgents:
         if incident is None:
             incident = {"service": "checkout", "severity": 2, "normalized": True}
         result = {"status": "ready", "incident": incident, "compiler": "mn-python-sdk"}
-        os.environ.setdefault("MN_DEMO_ID", "demo_python_sdk_workflow")
+        os.environ.setdefault("MN_BLUEPRINT_ID", "demo_python_sdk_workflow")
         write_run_store(
             result,
             [{"type": "python_workflow_compiled", "payload": {"agents": ["normalize", "summarize"]}}],

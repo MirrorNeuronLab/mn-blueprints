@@ -32,7 +32,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_observability_trace",
+            "MN_BLUEPRINT_ID": "demo_observability_trace",
             "MN_WORKFLOW_STEP_ID": "run"
           },
           "idempotent": true,
@@ -73,7 +73,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_observability_trace",
+            "MN_BLUEPRINT_ID": "demo_observability_trace",
             "MN_WORKFLOW_STEP_ID": "publish",
             "MN_DEMO_FINAL_STEP": "1"
           },

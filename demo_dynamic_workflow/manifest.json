@@ -25,7 +25,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dynamic_workflow"
+            "MN_BLUEPRINT_ID": "demo_dynamic_workflow"
           },
           "idempotent": true,
           "max_attempts": 1,
@@ -64,7 +64,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dynamic_workflow"
+            "MN_BLUEPRINT_ID": "demo_dynamic_workflow"
           },
           "idempotent": true,
           "max_attempts": 1,
@@ -103,7 +103,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dynamic_workflow"
+            "MN_BLUEPRINT_ID": "demo_dynamic_workflow"
           },
           "idempotent": true,
           "max_attempts": 1,
@@ -143,7 +143,7 @@
           ],
           "environment": {
             "MN_DEMO_FINAL_STEP": "1",
-            "MN_DEMO_ID": "demo_dynamic_workflow"
+            "MN_BLUEPRINT_ID": "demo_dynamic_workflow"
           },
           "idempotent": true,
           "max_attempts": 1,

@@ -21,7 +21,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--blueprint-id",
         default=os.environ.get("MN_BLUEPRINT_ID")
-        or os.environ.get("MN_DEMO_ID", ""),
+        or os.environ.get("MN_BLUEPRINT_ID", ""),
     )
     parser.add_argument("--run-id", default=os.environ.get("MN_RUN_ID", ""))
     parser.add_argument("--goal-id", default=os.environ.get("MN_MCP_GOAL_ID", ""))

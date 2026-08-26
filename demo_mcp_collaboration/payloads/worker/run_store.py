@@ -29,7 +29,7 @@ def write_run_store(result: dict[str, Any], events: list[dict[str, Any]]) -> Pat
     root = output_root()
     run_id = os.environ.get("MN_RUN_ID") or root.name
     job_id = os.environ.get("MN_JOB_ID", "")
-    blueprint_id = os.environ.get("MN_DEMO_ID", "demo_mcp_collaboration")
+    blueprint_id = os.environ.get("MN_BLUEPRINT_ID", "demo_mcp_collaboration")
     timestamp = _now()
     trace_id = "trc_" + hashlib.sha256(f"{run_id}:{job_id}".encode()).hexdigest()[:20]
     span_id = "spn_" + hashlib.sha256(f"{run_id}:final".encode()).hexdigest()[:16]

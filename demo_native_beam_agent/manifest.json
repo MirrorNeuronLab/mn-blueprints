@@ -50,7 +50,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_native_beam_agent",
+            "MN_BLUEPRINT_ID": "demo_native_beam_agent",
             "MN_WORKFLOW_STEP_ID": "publish",
             "MN_DEMO_FINAL_STEP": "1"
           },

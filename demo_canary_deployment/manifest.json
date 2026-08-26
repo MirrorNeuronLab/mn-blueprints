@@ -32,7 +32,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_canary_deployment",
+            "MN_BLUEPRINT_ID": "demo_canary_deployment",
             "MN_DEMO_SERVICE_SECONDS": "20",
             "MN_WORKFLOW_STEP_ID": "serve"
           },
@@ -74,7 +74,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_canary_deployment",
+            "MN_BLUEPRINT_ID": "demo_canary_deployment",
             "MN_WORKFLOW_STEP_ID": "close",
             "MN_DEMO_FINAL_STEP": "1"
           },

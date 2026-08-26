@@ -21,7 +21,7 @@ def load_json(path_env: str, default):
         return default
 
 
-demo = os.environ.get("MN_DEMO_ID", "unknown")
+demo = os.environ.get("MN_BLUEPRINT_ID", "unknown")
 step = os.environ.get("MN_WORKFLOW_STEP_ID", "run")
 payload = load_json("MN_INPUT_FILE", {})
 context = load_json("MN_CONTEXT_FILE", {})

@@ -62,7 +62,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_fork_join",
+            "MN_BLUEPRINT_ID": "demo_dag_fork_join",
             "MN_WORKFLOW_STEP_ID": "start"
           },
           "idempotent": true,
@@ -103,7 +103,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_fork_join",
+            "MN_BLUEPRINT_ID": "demo_dag_fork_join",
             "MN_WORKFLOW_STEP_ID": "east"
           },
           "idempotent": true,
@@ -144,7 +144,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_fork_join",
+            "MN_BLUEPRINT_ID": "demo_dag_fork_join",
             "MN_WORKFLOW_STEP_ID": "west"
           },
           "idempotent": true,
@@ -185,7 +185,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_fork_join",
+            "MN_BLUEPRINT_ID": "demo_dag_fork_join",
             "MN_WORKFLOW_STEP_ID": "central"
           },
           "idempotent": true,
@@ -226,7 +226,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_fork_join",
+            "MN_BLUEPRINT_ID": "demo_dag_fork_join",
             "MN_WORKFLOW_STEP_ID": "join",
             "MN_DEMO_FINAL_STEP": "1"
           },

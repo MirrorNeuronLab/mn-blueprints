@@ -58,7 +58,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_conditional_branch",
+            "MN_BLUEPRINT_ID": "demo_dag_conditional_branch",
             "MN_WORKFLOW_STEP_ID": "route"
           },
           "idempotent": true,
@@ -99,7 +99,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_conditional_branch",
+            "MN_BLUEPRINT_ID": "demo_dag_conditional_branch",
             "MN_WORKFLOW_STEP_ID": "low_risk"
           },
           "idempotent": true,
@@ -140,7 +140,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_conditional_branch",
+            "MN_BLUEPRINT_ID": "demo_dag_conditional_branch",
             "MN_WORKFLOW_STEP_ID": "high_risk"
           },
           "idempotent": true,
@@ -181,7 +181,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_conditional_branch",
+            "MN_BLUEPRINT_ID": "demo_dag_conditional_branch",
             "MN_WORKFLOW_STEP_ID": "join",
             "MN_DEMO_FINAL_STEP": "1"
           },

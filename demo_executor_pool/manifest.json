@@ -74,7 +74,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_executor_pool",
+            "MN_BLUEPRINT_ID": "demo_executor_pool",
             "MN_WORKFLOW_STEP_ID": "start"
           },
           "idempotent": true,
@@ -115,7 +115,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_executor_pool",
+            "MN_BLUEPRINT_ID": "demo_executor_pool",
             "MN_DEMO_SLEEP_MS": "350",
             "MN_WORKFLOW_STEP_ID": "worker_a"
           },
@@ -157,7 +157,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_executor_pool",
+            "MN_BLUEPRINT_ID": "demo_executor_pool",
             "MN_DEMO_SLEEP_MS": "350",
             "MN_WORKFLOW_STEP_ID": "worker_b"
           },
@@ -199,7 +199,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_executor_pool",
+            "MN_BLUEPRINT_ID": "demo_executor_pool",
             "MN_DEMO_SLEEP_MS": "350",
             "MN_WORKFLOW_STEP_ID": "worker_c"
           },
@@ -241,7 +241,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_executor_pool",
+            "MN_BLUEPRINT_ID": "demo_executor_pool",
             "MN_DEMO_SLEEP_MS": "350",
             "MN_WORKFLOW_STEP_ID": "worker_d"
           },
@@ -283,7 +283,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_executor_pool",
+            "MN_BLUEPRINT_ID": "demo_executor_pool",
             "MN_WORKFLOW_STEP_ID": "join",
             "MN_DEMO_FINAL_STEP": "1"
           },

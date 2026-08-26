@@ -50,7 +50,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_mcp_collaboration",
+            "MN_BLUEPRINT_ID": "demo_mcp_collaboration",
             "MN_WORKFLOW_STEP_ID": "start"
           },
           "idempotent": true,
@@ -91,7 +91,7 @@
             "serve.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_mcp_collaboration",
+            "MN_BLUEPRINT_ID": "demo_mcp_collaboration",
             "MN_WORKFLOW_STEP_ID": "serve"
           },
           "idempotent": true,
@@ -132,7 +132,7 @@
             "collaborate.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_mcp_collaboration",
+            "MN_BLUEPRINT_ID": "demo_mcp_collaboration",
             "MN_WORKFLOW_STEP_ID": "collaborate"
           },
           "idempotent": true,
@@ -182,7 +182,7 @@
           ],
           "environment": {
             "MN_DEMO_FINAL_STEP": "1",
-            "MN_DEMO_ID": "demo_mcp_collaboration",
+            "MN_BLUEPRINT_ID": "demo_mcp_collaboration",
             "MN_WORKFLOW_STEP_ID": "join"
           },
           "idempotent": true,

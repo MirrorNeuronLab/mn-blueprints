@@ -38,7 +38,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_linear",
+            "MN_BLUEPRINT_ID": "demo_dag_linear",
             "MN_WORKFLOW_STEP_ID": "parse"
           },
           "idempotent": true,
@@ -79,7 +79,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_linear",
+            "MN_BLUEPRINT_ID": "demo_dag_linear",
             "MN_WORKFLOW_STEP_ID": "score"
           },
           "idempotent": true,
@@ -120,7 +120,7 @@
             "worker.py"
           ],
           "environment": {
-            "MN_DEMO_ID": "demo_dag_linear",
+            "MN_BLUEPRINT_ID": "demo_dag_linear",
             "MN_WORKFLOW_STEP_ID": "report",
             "MN_DEMO_FINAL_STEP": "1"
           },

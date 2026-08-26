@@ -284,7 +284,7 @@
       "mode": "fail"
     }
   },
-  "requiredContextEngine": false,
+  "required_context_engine": false,
   "requirements": {
     "cpu": {
       "min_cores": 0.1

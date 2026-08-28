@@ -1,10 +1,7 @@
-FROM mirror-neuron-core:latest
+FROM ghcr.io/nvidia/openshell-community/sandboxes/base:latest@sha256:aeef1c63f00e2913ea002ccb3aaf925f338b5c5d70e63576f0d95c16a138044e
 
 USER root
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends iproute2 \
-    && rm -rf /var/lib/apt/lists/* \
-    && groupadd --gid 1000 sandbox \
-    && useradd --uid 1000 --gid sandbox --create-home --shell /bin/bash sandbox \
-    && mkdir -p /sandbox/job \
+RUN mkdir -p /sandbox/job \
     && chown -R sandbox:sandbox /sandbox
+
+USER sandbox

@@ -181,7 +181,7 @@
       "enabled": true,
       "max_pages": null,
       "min_text_chars": 40,
-      "package": "mirrorneuron-llm-ocr-skill",
+      "package": "mirrorneuron-llm-ocr-skill==1.3.22",
       "purpose": "shared local OCR for scanned or low-text PDF startup packets",
       "required": true,
       "skill": "llm_ocr_skill",
@@ -198,7 +198,7 @@
       "max_sources_per_company": 8,
       "no_captcha_solving": true,
       "no_proxy_rotation": true,
-      "package": "mirrorneuron-web-browser-skill",
+      "package": "mirrorneuron-web-browser-skill==1.3.22",
       "per_host_delay_seconds": 1,
       "purpose": "unified public research with lightweight w3m routing and a deterministic agent-browser rendered actuator, plain-text extraction, bounded retries, audits, and structured blocked outcomes",
       "required": false,
@@ -777,7 +777,7 @@
     "index_url": "https://us-central1-python.pkg.dev/mirrorneuron-public-packages/agent-skills/simple/",
     "installer": "pip",
     "packages": [
-      "mirrorneuron-membrane-python-sdk==1.2.31"
+      "mirrorneuron-membrane-python-sdk==1.3.19"
     ],
     "requirements": "requirements.txt"
   },

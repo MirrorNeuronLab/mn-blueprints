@@ -8,15 +8,20 @@ action queue. The full JSON bundle remains the audit layer.
 
 ## Run
 
+From the repository root:
+
 ```bash
-mn run financial_advisor
+mn blueprint run ./financial_advisor
 ```
 
-Or from the folder:
+Skill versions are declared in `dependencies.json`. In local dev mode, the
+runtime loads these skills from the local source folders. In binary production,
+the same declarations select versioned GAR/pip packages.
+
+Or from this blueprint folder:
 
 ```bash
-cd financial_advisor
-mn run --folder .
+mn blueprint run .
 ```
 
 The default sample input folder is `financial_advisor/examples/sample_inputs`; the default output folder is `~/Downloads/financial_advisor`. The sample folder includes synthetic bank/tax/portfolio text fixtures plus tax-form image/label pairs for local OCR-capture validation.

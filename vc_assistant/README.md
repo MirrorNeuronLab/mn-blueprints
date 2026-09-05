@@ -66,22 +66,20 @@ There is intentionally no `payloads/agents/domain.py`. Agents import only the VC
 
 ## Quick Start
 
-Run from the catalog:
+From the repository root:
 
 ```bash
-mn run vc_assistant
+mn blueprint run ./vc_assistant
 ```
 
-Run directly from this folder:
+Skill versions are declared in `dependencies.json`. In local dev mode, the
+runtime loads these skills from the local source folders. In binary production,
+the same declarations select versioned GAR/pip packages.
+
+Or from this blueprint folder:
 
 ```bash
-mn run --folder .
-```
-
-Inspect recent run state:
-
-```bash
-mn blueprint monitor --follow
+mn blueprint run .
 ```
 
 ## Inputs And Configuration

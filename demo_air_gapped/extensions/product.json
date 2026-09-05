@@ -1,0 +1,11 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "runtime_features": [
+    "Blueprint-owned skill",
+    "Blueprint-owned agents",
+    "Blueprint-owned model",
+    "Streaming large payload staging",
+    "Air-gapped backup and restore"
+  ],
+  "category": "Air-Gapped Execution"
+}

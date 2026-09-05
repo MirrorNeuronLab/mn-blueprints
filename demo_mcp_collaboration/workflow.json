@@ -1,0 +1,135 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_serve",
+      "required": true,
+      "to": "serve"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_collaborate",
+      "required": true,
+      "to": "collaborate"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "serve",
+      "id": "serve_to_join",
+      "required": true,
+      "to": "join"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "collaborate",
+      "id": "collaborate_to_join",
+      "required": true,
+      "to": "join"
+    }
+  ],
+  "entrypoint": "start",
+  "execution": {
+    "max_parallel_steps": 2,
+    "strategy": "parallel"
+  },
+  "mode": "static_dag",
+  "sink": "join",
+  "source": "start",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "start_done"
+      ],
+      "goal": "Run the publish local exchange stage.",
+      "id": "start",
+      "kind": "task",
+      "label": "Publish Local Exchange",
+      "run": "start"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 30
+      },
+      "emits": [
+        "serve_done"
+      ],
+      "goal": "Run the serve job mcp stage.",
+      "id": "serve",
+      "kind": "task",
+      "label": "Serve Job MCP",
+      "run": "serve"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 25
+      },
+      "emits": [
+        "collaborate_done"
+      ],
+      "goal": "Run the read peer exchanges stage.",
+      "id": "collaborate",
+      "kind": "task",
+      "label": "Read Peer Exchanges",
+      "run": "collaborate"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "join_done"
+      ],
+      "goal": "Run the finalize evidence stage.",
+      "id": "join",
+      "kind": "task",
+      "label": "Finalize Evidence",
+      "run": "join"
+    }
+  ],
+  "workflow_id": "demo_mcp_collaboration_v2"
+}

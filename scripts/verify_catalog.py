@@ -8,9 +8,18 @@ import subprocess
 import sys
 from pathlib import Path
 
-
-REQUIRED = ("manifest.json", "README.md", "SPEC.md", "LICENSE.md", "TERM.md", "config/default.json", "payloads")
-SECRET_RE = re.compile(r"(?i)(api[_-]?key|authorization|password|private[_-]?key)\s*[:=]\s*[\"']?(?!\s*(?:null|none|false|\"\"))[^\s,}]+")
+REQUIRED = (
+    "manifest.json",
+    "README.md",
+    "SPEC.md",
+    "LICENSE.md",
+    "TERM.md",
+    "config/default.json",
+    "payloads",
+)
+SECRET_RE = re.compile(
+    r"(?i)(api[_-]?key|authorization|password|private[_-]?key)\s*[:=]\s*[\"']?(?!\s*(?:null|none|false|\"\"))[^\s,}]+"
+)
 
 
 def main():
@@ -18,7 +27,14 @@ def main():
     parser.add_argument("--validate", action="store_true")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    index = json.loads((root / "index.json").read_text())
+    from mn_sdk.blueprints import (
+        blueprint_definition,
+        read_blueprint,
+        read_catalog,
+        resolve_config,
+    )
+
+    index = read_catalog(root / "index.json")
     categories = json.loads((root / "category.json").read_text())
     demo_rows = [row for row in index if str(row.get("id") or "").startswith("demo_")]
     ids = [row["id"] for row in demo_rows]
@@ -26,7 +42,7 @@ def main():
         path.name
         for path in root.glob("demo_*")
         if path.is_dir()
-        and json.loads((path / "manifest.json").read_text())
+        and blueprint_definition(read_blueprint(path))
         .get("metadata", {})
         .get("quick_test", {})
         .get("enabled")
@@ -45,8 +61,8 @@ def main():
         for required in REQUIRED:
             if not (folder / required).exists():
                 errors.append(f"{blueprint_id}: missing {required}")
-        manifest = json.loads((folder / "manifest.json").read_text())
-        config = json.loads((folder / "config/default.json").read_text())
+        manifest = blueprint_definition(read_blueprint(folder))
+        config = resolve_config(read_blueprint(folder)).data
         row = next(item for item in index if item["id"] == blueprint_id)
         if manifest.get("id") != blueprint_id:
             errors.append(f"{blueprint_id}: root manifest id mismatch")
@@ -56,13 +72,19 @@ def main():
             errors.append(f"{blueprint_id}: config identity mismatch")
         features = manifest.get("metadata", {}).get("runtime_features") or []
         if len(features) != 1:
-            errors.append(f"{blueprint_id}: expected one runtime feature, found {len(features)}")
+            errors.append(
+                f"{blueprint_id}: expected one runtime feature, found {len(features)}"
+            )
         if features != row.get("product", {}).get("runtime_features"):
             errors.append(f"{blueprint_id}: index and manifest feature differ")
         if row.get("category") not in category_names:
             errors.append(f"{blueprint_id}: unknown category {row.get('category')}")
-        if manifest.get("apiVersion") != "mn.workflow/v1" or not isinstance(manifest.get("workflow"), dict):
-            errors.append(f"{blueprint_id}: current mn.workflow/v1 workflow contract is required")
+        if manifest.get("apiVersion") != "mn.workflow/v1" or not isinstance(
+            manifest.get("workflow"), dict
+        ):
+            errors.append(
+                f"{blueprint_id}: current mn.workflow/v1 workflow contract is required"
+            )
         if "flow" in manifest or "graph_id" in manifest:
             errors.append(f"{blueprint_id}: obsolete root flow/graph_id field found")
         if not isinstance(manifest.get("runtime", {}).get("bindings"), dict):
@@ -72,11 +94,19 @@ def main():
             errors.append(f"{blueprint_id}: all four input adapters are required")
         llm_enabled = bool(config.get("llm", {}).get("enabled"))
         if llm_enabled != (blueprint_id == "demo_llm_tool_call"):
-            errors.append(f"{blueprint_id}: llm.enabled violates the focused catalog default")
+            errors.append(
+                f"{blueprint_id}: llm.enabled violates the focused catalog default"
+            )
         size = sum(path.stat().st_size for path in folder.rglob("*") if path.is_file())
         if size > 1_000_000:
             errors.append(f"{blueprint_id}: checked-in size {size} exceeds 1 MB")
-        forbidden_dirs = {"_vendor", "site-packages", "__pycache__", ".venv", "node_modules"}
+        forbidden_dirs = {
+            "_vendor",
+            "site-packages",
+            "__pycache__",
+            ".venv",
+            "node_modules",
+        }
         forbidden_paths = []
         for path in folder.rglob("*"):
             if not path.is_dir() or path.name not in forbidden_dirs:
@@ -95,9 +125,15 @@ def main():
                 f"{blueprint_id}: generated or vendored dependency directory found: "
                 f"{forbidden_paths[0].relative_to(folder)}"
             )
-        oversized = [path for path in folder.rglob("*") if path.is_file() and path.stat().st_size > 250_000]
+        oversized = [
+            path
+            for path in folder.rglob("*")
+            if path.is_file() and path.stat().st_size > 250_000
+        ]
         if oversized:
-            errors.append(f"{blueprint_id}: individual file exceeds 250 KB: {oversized[0].relative_to(folder)}")
+            errors.append(
+                f"{blueprint_id}: individual file exceeds 250 KB: {oversized[0].relative_to(folder)}"
+            )
         text_files = []
         for path in folder.rglob("*"):
             if not path.is_file():
@@ -118,7 +154,9 @@ def main():
                 capture_output=True,
             )
             if proc.returncode:
-                errors.append(f"{blueprint_id}: mn validation failed\n{proc.stdout or proc.stderr}")
+                errors.append(
+                    f"{blueprint_id}: mn validation failed\n{proc.stdout or proc.stderr}"
+                )
     if errors:
         print("\n".join(errors), file=sys.stderr)
         raise SystemExit(1)

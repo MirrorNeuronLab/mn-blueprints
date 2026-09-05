@@ -4,10 +4,6 @@
     "max_llm_tokens": 600,
     "max_runtime_seconds": 180
   },
-  "identity": {
-    "blueprint_id": "demo_air_gapped",
-    "name": "Air-Gapped Payload Demo"
-  },
   "inputs": {
     "adapter": "mock",
     "env": "MN_BLUEPRINT_INPUT_JSON",

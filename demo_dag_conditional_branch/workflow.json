@@ -1,0 +1,136 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "route",
+      "id": "route_to_low_risk",
+      "required": true,
+      "to": "low_risk"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "route",
+      "id": "route_to_high_risk",
+      "required": true,
+      "to": "high_risk"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "low_risk",
+      "id": "low_risk_to_join",
+      "required": true,
+      "to": "join"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "high_risk",
+      "id": "high_risk_to_join",
+      "required": true,
+      "to": "join"
+    }
+  ],
+  "entrypoint": "route",
+  "execution": {
+    "max_parallel_steps": 4,
+    "strategy": "serial"
+  },
+  "mode": "static_dag",
+  "sink": "join",
+  "source": "route",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 60
+      },
+      "emits": [
+        "route_done"
+      ],
+      "goal": "Run the route stage.",
+      "id": "route",
+      "kind": "task",
+      "label": "Route",
+      "run": "route"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 60
+      },
+      "emits": [
+        "low_risk_done"
+      ],
+      "goal": "Run the low_risk stage.",
+      "id": "low_risk",
+      "kind": "task",
+      "label": "Low Risk",
+      "run": "low_risk"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 60
+      },
+      "emits": [
+        "high_risk_done"
+      ],
+      "goal": "Run the high_risk stage.",
+      "id": "high_risk",
+      "kind": "task",
+      "label": "High Risk",
+      "run": "high_risk"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 60
+      },
+      "emits": [
+        "join_done"
+      ],
+      "goal": "Run the join stage.",
+      "id": "join",
+      "kind": "task",
+      "label": "Join",
+      "run": "join",
+      "trigger_rule": "none_failed_min_one_success"
+    }
+  ],
+  "workflow_id": "demo_dag_conditional_branch_v2"
+}

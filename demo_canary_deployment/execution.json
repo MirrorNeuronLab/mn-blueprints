@@ -1,0 +1,224 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/execution.schema.json",
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "serve_to_close",
+        "from_node": "serve",
+        "message_type": "serve_done",
+        "to_node": "close"
+      },
+      {
+        "edge_id": "close_to_report_sink",
+        "from_node": "close",
+        "message_type": "final_result",
+        "to_node": "report_sink"
+      }
+    ],
+    "entrypoints": [
+      "serve"
+    ],
+    "nodes": [
+      {
+        "agent_type": "executor",
+        "alias": "serve",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_canary_deployment",
+            "MN_DEMO_SERVICE_SECONDS": "20",
+            "MN_WORKFLOW_STEP_ID": "serve"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "serve_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 30,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Serve",
+        "node_id": "serve",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "root_coordinator",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "close",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_canary_deployment",
+            "MN_WORKFLOW_STEP_ID": "close",
+            "MN_DEMO_FINAL_STEP": "1"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "final_result",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Close",
+        "node_id": "close",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "aggregator",
+        "alias": "result_sink",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        },
+        "node_id": "report_sink",
+        "role": "result_sink",
+        "type": "reduce"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "deployment": {
+    "key": "demo-canary-service"
+  },
+  "job_name": "demo-canary-deployment",
+  "policies": {
+    "recovery_mode": "local_restart",
+    "restart": {
+      "attempts": 2,
+      "delay_function": "constant",
+      "delay_ms": 100,
+      "interval_ms": 60000,
+      "max_delay_ms": 100,
+      "mode": "fail"
+    },
+    "update": {
+      "auto_promote": false,
+      "auto_revert": true,
+      "canary": 1,
+      "health_check": "agent_states",
+      "healthy_deadline_ms": 5000,
+      "max_parallel": 1,
+      "min_healthy_ms": 250,
+      "progress_deadline_ms": 10000,
+      "strategy": "canary"
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 0.1
+    },
+    "disk": {
+      "min_gb": 0.01
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 0.05
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "close": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "close",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "serve": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "serve",
+            "role": "Run this workflow step."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "serve": [
+        {
+          "records": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "scenario": "demo_canary_deployment",
+          "seed": 42
+        }
+      ]
+    },
+    "store": {
+      "path": "~/.mn/runs/${run_id}",
+      "type": "local_run_store"
+    },
+    "workflow_control": {
+      "enabled": true,
+      "liveness": {
+        "event": "agent_beacon",
+        "interval_ms": 1000,
+        "missed_action": "fail_attempt",
+        "required": false,
+        "timeout_ms": 5000
+      },
+      "schema_version": "mn.workflow.runtime_control.v1",
+      "source_of_truth": "workflow.steps",
+      "state_ledger": {
+        "delivery_semantics": "at_least_once_with_idempotency",
+        "enabled": true,
+        "message_ledger": true,
+        "persisted_field": "workflow_state"
+      }
+    }
+  },
+  "type": "service",
+  "mode": "explicit"
+}

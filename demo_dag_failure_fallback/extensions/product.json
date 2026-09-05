@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "A compact JSON result and standard run-store evidence.",
+  "problem_solved": "Fail a primary lookup and recover through a fallback step.",
+  "simulation_type": "Deterministic synthetic runtime scenario.",
+  "runtime_features": [
+    "Failure-triggered fallback"
+  ],
+  "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates Failure-triggered fallback with minimal setup.",
+    "how_it_works": "Fail a primary lookup and recover through a fallback step.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "problem": "Fail a primary lookup and recover through a fallback step.",
+    "runtime_features": [
+      "Failure-triggered fallback"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

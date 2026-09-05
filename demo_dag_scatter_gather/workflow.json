@@ -1,0 +1,97 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "scatter",
+      "id": "scatter_to_worker",
+      "required": true,
+      "to": "worker"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "worker",
+      "id": "worker_to_collect",
+      "required": true,
+      "to": "collect"
+    }
+  ],
+  "entrypoint": "scatter",
+  "execution": {
+    "max_parallel_steps": 4,
+    "strategy": "serial"
+  },
+  "mode": "static_dag",
+  "sink": "collect",
+  "source": "scatter",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 300
+      },
+      "emits": [
+        "scatter_done"
+      ],
+      "goal": "Run the scatter stage.",
+      "id": "scatter",
+      "kind": "task",
+      "label": "Scatter",
+      "run": "scatter"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 300
+      },
+      "emits": [
+        "worker_done"
+      ],
+      "goal": "Run the worker stage.",
+      "id": "worker",
+      "kind": "task",
+      "label": "Worker",
+      "run": "worker"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 300
+      },
+      "emits": [
+        "collect_done"
+      ],
+      "goal": "Run the collect stage.",
+      "id": "collect",
+      "kind": "task",
+      "label": "Collect",
+      "run": "collect"
+    }
+  ],
+  "workflow_id": "demo_dag_scatter_gather_v2"
+}

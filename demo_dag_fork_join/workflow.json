@@ -1,0 +1,173 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_east",
+      "required": true,
+      "to": "east"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_west",
+      "required": true,
+      "to": "west"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_central",
+      "required": true,
+      "to": "central"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "east",
+      "id": "east_to_join",
+      "required": true,
+      "to": "join"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "west",
+      "id": "west_to_join",
+      "required": true,
+      "to": "join"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "central",
+      "id": "central_to_join",
+      "required": true,
+      "to": "join"
+    }
+  ],
+  "entrypoint": "start",
+  "execution": {
+    "max_parallel_steps": 4,
+    "strategy": "parallel"
+  },
+  "mode": "static_dag",
+  "sink": "join",
+  "source": "start",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "start_done"
+      ],
+      "goal": "Run the start stage.",
+      "id": "start",
+      "kind": "task",
+      "label": "Start",
+      "run": "start"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "east_done"
+      ],
+      "goal": "Run the east stage.",
+      "id": "east",
+      "kind": "task",
+      "label": "East",
+      "run": "east"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "west_done"
+      ],
+      "goal": "Run the west stage.",
+      "id": "west",
+      "kind": "task",
+      "label": "West",
+      "run": "west"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "central_done"
+      ],
+      "goal": "Run the central stage.",
+      "id": "central",
+      "kind": "task",
+      "label": "Central",
+      "run": "central"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "join_done"
+      ],
+      "goal": "Run the join stage.",
+      "id": "join",
+      "kind": "task",
+      "label": "Join",
+      "run": "join"
+    }
+  ],
+  "workflow_id": "demo_dag_fork_join_v2"
+}

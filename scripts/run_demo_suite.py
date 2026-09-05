@@ -7,10 +7,10 @@ by default. The runner also understands the shared-submission run store, because
 output-copy is asynchronous and authoritative artifacts can appear there before
 ``~/.mn/runs`` is merged.
 """
+
 from __future__ import annotations
 
 import argparse
-from contextlib import contextmanager
 import json
 import os
 import re
@@ -21,8 +21,8 @@ import sys
 import tempfile
 import time
 import uuid
+from contextlib import contextmanager
 from pathlib import Path
-
 
 REQUIRED_ARTIFACTS = (
     "run.json",
@@ -44,21 +44,41 @@ EVIDENCE = {
     "demo_python_sdk_workflow": ("demo_python_sdk_workflow",),
     "demo_dag_linear": ("parse", "score", "report"),
     "demo_dag_fork_join": ("east", "west", "central", "join"),
-    "demo_dag_scatter_gather": ("workflow_step_scattered", "workflow_gather_completed", "mapped_items"),
+    "demo_dag_scatter_gather": (
+        "workflow_step_scattered",
+        "workflow_gather_completed",
+        "mapped_items",
+    ),
     "demo_dag_conditional_branch": ("high_risk", "join"),
-    "demo_dynamic_workflow": ("workflow_graph_patch_applied", "evidence-gap-1", "verified_evidence"),
+    "demo_dynamic_workflow": (
+        "workflow_graph_patch_applied",
+        "evidence-gap-1",
+        "verified_evidence",
+    ),
     "demo_dag_failure_fallback": ("intentional primary outage", "fallback"),
     "demo_dag_quorum": ("sensor_a", "sensor_b", "approve"),
     "demo_llm_tool_call": ("local_forecast", "tool_trace"),
     "demo_mcp_collaboration": ("peer_exchange", "publication_state", "staged"),
     "demo_context_memory_acl": ("private_hidden",),
     "demo_context_compression": ("source_refs",),
-    "demo_stream_backpressure": ("stream_burst_emitted", "stream_drain_completed", "consumer_processed"),
+    "demo_stream_backpressure": (
+        "stream_burst_emitted",
+        "stream_drain_completed",
+        "consumer_processed",
+    ),
     "demo_executor_pool": ("pool_slots",),
     "demo_resource_allocation": ("allocation",),
     "demo_retry_recovery": ("attempt",),
-    "demo_checkpoint_replay": ("checkpoint_replay_completed", "replayed_duplicate_ignored", "persisted_executor_agent_state"),
-    "demo_observability_trace": ("trace_span_started", "trace_span_linked", "parent_span_id"),
+    "demo_checkpoint_replay": (
+        "checkpoint_replay_completed",
+        "replayed_duplicate_ignored",
+        "persisted_executor_agent_state",
+    ),
+    "demo_observability_trace": (
+        "trace_span_started",
+        "trace_span_linked",
+        "parent_span_id",
+    ),
 }
 
 
@@ -69,8 +89,15 @@ def run(
     check: bool = True,
     env: dict[str, str] | None = None,
 ) -> subprocess.CompletedProcess[str]:
-    process_env = {**os.environ, **(env or {}), "NO_COLOR": "1", "MN_CLI_OUTPUT": "plain"}
-    proc = subprocess.run(command, text=True, capture_output=True, timeout=timeout, env=process_env)
+    process_env = {
+        **os.environ,
+        **(env or {}),
+        "NO_COLOR": "1",
+        "MN_CLI_OUTPUT": "plain",
+    }
+    proc = subprocess.run(
+        command, text=True, capture_output=True, timeout=timeout, env=process_env
+    )
     if check and proc.returncode:
         raise RuntimeError(
             f"command failed ({proc.returncode}): {' '.join(command)}\n{proc.stdout}\n{proc.stderr}"
@@ -152,7 +179,11 @@ def wait_run(run_id: str, timeout: float) -> tuple[Path, dict]:
         if not run_dir or not (run_dir / "run.json").exists():
             return None
         state = json.loads((run_dir / "run.json").read_text(encoding="utf-8"))
-        return (run_dir, state) if state.get("status") in {"completed", "failed", "cancelled"} else None
+        return (
+            (run_dir, state)
+            if state.get("status") in {"completed", "failed", "cancelled"}
+            else None
+        )
 
     return wait_until(finished, timeout, f"run {run_id}")
 
@@ -171,14 +202,21 @@ def assert_run(blueprint_id: str, run_id: str, timeout: float) -> Path:
     ).lower()
     runtime_events = Path(os.path.expanduser("~/.mn/runs")) / run_id / "events.jsonl"
     if runtime_events.is_file() and runtime_events.parent != run_dir:
-        corpus += "\n" + runtime_events.read_text(encoding="utf-8", errors="replace").lower()
-    absent = [token for token in EVIDENCE.get(blueprint_id, ()) if token.lower() not in corpus]
+        corpus += (
+            "\n" + runtime_events.read_text(encoding="utf-8", errors="replace").lower()
+        )
+    absent = [
+        token for token in EVIDENCE.get(blueprint_id, ()) if token.lower() not in corpus
+    ]
     if absent:
         raise RuntimeError(f"{blueprint_id}: missing feature evidence {absent}")
     if blueprint_id == "demo_context_memory_acl" and not any(
-        token in corpus for token in ('"private_hidden": true', '\\"private_hidden\\": true')
+        token in corpus
+        for token in ('"private_hidden": true', '\\"private_hidden\\": true')
     ):
-        raise RuntimeError("demo_context_memory_acl: private memory was visible to the auditor")
+        raise RuntimeError(
+            "demo_context_memory_acl: private memory was visible to the auditor"
+        )
     return run_dir
 
 
@@ -232,7 +270,9 @@ def runtime_bundle(folder: Path, revision: str = ""):
     with tempfile.TemporaryDirectory(prefix=f"mn-{folder.name}-runtime-") as temp:
         output = Path(temp) / "bundle"
         output.mkdir()
-        manifest = json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
+        from mn_sdk.blueprints import compile_blueprint, read_blueprint
+
+        manifest = compile_blueprint(read_blueprint(folder)).manifest
         workflow = manifest.get("workflow") or {}
         agents = manifest.get("agents") or {}
         if folder.name == "demo_canary_deployment":
@@ -247,7 +287,9 @@ def runtime_bundle(folder: Path, revision: str = ""):
             workflow["edges"] = []
             workflow["source"] = "serve"
             workflow["sink"] = "serve"
-            manifest["runtime"]["bindings"] = {"serve": manifest["runtime"]["bindings"]["serve"]}
+            manifest["runtime"]["bindings"] = {
+                "serve": manifest["runtime"]["bindings"]["serve"]
+            }
         workflow_id = workflow.get("workflow_id")
         if workflow_id:
             manifest["graph_id"] = workflow_id
@@ -257,12 +299,23 @@ def runtime_bundle(folder: Path, revision: str = ""):
             "steps": workflow.get("steps", []),
             "graph": {"edges": workflow.get("edges", [])},
         }
-        for key in ("entrypoint", "source", "sink", "mode", "execution", "dynamic", "policy", "state"):
+        for key in (
+            "entrypoint",
+            "source",
+            "sink",
+            "mode",
+            "execution",
+            "dynamic",
+            "policy",
+            "state",
+        ):
             if key in workflow:
                 flow[key] = workflow[key]
         manifest["flow"] = flow
         manifest["entrypoints"] = agents.get("entrypoints", [])
-        manifest["initial_inputs"] = (manifest.get("runtime") or {}).get("initial_inputs", {})
+        manifest["initial_inputs"] = (manifest.get("runtime") or {}).get(
+            "initial_inputs", {}
+        )
         (output / "manifest.json").write_text(
             json.dumps(manifest, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
@@ -272,11 +325,15 @@ def runtime_bundle(folder: Path, revision: str = ""):
         if revision:
             manifest["metadata"]["demo_revision"] = revision
             for node in manifest.get("agents", {}).get("nodes", []):
-                config = node.get("config") if isinstance(node.get("config"), dict) else None
+                config = (
+                    node.get("config") if isinstance(node.get("config"), dict) else None
+                )
                 if config is not None:
                     config.setdefault("environment", {})["MN_DEMO_REVISION"] = revision
             manifest_path = output / "manifest.json"
-            manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+            manifest_path.write_text(
+                json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+            )
             worker = output / "payloads/worker/worker.py"
             if worker.is_file():
                 with worker.open("a", encoding="utf-8") as handle:
@@ -339,7 +396,9 @@ def python_sdk_demo(mn: str, folder: Path, timeout: float):
     executable = Path(shutil.which(mn) or mn)
     python = sys.executable
     try:
-        first_line = executable.read_text(encoding="utf-8", errors="ignore").splitlines()[0]
+        first_line = executable.read_text(
+            encoding="utf-8", errors="ignore"
+        ).splitlines()[0]
         if first_line.startswith("#!") and "python" in first_line:
             python = first_line[2:].strip().split()[0]
     except (OSError, IndexError):
@@ -355,8 +414,7 @@ def python_sdk_demo(mn: str, folder: Path, timeout: float):
     # installed package in the CLI's interpreter.
     sdk_candidates.append(folder.parents[1] / "mirror-neuron-set" / "mn-python-sdk")
     sdk_candidates.extend(
-        parent / "mn-python-sdk"
-        for parent in executable.resolve().parents
+        parent / "mn-python-sdk" for parent in executable.resolve().parents
     )
     workspace_sdk = next(
         (candidate for candidate in sdk_candidates if (candidate / "mn_sdk").is_dir()),
@@ -388,7 +446,10 @@ def python_sdk_demo(mn: str, folder: Path, timeout: float):
             timeout=timeout,
             env={"PYTHONPATH": pythonpath},
         )
-        run([mn, "blueprint", "validate", str(bundle), "--output", "json"], timeout=timeout)
+        run(
+            [mn, "blueprint", "validate", str(bundle), "--output", "json"],
+            timeout=timeout,
+        )
         run_id = f"demo-python-sdk-{uuid.uuid4().hex[:8]}"
         proc = launch(mn, bundle, run_id, timeout)
         if proc.returncode and not locate_run_dir(run_id):
@@ -409,9 +470,11 @@ def openshell_demo(mn: str, folder: Path, timeout: float):
     with tempfile.TemporaryDirectory(prefix="mn-openshell-demo-") as temp:
         bundle = Path(temp) / "bundle"
         shutil.copytree(folder, bundle)
-        manifest_path = bundle / "manifest.json"
+        manifest_path = bundle / "execution.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        node = next(node for node in manifest["agents"]["nodes"] if node["node_id"] == "run")
+        node = next(
+            node for node in manifest["agents"]["nodes"] if node["node_id"] == "run"
+        )
         node["config"].update(
             {
                 "reuse_shared_sandbox": True,
@@ -419,34 +482,77 @@ def openshell_demo(mn: str, folder: Path, timeout: float):
                 "ssh_host": f"openshell-{sandbox_name}",
             }
         )
-        manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        run(["docker", "cp", str(policy), f"mirror-neuron-core:{container_policy}"], timeout=timeout)
+        manifest_path.write_text(
+            json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        run(
+            ["docker", "cp", str(policy), f"mirror-neuron-core:{container_policy}"],
+            timeout=timeout,
+        )
         try:
             run(
                 [
-                    "docker", "exec", "mirror-neuron-core", "openshell", "sandbox", "create",
-                    "--name", sandbox_name, "--from", image,
-                    "--policy", container_policy, "--no-tty",
-                    "--no-auto-providers", "--", "bash", "-lc", "mkdir -p /sandbox/job && true",
+                    "docker",
+                    "exec",
+                    "mirror-neuron-core",
+                    "openshell",
+                    "sandbox",
+                    "create",
+                    "--name",
+                    sandbox_name,
+                    "--from",
+                    image,
+                    "--policy",
+                    container_policy,
+                    "--no-tty",
+                    "--no-auto-providers",
+                    "--",
+                    "bash",
+                    "-lc",
+                    "mkdir -p /sandbox/job && true",
                 ],
                 timeout=max(timeout, 120),
             )
             generic_demo(mn, "demo_openshell_worker", bundle, timeout)
         finally:
             run(
-                ["docker", "exec", "mirror-neuron-core", "openshell", "sandbox", "delete", sandbox_name],
+                [
+                    "docker",
+                    "exec",
+                    "mirror-neuron-core",
+                    "openshell",
+                    "sandbox",
+                    "delete",
+                    sandbox_name,
+                ],
                 timeout=timeout,
                 check=False,
             )
-            run(["docker", "exec", "mirror-neuron-core", "rm", "-f", container_policy], check=False)
+            run(
+                ["docker", "exec", "mirror-neuron-core", "rm", "-f", container_policy],
+                check=False,
+            )
 
 
 def human_demo(mn: str, folder: Path, timeout: float):
     run_id = f"demo-human-{uuid.uuid4().hex[:8]}"
     env = {**os.environ, "NO_COLOR": "1", "MN_CLI_OUTPUT": "plain"}
-    command = [mn, "blueprint", "run", "--folder", str(folder), "--offline", "--fake-llm",
-               "--run-id", run_id, "--follow-seconds", "1"]
-    process = subprocess.Popen(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+    command = [
+        mn,
+        "blueprint",
+        "run",
+        "--folder",
+        str(folder),
+        "--offline",
+        "--fake-llm",
+        "--run-id",
+        run_id,
+        "--follow-seconds",
+        "1",
+    ]
+    process = subprocess.Popen(
+        command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env
+    )
 
     def pending():
         run_dir = locate_run_dir(run_id)
@@ -462,8 +568,20 @@ def human_demo(mn: str, folder: Path, timeout: float):
     try:
         run_dir, request_id = wait_until(pending, timeout, "human input request")
         run(
-            [mn, "blueprint", "human", "respond", run_id, request_id, "--decision", "approve",
-             "--reviewer", "demo-suite", "--runs-root", str(run_dir.parent)],
+            [
+                mn,
+                "blueprint",
+                "human",
+                "respond",
+                run_id,
+                request_id,
+                "--decision",
+                "approve",
+                "--reviewer",
+                "demo-suite",
+                "--runs-root",
+                str(run_dir.parent),
+            ],
             timeout=timeout,
         )
         stdout, stderr = process.communicate(timeout=timeout)
@@ -492,10 +610,27 @@ def periodic_demo(mn: str, folder: Path, timeout: float):
     schedule_id = ""
     try:
         with runtime_bundle(folder) as bundle:
-            run([mn, "schedule", "create", str(bundle), "--cron", "0 0 * * *", "--name", name], timeout=timeout)
+            run(
+                [
+                    mn,
+                    "schedule",
+                    "create",
+                    str(bundle),
+                    "--cron",
+                    "0 0 * * *",
+                    "--name",
+                    name,
+                ],
+                timeout=timeout,
+            )
         rows = schedule_rows(mn)
-        created = [row for row in rows if identifier(row, "schedule_id", "id") not in before]
-        match = next((row for row in created if row.get("name") == name), created[0] if created else None)
+        created = [
+            row for row in rows if identifier(row, "schedule_id", "id") not in before
+        ]
+        match = next(
+            (row for row in created if row.get("name") == name),
+            created[0] if created else None,
+        )
         if not match:
             raise RuntimeError("periodic schedule was not registered")
         schedule_id = identifier(match, "schedule_id", "id")
@@ -515,45 +650,94 @@ def periodic_demo(mn: str, folder: Path, timeout: float):
         # Some current Core versions submit the child job successfully but
         # fail while formatting the DispatchSchedule RPC response.  The
         # schedule status/dispatch ledger is authoritative in that case.
-        if not submitted and (dispatched.returncode or "Job ID" not in dispatched.stdout):
+        if not submitted and (
+            dispatched.returncode or "Job ID" not in dispatched.stdout
+        ):
             raise RuntimeError(
                 "periodic run-now did not create a child job\n"
                 f"{dispatched.stdout}\n{dispatched.stderr}"
             )
     finally:
         if schedule_id:
-            run([mn, "schedule", "delete", schedule_id, "--reason", "demo suite cleanup"], check=False)
-            if any(identifier(row, "schedule_id", "id") == schedule_id for row in schedule_rows(mn)):
+            run(
+                [
+                    mn,
+                    "schedule",
+                    "delete",
+                    schedule_id,
+                    "--reason",
+                    "demo suite cleanup",
+                ],
+                check=False,
+            )
+            if any(
+                identifier(row, "schedule_id", "id") == schedule_id
+                for row in schedule_rows(mn)
+            ):
                 raise RuntimeError("periodic schedule cleanup failed")
 
 
 def event_demo(mn: str, folder: Path, timeout: float):
     name = f"demo-trigger-{uuid.uuid4().hex[:8]}"
     event_type = f"demo.match.{uuid.uuid4().hex[:8]}"
-    before = {identifier(row, "schedule_id", "id") for row in schedule_rows(mn, "event")}
+    before = {
+        identifier(row, "schedule_id", "id") for row in schedule_rows(mn, "event")
+    }
     schedule_id = ""
     try:
         with runtime_bundle(folder) as bundle:
-            run([mn, "trigger", "create", str(bundle), "--event", event_type, "--name", name,
-                 "--filter-json", '{"region":"east"}'], timeout=timeout)
+            run(
+                [
+                    mn,
+                    "trigger",
+                    "create",
+                    str(bundle),
+                    "--event",
+                    event_type,
+                    "--name",
+                    name,
+                    "--filter-json",
+                    '{"region":"east"}',
+                ],
+                timeout=timeout,
+            )
         rows = schedule_rows(mn, "event")
-        created = [row for row in rows if identifier(row, "schedule_id", "id") not in before]
-        match = next((row for row in created if row.get("name") == name), created[0] if created else None)
+        created = [
+            row for row in rows if identifier(row, "schedule_id", "id") not in before
+        ]
+        match = next(
+            (row for row in created if row.get("name") == name),
+            created[0] if created else None,
+        )
         if not match:
             raise RuntimeError("event trigger was not registered")
         schedule_id = identifier(match, "schedule_id", "id")
         baseline = int((match.get("counters") or {}).get("dispatched", 0))
-        run([mn, "event", "emit", event_type, "--payload-json", '{"region":"west"}'], timeout=timeout)
+        run(
+            [mn, "event", "emit", event_type, "--payload-json", '{"region":"west"}'],
+            timeout=timeout,
+        )
         time.sleep(0.5)
         after_nonmatch = read_json_output(run([mn, "schedule", "status", schedule_id]))
         if int((after_nonmatch.get("counters") or {}).get("dispatched", 0)) != baseline:
             raise RuntimeError("nonmatching event unexpectedly launched a child job")
-        run([mn, "event", "emit", event_type, "--payload-json", '{"region":"east"}'], timeout=timeout)
+        run(
+            [mn, "event", "emit", event_type, "--payload-json", '{"region":"east"}'],
+            timeout=timeout,
+        )
         after_match = wait_until(
             lambda: (
                 status
-                if int((status := read_json_output(run([mn, "schedule", "status", schedule_id])))
-                       .get("counters", {}).get("dispatched", 0)) == baseline + 1
+                if int(
+                    (
+                        status := read_json_output(
+                            run([mn, "schedule", "status", schedule_id])
+                        )
+                    )
+                    .get("counters", {})
+                    .get("dispatched", 0)
+                )
+                == baseline + 1
                 else None
             ),
             timeout,
@@ -564,8 +748,21 @@ def event_demo(mn: str, folder: Path, timeout: float):
             raise RuntimeError("matching event counter advanced without a child job id")
     finally:
         if schedule_id:
-            run([mn, "trigger", "delete", schedule_id, "--reason", "demo suite cleanup"], check=False)
-            if any(identifier(row, "schedule_id", "id") == schedule_id for row in schedule_rows(mn, "event")):
+            run(
+                [
+                    mn,
+                    "trigger",
+                    "delete",
+                    schedule_id,
+                    "--reason",
+                    "demo suite cleanup",
+                ],
+                check=False,
+            )
+            if any(
+                identifier(row, "schedule_id", "id") == schedule_id
+                for row in schedule_rows(mn, "event")
+            ):
                 raise RuntimeError("event trigger cleanup failed")
 
 
@@ -585,8 +782,15 @@ def service_demo(mn: str, folder: Path, timeout: float):
         raise RuntimeError(proc.stdout + proc.stderr)
     try:
         wait_until(
-            lambda: (result := run([mn, "service", "resolve", "demo-health"], check=False)).returncode == 0
-            and "demo-health" in result.stdout,
+            lambda: (
+                (
+                    result := run(
+                        [mn, "service", "resolve", "demo-health"], check=False
+                    )
+                ).returncode
+                == 0
+                and "demo-health" in result.stdout
+            ),
             timeout,
             "healthy demo service",
         )
@@ -602,16 +806,43 @@ def canary_demo(mn: str, folder: Path, timeout: float):
     job_ids: list[str] = []
     try:
         with runtime_bundle(folder, "stable") as stable_bundle:
-            stable = run([mn, "deployment", "deploy", str(stable_bundle), "--key", key,
-                          "--strategy", "rolling", "--wait"], timeout=timeout, check=False)
+            stable = run(
+                [
+                    mn,
+                    "deployment",
+                    "deploy",
+                    str(stable_bundle),
+                    "--key",
+                    key,
+                    "--strategy",
+                    "rolling",
+                    "--wait",
+                ],
+                timeout=timeout,
+                check=False,
+            )
         if stable.returncode:
             raise RuntimeError(stable.stdout + stable.stderr)
         if stable_job := job_id_from_output(stable):
             job_ids.append(stable_job)
         with runtime_bundle(folder, "candidate") as candidate_bundle:
-            candidate = run([mn, "deployment", "deploy", str(candidate_bundle), "--key", key,
-                              "--strategy", "canary", "--canary", "1", "--wait"],
-                             timeout=timeout, check=False)
+            candidate = run(
+                [
+                    mn,
+                    "deployment",
+                    "deploy",
+                    str(candidate_bundle),
+                    "--key",
+                    key,
+                    "--strategy",
+                    "canary",
+                    "--canary",
+                    "1",
+                    "--wait",
+                ],
+                timeout=timeout,
+                check=False,
+            )
         if candidate.returncode:
             raise RuntimeError(candidate.stdout + candidate.stderr)
         if candidate_job := job_id_from_output(candidate):
@@ -628,7 +859,10 @@ def canary_demo(mn: str, folder: Path, timeout: float):
             run([mn, "job", "cancel", job_id], check=False)
         # The current public API has no delete-deployment command; mark the
         # stopped demo deployment failed so it cannot remain an active target.
-        run([mn, "deployment", "fail", key, "--reason", "demo suite cleanup"], check=False)
+        run(
+            [mn, "deployment", "fail", key, "--reason", "demo suite cleanup"],
+            check=False,
+        )
 
 
 def main():
@@ -636,25 +870,33 @@ def main():
     parser.add_argument("--blueprint", action="append", default=[])
     parser.add_argument("--timeout", type=float, default=30)
     parser.add_argument("--validate-only", action="store_true")
-    parser.add_argument("--twice", action="store_true", help="Run selected finite demos twice.")
+    parser.add_argument(
+        "--twice", action="store_true", help="Run selected finite demos twice."
+    )
     parser.add_argument("--mn", default=os.environ.get("MN_CLI", "mn"))
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    rows = json.loads((root / "index.json").read_text(encoding="utf-8"))
+    from mn_sdk.blueprints import read_catalog
+
     rows = [
         row
-        for row in rows
-        if str(row.get("id") or "").startswith("demo_")
+        for row in read_catalog(root / "index.json")
+        if row["id"].startswith("demo_")
     ]
     selected = set(args.blueprint)
     rows = [row for row in rows if not selected or row["id"] in selected]
-    run([sys.executable, str(root / "scripts/verify_catalog.py"), "--validate"], timeout=180)
+    run(
+        [sys.executable, str(root / "scripts/verify_catalog.py"), "--validate"],
+        timeout=180,
+    )
     if args.validate_only:
         print(f"validated {len(rows)} blueprints")
         return
     health = run([args.mn, "runtime", "health", "--json"], check=False)
     if health.returncode:
-        raise SystemExit("MirrorNeuron runtime is not healthy; run `mn runtime start` first")
+        raise SystemExit(
+            "MirrorNeuron runtime is not healthy; run `mn runtime start` first"
+        )
     run([args.mn, "runtime", "ensure-context-engine"], timeout=120, check=False)
 
     handlers = {

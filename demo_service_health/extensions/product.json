@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "A compact JSON result and standard run-store evidence.",
+  "problem_solved": "Register and resolve a tiny HTTP health service.",
+  "simulation_type": "Deterministic synthetic runtime scenario.",
+  "runtime_features": [
+    "Service registration and health"
+  ],
+  "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates Service registration and health with minimal setup.",
+    "how_it_works": "Register and resolve a tiny HTTP health service.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "problem": "Register and resolve a tiny HTTP health service.",
+    "runtime_features": [
+      "Service registration and health"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

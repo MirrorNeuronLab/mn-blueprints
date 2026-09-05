@@ -7,32 +7,10 @@ from pathlib import Path
 
 
 def generated(root: Path):
-    existing_path = root / "index.json"
-    existing = json.loads(existing_path.read_text()) if existing_path.is_file() else []
-    rows = [
-        row
-        for row in existing
-        if isinstance(row, dict) and not str(row.get("id") or "").startswith("demo_")
-    ]
-    for folder in sorted(root.glob("demo_*")):
-        if not folder.is_dir():
-            continue
-        manifest = json.loads((folder / "manifest.json").read_text())
-        if (
-            manifest.get("metadata", {})
-            .get("quick_test", {})
-            .get("enabled")
-            is not True
-        ):
-            continue
-        meta = manifest["metadata"]
-        rows.append({
-            "id": manifest["id"], "name": manifest["name"], "path": folder.name,
-            "category": "Runtime", "description": meta["description"],
-            "workflow_id": manifest["workflow"]["workflow_id"], "job_name": manifest["job_name"],
-            "product": {"problem": meta["problem_solved"], "input": "Small deterministic mock input; json, file, and env_json are also supported.", "output": meta["output"], "how_it_works": meta["description"], "benefit": f"Demonstrates {meta['runtime_features'][0]} with minimal setup.", "target_users": meta["target_user"], "runtime_features": meta["runtime_features"]},
-        })
-    return rows
+    """Validate and format the explicitly published, ordered package inventory."""
+    from mn_sdk.blueprints import read_catalog
+
+    return [record["path"] for record in read_catalog(root / "index.json")]
 
 
 def main():

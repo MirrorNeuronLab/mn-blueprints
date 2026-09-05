@@ -1,0 +1,68 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "run",
+      "id": "run_to_publish",
+      "required": true,
+      "to": "publish"
+    }
+  ],
+  "entrypoint": "run",
+  "execution": {
+    "max_parallel_steps": 4,
+    "strategy": "serial"
+  },
+  "mode": "static_dag",
+  "sink": "publish",
+  "source": "run",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "run_done"
+      ],
+      "goal": "Run the run stage.",
+      "id": "run",
+      "kind": "task",
+      "label": "Run",
+      "run": "run"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "publish_done"
+      ],
+      "goal": "Run the publish stage.",
+      "id": "publish",
+      "kind": "task",
+      "label": "Publish",
+      "run": "publish"
+    }
+  ],
+  "workflow_id": "demo_context_memory_acl_v2"
+}

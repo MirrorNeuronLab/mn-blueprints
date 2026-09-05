@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "A compact JSON result and standard run-store evidence.",
+  "problem_solved": "Register a periodic child job that can be dispatched immediately.",
+  "simulation_type": "Deterministic synthetic runtime scenario.",
+  "runtime_features": [
+    "Periodic scheduling"
+  ],
+  "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates Periodic scheduling with minimal setup.",
+    "how_it_works": "Register a periodic child job that can be dispatched immediately.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "problem": "Register a periodic child job that can be dispatched immediately.",
+    "runtime_features": [
+      "Periodic scheduling"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

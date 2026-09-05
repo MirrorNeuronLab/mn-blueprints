@@ -1,0 +1,37 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "runtime_features": [
+    "service lifecycle",
+    "federated CUDA placement",
+    "isolated Docker Compose execution",
+    "blueprint-owned Web UI",
+    "allowlisted Streamable HTTP MCP robot controls",
+    "Membrane context memory optimization"
+  ],
+  "category": "Robotics",
+  "product": {
+    "agent_role": "AI warehouse robot supervisor for inspecting and controlling a simulated ROS 2 autonomous mobile robot.",
+    "benefit": "Runs the GPU simulation where capacity exists while exposing a browser dashboard and a small, auditable natural-language control surface to the desktop app.",
+    "customizable_for": "Warehouse navigation demonstrations, ROS 2 operator training, Nav2 testing, and bounded autonomous-mobile-robot control workflows.",
+    "how_it_works": "Schedules one long-lived DockerWorker on a joined NVIDIA node, launches Gazebo, Nav2, ROSbridge, video streaming, a browser dashboard, and a Streamable HTTP MCP server backed by ROS 2 safety gateways.",
+    "input": "A warehouse operating scenario plus optional runtime configuration for the dashboard and MCP advertise addresses.",
+    "output": "A live warehouse control room, bounded robot-control tool results, run status, and a final run artifact when the service is stopped.",
+    "problem": "ROS demonstrations are difficult to operate from a desktop when simulation, GPU placement, browser telemetry, and AI control are separate manual systems.",
+    "runtime_features": [
+      "joined-node GPU placement",
+      "ROS 2 Jazzy and Nav2",
+      "Gazebo warehouse simulation",
+      "browser video and telemetry dashboard",
+      "Streamable HTTP MCP robot controls",
+      "bounded named-zone navigation",
+      "dead-man velocity relay",
+      "transparent long-lived service status"
+    ],
+    "simulation_type": "Long-lived TurtleBot warehouse navigation simulation.",
+    "target_users": "Robotics developers, warehouse automation teams, ROS 2 learners, and AMR operators.",
+    "web_ui": {
+      "enabled": true,
+      "title": "Warehouse AMR Monitor"
+    }
+  }
+}

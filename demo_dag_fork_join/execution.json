@@ -1,0 +1,391 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/execution.schema.json",
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "start_to_east",
+        "from_node": "start",
+        "message_type": "start_done",
+        "to_node": "east"
+      },
+      {
+        "edge_id": "start_to_west",
+        "from_node": "start",
+        "message_type": "start_done",
+        "to_node": "west"
+      },
+      {
+        "edge_id": "start_to_central",
+        "from_node": "start",
+        "message_type": "start_done",
+        "to_node": "central"
+      },
+      {
+        "edge_id": "east_to_join",
+        "from_node": "east",
+        "message_type": "east_done",
+        "to_node": "join"
+      },
+      {
+        "edge_id": "west_to_join",
+        "from_node": "west",
+        "message_type": "west_done",
+        "to_node": "join"
+      },
+      {
+        "edge_id": "central_to_join",
+        "from_node": "central",
+        "message_type": "central_done",
+        "to_node": "join"
+      },
+      {
+        "edge_id": "join_to_report_sink",
+        "from_node": "join",
+        "message_type": "final_result",
+        "to_node": "report_sink"
+      }
+    ],
+    "entrypoints": [
+      "start"
+    ],
+    "nodes": [
+      {
+        "agent_type": "executor",
+        "alias": "start",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_dag_fork_join",
+            "MN_WORKFLOW_STEP_ID": "start"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "start_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Start",
+        "node_id": "start",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "root_coordinator",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "east",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_dag_fork_join",
+            "MN_WORKFLOW_STEP_ID": "east"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "east_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "East",
+        "node_id": "east",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "west",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_dag_fork_join",
+            "MN_WORKFLOW_STEP_ID": "west"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "west_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "West",
+        "node_id": "west",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "central",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_dag_fork_join",
+            "MN_WORKFLOW_STEP_ID": "central"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "central_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Central",
+        "node_id": "central",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "join",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 5000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_dag_fork_join",
+            "MN_WORKFLOW_STEP_ID": "join",
+            "MN_DEMO_FINAL_STEP": "1"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "final_result",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Join",
+        "node_id": "join",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "aggregator",
+        "alias": "result_sink",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        },
+        "node_id": "report_sink",
+        "role": "result_sink",
+        "type": "reduce"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "job_name": "demo-dag-fork-join",
+  "policies": {
+    "recovery_mode": "local_restart",
+    "restart": {
+      "attempts": 2,
+      "delay_function": "constant",
+      "delay_ms": 100,
+      "interval_ms": 60000,
+      "max_delay_ms": 100,
+      "mode": "fail"
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 0.1
+    },
+    "disk": {
+      "min_gb": 0.01
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 0.05
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "central": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "central",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "east": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "east",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "join": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "join",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "start": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "start",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "west": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "west",
+            "role": "Run this workflow step."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "start": [
+        {
+          "records": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "scenario": "demo_dag_fork_join",
+          "seed": 42
+        }
+      ]
+    },
+    "store": {
+      "path": "~/.mn/runs/${run_id}",
+      "type": "local_run_store"
+    },
+    "workflow_control": {
+      "enabled": true,
+      "liveness": {
+        "event": "agent_beacon",
+        "interval_ms": 1000,
+        "missed_action": "fail_attempt",
+        "required": false,
+        "timeout_ms": 5000
+      },
+      "schema_version": "mn.workflow.runtime_control.v1",
+      "source_of_truth": "workflow.steps",
+      "state_ledger": {
+        "delivery_semantics": "at_least_once_with_idempotency",
+        "enabled": true,
+        "message_ledger": true,
+        "persisted_field": "workflow_state"
+      }
+    }
+  },
+  "mode": "explicit"
+}

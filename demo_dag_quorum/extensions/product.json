@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "A compact JSON result and standard run-store evidence.",
+  "problem_solved": "Accept two successful sensor votes while one controlled vote fails.",
+  "simulation_type": "Deterministic synthetic runtime scenario.",
+  "runtime_features": [
+    "Quorum trigger"
+  ],
+  "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates Quorum trigger with minimal setup.",
+    "how_it_works": "Accept two successful sensor votes while one controlled vote fails.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "problem": "Accept two successful sensor votes while one controlled vote fails.",
+    "runtime_features": [
+      "Quorum trigger"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

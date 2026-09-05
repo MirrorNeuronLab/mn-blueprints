@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "Peer MCP snapshots, update journals, and standard run-store evidence.",
+  "problem_solved": "Launch two jobs under one shared goal and exchange status, knowledge, and staged or final results through job-scoped MCP servers.",
+  "simulation_type": "Deterministic same-node collaboration between separately launched jobs.",
+  "runtime_features": [
+    "Cross-job MCP collaboration"
+  ],
+  "customizable_for": "Runtime training, multi-job research, and collaborative goal evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates Cross-job MCP collaboration with minimal setup.",
+    "how_it_works": "Launch two jobs under one shared goal and exchange status, knowledge, and staged or final results through job-scoped MCP servers.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "Peer MCP snapshots, update journals, and standard run-store evidence.",
+    "problem": "Launch two jobs under one shared goal and exchange status, knowledge, and staged or final results through job-scoped MCP servers.",
+    "runtime_features": [
+      "Cross-job MCP collaboration"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

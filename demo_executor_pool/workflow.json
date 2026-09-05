@@ -1,0 +1,211 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_worker_a",
+      "required": true,
+      "to": "worker_a"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_worker_b",
+      "required": true,
+      "to": "worker_b"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_worker_c",
+      "required": true,
+      "to": "worker_c"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_worker_d",
+      "required": true,
+      "to": "worker_d"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "worker_a",
+      "id": "worker_a_to_join",
+      "required": true,
+      "to": "join"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "worker_b",
+      "id": "worker_b_to_join",
+      "required": true,
+      "to": "join"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "worker_c",
+      "id": "worker_c_to_join",
+      "required": true,
+      "to": "join"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "worker_d",
+      "id": "worker_d_to_join",
+      "required": true,
+      "to": "join"
+    }
+  ],
+  "entrypoint": "start",
+  "execution": {
+    "max_parallel_steps": 4,
+    "strategy": "parallel"
+  },
+  "mode": "static_dag",
+  "sink": "join",
+  "source": "start",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "start_done"
+      ],
+      "goal": "Run the start stage.",
+      "id": "start",
+      "kind": "task",
+      "label": "Start",
+      "run": "start"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "worker_a_done"
+      ],
+      "goal": "Run the worker_a stage.",
+      "id": "worker_a",
+      "kind": "task",
+      "label": "Worker A",
+      "run": "worker_a"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "worker_b_done"
+      ],
+      "goal": "Run the worker_b stage.",
+      "id": "worker_b",
+      "kind": "task",
+      "label": "Worker B",
+      "run": "worker_b"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "worker_c_done"
+      ],
+      "goal": "Run the worker_c stage.",
+      "id": "worker_c",
+      "kind": "task",
+      "label": "Worker C",
+      "run": "worker_c"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "worker_d_done"
+      ],
+      "goal": "Run the worker_d stage.",
+      "id": "worker_d",
+      "kind": "task",
+      "label": "Worker D",
+      "run": "worker_d"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "join_done"
+      ],
+      "goal": "Run the join stage.",
+      "id": "join",
+      "kind": "task",
+      "label": "Join",
+      "run": "join"
+    }
+  ],
+  "workflow_id": "demo_executor_pool_v2"
+}

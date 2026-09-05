@@ -1,0 +1,97 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "parse",
+      "id": "parse_to_score",
+      "required": true,
+      "to": "score"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "score",
+      "id": "score_to_report",
+      "required": true,
+      "to": "report"
+    }
+  ],
+  "entrypoint": "parse",
+  "execution": {
+    "max_parallel_steps": 4,
+    "strategy": "serial"
+  },
+  "mode": "static_dag",
+  "sink": "report",
+  "source": "parse",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "parse_done"
+      ],
+      "goal": "Run the parse stage.",
+      "id": "parse",
+      "kind": "task",
+      "label": "Parse",
+      "run": "parse"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "score_done"
+      ],
+      "goal": "Run the score stage.",
+      "id": "score",
+      "kind": "task",
+      "label": "Score",
+      "run": "score"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "report_done"
+      ],
+      "goal": "Run the report stage.",
+      "id": "report",
+      "kind": "task",
+      "label": "Report",
+      "run": "report"
+    }
+  ],
+  "workflow_id": "demo_dag_linear_v2"
+}

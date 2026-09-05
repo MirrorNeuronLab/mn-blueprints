@@ -73,10 +73,6 @@
     "mode": "disabled",
     "reason": "The demo exchanges synthetic local records only."
   },
-  "identity": {
-    "blueprint_id": "demo_mcp_collaboration",
-    "name": "MCP Job Collaboration"
-  },
   "inputs": {
     "adapter": "mock",
     "description": "Bundled deterministic input; override with json, file, or env_json.",
@@ -104,12 +100,6 @@
       "real_adapters",
       "interfaces",
       "execution_model"
-    ],
-    "input_adapters": [
-      "mock",
-      "json",
-      "file",
-      "env_json"
     ],
     "output_adapters": [
       "local_run_store"

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "A compact JSON result and standard run-store evidence.",
+  "problem_solved": "Request and audit approval for a harmless mock action.",
+  "simulation_type": "Deterministic synthetic runtime scenario.",
+  "runtime_features": [
+    "Human-control gate"
+  ],
+  "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates Human-control gate with minimal setup.",
+    "how_it_works": "Request and audit approval for a harmless mock action.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "problem": "Request and audit approval for a harmless mock action.",
+    "runtime_features": [
+      "Human-control gate"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

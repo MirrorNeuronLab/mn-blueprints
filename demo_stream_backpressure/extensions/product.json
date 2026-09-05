@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "A compact JSON result and standard run-store evidence.",
+  "problem_solved": "Process a finite burst through a bounded queue and report pressure handling.",
+  "simulation_type": "Deterministic synthetic runtime scenario.",
+  "runtime_features": [
+    "Stream backpressure"
+  ],
+  "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates Stream backpressure with minimal setup.",
+    "how_it_works": "Process a finite burst through a bounded queue and report pressure handling.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "problem": "Process a finite burst through a bounded queue and report pressure handling.",
+    "runtime_features": [
+      "Stream backpressure"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

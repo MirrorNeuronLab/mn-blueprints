@@ -34,10 +34,6 @@
     "enabled": false,
     "mode": "disabled"
   },
-  "identity": {
-    "blueprint_id": "demo_dynamic_workflow",
-    "name": "Dynamic Workflow"
-  },
   "inputs": {
     "adapter": "mock",
     "description": "Bundled deterministic evidence-gap input.",
@@ -50,12 +46,6 @@
     }
   },
   "interfaces": {
-    "input_adapters": [
-      "mock",
-      "json",
-      "file",
-      "env_json"
-    ],
     "output_adapters": [
       "local_run_store"
     ],

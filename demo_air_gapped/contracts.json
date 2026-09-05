@@ -1,0 +1,47 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/contracts.schema.json",
+  "events": {
+    "stream": "events.jsonl",
+    "types": [
+      "payload_skill_loaded",
+      "payload_model_called",
+      "airgap_report_written",
+      "run_completed",
+      "run_failed"
+    ]
+  },
+  "inputs": {
+    "note": {
+      "description": "A local operational note to analyze without external network access.",
+      "required": true,
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "artifacts": [
+      {
+        "artifact_id": "result_json",
+        "path": "result.json"
+      },
+      {
+        "artifact_id": "final_artifact_json",
+        "path": "final_artifact.json"
+      }
+    ],
+    "primary": {
+      "id": "final_artifact",
+      "path": "final_artifact.json",
+      "schema_version": "mn.blueprint.final_artifact.v1",
+      "type": "final_artifact"
+    },
+    "profile": "standard_run_store"
+  },
+  "privacy": {
+    "classification": "internal",
+    "network": "forbidden"
+  },
+  "summary": "Analyze one local note with blueprint-owned code and a blueprint-owned model.",
+  "input_validation": {
+    "rules": []
+  }
+}

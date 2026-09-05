@@ -50,3 +50,13 @@ python3 scripts/run_demo_suite.py
 ```
 
 The first Docker/OpenShell/context run may prepare cached dependencies. Warm batch demos target 10 seconds, operational demos target 20 seconds, and no demo requires a GPU or real model. Service, schedule, event-trigger, human-control, and deployment demos document their operator lifecycle in their own README and SPEC files.
+
+## Canonical packages
+
+`index.json` is an ordered list of published package paths. Names, descriptions,
+versions, requirements, and product information come from each package's documents.
+Catalog reads validate data without importing Python code or preparing resources.
+All folders and ZIPs use `https://mirrorneuron.dev/schemas/blueprint/v1/manifest.schema.json`.
+Use `mn_sdk.blueprints.read_blueprint`, `resolve_config`, and `compile_blueprint`;
+`open_blueprint` adds ZIP extraction and `export_blueprint` preserves the full package.
+External dependencies remain declared; offline vendoring is optional.

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/testing.schema.json",
+  "quick_test": {
+    "command": "mn blueprint run --folder . --offline --fake-llm --detached",
+    "enabled": true,
+    "expected_seconds_warm": 15
+  }
+}

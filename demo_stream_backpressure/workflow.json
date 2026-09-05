@@ -1,0 +1,68 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "produce",
+      "id": "produce_to_consume",
+      "required": true,
+      "to": "consume"
+    }
+  ],
+  "entrypoint": "produce",
+  "execution": {
+    "max_parallel_steps": 4,
+    "strategy": "serial"
+  },
+  "mode": "static_dag",
+  "sink": "consume",
+  "source": "produce",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 300
+      },
+      "emits": [
+        "produce_done"
+      ],
+      "goal": "Run the produce stage.",
+      "id": "produce",
+      "kind": "task",
+      "label": "Produce",
+      "run": "produce"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 300
+      },
+      "emits": [
+        "consume_done"
+      ],
+      "goal": "Run the consume stage.",
+      "id": "consume",
+      "kind": "task",
+      "label": "Consume",
+      "run": "consume"
+    }
+  ],
+  "workflow_id": "demo_stream_backpressure_v2"
+}

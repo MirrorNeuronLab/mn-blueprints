@@ -1,0 +1,68 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "analyze",
+      "id": "analyze_to_report",
+      "required": true,
+      "to": "report"
+    }
+  ],
+  "entrypoint": "analyze",
+  "execution": {
+    "max_parallel_steps": 1,
+    "strategy": "serial"
+  },
+  "mode": "static_dag",
+  "sink": "report",
+  "source": "analyze",
+  "steps": [
+    {
+      "action": "call_bundled_model",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 180
+      },
+      "emits": [
+        "analysis_ready"
+      ],
+      "goal": "Use the bundled skill and model to analyze the local note.",
+      "id": "analyze",
+      "kind": "task",
+      "label": "Analyze",
+      "run": "analyze"
+    },
+    {
+      "action": "write_local_report",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 30
+      },
+      "emits": [
+        "final_result"
+      ],
+      "goal": "Normalize the model response and write standard run artifacts.",
+      "id": "report",
+      "kind": "task",
+      "label": "Report",
+      "run": "report"
+    }
+  ],
+  "workflow_id": "demo_air_gapped_v2"
+}

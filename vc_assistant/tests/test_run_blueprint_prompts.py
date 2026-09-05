@@ -7,16 +7,15 @@ import sys
 from pathlib import Path
 
 import pytest
-
-from vc_assistant.domain_test_support import load_domain_test_surface
-
 from mn_sdk import expand_manifest_source
 from mn_sdk.blueprint_support import (
     BlueprintBundleLayout,
     default_config_path,
     load_runtime_config,
 )
+from mn_sdk.blueprints import blueprint_definition, read_blueprint
 from mn_sdk.step_runtime import StepContext, resolve_handler
+from vc_assistant.domain_test_support import load_domain_test_surface
 
 BLUEPRINT_DIR = Path(__file__).resolve().parents[1]
 PAYLOAD_DIR = BLUEPRINT_DIR / "payloads"
@@ -52,19 +51,19 @@ def load_module():
 
 def test_source_manifest_keeps_the_default_runtime_declarative():
     default_config = json.loads((BLUEPRINT_DIR / "config" / "default.json").read_text())
-    manifest = json.loads((BLUEPRINT_DIR / "manifest.json").read_text())
+    manifest = blueprint_definition(read_blueprint(BLUEPRINT_DIR))
     assert manifest["apiVersion"] == "mn.workflow/v1"
-    assert manifest["manifest"]["policies"]["recovery_mode"] == "manual_recover"
+    assert manifest["policies"]["recovery_mode"] == "manual_recover"
     assert manifest["agents"] == {"registry": manifest["agents"]["registry"]}
     assert manifest["workflow"]["steps"][0]["id"] == "detect_packet_changes"
     assert all(step["run"]["definition"] for step in manifest["workflow"]["steps"])
-    assert set(default_config["llm"]) == {"strict_json", "configs", "require_live"}
+    assert set(default_config["llm"]) == {"configs", "require_live"}
     assert "agentic_research" not in default_config
     assert default_config["knowledge_rag"] == {"backend": "milvus_lite"}
     assert "resources" not in default_config
     assert "human_control" not in default_config
     assert "input_adapters" not in default_config["interfaces"]
-    assert "monitoring" not in default_config["inputs"]["payload"]
+    assert default_config["inputs"]["payload"]["monitoring"]["max_cycles"] == 1
     assert "identity" not in default_config
 
     resolved = load_runtime_config(RUNTIME_PATH)
@@ -97,24 +96,30 @@ def test_bundle_references_resolve_for_source_and_staged_payload_roots(tmp_path)
     module = load_module()
     active_knowledge = module.load_vc_knowledge(BLUEPRINT_DIR)
 
-    assert module.resolve_knowledge_dir(
-        BLUEPRINT_DIR,
-        active_knowledge,
-        "@/payloads/knowledge",
-    ) == (BLUEPRINT_DIR / "payloads" / "knowledge").resolve()
+    assert (
+        module.resolve_knowledge_dir(
+            BLUEPRINT_DIR,
+            active_knowledge,
+            "@/payloads/knowledge",
+        )
+        == (BLUEPRINT_DIR / "payloads" / "knowledge").resolve()
+    )
 
     staged_root = tmp_path / "attempt"
     staged_knowledge = staged_root / "knowledge"
     staged_knowledge.mkdir(parents=True)
-    assert module.resolve_knowledge_dir(
-        staged_root,
-        active_knowledge,
-        "@/payloads/knowledge",
-    ) == staged_knowledge.resolve()
+    assert (
+        module.resolve_knowledge_dir(
+            staged_root,
+            active_knowledge,
+            "@/payloads/knowledge",
+        )
+        == staged_knowledge.resolve()
+    )
 
 
 def test_step_definitions_resolve_to_direct_agent_handlers():
-    manifest = json.loads((BLUEPRINT_DIR / "manifest.json").read_text())
+    manifest = blueprint_definition(read_blueprint(BLUEPRINT_DIR))
     registry = manifest["agents"]["registry"]
     assigned = set()
     for step in manifest["workflow"]["steps"]:
@@ -131,9 +136,7 @@ def test_step_definitions_resolve_to_direct_agent_handlers():
     assert assigned == set(registry)
     assert "agents.public_researcher" in handlers
     scorer_handlers = {
-        f"agents.{agent_id}"
-        for agent_id in registry
-        if agent_id.endswith("_scorer")
+        f"agents.{agent_id}" for agent_id in registry if agent_id.endswith("_scorer")
     }
     assert scorer_handlers <= handlers
     assert not any(handler.startswith("steps.") for handler in handlers)
@@ -149,7 +152,7 @@ def test_step_definitions_resolve_to_direct_agent_handlers():
 
 def test_manifest_compiles_step_boundaries_parallel_joins_and_unique_invocations():
     expanded = expand_manifest_source(
-        json.loads((BLUEPRINT_DIR / "manifest.json").read_text()),
+        blueprint_definition(read_blueprint(BLUEPRINT_DIR)),
         root_dir=BLUEPRINT_DIR,
     )
     nodes = {node["node_id"]: node for node in expanded["agents"]["nodes"]}
@@ -158,8 +161,13 @@ def test_manifest_compiles_step_boundaries_parallel_joins_and_unique_invocations
     assert nodes["prepare_company_evidence__start"]["agent_type"] == "step_source"
     assert nodes["prepare_company_evidence__end"]["agent_type"] == "step_sink"
     assert nodes["collect_public_research__join_2"]["agent_type"] == "step_join"
-    assert len(nodes["collect_public_research__join_2"]["config"]["expected_sources"]) == 5
-    assert len(nodes["calculate_valuation_scores__join_2"]["config"]["expected_sources"]) == 7
+    assert (
+        len(nodes["collect_public_research__join_2"]["config"]["expected_sources"]) == 5
+    )
+    assert (
+        len(nodes["calculate_valuation_scores__join_2"]["config"]["expected_sources"])
+        == 7
+    )
     assert steps["collect_public_research"]["agent_ids"][1:6] == [
         "collect_public_research__company_identity_researcher",
         "collect_public_research__funding_researcher",
@@ -167,8 +175,14 @@ def test_manifest_compiles_step_boundaries_parallel_joins_and_unique_invocations
         "collect_public_research__traction_verifier",
         "collect_public_research__rendered_page_researcher",
     ]
-    assert steps["collect_public_research"]["start_agent_id"] == "collect_public_research__start"
-    assert steps["collect_public_research"]["end_agent_id"] == "collect_public_research__end"
+    assert (
+        steps["collect_public_research"]["start_agent_id"]
+        == "collect_public_research__start"
+    )
+    assert (
+        steps["collect_public_research"]["end_agent_id"]
+        == "collect_public_research__end"
+    )
     assert {"source": "domain", "target": "domain"} in nodes[
         "detect_packet_changes__startup_folder_watcher"
     ]["config"]["upload_paths"]
@@ -210,7 +224,9 @@ def test_runtime_context_uses_the_platform_staged_input_folder(tmp_path):
     assert context["payload"]["input_folder"] == str(staged_inputs)
 
     persisted = json.loads(
-        (tmp_path / "runs" / run_id / "workflow_state" / "runtime_context.json").read_text()
+        (
+            tmp_path / "runs" / run_id / "workflow_state" / "runtime_context.json"
+        ).read_text()
     )
     assert persisted["document_folder"] == str(staged_inputs)
 
@@ -335,7 +351,7 @@ def test_model_contract_uses_the_shared_adaptive_default():
 
 def test_valuation_methods_map_to_discoverable_specialist_agents():
     rb = load_module()
-    manifest = json.loads((BLUEPRINT_DIR / "manifest.json").read_text())
+    manifest = blueprint_definition(read_blueprint(BLUEPRINT_DIR))
     registry = manifest["agents"]["registry"]
 
     assert set(rb.SCORER_AGENT_BY_METHOD) == set(rb.METHOD_IDS)
@@ -353,13 +369,9 @@ def test_valuation_methods_map_to_discoverable_specialist_agents():
 
 
 def test_agent_lifecycle_exceptions_are_manifest_owned():
-    manifest = json.loads((BLUEPRINT_DIR / "manifest.json").read_text())
-    batch_lifecycle = manifest["agents"]["registry"]["batch_index_writer"][
-        "lifecycle"
-    ]
-    shared_source = (PAYLOAD_DIR / "agents" / "_shared.py").read_text(
-        encoding="utf-8"
-    )
+    manifest = blueprint_definition(read_blueprint(BLUEPRINT_DIR))
+    batch_lifecycle = manifest["agents"]["registry"]["batch_index_writer"]["lifecycle"]
+    shared_source = (PAYLOAD_DIR / "agents" / "_shared.py").read_text(encoding="utf-8")
 
     assert batch_lifecycle == {
         "rag_stage": "batch_indexing",
@@ -431,7 +443,10 @@ def test_research_prompt_bounds_large_rag_and_plan_context():
             "agent_queries": {"funding_researcher": ["Acme funding"] * 20},
             "agent_target_urls": {"funding_researcher": ["https://acme.example"] * 20},
             "rendered_target_urls": ["https://acme.example/app"] * 20,
-            "lanes": [{"lane_id": f"lane-{index}", "private": "x" * 1000} for index in range(20)],
+            "lanes": [
+                {"lane_id": f"lane-{index}", "private": "x" * 1000}
+                for index in range(20)
+            ],
             "signals": {f"signal-{index}": True for index in range(20)},
         },
         internet={},
@@ -440,10 +455,13 @@ def test_research_prompt_bounds_large_rag_and_plan_context():
         rag_context={
             "status": "ready",
             "context": "playbook " * 2000,
-            "citations": [{"ref": index, "body": "private " * 100} for index in range(20)],
+            "citations": [
+                {"ref": index, "body": "private " * 100} for index in range(20)
+            ],
         },
         knowledge_rag={"enabled": True, "config": {"required": True}},
-        observations=[{"snippets": ["raw " * 1000], "urls": ["https://acme.example"]}] * 20,
+        observations=[{"snippets": ["raw " * 1000], "urls": ["https://acme.example"]}]
+        * 20,
     )
 
     assert len(json.dumps(prompt)) < 5000
@@ -464,7 +482,9 @@ def test_actor_review_prompt_bounds_large_context():
             ],
             "rag_context": {
                 "status": "ready",
-                "citations": [{"ref": index, "body": "large " * 100} for index in range(10)],
+                "citations": [
+                    {"ref": index, "body": "large " * 100} for index in range(10)
+                ],
             },
             "output_files": [{"path": f"report-{index}.json"} for index in range(20)],
         },

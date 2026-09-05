@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "A compact JSON result and standard run-store evidence.",
+  "problem_solved": "Launch only when a matching dataset event is emitted.",
+  "simulation_type": "Deterministic synthetic runtime scenario.",
+  "runtime_features": [
+    "Event-triggered jobs"
+  ],
+  "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates Event-triggered jobs with minimal setup.",
+    "how_it_works": "Launch only when a matching dataset event is emitted.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "problem": "Launch only when a matching dataset event is emitted.",
+    "runtime_features": [
+      "Event-triggered jobs"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

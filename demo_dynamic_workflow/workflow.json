@@ -1,0 +1,122 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "apply_at": "between_steps",
+    "enabled": true,
+    "limits": {
+      "max_active_steps": 128,
+      "max_instance_input_bytes": 32768,
+      "max_operations_per_patch": 64,
+      "max_patches": 64
+    },
+    "regions": [
+      {
+        "controller": "inspect_context",
+        "exit": "write_report",
+        "id": "research_followups",
+        "mutable_edges": [
+          "inspect_to_report"
+        ],
+        "strategy": "replace_path",
+        "templates": [
+          "followup_research",
+          "verify_evidence"
+        ]
+      }
+    ],
+    "templates": {
+      "followup_research": {
+        "agent_id": "followup_research_worker",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 0.1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 60
+        },
+        "id": "followup_research",
+        "label": "Follow-up Research",
+        "run": "followup_research"
+      },
+      "verify_evidence": {
+        "agent_id": "verify_evidence_worker",
+        "control": {
+          "failure_policy": "fail_workflow",
+          "required": true,
+          "retry": {
+            "backoff_seconds": 0.1,
+            "max_attempts": 1
+          },
+          "timeout_seconds": 60
+        },
+        "id": "verify_evidence",
+        "label": "Verify Evidence",
+        "run": "verify_evidence"
+      }
+    }
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "inspect_context",
+      "id": "inspect_to_report",
+      "required": true,
+      "to": "write_report"
+    }
+  ],
+  "entrypoint": "inspect_context",
+  "execution": {
+    "max_parallel_steps": 4,
+    "strategy": "serial"
+  },
+  "mode": "dynamic_dag",
+  "sink": "write_report",
+  "source": "inspect_context",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 60
+      },
+      "emits": [
+        "inspect_context_done"
+      ],
+      "goal": "Inspect runtime evidence and control the adaptive region.",
+      "id": "inspect_context",
+      "kind": "task",
+      "label": "Inspect Context",
+      "run": "inspect_context"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 60
+      },
+      "emits": [
+        "final_result"
+      ],
+      "goal": "Write the final artifact from the resolved path.",
+      "id": "write_report",
+      "kind": "task",
+      "label": "Write Report",
+      "run": "write_report"
+    }
+  ],
+  "workflow_id": "demo_dynamic_workflow_v2"
+}

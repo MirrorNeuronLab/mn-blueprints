@@ -1,0 +1,367 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/execution.schema.json",
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "start_to_serve",
+        "from_node": "start",
+        "message_type": "start_done",
+        "to_node": "serve"
+      },
+      {
+        "edge_id": "start_to_collaborate",
+        "from_node": "start",
+        "message_type": "start_done",
+        "to_node": "collaborate"
+      },
+      {
+        "edge_id": "serve_to_join",
+        "from_node": "serve",
+        "message_type": "serve_done",
+        "to_node": "join"
+      },
+      {
+        "edge_id": "collaborate_to_join",
+        "from_node": "collaborate",
+        "message_type": "collaborate_done",
+        "to_node": "join"
+      },
+      {
+        "edge_id": "join_to_report_sink",
+        "from_node": "join",
+        "message_type": "final_result",
+        "to_node": "report_sink"
+      }
+    ],
+    "entrypoints": [
+      "start"
+    ],
+    "nodes": [
+      {
+        "agent_type": "executor",
+        "alias": "start",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 30000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_mcp_collaboration",
+            "MN_WORKFLOW_STEP_ID": "start"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "start_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Publish Local Exchange",
+        "node_id": "start",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 16,
+          "memory_mb": 64,
+          "runtime_driver": "host_local"
+        },
+        "role": "root_coordinator",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "serve",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 30000,
+          "command": [
+            "python3.11",
+            "serve.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_mcp_collaboration",
+            "MN_WORKFLOW_STEP_ID": "serve"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "serve_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 30,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Serve Job MCP",
+        "node_id": "serve",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 16,
+          "memory_mb": 64,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "collaborate",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 30000,
+          "command": [
+            "python3.11",
+            "collaborate.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_mcp_collaboration",
+            "MN_WORKFLOW_STEP_ID": "collaborate"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "collaborate_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "python_environment": {
+            "packages": [
+              "grpcio>=1.82.1,<2",
+              "protobuf>=7.35.1,<8",
+              "mirrorneuron-mcp-client-skill==1.2.31",
+              "mirrorneuron-mcp-server-skill==1.2.30"
+            ]
+          },
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 25,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Read Peer Exchanges",
+        "node_id": "collaborate",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 16,
+          "memory_mb": 64,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "join",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 30000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_DEMO_FINAL_STEP": "1",
+            "MN_BLUEPRINT_ID": "demo_mcp_collaboration",
+            "MN_WORKFLOW_STEP_ID": "join"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "final_result",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 10,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Finalize Evidence",
+        "node_id": "join",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 16,
+          "memory_mb": 64,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "aggregator",
+        "alias": "result_sink",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        },
+        "node_id": "report_sink",
+        "role": "result_sink",
+        "type": "reduce"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "job_name": "demo-mcp-collaboration",
+  "policies": {
+    "recovery_mode": "local_restart",
+    "restart": {
+      "attempts": 2,
+      "delay_function": "constant",
+      "delay_ms": 100,
+      "interval_ms": 60000,
+      "max_delay_ms": 100,
+      "mode": "fail"
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 0.1
+    },
+    "disk": {
+      "min_gb": 0.02
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 0.1
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "collaborate": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "collaborate",
+            "role": "Run the collaborate workflow step."
+          }
+        ]
+      },
+      "join": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "join",
+            "role": "Run the join workflow step."
+          }
+        ]
+      },
+      "serve": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "serve",
+            "role": "Run the serve workflow step."
+          }
+        ]
+      },
+      "start": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "start",
+            "role": "Run the start workflow step."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "start": [
+        {
+          "records": [
+            1,
+            2,
+            3
+          ],
+          "scenario": "demo_mcp_collaboration",
+          "seed": 42
+        }
+      ]
+    },
+    "store": {
+      "path": "~/.mn/runs/${run_id}",
+      "type": "local_run_store"
+    },
+    "workflow_control": {
+      "enabled": true,
+      "liveness": {
+        "event": "agent_beacon",
+        "interval_ms": 1000,
+        "missed_action": "fail_attempt",
+        "required": false,
+        "timeout_ms": 30000
+      },
+      "schema_version": "mn.workflow.runtime_control.v1",
+      "source_of_truth": "workflow.steps",
+      "state_ledger": {
+        "delivery_semantics": "at_least_once_with_idempotency",
+        "enabled": true,
+        "message_ledger": true,
+        "persisted_field": "workflow_state"
+      }
+    }
+  },
+  "services": [
+    {
+      "address": "${config.collaboration.advertise_host}",
+      "checks": [
+        {
+          "address": "${config.collaboration.advertise_host}",
+          "failures_before_critical": 2,
+          "interval_ms": 250,
+          "name": "mcp-tcp-ready",
+          "port": "${config.collaboration.port}",
+          "required": true,
+          "timeout_ms": 250,
+          "type": "tcp"
+        }
+      ],
+      "id": "${job_id}:job-mcp",
+      "meta": {
+        "goal_id": "${config.collaboration.goal_id}",
+        "mcp_path": "${config.collaboration.mcp_path}",
+        "mcp_scheme": "http",
+        "schema_version": "mn.mcp.job_exchange.v1"
+      },
+      "name": "mn-job-collaboration",
+      "origin": "internal",
+      "port": "${config.collaboration.port}",
+      "tags": [
+        "mcp",
+        "job-collaboration",
+        "demo_mcp_collaboration"
+      ]
+    }
+  ],
+  "type": "service",
+  "mode": "explicit"
+}

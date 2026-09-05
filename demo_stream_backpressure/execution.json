@@ -1,0 +1,224 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/execution.schema.json",
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "produce_to_consume",
+        "from_node": "produce",
+        "message_type": "produce_done",
+        "to_node": "consume"
+      },
+      {
+        "edge_id": "consume_to_report_sink",
+        "from_node": "consume",
+        "message_type": "final_result",
+        "to_node": "report_sink"
+      }
+    ],
+    "entrypoints": [
+      "produce"
+    ],
+    "nodes": [
+      {
+        "agent_type": "executor",
+        "alias": "produce",
+        "config": {
+          "agent_beacon_required": false,
+          "backpressure": {
+            "drop_policy": "block",
+            "max_concurrency": 1,
+            "max_queue_depth": 3
+          },
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 300000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_stream_backpressure",
+            "MN_STREAM_BURST_SIZE": "10",
+            "MN_STREAM_QUEUE_BOUND": "3",
+            "MN_WORKFLOW_STEP_ID": "produce"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": null,
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 300,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Produce",
+        "node_id": "produce",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "root_coordinator",
+        "type": "stream"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "consume",
+        "config": {
+          "agent_beacon_required": false,
+          "backpressure": {
+            "drop_policy": "block",
+            "max_concurrency": 1,
+            "max_queue_depth": 3
+          },
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_missed_action": "fail_attempt",
+          "beacon_timeout_ms": 300000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_stream_backpressure",
+            "MN_WORKFLOW_STEP_ID": "consume",
+            "MN_DEMO_FINAL_STEP": "1",
+            "MN_STREAM_BURST_SIZE": "10",
+            "MN_STREAM_CONSUME_DELAY_MS": "60",
+            "MN_STREAM_QUEUE_BOUND": "3"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": null,
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 300,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workflow_complete_step": false,
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Consume",
+        "node_id": "consume",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "worker",
+        "type": "stream"
+      },
+      {
+        "agent_type": "aggregator",
+        "alias": "result_sink",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        },
+        "node_id": "report_sink",
+        "role": "result_sink",
+        "type": "reduce"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "job_name": "demo-stream-backpressure",
+  "policies": {
+    "recovery_mode": "local_restart",
+    "restart": {
+      "attempts": 2,
+      "delay_function": "constant",
+      "delay_ms": 100,
+      "interval_ms": 60000,
+      "max_delay_ms": 100,
+      "mode": "fail"
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 0.1
+    },
+    "disk": {
+      "min_gb": 0.01
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 0.05
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "consume": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "consume",
+            "role": "Run this workflow step."
+          }
+        ]
+      },
+      "produce": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "produce",
+            "role": "Run this workflow step."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "produce": [
+        {
+          "records": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "scenario": "demo_stream_backpressure",
+          "seed": 42
+        }
+      ]
+    },
+    "store": {
+      "path": "~/.mn/runs/${run_id}",
+      "type": "local_run_store"
+    },
+    "workflow_control": {
+      "enabled": true,
+      "liveness": {
+        "event": "agent_beacon",
+        "interval_ms": 1000,
+        "missed_action": "fail_attempt",
+        "required": false,
+        "timeout_ms": 5000
+      },
+      "schema_version": "mn.workflow.runtime_control.v1",
+      "source_of_truth": "workflow.steps",
+      "state_ledger": {
+        "delivery_semantics": "at_least_once_with_idempotency",
+        "enabled": true,
+        "message_ledger": true,
+        "persisted_field": "workflow_state"
+      }
+    }
+  },
+  "mode": "explicit"
+}

@@ -17,3 +17,15 @@ An air-gapped backup contains the runtime snapshot, blueprint bundle, payload
 blobs, locally built wheels, required Docker images, compatibility metadata,
 and checksums. Restoring or running the extracted `bundle` rejects incompatible
 platforms and forbids package-index access.
+
+## Blueprint package format
+
+This blueprint uses the canonical blueprint/v1 format in both folders and ZIPs.
+`manifest.json` contains identity, semantic release version, and document references.
+`workflow.json` owns logical topology and policies; `execution.json` owns workers,
+resources, and services; `contracts.json` owns input/output and artifact contracts.
+Platform descriptors live in `extensions/`, package requirements in
+`dependencies.json` when present, and operator defaults in `config/default.json`.
+The SDK reads these documents together and compiles the Core execution artifact.
+A ZIP contains the same files as the folder. Local overrides and invocation
+configuration are resolved by the SDK before launch.

@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """Compile the decorated workflow into a temporary runnable bundle."""
+
 from __future__ import annotations
 
 import argparse
-import json
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 from mn_sdk import workflow
-
+from mn_sdk.blueprint_support.python_workflow_bundle import _preserve_source_package
+from mn_sdk.blueprints import compile_blueprint, read_blueprint
+from mn_sdk.blueprints.authoring import write_blueprint_definition
 from workflow import DemoPythonSdkWorkflow
 
 
@@ -16,7 +18,7 @@ def _write_runtime_compatible_worker(output: Path) -> None:
     """Adapt the SDK worker envelope to the current Core step contract."""
     worker = output / "payloads/mn_python_workflow/mn_worker.py"
     worker.write_text(
-        '''#!/usr/bin/env python3.11
+        """#!/usr/bin/env python3.11
 import importlib
 import json
 import os
@@ -51,7 +53,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-''',
+""",
         encoding="utf-8",
     )
 
@@ -76,9 +78,9 @@ def main() -> None:
     # Execute the freshly compiled SDK workers through the catalog's current
     # two-step topology. This is the narrow compatibility boundary between the
     # SDK compiler and the Core submission contract.
-    manifest_path = output / "manifest.json"
-    compiled = json.loads(manifest_path.read_text(encoding="utf-8"))
-    manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+    compiled = compile_blueprint(read_blueprint(output)).manifest
+    source_package = read_blueprint(root)
+    manifest = compile_blueprint(source_package).manifest
     compiled_nodes = {node["node_id"]: node for node in compiled["agents"]["nodes"]}
     for node, compiled_id, step_id, output_type in (
         (manifest["agents"]["nodes"][0], "normalize", "run", "run_done"),
@@ -99,8 +101,12 @@ def main() -> None:
     for node in manifest["agents"]["nodes"]:
         config = node["config"]
         config["timeout_seconds"] = max(float(config.get("timeout_seconds") or 0), 60)
-        config["beacon_interval_ms"] = max(int(config.get("beacon_interval_ms") or 0), 1000)
-        config["beacon_timeout_ms"] = max(int(config.get("beacon_timeout_ms") or 0), 30000)
+        config["beacon_interval_ms"] = max(
+            int(config.get("beacon_interval_ms") or 0), 1000
+        )
+        config["beacon_timeout_ms"] = max(
+            int(config.get("beacon_timeout_ms") or 0), 30000
+        )
     for step in manifest["workflow"]["steps"]:
         step.setdefault("control", {})["timeout_seconds"] = 60
     liveness = manifest["runtime"]["workflow_control"]["liveness"]
@@ -113,7 +119,15 @@ def main() -> None:
     manifest["runtime"]["initial_inputs"] = {"run": first_inputs}
     manifest["metadata"].update(compiled["metadata"])
     manifest["metadata"]["python_source_mode"] = False
-    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    for role in ("license", "terms"):
+        if source_package.manifest.get(role):
+            relative = source_package.manifest[role]
+            (output / relative).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(root / relative, output / relative)
+    write_blueprint_definition(
+        output, manifest, config=source_package.document("config")
+    )
+    _preserve_source_package(output, source_package)
     shutil.copytree(root / "config", output / "config", dirs_exist_ok=True)
     _write_runtime_compatible_worker(output)
 

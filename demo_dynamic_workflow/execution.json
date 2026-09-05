@@ -1,0 +1,291 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/execution.schema.json",
+  "agents": {
+    "edges": [
+      {
+        "edge_id": "write_report_to_sink",
+        "from_node": "write_report",
+        "message_type": "final_result",
+        "to_node": "report_sink"
+      }
+    ],
+    "entrypoints": [
+      "inspect_context"
+    ],
+    "nodes": [
+      {
+        "agent_type": "executor",
+        "alias": "inspect_context",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_timeout_ms": 60000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_dynamic_workflow"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "inspect_context_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 60,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Inspect Context",
+        "node_id": "inspect_context",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "dynamic_region_controller",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "followup_research",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_timeout_ms": 60000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_dynamic_workflow"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "followup_research_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 60,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Follow-up Research Template Worker",
+        "node_id": "followup_research_worker",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "pre_admitted_dynamic_worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "verify_evidence",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_timeout_ms": 60000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_dynamic_workflow"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "verify_evidence_done",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 60,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Verify Evidence Template Worker",
+        "node_id": "verify_evidence_worker",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "pre_admitted_dynamic_worker",
+        "type": "generic"
+      },
+      {
+        "agent_type": "executor",
+        "alias": "write_report",
+        "config": {
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_timeout_ms": 60000,
+          "command": [
+            "python3.11",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_DEMO_FINAL_STEP": "1",
+            "MN_BLUEPRINT_ID": "demo_dynamic_workflow"
+          },
+          "idempotent": true,
+          "max_attempts": 1,
+          "output_message_type": "final_result",
+          "pool": "default",
+          "pool_slots": 1,
+          "retry_backoff_ms": 100,
+          "runner_module": "MirrorNeuron.Runner.HostLocal",
+          "safe_to_retry": true,
+          "timeout_seconds": 60,
+          "upload_as": "worker",
+          "upload_path": "worker",
+          "workdir": "/sandbox/job/worker"
+        },
+        "display_name": "Write Report",
+        "node_id": "write_report",
+        "resources": {
+          "cpu_cores": 0.1,
+          "disk_mb": 4,
+          "memory_mb": 32,
+          "runtime_driver": "host_local"
+        },
+        "role": "fixed_exit",
+        "type": "generic"
+      },
+      {
+        "agent_type": "aggregator",
+        "alias": "result_sink",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        },
+        "node_id": "report_sink",
+        "role": "result_sink",
+        "type": "reduce"
+      }
+    ],
+    "schema": "mn.agents.communication_graph/v1"
+  },
+  "job_name": "demo-dynamic-workflow",
+  "policies": {
+    "recovery_mode": "local_restart",
+    "restart": {
+      "attempts": 2,
+      "delay_function": "constant",
+      "delay_ms": 100,
+      "interval_ms": 60000,
+      "max_delay_ms": 100,
+      "mode": "fail"
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 0.1
+    },
+    "disk": {
+      "min_gb": 0.01
+    },
+    "gpu": {
+      "min_count": 0
+    },
+    "memory": {
+      "min_gb": 0.05
+    }
+  },
+  "runtime": {
+    "bindings": {
+      "followup_research": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "followup_research_worker",
+            "role": "Execute admitted follow-up research instances."
+          }
+        ]
+      },
+      "inspect_context": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "inspect_context",
+            "role": "Inspect runtime context and control the adaptive region."
+          }
+        ]
+      },
+      "verify_evidence": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "verify_evidence_worker",
+            "role": "Verify admitted evidence instances."
+          }
+        ]
+      },
+      "write_report": {
+        "strategy": "single",
+        "type": "worker",
+        "workers": [
+          {
+            "id": "write_report",
+            "role": "Write the final deterministic report."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "inspect_context": [
+        {
+          "evidence_gap": true,
+          "question": "Is the bounded dynamic DAG runtime working?",
+          "scenario": "demo_dynamic_workflow",
+          "seed": 42
+        }
+      ]
+    },
+    "store": {
+      "path": "~/.mn/runs/${run_id}",
+      "type": "local_run_store"
+    },
+    "workflow_control": {
+      "enabled": true,
+      "liveness": {
+        "event": "agent_beacon",
+        "interval_ms": 1000,
+        "missed_action": "fail_attempt",
+        "required": false,
+        "timeout_ms": 5000
+      },
+      "schema_version": "mn.workflow.runtime_control.v1",
+      "source_of_truth": "workflow.steps",
+      "state_ledger": {
+        "delivery_semantics": "at_least_once_with_idempotency",
+        "enabled": true,
+        "message_ledger": true,
+        "persisted_field": "workflow_state"
+      }
+    }
+  },
+  "mode": "explicit"
+}

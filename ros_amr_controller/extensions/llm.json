@@ -1,0 +1,46 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/llm.schema.json",
+  "enabled": true,
+  "mode": "actor_assisted",
+  "mock_mode": "deterministic",
+  "provider": "docker_model_runner",
+  "model": "default",
+  "runtime_model": "default",
+  "backend": "llama.cpp",
+  "default_config": "primary",
+  "configs": {
+    "primary": {
+      "provider": "docker_model_runner",
+      "model": "default",
+      "runtime_model": "default",
+      "backend": "llama.cpp",
+      "temperature": 0.1,
+      "max_tokens": 600
+    }
+  },
+  "responsibilities": [
+    "Interpret explicit warehouse-robot control requests conservatively.",
+    "Use only the allowlisted MCP tools and fixed navigation zones.",
+    "Report the accepted command or current robot status without inventing motion results."
+  ],
+  "agents": {
+    "warehouse_service": {
+      "llm_config": "primary",
+      "role": "ROS AMR service controller",
+      "responsibilities": [
+        "Keep the ROS 2 simulation, Nav2, dashboard, and MCP endpoint healthy.",
+        "Expose only named-zone navigation and bounded fine-adjustment controls.",
+        "Stop child processes when the service lease ends."
+      ]
+    },
+    "finalize": {
+      "llm_config": "primary",
+      "role": "ROS AMR service finalizer",
+      "responsibilities": [
+        "Record deliberate service shutdown.",
+        "Preserve the run event trail.",
+        "Avoid issuing any robot command during finalization."
+      ]
+    }
+  }
+}

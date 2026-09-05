@@ -1,0 +1,180 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_sensor_a",
+      "required": true,
+      "to": "sensor_a"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_sensor_b",
+      "required": true,
+      "to": "sensor_b"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "start",
+      "id": "start_to_sensor_c",
+      "required": true,
+      "to": "sensor_c"
+    },
+    {
+      "accepts": [
+        "done",
+        "failed"
+      ],
+      "from": "sensor_a",
+      "id": "sensor_a_to_approve",
+      "required": true,
+      "to": "approve"
+    },
+    {
+      "accepts": [
+        "done",
+        "failed"
+      ],
+      "from": "sensor_b",
+      "id": "sensor_b_to_approve",
+      "required": true,
+      "to": "approve"
+    },
+    {
+      "accepts": [
+        "done",
+        "failed"
+      ],
+      "from": "sensor_c",
+      "id": "sensor_c_to_approve",
+      "required": true,
+      "to": "approve"
+    }
+  ],
+  "entrypoint": "start",
+  "execution": {
+    "max_parallel_steps": 4,
+    "strategy": "parallel"
+  },
+  "mode": "static_dag",
+  "sink": "approve",
+  "source": "start",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "start_done"
+      ],
+      "goal": "Run the start stage.",
+      "id": "start",
+      "kind": "task",
+      "label": "Start",
+      "run": "start"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "sensor_a_done"
+      ],
+      "goal": "Run the sensor_a stage.",
+      "id": "sensor_a",
+      "kind": "task",
+      "label": "Sensor A",
+      "run": "sensor_a"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "sensor_b_done"
+      ],
+      "goal": "Run the sensor_b stage.",
+      "id": "sensor_b",
+      "kind": "task",
+      "label": "Sensor B",
+      "run": "sensor_b"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "continue_partial",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "sensor_c_done"
+      ],
+      "goal": "Run the sensor_c stage.",
+      "id": "sensor_c",
+      "kind": "task",
+      "label": "Sensor C",
+      "run": "sensor_c"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "approve_done"
+      ],
+      "goal": "Run the approve stage.",
+      "id": "approve",
+      "kind": "task",
+      "label": "Approve",
+      "run": "approve",
+      "trigger_rule": {
+        "quorum": 2,
+        "rule": "quorum_success"
+      }
+    }
+  ],
+  "workflow_id": "demo_dag_quorum_v2"
+}

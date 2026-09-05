@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "A compact JSON result and standard run-store evidence.",
+  "problem_solved": "Use a deterministic fake model decision to call a local forecast tool.",
+  "simulation_type": "Deterministic synthetic runtime scenario.",
+  "runtime_features": [
+    "LLM tool orchestration"
+  ],
+  "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates LLM tool orchestration with minimal setup.",
+    "how_it_works": "Use a deterministic fake model decision to call a local forecast tool.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "problem": "Use a deterministic fake model decision to call a local forecast tool.",
+    "runtime_features": [
+      "LLM tool orchestration"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

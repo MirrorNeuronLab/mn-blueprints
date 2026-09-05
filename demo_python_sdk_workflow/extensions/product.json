@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "A compact JSON result and standard run-store evidence.",
+  "problem_solved": "Compile and run a decorated two-agent incident workflow.",
+  "simulation_type": "Deterministic synthetic runtime scenario.",
+  "runtime_features": [
+    "Python SDK compilation"
+  ],
+  "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates Python SDK compilation with minimal setup.",
+    "how_it_works": "Compile and run a decorated two-agent incident workflow.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "problem": "Compile and run a decorated two-agent incident workflow.",
+    "runtime_features": [
+      "Python SDK compilation"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/contracts.schema.json",
+  "events": {
+    "stream": "events.jsonl",
+    "types": [
+      "run_started",
+      "inputs_loaded",
+      "workflow_step_started",
+      "workflow_step_completed",
+      "run_completed",
+      "run_failed"
+    ]
+  },
+  "input_adapters": {
+    "supported": [
+      "mock",
+      "json",
+      "file",
+      "env_json"
+    ],
+    "resolved_artifact": "inputs.json",
+    "default": "mock",
+    "validation_rules": []
+  },
+  "inputs": {
+    "scenario": {
+      "description": "Small deterministic demo payload.",
+      "type": "object",
+      "required": true
+    },
+    "seed": {
+      "description": "Replay seed.",
+      "example": 42,
+      "type": "integer",
+      "required": false
+    }
+  },
+  "outputs": {
+    "artifacts": [
+      {
+        "artifact_id": "run_json",
+        "path": "run.json"
+      },
+      {
+        "artifact_id": "config_json",
+        "path": "config.json"
+      },
+      {
+        "artifact_id": "inputs_json",
+        "path": "inputs.json"
+      },
+      {
+        "artifact_id": "events_jsonl",
+        "path": "events.jsonl"
+      },
+      {
+        "artifact_id": "errors_jsonl",
+        "path": "errors.jsonl"
+      },
+      {
+        "artifact_id": "timeline_jsonl",
+        "path": "timeline.jsonl"
+      },
+      {
+        "artifact_id": "observability_summary_json",
+        "path": "observability_summary.json"
+      },
+      {
+        "artifact_id": "result_json",
+        "path": "result.json"
+      },
+      {
+        "artifact_id": "final_artifact_json",
+        "path": "final_artifact.json"
+      }
+    ],
+    "primary": {
+      "id": "final_artifact",
+      "path": "final_artifact.json",
+      "schema_version": "mn.blueprint.final_artifact.v1",
+      "type": "final_artifact"
+    },
+    "profile": "standard_run_store"
+  },
+  "privacy": {
+    "classification": "internal"
+  },
+  "summary": "Request small HostLocal resources and report the concrete allocation.",
+  "users": [
+    "MirrorNeuron developers and runtime evaluators."
+  ],
+  "input_validation": {
+    "rules": []
+  },
+  "artifacts": {
+    "schema": "mn.blueprint.final_artifact.v1"
+  }
+}

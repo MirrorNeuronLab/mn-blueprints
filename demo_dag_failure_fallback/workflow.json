@@ -1,0 +1,98 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/workflow.schema.json",
+  "dynamic": {
+    "enabled": false
+  },
+  "edges": [
+    {
+      "accepts": [
+        "failed"
+      ],
+      "from": "primary",
+      "id": "primary_to_fallback",
+      "required": true,
+      "to": "fallback"
+    },
+    {
+      "accepts": [
+        "done"
+      ],
+      "from": "fallback",
+      "id": "fallback_to_report",
+      "required": true,
+      "to": "report"
+    }
+  ],
+  "entrypoint": "primary",
+  "execution": {
+    "max_parallel_steps": 4,
+    "strategy": "serial"
+  },
+  "mode": "static_dag",
+  "sink": "report",
+  "source": "primary",
+  "steps": [
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "continue_partial",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "primary_done"
+      ],
+      "goal": "Run the primary stage.",
+      "id": "primary",
+      "kind": "task",
+      "label": "Primary",
+      "run": "primary"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "fallback_done"
+      ],
+      "goal": "Run the fallback stage.",
+      "id": "fallback",
+      "kind": "task",
+      "label": "Fallback",
+      "run": "fallback",
+      "trigger_rule": "one_failed"
+    },
+    {
+      "action": "run_worker",
+      "control": {
+        "failure_policy": "fail_workflow",
+        "required": true,
+        "retry": {
+          "backoff_seconds": 0.1,
+          "max_attempts": 1
+        },
+        "timeout_seconds": 10
+      },
+      "emits": [
+        "report_done"
+      ],
+      "goal": "Run the report stage.",
+      "id": "report",
+      "kind": "task",
+      "label": "Report",
+      "run": "report"
+    }
+  ],
+  "workflow_id": "demo_dag_failure_fallback_v2"
+}

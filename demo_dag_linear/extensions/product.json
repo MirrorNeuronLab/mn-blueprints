@@ -1,0 +1,23 @@
+{
+  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "target_user": "MirrorNeuron developers and runtime evaluators.",
+  "output": "A compact JSON result and standard run-store evidence.",
+  "problem_solved": "Parse, score, and report one support ticket in strict order.",
+  "simulation_type": "Deterministic synthetic runtime scenario.",
+  "runtime_features": [
+    "Linear DAG"
+  ],
+  "customizable_for": "Runtime training, smoke testing, and feature evaluation.",
+  "category": "Runtime",
+  "product": {
+    "benefit": "Demonstrates Linear DAG with minimal setup.",
+    "how_it_works": "Parse, score, and report one support ticket in strict order.",
+    "input": "Small deterministic mock input; json, file, and env_json are also supported.",
+    "output": "A compact JSON result and standard run-store evidence.",
+    "problem": "Parse, score, and report one support ticket in strict order.",
+    "runtime_features": [
+      "Linear DAG"
+    ],
+    "target_users": "MirrorNeuron developers and runtime evaluators."
+  }
+}

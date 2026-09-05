@@ -57,10 +57,6 @@
     "mode": "disabled",
     "reason": "The default demo is deterministic and only writes local artifacts."
   },
-  "identity": {
-    "blueprint_id": "demo_event_trigger",
-    "name": "Event Trigger"
-  },
   "inputs": {
     "adapter": "mock",
     "description": "Bundled deterministic input; override with json, file, or env_json.",
@@ -87,12 +83,6 @@
       "real_adapters",
       "interfaces",
       "execution_model"
-    ],
-    "input_adapters": [
-      "mock",
-      "json",
-      "file",
-      "env_json"
     ],
     "output_adapters": [
       "local_run_store"

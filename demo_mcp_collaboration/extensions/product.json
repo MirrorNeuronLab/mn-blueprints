@@ -1,5 +1,5 @@
 {
-  "$schema": "https://mirrorneuron.dev/schemas/blueprint/v1/extensions/product.schema.json",
+  "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/extensions/product.schema.json",
   "target_user": "MirrorNeuron developers and runtime evaluators.",
   "output": "Peer MCP snapshots, update journals, and standard run-store evidence.",
   "problem_solved": "Launch two jobs under one shared goal and exchange status, knowledge, and staged or final results through job-scoped MCP servers.",

@@ -2,7 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "vc_assistant",
   "name": "VC Assistant",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A VC analysis co-worker for early startup screening reports. Put pitch decks, memos, financial snippets, company folders, or other startup documents in the input folder; it groups documents by company, performs privacy-safe public research, applies seven VC heuristic scoring methods, audits the math and evidence, and writes score-only per-company reports and batch indexes to the output folder.",
   "workflow": "workflow.json",
   "execution": "execution.json",

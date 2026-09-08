@@ -96,7 +96,7 @@ def knowledge_rag_config(config: dict[str, Any]) -> dict[str, Any]:
                 "required": False,
             },
         }
-    return skill_knowledge_rag_config(config)
+    return sdk_knowledge_rag_config(config)
 
 def with_runtime_knowledge_rag_defaults(config: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(config, dict):
@@ -136,7 +136,7 @@ def resolve_knowledge_dir(
             bundle_root=blueprint_dir,
             payload_root=payload_root,
         )
-    return skill_resolve_blueprint_knowledge_dir(
+    return sdk_resolve_blueprint_knowledge_dir(
         blueprint_dir,
         active_knowledge=active_knowledge,
         configured_path=configured_path,
@@ -174,7 +174,7 @@ def prepare_knowledge_rag(
             {
                 "phase": "knowledge_rag",
                 "operation": "prepare",
-                "tool": "rag_skill",
+                "tool": "mn_sdk_rag",
                 "status": "mocked",
                 "mocked": True,
             },
@@ -254,10 +254,10 @@ def prepare_knowledge_rag(
                 raw.get("knowledge_dir"),
             ),
             event_callback=event_callback,
-            prepare_callback=skill_prepare_blueprint_knowledge_rag,
-            retrieve_callback=skill_retrieve_knowledge_rag_context,
-            require_callback=skill_require_ready_knowledge_rag,
-            public_state_callback=skill_public_rag_state,
+            prepare_callback=sdk_prepare_blueprint_knowledge_rag,
+            retrieve_callback=sdk_retrieve_knowledge_rag_context,
+            require_callback=sdk_require_ready_knowledge_rag,
+            public_state_callback=sdk_public_rag_state,
         ).prepare()
     except Exception as exc:
         warning = {
@@ -285,7 +285,7 @@ def prepare_knowledge_rag(
 def public_knowledge_rag_state(state: dict[str, Any] | None) -> dict[str, Any]:
     if not state:
         return {"enabled": False, "status": "disabled"}
-    return skill_public_rag_state(state)
+    return sdk_public_rag_state(state)
 
 def knowledge_rag_is_required(state: dict[str, Any] | None) -> bool:
     if not state or not state.get("enabled"):
@@ -320,7 +320,7 @@ def require_ready_rag(
         return KnowledgeRagSession.from_state(
             knowledge_rag,
             blueprint_id=BLUEPRINT_ID,
-            require_callback=skill_require_ready_knowledge_rag,
+            require_callback=sdk_require_ready_knowledge_rag,
         ).require_ready(
             stage=stage,
             company=company,
@@ -375,9 +375,13 @@ def retrieve_knowledge_rag_context(
             context = KnowledgeRagSession.from_state(
                 knowledge_rag,
                 blueprint_id=BLUEPRINT_ID,
-                retrieve_callback=skill_retrieve_knowledge_rag_context,
-                require_callback=skill_require_ready_knowledge_rag,
-                public_state_callback=skill_public_rag_state,
+                embedder=build_runtime_embedder(RagConfig.from_mapping(
+                    (knowledge_rag or {}).get("config") or {},
+                    blueprint_id=BLUEPRINT_ID,
+                )) if (knowledge_rag or {}).get("enabled") else None,
+                retrieve_callback=sdk_retrieve_knowledge_rag_context,
+                require_callback=sdk_require_ready_knowledge_rag,
+                public_state_callback=sdk_public_rag_state,
             ).retrieve(
                 query,
                 stage=stage,

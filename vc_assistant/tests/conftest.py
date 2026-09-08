@@ -8,6 +8,7 @@ workspace = blueprints_root.parent / "mirror-neuron-set"
 if not workspace.is_dir():
     workspace = blueprints_root.parent
 sources = [blueprints_root, workspace / "mn-python-sdk"]
+sources.extend((workspace / "mn-python-sdk" / "packages").glob("*/src"))
 for repository in ("mn-skills", "mn-agents"):
     sources.extend((workspace / repository).glob("*/src"))
 for source in sources:

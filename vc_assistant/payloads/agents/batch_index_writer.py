@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from mn_blueprint_support import llm_usage
+from mn_prototype_actor_review_agent.actors import llm_usage
 from mn_public_research_orchestrator_skill import flatten_research_ledger
 from mn_prototype_artifact_finalizer_agent import (
     ArtifactBundle,

@@ -98,7 +98,7 @@ startup materials.
 - `skill_runtime`: shared DockerWorker image settings for skills that need system binaries.
 - `execution.max_company_workers`: maximum changed-company packets processed concurrently; defaults to one for local Docker Model Runner stability.
 - `backpressure.llm`: serializes and spaces local LLM calls so agentic research does not overwhelm Docker Model Runner.
-- Concurrent RAG-consuming workers use the RAG skill's job-scoped Unix-socket service. One owner process retains the sole Milvus Lite connection to `databases/rag/milvus.db`; every specialist agent indexes and queries through that shared connection.
+- Concurrent RAG-consuming workers use the SDK RAG package's job-scoped Unix-socket service. One owner process retains the sole Milvus Lite connection to `databases/rag/milvus.db`; every specialist agent indexes and queries through that shared connection.
 - `internet_research`: public verification targets, bounded browser timeouts, Crunchbase/profile URL templates, and explicit deep-render controls.
 - `internet_research.max_parallel_research_agents`: maximum research agents running in parallel per changed company.
 - `scoring.max_workers`: maximum parallel method scorers per changed company.
@@ -107,7 +107,7 @@ startup materials.
 
 Each configured VC Assistant job owns persistent `knowledge/`,
 `databases/rag/`, and `state/`. Bundled diligence knowledge seeds once; later
-runs preserve edits and reuse one Milvus Lite database. The RAG skill
+runs preserve edits and reuse one Milvus Lite database. The SDK RAG package
 single-flights startup indexing and serves parallel agent retrieval through one
 connection. Pitch inputs, reports, logs, and ordinary artifacts remain
 independent by `run_id`.
@@ -153,10 +153,12 @@ an investment decision.
 
 ## Validation
 
-Run repository-level tests from `otterdesk-blueprints` after changing catalog metadata, manifest structure, payload behavior, or shared fixtures:
+From `mn-blueprints`, run the self-contained VC suite with the companion SDK,
+skill, and agent checkouts available:
 
 ```bash
-.venv/bin/python -m pytest -q
+python -m pytest vc_assistant/tests -q
+git diff --check
 ```
 
 ## Blueprint package format
@@ -170,3 +172,23 @@ Platform descriptors live in `extensions/`, package requirements in
 The SDK reads these documents together and compiles the Core execution artifact.
 A ZIP contains the same files as the folder. Local overrides and invocation
 configuration are resolved by the SDK before launch.
+
+## SDK capability dependencies
+
+Release 1.1.0 migrates infrastructure from retired skill distributions to the
+current SDK component contract. `dependencies.json` declares pinned
+`mn-python-sdk-common`, `mn-python-sdk-rag[milvus]`,
+`mn-python-sdk-job-response`, and `mn-python-sdk-mcp` under `packages`.
+Task capabilities remain under `skills`; reusable workers remain under `agents`.
+The skill and agent pins follow the migration releases used by the OtterDesk
+catalog (1.3.23 and 1.3.10 respectively).
+
+Prompt/event helpers use `mn_sdk_common`; actor configuration and usage use the
+actor-review agent; foundational LLM access uses `mn_sdk.llm`. RAG owns indexing,
+retrieval, and the shared Job database, with the SDK runtime model adapter
+injected for embedding preparation and retrieval. The RAG `milvus` extra owns
+Milvus installation; the blueprint does not maintain a second dependency list.
+
+Local development (`MN_USE_LOCAL_SKILLS=1`) resolves declared SDK packages from
+`mn-python-sdk/packages` and skills/agents from their companion source projects,
+ignoring release pins. Binary installation uses the pinned GAR releases.

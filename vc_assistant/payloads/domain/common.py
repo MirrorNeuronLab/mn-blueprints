@@ -29,14 +29,20 @@ from typing import Any
 
 from urllib.parse import urlparse
 
-from mn_blueprint_support import (
-    PromptLibrary,
-    append_event_jsonl,
+from mn_sdk_common.prompts import PromptLibrary
+from mn_sdk_common.events import append_event_jsonl
+from mn_sdk.blueprint_support import (
     env_flag_enabled,
     fake_llm_mode_enabled,
     fake_skills_mode_enabled,
+)
+from mn_prototype_actor_review_agent.actors import (
     get_actor_llm_client,
     resolve_actor_specs,
+)
+from mn_sdk.integrations.rag import (
+    build_runtime_embedder,
+    prepare_blueprint_knowledge_rag as sdk_prepare_blueprint_knowledge_rag,
 )
 
 from mn_sdk.blueprint_support import (
@@ -142,14 +148,14 @@ from mn_document_reading_skill import (
     safe_read_text,
 )
 
-from mn_rag_skill import (
+from mn_sdk_rag import (
+    RagConfig,
     KnowledgeRagSession,
-    knowledge_rag_config as skill_knowledge_rag_config,
-    prepare_blueprint_knowledge_rag as skill_prepare_blueprint_knowledge_rag,
-    public_rag_state as skill_public_rag_state,
-    require_ready_knowledge_rag as skill_require_ready_knowledge_rag,
-    resolve_blueprint_knowledge_dir as skill_resolve_blueprint_knowledge_dir,
-    retrieve_knowledge_rag_context as skill_retrieve_knowledge_rag_context,
+    knowledge_rag_config as sdk_knowledge_rag_config,
+    public_rag_state as sdk_public_rag_state,
+    require_ready_knowledge_rag as sdk_require_ready_knowledge_rag,
+    resolve_blueprint_knowledge_dir as sdk_resolve_blueprint_knowledge_dir,
+    retrieve_knowledge_rag_context as sdk_retrieve_knowledge_rag_context,
 )
 
 from mn_public_research_orchestrator_skill import (

@@ -27,7 +27,6 @@ for skill_name in (
     "client_report_skill",
     "document_reading_skill",
     "public_research_orchestrator_skill",
-    "rag_skill",
     "scoring_framework_skill",
 ):
     skill_src = BLUEPRINT_DIR.parents[1] / "mn-skills" / skill_name / "src"
@@ -540,7 +539,7 @@ def test_required_rag_zero_citations_fails_before_llm(monkeypatch):
             calls["llm"] += 1
             return {"tool_calls": [{"tool": "finish"}], "rag_refs": [1]}
 
-    monkeypatch.setattr(rb, "skill_require_ready_knowledge_rag", fake_require_ready)
+    monkeypatch.setattr(rb, "sdk_require_ready_knowledge_rag", fake_require_ready)
     monkeypatch.setattr(
         rb,
         "retrieve_knowledge_rag_context",
@@ -630,7 +629,7 @@ def test_runtime_rag_uses_one_job_database_for_every_agent(monkeypatch, tmp_path
 
     assert not hasattr(rb, "with_agent_scoped_knowledge_rag_config")
 
-    from mn_rag_skill import RagConfig
+    from mn_sdk_rag import RagConfig
 
     job_id = "job-vc-rag-test"
     job_data_dir = tmp_path / job_id
@@ -679,7 +678,7 @@ def test_agentic_rag_query_prioritizes_agent_playbook_terms(monkeypatch):
                 "rag_refs": [1],
             }
 
-    monkeypatch.setattr(rb, "skill_require_ready_knowledge_rag", fake_require_ready)
+    monkeypatch.setattr(rb, "sdk_require_ready_knowledge_rag", fake_require_ready)
     monkeypatch.setattr(rb, "retrieve_knowledge_rag_context", fake_retrieve)
 
     rb.run_agentic_research_agent(

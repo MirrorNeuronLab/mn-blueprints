@@ -317,6 +317,7 @@ def run_batch_index_writer(
                 result=result,
             ),
             event_writer=artifact_event_writer,
+            contained_paths=True,
         )
     )
     with observed_operation(
@@ -341,6 +342,7 @@ def run_batch_index_writer(
                     ),
                 ),
                 event_writer=artifact_event_writer,
+                contained_paths=True,
             )
         )(ctx)
         append_event(

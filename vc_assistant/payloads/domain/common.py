@@ -178,6 +178,7 @@ from mn_public_research_orchestrator_skill import (
     PublicResearchPolicy,
     PublicResearchToolset,
     source_record as shared_source_record,
+    source_records_from_browser_result as shared_source_records_from_browser_result,
 )
 
 from mn_scoring_framework_skill import (

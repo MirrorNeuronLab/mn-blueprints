@@ -4,10 +4,10 @@ from typing import Any, Callable
 
 from mn_prototype_stateful_step_agent import (
     AgentHandlerOutput,
-    MessageAgentSpec,
+    DomainOperationSpec,
     StatefulStepContext,
     StatefulStepSpec,
-    create_message_agent,
+    create_domain_message_agent,
 )
 from mn_sdk.blueprint_support import StepLifecycleHooks
 from mn_sdk.blueprint_support import source_manifest
@@ -132,12 +132,12 @@ def create_agent_handler(
             )
         return result
 
-    return create_message_agent(
-        MessageAgentSpec(
+    return create_domain_message_agent(
+        DomainOperationSpec(
             stateful=AGENT_SPEC,
+            operation=invoke,
             input_resolver=lambda value: _runtime_inputs(value.payload),
-        ),
-        invoke,
+        )
     )
 
 

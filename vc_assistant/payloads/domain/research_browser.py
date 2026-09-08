@@ -196,31 +196,24 @@ def _append_browser_research_unobserved(
         return
     if action_budget:
         action_budget.complete(action, "completed", {"source_count": len(result.get("sources") or [])})
-    for source in result.get("sources") or []:
+    for source in shared_source_records_from_browser_result(
+        result,
+        entity=company,
+        query=query,
+        skill="web_browser_skill",
+        verification_target=verification_target,
+    ):
         sources.append(
             _source_record(
                 company=company,
                 query=query,
-                url=str(source.get("final_url") or source.get("url") or ""),
+                url=str(source.get("url") or ""),
                 title=str(source.get("title") or ""),
-                snippet=str(source.get("snippet") or source.get("text") or ""),
+                snippet=str(source.get("snippet") or ""),
                 status=str(source.get("status") or "ok"),
                 skill="web_browser_skill",
                 verification_target=verification_target,
-            )
-        )
-    for warning in result.get("warnings") or []:
-        sources.append(
-            _source_record(
-                company=company,
-                query=query,
-                url=str(result.get("search_url") or ""),
-                title="web research warning",
-                snippet=str(warning),
-                status="warning",
-                skill="web_browser_skill",
-                verification_target=verification_target,
-                warning=str(warning),
+                warning=str(source.get("warning") or ""),
             )
         )
 

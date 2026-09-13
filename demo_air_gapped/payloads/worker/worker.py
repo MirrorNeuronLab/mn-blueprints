@@ -83,12 +83,12 @@ if step == "analyze":
         "analysis": call_local_model(system_prompt, user_prompt),
         "model": os.environ.get("MN_LLM_MODEL", MODEL),
         "network": "forbidden",
-        "payload_skill": "mn-demo-airgap-skill==1.0.0",
+        "payload_skill": "mn-demo-airgap-skill==1.3.47",
     }
     events = [
         {
             "type": "payload_skill_loaded",
-            "payload": {"package": "mn-demo-airgap-skill==1.0.0"},
+            "payload": {"package": "mn-demo-airgap-skill==1.3.47"},
         },
         {
             "type": "payload_model_called",

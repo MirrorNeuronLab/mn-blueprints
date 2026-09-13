@@ -52,6 +52,6 @@ def finalize_report(payload: Any) -> dict[str, Any]:
             payload.get("model") or "demo-air-gapped/gemma4-e2b:latest"
         ),
         "network": "forbidden",
-        "payload_skill": "mn-demo-airgap-skill==1.0.0",
+        "payload_skill": "mn-demo-airgap-skill==1.3.47",
         "status": "completed",
     }

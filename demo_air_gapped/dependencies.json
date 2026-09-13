@@ -7,7 +7,7 @@
       "path": "skills/demo_airgap_skill",
       "source": "payload",
       "type": "pip",
-      "version": "1.3.47"
+      "version": ">=1.3.47"
     }
   ],
   "agents": [
@@ -17,7 +17,7 @@
       "path": "agents/demo_airgap_analyzer_agent",
       "source": "payload",
       "type": "pip",
-      "version": "1.3.47"
+      "version": ">=1.3.47"
     },
     {
       "format": "source",
@@ -25,7 +25,7 @@
       "path": "agents/demo_airgap_reporter_agent",
       "source": "payload",
       "type": "pip",
-      "version": "1.3.47"
+      "version": ">=1.3.47"
     }
   ]
 }

@@ -60,3 +60,11 @@ All folders and ZIPs use `https://mirrorneuron.io/schemas/blueprint/v1/manifest.
 Use `mn_sdk.blueprints.read_blueprint`, `resolve_config`, and `compile_blueprint`;
 `open_blueprint` adds ZIP extraction and `export_blueprint` preserves the full package.
 External dependencies remain declared; offline vendoring is optional.
+
+## Dependency ranges
+
+MirrorNeuron Python dependencies in `dependencies.json`, execution configuration,
+and worker requirements use `>=1.3.47`. Bundled demo distributions are versioned
+`1.3.47` and their declarations use the same minimum. Third-party libraries retain
+their own version families (for example `numpy>=2.3.5,<3.0`). Package identity
+versions and container image digests remain concrete artifact identities.

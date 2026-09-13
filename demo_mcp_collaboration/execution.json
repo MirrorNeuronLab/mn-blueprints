@@ -145,8 +145,8 @@
             "packages": [
               "grpcio>=1.82.1,<2",
               "protobuf>=7.35.1,<8",
-              "mirrorneuron-mcp-client-skill==1.2.31",
-              "mirrorneuron-mcp-server-skill==1.2.30"
+              "mirrorneuron-mcp-client-skill>=1.3.47",
+              "mirrorneuron-mcp-server-skill>=1.3.47"
             ]
           },
           "retry_backoff_ms": 100,

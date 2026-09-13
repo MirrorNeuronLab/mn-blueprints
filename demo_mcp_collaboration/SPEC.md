@@ -35,3 +35,9 @@ Platform descriptors live in `extensions/`, package requirements in
 The SDK reads these documents together and compiles the Core execution artifact.
 A ZIP contains the same files as the folder. Local overrides and invocation
 configuration are resolved by the SDK before launch.
+
+## Bundled dependency versions
+
+The bundled Python distributions are versioned `1.3.47`. Their dependency
+declarations use `>=1.3.47`, matching the shared MirrorNeuron dependency floor.
+The SDK validates the shipped artifact version against that constraint.

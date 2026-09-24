@@ -115,6 +115,15 @@ def step_advisor_review_auditor(ctx: dict[str, Any]) -> dict[str, Any]:
         issues.append("llm_review_evidence_gaps_present")
     if any(review.get("risk_flags") for review in llm_reviews.values()):
         issues.append("llm_review_risk_flags_present")
+    review_briefs = {
+        lane: {
+            "summary": str(review.get("summary") or "")[:240],
+            "evidence_gaps": (review.get("evidence_gaps") or [])[:2],
+            "risk_flags": (review.get("risk_flags") or [])[:2],
+            "source_refs": (review.get("source_refs") or [])[:3],
+        }
+        for lane, review in llm_reviews.items()
+    }
     finding = actor_review(
         ctx["config"],
         ctx["llm"],
@@ -123,9 +132,17 @@ def step_advisor_review_auditor(ctx: dict[str, Any]) -> dict[str, Any]:
         {
             "issues": issues,
             "blocked_actions": blocked_actions,
-            "llm_reviews": llm_reviews,
-            "reconciled_evidence": reconciler.get("evidence", []),
-            "missing_evidence": reconciler.get("missing_evidence", []),
+            "llm_reviews": review_briefs,
+            "reconciled_evidence": [
+                {
+                    "domain": item.get("domain"),
+                    "summary": str(item.get("summary") or "")[:120],
+                    "source_refs": (item.get("source_refs") or [])[:2],
+                }
+                for item in reconciler.get("evidence", [])
+                if isinstance(item, dict)
+            ],
+            "missing_evidence": (reconciler.get("missing_evidence") or [])[:4],
             "review_constraints": [
                 "Confirm LLM reviews did not alter deterministic math.",
                 "Confirm blocked actions remain blocked.",

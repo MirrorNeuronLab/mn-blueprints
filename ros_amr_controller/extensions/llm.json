@@ -3,25 +3,25 @@
   "enabled": true,
   "mode": "actor_assisted",
   "mock_mode": "deterministic",
-  "provider": "docker_model_runner",
   "model": "default",
-  "runtime_model": "default",
-  "backend": "llama.cpp",
   "default_config": "primary",
   "configs": {
     "primary": {
-      "provider": "docker_model_runner",
+      "provider": "openai_compatible",
       "model": "default",
-      "runtime_model": "default",
-      "backend": "llama.cpp",
-      "temperature": 0.1,
+      "api_base": "auto",
+      "temperature": 0,
+      "structured_output_options": {
+        "temperature": 0
+      },
       "max_tokens": 600
     }
   },
   "responsibilities": [
-    "Interpret explicit warehouse-robot control requests conservatively.",
-    "Use only the allowlisted MCP tools and fixed navigation zones.",
-    "Report the accepted command or current robot status without inventing motion results."
+    "Interpret typed robot commands by semantic intent, including polite paraphrases, using declared MCP tool descriptions and exact argument enums.",
+    "Map move to zone A/B/C to navigate_to_zone with zone_a/zone_b/zone_c. Map stop, halt, and cancel navigation to cancel_navigation without stopping the simulation service.",
+    "Ask for clarification when the destination is missing or unsupported; never invent coordinates or tools.",
+    "Report acceptance and observed navigation progress separately; claim arrival only after the operation completes."
   ],
   "agents": {
     "warehouse_service": {

@@ -5,29 +5,6 @@
       "scenario": "warehouse"
     }
   },
-  "llm": {
-    "agents": {
-      "finalize": {
-        "responsibilities": [
-          "Record deliberate shutdown.",
-          "Preserve the run event trail.",
-          "Never issue a motion command."
-        ]
-      },
-      "warehouse_service": {
-        "responsibilities": [
-          "Keep the ROS 2 simulation and controls healthy.",
-          "Use only bounded robot controls.",
-          "Stop cleanly with the service lease."
-        ]
-      }
-    },
-    "responsibilities": [
-      "Interpret explicit warehouse-robot control requests conservatively.",
-      "Use only the allowlisted MCP tools and fixed navigation zones.",
-      "Report accepted commands and observed status without inventing motion results."
-    ]
-  },
   "logging": {
     "events_jsonl": true,
     "logs_jsonl": true,
@@ -37,7 +14,6 @@
     "enabled": true,
     "kind": "streamable_http",
     "service": {
-      "advertise_host": "10.0.4.26",
       "host": "0.0.0.0",
       "path": "/mcp",
       "port": 8090
@@ -62,9 +38,6 @@
     "python_sdk_path": "${MN_MEMBRANE_SDK_PATH}",
     "sdk_distribution": "mirrorneuron-membrane-python-sdk",
     "sdk_import_package": "mn_context_engine_sdk"
-  },
-  "metadata": {
-    "description": "Give it a warehouse scenario and it runs a long-lived ROS 2 TurtleBot simulation on a joined NVIDIA node, with a browser control room, bounded natural-language MCP controls, and run evidence written to the configured output folder without exposing an arbitrary host input folder."
   },
   "outputs": {
     "adapter": "local_run_store",
@@ -100,7 +73,6 @@
       "adapter": "live_http"
     },
     "service": {
-      "advertise_host": "10.0.4.26",
       "host": "0.0.0.0",
       "port": 8088
     }

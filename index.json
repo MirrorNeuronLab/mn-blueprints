@@ -28,5 +28,6 @@
   "demo_stream_backpressure",
   "ros_amr_controller",
   "financial_advisor",
-  "vc_assistant"
+  "vc_assistant",
+  "research_assistant"
 ]

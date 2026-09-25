@@ -26,7 +26,8 @@
       "user": {
         "get_robot_status": {
           "effect": "read",
-          "arguments": {}
+          "arguments": {},
+          "description": "Read current simulated robot status and pose without changing motion."
         },
         "navigate_to_zone": {
           "effect": "motion",
@@ -39,11 +40,13 @@
                 "zone_c"
               ]
             }
-          }
+          },
+          "description": "Move the simulated robot to a named zone. Interpret move to zone A, go to A, or please navigate to Zone A as zone=zone_a; likewise B and C. Use only the declared zones. Acceptance means navigation was requested; report arrival only from the correlated operation."
         },
         "cancel_navigation": {
-          "effect": "motion",
-          "arguments": {}
+          "effect": "stop",
+          "arguments": {},
+          "description": "Stop the simulated robot: interpret stop, halt, cancel navigation, or stop the robot as this tool with no arguments. Cancel navigation and send a bounded zero-velocity burst. Keep the simulation service running. This stop effect does not require a motion status preflight."
         },
         "adjust_robot": {
           "effect": "motion",
@@ -56,7 +59,8 @@
                 "right"
               ]
             }
-          }
+          },
+          "description": "Apply one short forward, left, or right fine-adjustment pulse only when requested. Never expand zone navigation into repeated adjustments."
         }
       },
       "internal": {

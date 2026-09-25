@@ -1,6 +1,6 @@
 {
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/contracts.schema.json",
-  "summary": "Run the TurtleBot warehouse simulation continuously and expose its operations dashboard.",
+  "summary": "Control and monitor a simulated warehouse robot through chat and live video.",
   "inputs": {
     "scenario": {
       "type": "string",

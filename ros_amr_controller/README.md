@@ -2,6 +2,10 @@
 
 This long-lived service runs the ROS 2 Jazzy TurtleBot warehouse simulation as
 an isolated Docker Compose project on the selected CUDA/NVIDIA runtime node.
+In OtterDesk, **Try a sample** starts the bundled warehouse scenario with the
+defaults in `config/default.json`. Once the service is healthy, use chat to
+move to Zones A, B, or C, check status, or stop the robot through the bounded
+MCP response agent.
 The blueprint source includes the complete Compose context at
 `payloads/docker_compose/turtlebot-maze`; it does not require a prebuilt image
 or a checkout at `/home/homer/Sandbox`.
@@ -23,13 +27,16 @@ The service uses the exclusive Compose project name
 clears that previous project before starting, preventing stale services from
 holding the dashboard, video, rosbridge, or MCP ports.
 
-The selected Spark node hosts the dashboard on `8088`, the bounded MCP endpoint
+The runtime-selected node hosts the dashboard on `8088`, the bounded MCP endpoint
 on `8090`, video on `8080`, and rosbridge on `9090`. With `--web-ui`, open the
 local MirrorNeuron URL printed by the CLI (`/jobs/<job_id>/ui`): it proxies the
 dashboard, video streams, and rosbridge through the local Web UI service rather
-than navigating the browser directly to Spark. Startup requires all seven
+than navigating the browser directly to the runtime node. The service registry
+and Web UI handle use the selected node's advertised runtime address. Startup requires all seven
 declared Compose services plus the dashboard, MCP health endpoint, video TCP
-port, and rosbridge TCP port.
+port, and rosbridge TCP port. Compose health probes use the selected node's
+advertised address so the native SDK container can reach the host-network
+services.
 
 Pausing or stopping the service runs Compose `down --remove-orphans --volumes`
 only for this service project. Resuming recreates that same owned project from
@@ -55,19 +62,31 @@ commands are not exposed.
 The stable Job also owns a bounded conversational response agent. OtterDesk
 chat calls the Job's `ask_job` MCP tool directly; it does not run a desktop
 keyword parser or call the robot MCP endpoint. The agent uses MirrorNeuron's
-resolved `default` model for one strict JSON plan per turn, discovers only the
+resolved `default` model for a validated JSON plan per turn, discovers only the
 healthy MCP service registered by the already-running ROS service Run, and
 checks its exact tool schemas before issuing at most one declared effect. It
 never starts or resumes the ROS Run.
 
-The agent keeps operational state separate from RAG. Capabilities, zone
-semantics, safety policy, and explicitly learned rules are durable knowledge;
-Job, Run, navigation, pose, and service status are timestamped structured
-snapshots. A conversational answer may identify a snapshot as last-known-good
-for up to 30 seconds, but cached status never authorizes motion. Before any
-non-emergency motion, the agent calls `get_robot_status` live and requires the
-robot bridge to report `connected: true`. Exact stop/cancel/halt remains the
-direct safety exception.
+## Type commands in chat
+
+Start the simulation, wait for its services to become healthy, then open this
+co-worker's OtterDesk chat and type, for example:
+
+- `move to zone A` — request navigation to Zone A (also supports B and C).
+- `stop` — cancel navigation and send a stop burst, keeping the simulation open.
+- `what is the robot's status?` — read status without changing motion.
+- `turn left` — request one short left adjustment.
+
+The current Job response SDK interprets these requests using the declared tool
+descriptions and the resolved `default` model through `openai_compatible` with
+`api_base: auto`. No separate chat server or desktop command parser is needed.
+The blueprint declares the SDK job-response, MCP, RAG, and Web UI packages.
+
+Before navigation or adjustment, the agent reads `get_robot_status` live and
+requires `connected: true`. The `stop` effect skips that motion preflight, but
+still requires a reachable registered MCP service and a valid model plan.
+It does not bypass the planner or stop the co-worker's Compose service.
+Use OtterDesk's pause/stop service control to shut down the simulation.
 
 Navigation replies are correlated. Chat receives an immediate accepted reply
 with a turn to poll; the Job agent then reads `get_navigation_operation` once

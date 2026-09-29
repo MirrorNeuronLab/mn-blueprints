@@ -1,0 +1,63 @@
+{
+  "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/workflow.schema.json",
+  "workflow_id": "demo_openshell_code_generation_v1",
+  "mode": "static_dag",
+  "entrypoint": "generate",
+  "source": "generate",
+  "sink": "verify",
+  "steps": [
+    {
+      "id": "generate",
+      "label": "Generate and validate pizza page",
+      "kind": "task",
+      "action": "run_worker",
+      "run": "generate",
+      "goal": "Use OpenCode in OpenShell to write and validate a standalone pizza ordering page.",
+      "emits": [
+        "generated"
+      ],
+      "control": {
+        "required": true,
+        "failure_policy": "fail_workflow",
+        "retry": {
+          "max_attempts": 1
+        },
+        "timeout_seconds": 660
+      }
+    },
+    {
+      "id": "verify",
+      "label": "Verify generated HTML",
+      "kind": "task",
+      "action": "run_worker",
+      "run": "verify",
+      "goal": "Verify the generated page in the same OpenShell sandbox and emit the final artifact.",
+      "emits": [
+        "final_result"
+      ],
+      "control": {
+        "required": true,
+        "failure_policy": "fail_workflow",
+        "retry": {
+          "max_attempts": 1
+        },
+        "timeout_seconds": 60
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "generate_to_verify",
+      "from": "generate",
+      "to": "verify",
+      "accepts": [
+        "done"
+      ],
+      "required": true
+    }
+  ],
+  "execution": {
+    "strategy": "serial",
+    "max_parallel_steps": 1
+  }
+}

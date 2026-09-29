@@ -1,0 +1,37 @@
+{
+  "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/contracts.schema.json",
+  "summary": "Generate and export an offline pizza ordering HTML page.",
+  "inputs": {
+    "opencode": {
+      "type": "object",
+      "required": false,
+      "description": "Override the model, sandbox folder, prompt, mode, and timeout."
+    }
+  },
+  "outputs": {
+    "primary": {
+      "id": "pizza_page",
+      "type": "html",
+      "path": "index.html"
+    },
+    "artifacts": [
+      {
+        "artifact_id": "pizza_page",
+        "path": "index.html"
+      },
+      {
+        "artifact_id": "generation_run",
+        "path": "run.json"
+      }
+    ]
+  },
+  "events": {
+    "types": [
+      "opencode_completed",
+      "html_verified"
+    ]
+  },
+  "privacy": {
+    "classification": "internal"
+  }
+}

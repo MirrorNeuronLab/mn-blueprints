@@ -1,0 +1,14 @@
+{
+  "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
+  "id": "demo_openshell_code_generation",
+  "name": "OpenShell Code Generation",
+  "version": "1.0.0",
+  "description": "Generate a pizza ordering HTML page with OpenCode inside OpenShell.",
+  "workflow": "workflow.json",
+  "execution": "execution.json",
+  "contracts": "contracts.json",
+  "config": "config/default.json",
+  "dependencies": "dependencies.json",
+  "license": "LICENSE.md",
+  "terms": "TERM.md"
+}

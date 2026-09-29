@@ -1,0 +1,23 @@
+[project]
+name = "mirrorneuron-opencode-skill"
+version = "0.0.0"
+description = "Bounded OpenCode CLI adapter for generation, editing, and review in OpenShell workers."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = []
+
+[project.scripts]
+mn-opencode = "mn_opencode_skill.__main__:main"
+
+[build-system]
+requires = ["setuptools>=77", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+root = ".."
+fallback_version = "0.0.0"
+local_scheme = "no-local-version"
+
+[tool.setuptools.packages.find]
+where = ["src"]

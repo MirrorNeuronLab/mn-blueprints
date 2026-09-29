@@ -1,0 +1,13 @@
+{
+  "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/dependencies.schema.json",
+  "skills": [
+    {
+      "name": "mirrorneuron-opencode-skill",
+      "version": "==0.0.0",
+      "type": "pip",
+      "source": "payload",
+      "format": "source",
+      "path": "skills/opencode_skill"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "checks": [
+    "customized large stuffed-crust pizza with extra cheese costs $22.00",
+    "delivery total $27.86 for one customized pizza",
+    "quantity 2 and pickup total $47.74",
+    "required name/email validation",
+    "invalid email validation",
+    "pickup confirmation with order summary and no payment notice",
+    "cart removal resets totals and disables checkout",
+    "390px mobile viewport has no horizontal overflow",
+    "1280px desktop viewport has no horizontal overflow",
+    "JavaScript syntax valid"
+  ],
+  "scope": "manual browser verification using synthetic customer data"
+}

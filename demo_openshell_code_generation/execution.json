@@ -1,0 +1,204 @@
+{
+  "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/execution.schema.json",
+  "job_name": "demo-openshell-code-generation",
+  "agents": {
+    "schema": "mn.agents.communication_graph/v1",
+    "entrypoints": [
+      "generate"
+    ],
+    "nodes": [
+      {
+        "node_id": "generate",
+        "alias": "generate",
+        "display_name": "OpenCode generator",
+        "agent_type": "executor",
+        "role": "root_coordinator",
+        "type": "generic",
+        "config": {
+          "runner_module": "MirrorNeuron.Runner.OpenShell",
+          "command": [
+            "python3",
+            "worker.py"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_openshell_code_generation",
+            "MN_WORKFLOW_STEP_ID": "generate"
+          },
+          "from": "mirror-neuron/demo-openshell-code-generation:local",
+          "policy": "worker/openshell-policy.yaml",
+          "sandbox_upload_path": "/sandbox/job",
+          "workdir": "/sandbox/job/worker",
+          "reuse_shared_sandbox": true,
+          "timeout_seconds": 660,
+          "max_attempts": 1,
+          "safe_to_retry": false,
+          "idempotent": false,
+          "output_message_type": "generated",
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_timeout_ms": 660000,
+          "upload_paths": [
+            {
+              "source": "worker",
+              "target": "worker"
+            },
+            {
+              "source": "skills",
+              "target": "skills"
+            }
+          ],
+          "artifact_handoff": {
+            "version": "mn.artifact_handoff/v1",
+            "max_files": 16,
+            "max_bytes": 16000000
+          }
+        },
+        "resources": {
+          "runtime_driver": "openshell",
+          "cpu_cores": 1,
+          "memory_mb": 2048,
+          "disk_mb": 512
+        }
+      },
+      {
+        "node_id": "verify",
+        "alias": "verify",
+        "display_name": "Verify generated HTML",
+        "agent_type": "executor",
+        "role": "worker",
+        "type": "generic",
+        "config": {
+          "runner_module": "MirrorNeuron.Runner.OpenShell",
+          "command": [
+            "python3",
+            "worker.py",
+            "--verify-only"
+          ],
+          "environment": {
+            "MN_BLUEPRINT_ID": "demo_openshell_code_generation",
+            "MN_WORKFLOW_STEP_ID": "verify"
+          },
+          "from": "mirror-neuron/demo-openshell-code-generation:local",
+          "policy": "worker/openshell-policy.yaml",
+          "sandbox_upload_path": "/sandbox/job",
+          "workdir": "/sandbox/job/worker",
+          "reuse_shared_sandbox": true,
+          "timeout_seconds": 60,
+          "max_attempts": 1,
+          "safe_to_retry": true,
+          "idempotent": true,
+          "output_message_type": "final_result",
+          "agent_beacon_required": false,
+          "beacon_enabled": true,
+          "beacon_interval_ms": 1000,
+          "beacon_timeout_ms": 660000,
+          "upload_paths": [
+            {
+              "source": "worker",
+              "target": "worker"
+            },
+            {
+              "source": "skills",
+              "target": "skills"
+            }
+          ],
+          "artifact_handoff": {
+            "version": "mn.artifact_handoff/v1",
+            "max_files": 16,
+            "max_bytes": 16000000,
+            "export_outputs": true
+          }
+        },
+        "resources": {
+          "runtime_driver": "openshell",
+          "cpu_cores": 1,
+          "memory_mb": 2048,
+          "disk_mb": 512
+        }
+      },
+      {
+        "node_id": "report_sink",
+        "alias": "result_sink",
+        "agent_type": "aggregator",
+        "role": "result_sink",
+        "type": "reduce",
+        "config": {
+          "complete_on_message": true,
+          "complete_run": true,
+          "terminal_sink": true
+        }
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "generate_to_verify",
+        "from_node": "generate",
+        "to_node": "verify",
+        "message_type": "generated"
+      },
+      {
+        "edge_id": "verify_to_result",
+        "from_node": "verify",
+        "to_node": "report_sink",
+        "message_type": "final_result"
+      }
+    ]
+  },
+  "runtime": {
+    "bindings": {
+      "generate": {
+        "type": "worker",
+        "strategy": "single",
+        "workers": [
+          {
+            "id": "generate",
+            "role": "Generate the requested page with OpenCode in OpenShell."
+          }
+        ]
+      },
+      "verify": {
+        "type": "worker",
+        "strategy": "single",
+        "workers": [
+          {
+            "id": "verify",
+            "role": "Verify and return the generated HTML."
+          }
+        ]
+      }
+    },
+    "initial_inputs": {
+      "generate": [
+        {
+          "task": "generate_pizza_page"
+        }
+      ]
+    },
+    "workflow_control": {
+      "enabled": true,
+      "liveness": {
+        "event": "agent_beacon",
+        "interval_ms": 1000,
+        "timeout_ms": 660000,
+        "missed_action": "fail_attempt"
+      }
+    }
+  },
+  "requirements": {
+    "cpu": {
+      "min_cores": 1
+    },
+    "memory": {
+      "min_gb": 2
+    },
+    "disk": {
+      "min_gb": 0.5
+    },
+    "gpu": {
+      "min_count": 0
+    }
+  },
+  "mode": "explicit",
+  "type": "batch"
+}

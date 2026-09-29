@@ -1,0 +1,1145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ember &amp; Crust — Neighborhood Pizza</title>
+<meta name="description" content="Ember & Crust demo storefront. Wood-fired neighborhood pizza. Customize, cart, and demo checkout." />
+<style>
+  :root {
+    --ivory: #fffaf0;
+    --ivory-deep: #f7ecd8;
+    --ink: #2b2118;
+    --muted: #6f5d4d;
+    --tomato: #d6402b;
+    --tomato-dark: #a92e1f;
+    --basil: #2e7d4f;
+    --basil-dark: #1f5a38;
+    --crust: #e9a44a;
+    --card: #ffffff;
+    --line: #ead9c0;
+    --focus: #1a6fd4;
+    --radius: 18px;
+    --shadow: 0 12px 32px rgba(43, 33, 24, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ivory);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  h1, h2, h3 {
+    font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+  }
+  p { margin: 0 0 1rem; }
+  a { color: var(--tomato-dark); }
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -100px;
+    background: var(--ink);
+    color: #fff;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    z-index: 100;
+    text-decoration: none;
+  }
+  .skip-link:focus { top: 1rem; }
+
+  header.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255, 250, 240, 0.96);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(6px);
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 1.25rem; }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+  }
+  .brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: var(--ink); }
+  .brand-mark {
+    width: 44px; height: 44px; flex: none;
+    background: var(--tomato);
+    border-radius: 14px;
+    display: grid; place-items: center;
+    box-shadow: var(--shadow);
+  }
+  .brand-name { font-family: Georgia, serif; font-weight: 800; font-size: 1.25rem; line-height: 1; }
+  .brand-sub { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  nav.main-nav { margin-left: auto; display: flex; gap: 0.25rem; align-items: center; flex-wrap: wrap; }
+  nav.main-nav a {
+    text-decoration: none; color: var(--ink);
+    padding: 0.5rem 0.8rem; border-radius: 999px; font-weight: 600;
+  }
+  nav.main-nav a:hover { background: var(--ivory-deep); }
+  .cart-pill {
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.5rem 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 2.5rem;
+    align-items: center;
+    padding: 3rem 0 2rem;
+  }
+  .eyebrow {
+    display: inline-block;
+    background: #fde7df;
+    color: var(--tomato-dark);
+    border: 1px solid #f3c4b5;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+  .hero h1 { font-size: clamp(2.4rem, 5vw, 4rem); }
+  .hero h1 em { font-style: italic; color: var(--tomato); }
+  .hero-copy { font-size: 1.1rem; color: #4a3d31; max-width: 34rem; }
+  .hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; margin: 1.4rem 0; }
+  .btn {
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.85rem 1.4rem;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+  .btn-primary { background: var(--tomato); color: #fff; box-shadow: 0 8px 20px rgba(214,64,43,.3); }
+  .btn-primary:hover { background: var(--tomato-dark); }
+  .btn-secondary { background: #fff; color: var(--ink); border: 2px solid var(--ink); }
+  .btn-secondary:hover { background: var(--ink); color: #fff; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+  .hero-points { display: flex; gap: 1rem; flex-wrap: wrap; list-style: none; padding: 0; margin: 1rem 0 0; }
+  .hero-points li {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 0.45rem 0.85rem;
+    font-size: 0.92rem; font-weight: 600;
+  }
+  .hero-art {
+    background: radial-gradient(circle at 50% 35%, #fff 0, #fff6e6 45%, #f7ecd8 100%);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .hero-art figcaption { text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+
+  section { padding: 2rem 0; }
+  .section-head { max-width: 46rem; margin-bottom: 1.5rem; }
+  .section-head h2 { font-size: clamp(1.7rem, 3.5vw, 2.4rem); }
+  .section-head p { color: var(--muted); }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+  }
+  .pizza-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 6px 18px rgba(43,33,24,.07);
+  }
+  .pizza-card figure { margin: 0; background: #fff6e6; padding: 1rem; border-bottom: 1px solid var(--line); }
+  .pizza-card svg { width: 100%; height: auto; display: block; }
+  .pizza-card-body { padding: 1.1rem 1.1rem 1.25rem; display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
+  .pizza-card-body h3 { font-size: 1.25rem; }
+  .pizza-card-body p { color: var(--muted); font-size: 0.95rem; margin: 0; }
+  .price-row { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 0.6rem; }
+  .price { font-weight: 900; font-size: 1.1rem; }
+  .price small { font-weight: 600; color: var(--muted); }
+  .tag {
+    font-size: 0.78rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+    background: #e7f3eb; color: var(--basil-dark);
+    padding: 0.25rem 0.6rem; border-radius: 999px; border: 1px solid #bfe0cb;
+  }
+  .tag.hot { background: #fde7df; color: var(--tomato-dark); border-color: #f3c4b5; }
+
+  .order-layout {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  fieldset { border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1rem 1.1rem; margin: 0 0 1rem; }
+  legend { font-weight: 800; padding: 0 0.5rem; }
+  .choice-grid { display: grid; gap: 0.6rem; }
+  .choice {
+    display: flex; gap: 0.7rem; align-items: flex-start;
+    border: 1px solid var(--line); border-radius: 12px; padding: 0.65rem 0.75rem;
+    cursor: pointer; background: #fffdf8;
+  }
+  .choice:hover { border-color: var(--crust); }
+  .choice input { margin-top: 0.25rem; width: 1.1rem; height: 1.1rem; accent-color: var(--tomato); }
+  .choice strong { display: block; }
+  .choice span.desc { color: var(--muted); font-size: 0.9rem; }
+  .choice span.add-price { margin-left: auto; font-weight: 800; white-space: nowrap; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+
+  .builder-price {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--ivory); border: 1px dashed var(--crust);
+    border-radius: 14px; padding: 0.9rem 1rem; margin: 0 0 1rem;
+    font-weight: 800; font-size: 1.1rem;
+  }
+
+  label { font-weight: 700; display: block; margin-bottom: 0.35rem; }
+  input[type="text"], input[type="email"], input[type="tel"], select {
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    border-radius: 12px;
+    border: 1.5px solid #d9c7ad;
+    background: #fffdf8;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .field { margin-bottom: 0.9rem; }
+  .field-hint { font-weight: 400; color: var(--muted); font-size: 0.88rem; margin-top: 0.25rem; }
+  .error { color: var(--tomato-dark); font-size: 0.9rem; font-weight: 600; margin-top: 0.3rem; min-height: 1.2em; }
+  input[aria-invalid="true"] { border-color: var(--tomato); background: #fff2ee; }
+
+  .cart-list { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: 0.8rem; }
+  .cart-item {
+    border: 1px solid var(--line); border-radius: 14px; padding: 0.9rem;
+    background: #fffdf8; display: grid; gap: 0.5rem;
+  }
+  .cart-item-top { display: flex; gap: 0.7rem; align-items: flex-start; }
+  .cart-item-top strong { font-size: 1.02rem; }
+  .cart-options { color: var(--muted); font-size: 0.9rem; margin: 0.15rem 0 0; }
+  .cart-unit { margin-left: auto; font-weight: 800; white-space: nowrap; }
+  .qty-row { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+  .qty-controls { display: flex; align-items: center; gap: 0.5rem; }
+  .qty-btn {
+    width: 2.1rem; height: 2.1rem; border-radius: 999px;
+    border: 2px solid var(--ink); background: #fff;
+    font-size: 1.15rem; font-weight: 900; line-height: 1;
+    cursor: pointer; display: grid; place-items: center;
+  }
+  .qty-btn:hover { background: var(--ink); color: #fff; }
+  .qty { min-width: 2ch; text-align: center; font-weight: 800; }
+  .link-btn {
+    background: none; border: 0; color: var(--tomato-dark);
+    font-weight: 700; cursor: pointer; text-decoration: underline;
+    padding: 0.3rem; font-size: 0.95rem;
+  }
+  .line-total { margin-left: auto; font-weight: 800; }
+  .empty-cart {
+    border: 1.5px dashed #d9c7ad; border-radius: 14px;
+    padding: 1.2rem; text-align: center; color: var(--muted); background: var(--ivory);
+  }
+  dl.totals { display: grid; gap: 0.4rem; margin: 0 0 1rem; }
+  dl.totals > div { display: flex; justify-content: space-between; gap: 1rem; }
+  dl.totals dt { color: var(--muted); }
+  dl.totals dd { margin: 0; font-weight: 700; }
+  dl.totals .grand { border-top: 2px solid var(--line); padding-top: 0.6rem; font-size: 1.2rem; }
+  dl.totals .grand dt { color: var(--ink); font-weight: 900; }
+  dl.totals .grand dd { font-weight: 900; }
+
+  .fulfillment { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+  .live-region {
+    background: #1f2a22; color: #fff;
+    border-radius: 12px; padding: 0.7rem 0.9rem;
+    font-size: 0.95rem; margin-top: 1rem;
+  }
+
+  footer { border-top: 1px solid var(--line); margin-top: 2rem; padding: 1.5rem 0 2.5rem; color: var(--muted); }
+
+  dialog {
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 0;
+    max-width: min(560px, calc(100vw - 2rem));
+    width: 560px;
+    box-shadow: 0 24px 80px rgba(0,0,0,.25);
+  }
+  dialog::backdrop { background: rgba(43,33,24,.55); }
+  .dialog-inner { padding: 1.6rem; }
+  .dialog-inner h2 { font-size: 1.8rem; }
+  .success-badge {
+    display: inline-block; background: var(--basil); color: #fff;
+    font-weight: 800; padding: 0.35rem 0.8rem; border-radius: 999px; margin-bottom: 0.8rem;
+  }
+  .order-summary-box {
+    background: var(--ivory); border: 1px solid var(--line);
+    border-radius: 14px; padding: 1rem; margin: 1rem 0;
+  }
+  .order-summary-box ul { margin: 0.5rem 0; padding-left: 1.2rem; }
+  .fine-print { font-size: 0.92rem; color: var(--muted); }
+
+  @media (max-width: 980px) {
+    .menu-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero, .order-layout { grid-template-columns: 1fr; }
+    .hero-art { order: -1; }
+  }
+  @media (max-width: 520px) {
+    .menu-grid { grid-template-columns: 1fr; }
+    .two-col, .fulfillment { grid-template-columns: 1fr; }
+    .wrap { padding: 0 1rem; }
+    .header-inner { flex-wrap: wrap; }
+    nav.main-nav { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top" aria-label="Ember and Crust home">
+      <span class="brand-mark" aria-hidden="true">
+        <!-- flame + crust mark -->
+        <svg width="26" height="26" viewBox="0 0 26 26" role="img" aria-hidden="true">
+          <path d="M13 2c1.5 3.2 5.5 5.2 5.5 10a5.5 5.5 0 0 1-11 0c0-2 1-3.6 2.2-5 .3 1.2 1 2 2 2.4C11.4 7 12 4.5 13 2z" fill="#fff"/>
+          <path d="M13 22a7.5 7.5 0 0 0 7.5-7.5c0-.4 0-.8-.1-1.2C19 15 16.5 16 13 16s-6-1-7.4-2.7c-.1.4-.1.8-.1 1.2A7.5 7.5 0 0 0 13 22z" fill="#f7c873"/>
+        </svg>
+      </span>
+      <span>
+        <span class="brand-name">Ember &amp; Crust</span><br />
+        <span class="brand-sub">Wood-fired neighborhood pizza</span>
+      </span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="#menu">Menu</a>
+      <a href="#builder">Build your pizza</a>
+      <a href="#checkout">Cart &amp; checkout</a>
+      <button class="cart-pill" type="button" id="header-cart-btn">Cart · <span id="header-cart-count">0</span></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+    <!-- HERO -->
+    <div class="hero" id="top">
+      <div>
+        <span class="eyebrow">Est. 2012 · Baked at 900°F</span>
+        <h1>Real fire. <em>Honest crust.</em> Pizza worth walking for.</h1>
+        <p class="hero-copy">
+          We ferment our dough for 48 hours, crush San Marzano-style tomatoes every morning,
+          and finish every pie in a blazing oak oven. Customize your pizza below — it goes
+          straight into our demo oven (no real order, no payment).
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#builder">Build your pizza</a>
+          <a class="btn btn-secondary" href="#menu">See the menu</a>
+        </div>
+        <ul class="hero-points" aria-label="Highlights">
+          <li>48-hour dough</li>
+          <li>Vegetarian options</li>
+          <li>Pickup or delivery</li>
+        </ul>
+      </div>
+      <figure class="hero-art">
+        <!-- Large appetizing pizza SVG -->
+        <svg viewBox="0 0 320 240" role="img" aria-labelledby="heroPizzaTitle heroPizzaDesc">
+          <title id="heroPizzaTitle">Whole pepperoni pizza illustration</title>
+          <desc id="heroPizzaDesc">A golden pizza with melted cheese, pepperoni, basil, and steam above it.</desc>
+          <ellipse cx="160" cy="205" rx="105" ry="14" fill="#ead9c0" />
+          <circle cx="160" cy="135" r="98" fill="#e9a44a" />
+          <circle cx="160" cy="135" r="86" fill="#d6402b" />
+          <circle cx="160" cy="135" r="78" fill="#f6c453" />
+          <circle cx="160" cy="135" r="78" fill="#f9d488" opacity="0.7" />
+          <!-- cheese blobs -->
+          <ellipse cx="125" cy="115" rx="22" ry="16" fill="#ffe9b0" />
+          <ellipse cx="185" cy="105" rx="26" ry="18" fill="#ffe9b0" />
+          <ellipse cx="195" cy="160" rx="24" ry="17" fill="#ffe9b0" />
+          <ellipse cx="130" cy="165" rx="20" ry="15" fill="#ffe9b0" />
+          <!-- pepperoni -->
+          <g>
+            <circle cx="140" cy="125" r="16" fill="#b3271e" stroke="#7e1c15" stroke-width="3" />
+            <circle cx="180" cy="140" r="16" fill="#b3271e" stroke="#7e1c15" stroke-width="3" />
+            <circle cx="160" cy="170" r="16" fill="#b3271e" stroke="#7e1c15" stroke-width="3" />
+            <circle cx="200" cy="120" r="13" fill="#b3271e" stroke="#7e1c15" stroke-width="3" />
+            <circle cx="120" cy="150" r="13" fill="#b3271e" stroke="#7e1c15" stroke-width="3" />
+          </g>
+          <!-- basil -->
+          <g fill="#2e7d4f">
+            <ellipse cx="155" cy="110" rx="9" ry="6" transform="rotate(-20 155 110)" />
+            <ellipse cx="175" cy="165" rx="9" ry="6" transform="rotate(25 175 165)" />
+            <ellipse cx="135" cy="140" rx="8" ry="5" transform="rotate(15 135 140)" />
+          </g>
+          <!-- steam -->
+          <g stroke="#cbb99f" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.9">
+            <path d="M130 55 q6 -10 0 -20 q-6 -10 0 -20" />
+            <path d="M160 58 q6 -10 0 -20 q-6 -10 0 -20" />
+            <path d="M190 55 q6 -10 0 -20 q-6 -10 0 -20" />
+          </g>
+        </svg>
+        <figcaption>Tonight’s special: wood-fired pepperoni, fresh basil, bubbling mozzarella.</figcaption>
+      </figure>
+    </div>
+
+    <!-- MENU -->
+    <section id="menu" aria-labelledby="menu-heading">
+      <div class="section-head">
+        <h2 id="menu-heading">The menu</h2>
+        <p>Four house favorites. Every card shows its starting price (medium, classic crust). Press “Customize” to load it into the builder with size, crust, and extra toppings.</p>
+      </div>
+
+      <div class="menu-grid">
+        <article class="pizza-card">
+          <figure>
+            <svg viewBox="0 0 200 150" role="img" aria-label="Margherita pizza illustration">
+              <circle cx="100" cy="78" r="62" fill="#e9a44a" />
+              <circle cx="100" cy="78" r="52" fill="#d6402b" />
+              <circle cx="100" cy="78" r="47" fill="#f6d47a" />
+              <circle cx="85" cy="68" r="9" fill="#fff6df" stroke="#e8c88a" stroke-width="2" />
+              <circle cx="115" cy="72" r="9" fill="#fff6df" stroke="#e8c88a" stroke-width="2" />
+              <circle cx="100" cy="92" r="9" fill="#fff6df" stroke="#e8c88a" stroke-width="2" />
+              <g fill="#2e7d4f">
+                <ellipse cx="100" cy="62" rx="8" ry="5" />
+                <ellipse cx="88" cy="86" rx="7" ry="5" transform="rotate(-20 88 86)" />
+                <ellipse cx="113" cy="88" rx="7" ry="5" transform="rotate(20 113 88)" />
+              </g>
+            </svg>
+          </figure>
+          <div class="pizza-card-body">
+            <h3>Margherita</h3>
+            <p>Crushed tomato, fior-di-latte mozzarella, fresh basil, cold-pressed olive oil.</p>
+            <div class="price-row">
+              <span class="price">$12.00 <small>from</small></span>
+              <span class="tag">Vegetarian</span>
+            </div>
+            <button class="btn btn-secondary" type="button" data-load-pizza="margherita">Customize</button>
+          </div>
+        </article>
+
+        <article class="pizza-card">
+          <figure>
+            <svg viewBox="0 0 200 150" role="img" aria-label="Pepperoni pizza illustration">
+              <circle cx="100" cy="78" r="62" fill="#e9a44a" />
+              <circle cx="100" cy="78" r="52" fill="#c93a26" />
+              <circle cx="100" cy="78" r="47" fill="#f6c453" />
+              <g>
+                <circle cx="85" cy="68" r="11" fill="#a92318" stroke="#6f150e" stroke-width="2.5" />
+                <circle cx="114" cy="70" r="11" fill="#a92318" stroke="#6f150e" stroke-width="2.5" />
+                <circle cx="100" cy="92" r="11" fill="#a92318" stroke="#6f150e" stroke-width="2.5" />
+                <circle cx="122" cy="92" r="8" fill="#a92318" stroke="#6f150e" stroke-width="2" />
+                <circle cx="78" cy="90" r="8" fill="#a92318" stroke="#6f150e" stroke-width="2" />
+              </g>
+              <g fill="#ffe9b0" opacity="0.9">
+                <circle cx="92" cy="62" r="2.5" /><circle cx="108" cy="84" r="2.5" /><circle cx="96" cy="106" r="2" />
+              </g>
+            </svg>
+          </figure>
+          <div class="pizza-card-body">
+            <h3>Pepperoni</h3>
+            <p>Cup-and-char pepperoni, low-moisture mozzarella, tomato sauce, oregano.</p>
+            <div class="price-row">
+              <span class="price">$14.00 <small>from</small></span>
+              <span class="tag hot">House icon</span>
+            </div>
+            <button class="btn btn-secondary" type="button" data-load-pizza="pepperoni">Customize</button>
+          </div>
+        </article>
+
+        <article class="pizza-card">
+          <figure>
+            <svg viewBox="0 0 200 150" role="img" aria-label="Garden Party vegetable pizza illustration">
+              <circle cx="100" cy="78" r="62" fill="#e9a44a" />
+              <circle cx="100" cy="78" r="52" fill="#d6402b" />
+              <circle cx="100" cy="78" r="47" fill="#f2cd6b" />
+              <g>
+                <rect x="78" y="62" width="18" height="8" rx="4" fill="#2e7d4f" transform="rotate(-15 87 66)" />
+                <rect x="104" y="84" width="18" height="8" rx="4" fill="#2e7d4f" transform="rotate(20 113 88)" />
+                <rect x="88" y="92" width="18" height="8" rx="4" fill="#d98a1f" transform="rotate(-10 97 96)" />
+                <circle cx="115" cy="66" r="6" fill="#3b3b3b" />
+                <circle cx="115" cy="66" r="2.5" fill="#fff" />
+                <circle cx="86" cy="82" r="6" fill="#3b3b3b" />
+                <circle cx="86" cy="82" r="2.5" fill="#fff" />
+                <ellipse cx="103" cy="72" rx="7" ry="5" fill="#f4f0e6" stroke="#c9bda6" stroke-width="1.5" />
+                <ellipse cx="96" cy="104" rx="7" ry="5" fill="#f4f0e6" stroke="#c9bda6" stroke-width="1.5" />
+              </g>
+              <g fill="#b3271e">
+                <circle cx="124" cy="82" r="4" /><circle cx="76" cy="72" r="4" />
+              </g>
+            </svg>
+          </figure>
+          <div class="pizza-card-body">
+            <h3>Garden Party</h3>
+            <p>Bell peppers, mushrooms, red onion, black olives, sweet tomato sauce.</p>
+            <div class="price-row">
+              <span class="price">$13.50 <small>from</small></span>
+              <span class="tag">Vegetarian</span>
+            </div>
+            <button class="btn btn-secondary" type="button" data-load-pizza="garden">Customize</button>
+          </div>
+        </article>
+
+        <article class="pizza-card">
+          <figure>
+            <svg viewBox="0 0 200 150" role="img" aria-label="Hot Honey pizza illustration">
+              <circle cx="100" cy="78" r="62" fill="#c98a2e" />
+              <circle cx="100" cy="78" r="52" fill="#c93a26" />
+              <circle cx="100" cy="78" r="47" fill="#f6c453" />
+              <g>
+                <circle cx="88" cy="70" r="10" fill="#a92318" stroke="#6f150e" stroke-width="2.5" />
+                <circle cx="112" cy="84" r="10" fill="#a92318" stroke="#6f150e" stroke-width="2.5" />
+                <circle cx="96" cy="96" r="8" fill="#a92318" stroke="#6f150e" stroke-width="2" />
+              </g>
+              <g stroke="#8a4a00" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.85">
+                <path d="M70 60 Q100 72 130 62" />
+                <path d="M68 84 Q100 96 132 86" />
+                <path d="M74 106 Q100 114 126 106" />
+              </g>
+              <g fill="#2e7d4f">
+                <ellipse cx="118" cy="66" rx="6" ry="4" transform="rotate(20 118 66)" />
+                <ellipse cx="82" cy="90" rx="6" ry="4" transform="rotate(-20 82 90)" />
+              </g>
+            </svg>
+          </figure>
+          <div class="pizza-card-body">
+            <h3>Hot Honey</h3>
+            <p>Pepperoni, mozzarella, chili-infused honey drizzle, torn basil, sea salt.</p>
+            <div class="price-row">
+              <span class="price">$15.00 <small>from</small></span>
+              <span class="tag hot">Spicy-sweet</span>
+            </div>
+            <button class="btn btn-secondary" type="button" data-load-pizza="hothoney">Customize</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- BUILDER + CART -->
+    <section id="builder" aria-labelledby="builder-heading">
+      <div class="section-head">
+        <h2 id="builder-heading">Build your pizza</h2>
+        <p>Pick a base, size, crust, and extra toppings. Prices update live. All math is done in cents so totals stay exact.</p>
+      </div>
+
+      <div class="order-layout">
+        <!-- Builder -->
+        <div class="panel" aria-labelledby="customize-heading">
+          <h3 id="customize-heading">1 · Customize</h3>
+          <form id="customize-form">
+            <fieldset>
+              <legend>Pizza</legend>
+              <div class="choice-grid" id="pizza-choices">
+                <label class="choice">
+                  <input type="radio" name="pizza" value="margherita" checked />
+                  <span><strong>Margherita — $12.00</strong><span class="desc">Classic tomato, mozzarella, basil</span></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="pizza" value="pepperoni" />
+                  <span><strong>Pepperoni — $14.00</strong><span class="desc">Cup-and-char pepperoni, oregano</span></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="pizza" value="garden" />
+                  <span><strong>Garden Party — $13.50</strong><span class="desc">Peppers, mushrooms, olives, onion</span></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="pizza" value="hothoney" />
+                  <span><strong>Hot Honey — $15.00</strong><span class="desc">Pepperoni + chili honey drizzle</span></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Size</legend>
+              <div class="choice-grid" id="size-choices">
+                <label class="choice">
+                  <input type="radio" name="size" value="small" />
+                  <span><strong>Small · 10″</strong><span class="desc">Lighter appetite · −$2.00</span></span>
+                  <span class="add-price">−$2.00</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="size" value="medium" checked />
+                  <span><strong>Medium · 12″</strong><span class="desc">Our standard · included</span></span>
+                  <span class="add-price">$0.00</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="size" value="large" />
+                  <span><strong>Large · 14″</strong><span class="desc">For sharing · +$4.00</span></span>
+                  <span class="add-price">+$4.00</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Crust</legend>
+              <div class="choice-grid">
+                <label class="choice">
+                  <input type="radio" name="crust" value="thin" checked />
+                  <span><strong>Thin &amp; crackly</strong><span class="desc">Light, crisp base</span></span>
+                  <span class="add-price">$0.00</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="crust" value="classic" />
+                  <span><strong>Classic hand-tossed</strong><span class="desc">Puffy, airy edge</span></span>
+                  <span class="add-price">$0.00</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="crust" value="stuffed" />
+                  <span><strong>Stuffed crust</strong><span class="desc">Mozzarella-filled rim</span></span>
+                  <span class="add-price">+$2.50</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="crust" value="glutenfree" />
+                  <span><strong>Gluten-free</strong><span class="desc">Cauliflower-rice blend</span></span>
+                  <span class="add-price">+$2.00</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Extra toppings</legend>
+              <div class="choice-grid" id="topping-choices">
+                <label class="choice"><input type="checkbox" name="topping" value="mozzarella" /><span><strong>Extra mozzarella</strong><span class="desc">Double cheese pull</span></span><span class="add-price">+$1.50</span></label>
+                <label class="choice"><input type="checkbox" name="topping" value="pepperoni" /><span><strong>Extra pepperoni</strong><span class="desc">More cup-and-char</span></span><span class="add-price">+$1.75</span></label>
+                <label class="choice"><input type="checkbox" name="topping" value="mushrooms" /><span><strong>Mushrooms</strong><span class="desc">Roasted cremini</span></span><span class="add-price">+$1.00</span></label>
+                <label class="choice"><input type="checkbox" name="topping" value="olives" /><span><strong>Black olives</strong><span class="desc">Briny, sliced</span></span><span class="add-price">+$1.00</span></label>
+                <label class="choice"><input type="checkbox" name="topping" value="basil" /><span><strong>Fresh basil</strong><span class="desc">Torn after baking</span></span><span class="add-price">+$0.75</span></label>
+                <label class="choice"><input type="checkbox" name="topping" value="hothoney" /><span><strong>Hot honey drizzle</strong><span class="desc">Chili-infused honey</span></span><span class="add-price">+$1.25</span></label>
+              </div>
+            </fieldset>
+
+            <div class="builder-price" aria-live="polite">
+              <span>Current build</span>
+              <span id="builder-price-value">$12.00 each</span>
+            </div>
+            <button class="btn btn-primary" type="submit" id="add-to-cart-btn" style="width:100%">Add to cart</button>
+          </form>
+        </div>
+
+        <!-- Cart + checkout -->
+        <div class="panel" id="checkout" aria-labelledby="cart-heading">
+          <h3 id="cart-heading">2 · Cart &amp; checkout</h3>
+
+          <div id="cart-status" class="sr-only" role="status"></div>
+          <ul class="cart-list" id="cart-list" aria-label="Cart items"></ul>
+          <div class="empty-cart" id="empty-cart">
+            <strong>Your cart is empty.</strong><br />
+            Build a pizza on the left and press “Add to cart”.
+          </div>
+
+          <h4 style="margin:1.2rem 0 .6rem">Order type</h4>
+          <div class="fulfillment" role="radiogroup" aria-label="Order type">
+            <label class="choice">
+              <input type="radio" name="fulfillment" value="delivery" checked />
+              <span><strong>Delivery</strong><span class="desc">$3.99 fee · 30–45 min</span></span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="fulfillment" value="pickup" />
+              <span><strong>Pickup</strong><span class="desc">No fee · ready in 15 min</span></span>
+            </label>
+          </div>
+
+          <dl class="totals" aria-label="Order totals">
+            <div><dt>Subtotal</dt><dd id="subtotal-value">$0.00</dd></div>
+            <div><dt>Estimated tax (8.5%)</dt><dd id="tax-value">$0.00</dd></div>
+            <div><dt>Delivery fee</dt><dd id="fee-value">$0.00</dd></div>
+            <div class="grand"><dt>Total</dt><dd id="total-value">$0.00</dd></div>
+          </dl>
+
+          <form id="checkout-form" novalidate>
+            <h4 style="margin:0 0 .6rem">Your details</h4>
+            <div class="two-col">
+              <div class="field">
+                <label for="cust-name">Full name *</label>
+                <input type="text" id="cust-name" name="name" autocomplete="name" required />
+                <div class="error" id="err-name"></div>
+              </div>
+              <div class="field">
+                <label for="cust-phone">Phone</label>
+                <input type="tel" id="cust-phone" name="phone" autocomplete="tel" placeholder="(555) 123-4567" />
+                <div class="error" id="err-phone"></div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="cust-email">Email *</label>
+              <input type="email" id="cust-email" name="email" autocomplete="email" required placeholder="you@example.com" />
+              <div class="error" id="err-email"></div>
+            </div>
+
+            <div id="address-fields">
+              <h4 style="margin:.4rem 0 .6rem">Delivery address *</h4>
+              <div class="field">
+                <label for="cust-street">Street address</label>
+                <input type="text" id="cust-street" name="street" autocomplete="street-address" placeholder="123 Grove St, Apt 4" />
+                <div class="error" id="err-street"></div>
+              </div>
+              <div class="two-col">
+                <div class="field">
+                  <label for="cust-city">City</label>
+                  <input type="text" id="cust-city" name="city" autocomplete="address-level2" placeholder="Maplewood" />
+                  <div class="error" id="err-city"></div>
+                </div>
+                <div class="field">
+                  <label for="cust-zip">ZIP code</label>
+                  <input type="text" id="cust-zip" name="zip" autocomplete="postal-code" inputmode="numeric" placeholder="04000" />
+                  <div class="error" id="err-zip"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit" id="checkout-btn" style="width:100%" disabled>Place demo order</button>
+            <p class="field-hint">Demo only — no payment is taken and no real order is sent to the kitchen.</p>
+          </form>
+
+          <div class="live-region" id="announcer" aria-live="polite">Welcome to Ember &amp; Crust. Your cart is empty.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Ember &amp; Crust</strong> · 48 Hearth Lane · Open Tue–Sun, 4–10pm · Demo storefront — all orders are simulated.</p>
+    <p style="margin:0">Prices include a demo 8.5% tax estimate. Delivery is a flat $3.99; pickup is free.</p>
+  </div>
+</footer>
+
+<!-- Confirmation dialog -->
+<dialog id="confirmation-dialog" aria-labelledby="confirm-title">
+  <div class="dialog-inner">
+    <span class="success-badge">Order confirmed (demo)</span>
+    <h2 id="confirm-title">Thanks! Your demo order is in.</h2>
+    <p id="confirm-intro"></p>
+    <div class="order-summary-box" aria-label="Order summary">
+      <strong>Order <span id="confirm-number"></span> · <span id="confirm-type"></span></strong>
+      <ul id="confirm-items"></ul>
+      <p style="margin:.5rem 0 0" id="confirm-totals"></p>
+      <p style="margin:.5rem 0 0" id="confirm-customer"></p>
+    </div>
+    <p class="fine-print"><strong>Demo notice:</strong> no payment was taken and no real order was submitted to a restaurant. This confirmation only proves the checkout flow works in your browser.</p>
+    <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem">
+      <button class="btn btn-primary" type="button" id="confirm-close-btn">Back to shop</button>
+      <button class="btn btn-secondary" type="button" id="confirm-new-btn">Start a new cart</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Prices in integer cents ----------
+  var MENU = {
+    margherita: { name: "Margherita", baseCents: 1200 },
+    pepperoni:  { name: "Pepperoni",  baseCents: 1400 },
+    garden:     { name: "Garden Party", baseCents: 1350 },
+    hothoney:   { name: "Hot Honey",  baseCents: 1500 }
+  };
+  var SIZES = {
+    small:  { label: 'Small 10"',  deltaCents: -200 },
+    medium: { label: 'Medium 12"', deltaCents: 0 },
+    large:  { label: 'Large 14"',  deltaCents: 400 }
+  };
+  var CRUSTS = {
+    thin:       { label: "Thin & crackly",       deltaCents: 0 },
+    classic:    { label: "Classic hand-tossed",  deltaCents: 0 },
+    stuffed:    { label: "Stuffed crust",        deltaCents: 250 },
+    glutenfree: { label: "Gluten-free",          deltaCents: 200 }
+  };
+  var TOPPINGS = {
+    mozzarella: { label: "Extra mozzarella",  priceCents: 150 },
+    pepperoni:  { label: "Extra pepperoni",   priceCents: 175 },
+    mushrooms:  { label: "Mushrooms",         priceCents: 100 },
+    olives:     { label: "Black olives",      priceCents: 100 },
+    basil:      { label: "Fresh basil",       priceCents: 75 },
+    hothoney:   { label: "Hot honey drizzle", priceCents: 125 }
+  };
+  var TAX_RATE = 0.085;
+  var DELIVERY_FEE_CENTS = 399;
+
+  var cart = []; // {key, pizzaId, size, crust, toppings[], unitCents, qty}
+  var fulfillment = "delivery";
+  var orderCount = 0;
+
+  // ---------- Elements ----------
+  var customizeForm = document.getElementById("customize-form");
+  var builderPriceValue = document.getElementById("builder-price-value");
+  var cartList = document.getElementById("cart-list");
+  var emptyCartBox = document.getElementById("empty-cart");
+  var subtotalEl = document.getElementById("subtotal-value");
+  var taxEl = document.getElementById("tax-value");
+  var feeEl = document.getElementById("fee-value");
+  var totalEl = document.getElementById("total-value");
+  var checkoutForm = document.getElementById("checkout-form");
+  var checkoutBtn = document.getElementById("checkout-btn");
+  var announcer = document.getElementById("announcer");
+  var cartStatus = document.getElementById("cart-status");
+  var headerCartCount = document.getElementById("header-cart-count");
+  var addressFields = document.getElementById("address-fields");
+  var dialog = document.getElementById("confirmation-dialog");
+
+  function formatCents(cents) {
+    var sign = cents < 0 ? "-" : "";
+    var abs = Math.abs(cents);
+    return sign + "$" + (abs / 100).toFixed(2);
+  }
+
+  function getBuilderSelection() {
+    var pizza = customizeForm.querySelector('input[name="pizza"]:checked').value;
+    var size = customizeForm.querySelector('input[name="size"]:checked').value;
+    var crust = customizeForm.querySelector('input[name="crust"]:checked').value;
+    var toppingNodes = customizeForm.querySelectorAll('input[name="topping"]:checked');
+    var toppings = [];
+    for (var i = 0; i < toppingNodes.length; i++) toppings.push(toppingNodes[i].value);
+    toppings.sort();
+    return { pizza: pizza, size: size, crust: crust, toppings: toppings };
+  }
+
+  function calcUnitCents(sel) {
+    var total = MENU[sel.pizza].baseCents + SIZES[sel.size].deltaCents + CRUSTS[sel.crust].deltaCents;
+    for (var i = 0; i < sel.toppings.length; i++) total += TOPPINGS[sel.toppings[i]].priceCents;
+    return total;
+  }
+
+  function calcTotals() {
+    var subtotal = 0;
+    for (var i = 0; i < cart.length; i++) subtotal += cart[i].unitCents * cart[i].qty;
+    var tax = subtotal > 0 ? Math.round(subtotal * TAX_RATE) : 0;
+    var fee = (fulfillment === "delivery" && subtotal > 0) ? DELIVERY_FEE_CENTS : 0;
+    return { subtotal: subtotal, tax: tax, fee: fee, grand: subtotal + tax + fee };
+  }
+
+  function describeItem(item) {
+    var tops = item.toppings.length
+      ? item.toppings.map(function (t) { return TOPPINGS[t].label; }).join(", ")
+      : "no extra toppings";
+    return MENU[item.pizzaId].name + " · " + SIZES[item.size].label + " · " +
+      CRUSTS[item.crust].label + " · " + tops;
+  }
+
+  function updateBuilderPrice() {
+    builderPriceValue.textContent = formatCents(calcUnitCents(getBuilderSelection())) + " each";
+  }
+
+  function renderCart(announceMsg) {
+    cartList.textContent = ""; // clear safely
+    var count = 0;
+
+    if (cart.length === 0) {
+      emptyCartBox.style.display = "block";
+      cartList.style.display = "none";
+    } else {
+      emptyCartBox.style.display = "none";
+      cartList.style.display = "grid";
+      cart.forEach(function (item, index) {
+        count += item.qty;
+        var li = document.createElement("li");
+        li.className = "cart-item";
+
+        var top = document.createElement("div");
+        top.className = "cart-item-top";
+        var title = document.createElement("strong");
+        title.textContent = MENU[item.pizzaId].name + " × " + item.qty;
+        var unit = document.createElement("span");
+        unit.className = "cart-unit";
+        unit.textContent = formatCents(item.unitCents) + " each";
+        top.appendChild(title);
+        top.appendChild(unit);
+
+        var opts = document.createElement("p");
+        opts.className = "cart-options";
+        opts.textContent = describeItem(item);
+
+        var row = document.createElement("div");
+        row.className = "qty-row";
+
+        var controls = document.createElement("div");
+        controls.className = "qty-controls";
+
+        var dec = document.createElement("button");
+        dec.type = "button";
+        dec.className = "qty-btn";
+        dec.setAttribute("aria-label", "Decrease quantity of " + MENU[item.pizzaId].name);
+        dec.textContent = "−";
+        dec.addEventListener("click", function () { changeQty(index, -1); });
+
+        var qty = document.createElement("span");
+        qty.className = "qty";
+        qty.textContent = String(item.qty);
+
+        var inc = document.createElement("button");
+        inc.type = "button";
+        inc.className = "qty-btn";
+        inc.setAttribute("aria-label", "Increase quantity of " + MENU[item.pizzaId].name);
+        inc.textContent = "+";
+        inc.addEventListener("click", function () { changeQty(index, 1); });
+
+        controls.appendChild(dec);
+        controls.appendChild(qty);
+        controls.appendChild(inc);
+
+        var remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "link-btn";
+        remove.textContent = "Remove";
+        remove.setAttribute("aria-label", "Remove " + MENU[item.pizzaId].name + " from cart");
+        remove.addEventListener("click", function () { removeItem(index); });
+
+        var line = document.createElement("span");
+        line.className = "line-total";
+        line.textContent = formatCents(item.unitCents * item.qty);
+
+        row.appendChild(controls);
+        row.appendChild(remove);
+        row.appendChild(line);
+
+        li.appendChild(top);
+        li.appendChild(opts);
+        li.appendChild(row);
+        cartList.appendChild(li);
+      });
+    }
+
+    var t = calcTotals();
+    subtotalEl.textContent = formatCents(t.subtotal);
+    taxEl.textContent = formatCents(t.tax);
+    feeEl.textContent = formatCents(t.fee);
+    totalEl.textContent = formatCents(t.grand);
+    headerCartCount.textContent = String(count);
+
+    checkoutBtn.disabled = cart.length === 0;
+
+    var stateMsg = cart.length === 0
+      ? "Your cart is empty."
+      : count + (count === 1 ? " item" : " items") + " in cart. Total " + formatCents(t.grand) + ".";
+    announcer.textContent = announceMsg ? (announceMsg + " " + stateMsg) : ("Cart updated. " + stateMsg);
+    cartStatus.textContent = stateMsg;
+  }
+
+  function changeQty(index, delta) {
+    if (!cart[index]) return;
+    cart[index].qty += delta;
+    if (cart[index].qty <= 0) {
+      var name = MENU[cart[index].pizzaId].name;
+      cart.splice(index, 1);
+      renderCart(name + " removed from cart.");
+    } else {
+      renderCart("Quantity updated.");
+    }
+  }
+
+  function removeItem(index) {
+    if (!cart[index]) return;
+    var name = MENU[cart[index].pizzaId].name;
+    cart.splice(index, 1);
+    renderCart(name + " removed from cart.");
+  }
+
+  // ---------- Events ----------
+  customizeForm.addEventListener("change", updateBuilderPrice);
+
+  customizeForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var sel = getBuilderSelection();
+    var unit = calcUnitCents(sel);
+    var key = sel.pizza + "|" + sel.size + "|" + sel.crust + "|" + sel.toppings.join(",");
+    var found = null;
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].key === key) { found = cart[i]; break; }
+    }
+    if (found) {
+      found.qty += 1;
+    } else {
+      cart.push({ key: key, pizzaId: sel.pizza, size: sel.size, crust: sel.crust, toppings: sel.toppings.slice(), unitCents: unit, qty: 1 });
+    }
+    renderCart(MENU[sel.pizza].name + " added to cart at " + formatCents(unit) + ".");
+    document.getElementById("checkout").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  document.querySelectorAll("[data-load-pizza]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var id = btn.getAttribute("data-load-pizza");
+      var radio = customizeForm.querySelector('input[name="pizza"][value="' + id + '"]');
+      if (radio) { radio.checked = true; updateBuilderPrice(); }
+      document.getElementById("builder").scrollIntoView({ behavior: "smooth" });
+      announcer.textContent = MENU[id].name + " loaded in the builder.";
+    });
+  });
+
+  document.querySelectorAll('input[name="fulfillment"]').forEach(function (r) {
+    r.addEventListener("change", function () {
+      fulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
+      addressFields.style.display = fulfillment === "delivery" ? "block" : "none";
+      renderCart(fulfillment === "pickup" ? "Pickup selected. Delivery fee removed." : "Delivery selected.");
+    });
+  });
+
+  document.getElementById("header-cart-btn").addEventListener("click", function () {
+    document.getElementById("checkout").scrollIntoView({ behavior: "smooth" });
+  });
+
+  // ---------- Validation ----------
+  function setError(inputId, errId, message) {
+    var input = document.getElementById(inputId);
+    var err = document.getElementById(errId);
+    err.textContent = message || "";
+    if (message) input.setAttribute("aria-invalid", "true");
+    else input.removeAttribute("aria-invalid");
+    return !message;
+  }
+
+  function validateCheckout() {
+    var ok = true;
+    var name = document.getElementById("cust-name").value.trim();
+    var email = document.getElementById("cust-email").value.trim();
+    var street = document.getElementById("cust-street").value.trim();
+    var city = document.getElementById("cust-city").value.trim();
+    var zip = document.getElementById("cust-zip").value.trim();
+
+    ok = setError("cust-name", "err-name", name ? "" : "Please enter your name.") && ok;
+
+    var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var emailMsg = "";
+    if (!email) emailMsg = "Please enter your email.";
+    else if (!emailRe.test(email)) emailMsg = "That email doesn’t look valid (e.g. you@example.com).";
+    ok = setError("cust-email", "err-email", emailMsg) && ok;
+
+    if (fulfillment === "delivery") {
+      ok = setError("cust-street", "err-street", street ? "" : "Street address is required for delivery.") && ok;
+      ok = setError("cust-city", "err-city", city ? "" : "City is required for delivery.") && ok;
+      var zipMsg = "";
+      if (!zip) zipMsg = "ZIP code is required for delivery.";
+      else if (!/^\d{5}(-\d{4})?$/.test(zip)) zipMsg = "Enter a valid ZIP (e.g. 04000).";
+      ok = setError("cust-zip", "err-zip", zipMsg) && ok;
+    } else {
+      setError("cust-street", "err-street", "");
+      setError("cust-city", "err-city", "");
+      setError("cust-zip", "err-zip", "");
+    }
+
+    if (cart.length === 0) ok = false;
+    return ok;
+  }
+
+  checkoutForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!validateCheckout()) {
+      announcer.textContent = "Checkout needs attention. Please fix the highlighted fields.";
+      var firstInvalid = checkoutForm.querySelector('[aria-invalid="true"]');
+      if (firstInvalid) firstInvalid.focus();
+      return;
+    }
+    openConfirmation();
+  });
+
+  function openConfirmation() {
+    orderCount += 1;
+    var t = calcTotals();
+    var orderNo = "EC-" + String(1000 + orderCount);
+    var name = document.getElementById("cust-name").value.trim();
+    var email = document.getElementById("cust-email").value.trim();
+    var phone = document.getElementById("cust-phone").value.trim();
+
+    document.getElementById("confirm-number").textContent = orderNo;
+    document.getElementById("confirm-type").textContent =
+      (fulfillment === "delivery" ? "Delivery" : "Pickup") + " · " + formatCents(t.grand);
+
+    var intro = document.getElementById("confirm-intro");
+    intro.textContent = ""; // built with textContent only
+    var s1 = document.createElement("span");
+    s1.textContent = "Hi " + name + ", thanks for trying the demo! ";
+    var s2 = document.createElement("span");
+    s2.textContent = fulfillment === "delivery"
+      ? "Your pizzas would be on their way in 30–45 minutes."
+      : "Your pizzas would be ready for pickup in about 15 minutes.";
+    intro.appendChild(s1);
+    intro.appendChild(s2);
+
+    var ul = document.getElementById("confirm-items");
+    ul.textContent = "";
+    cart.forEach(function (item) {
+      var li = document.createElement("li");
+      li.textContent = MENU[item.pizzaId].name + " × " + item.qty + " — " +
+        describeItem(item) + " — " + formatCents(item.unitCents * item.qty);
+      ul.appendChild(li);
+    });
+
+    var totalsP = document.getElementById("confirm-totals");
+    totalsP.textContent = "Subtotal " + formatCents(t.subtotal) + " · Tax " +
+      formatCents(t.tax) + " · Fee " + formatCents(t.fee) + " · Total " + formatCents(t.grand) + ".";
+
+    var custP = document.getElementById("confirm-customer");
+    var contactBits = "Receipt for " + name + " (" + email + ")";
+    if (phone) contactBits += ", phone " + phone;
+    contactBits += ".";
+    if (fulfillment === "delivery") {
+      contactBits += " Deliver to: " + document.getElementById("cust-street").value.trim() + ", " +
+        document.getElementById("cust-city").value.trim() + " " + document.getElementById("cust-zip").value.trim() + ".";
+    } else {
+      contactBits += " Pickup at 48 Hearth Lane.";
+    }
+    custP.textContent = contactBits;
+
+    if (typeof dialog.showModal === "function") dialog.showModal();
+    else dialog.setAttribute("open", "");
+    document.getElementById("confirm-close-btn").focus();
+    announcer.textContent = "Demo order " + orderNo + " placed. Total " + formatCents(t.grand) + ". No payment was taken.";
+  }
+
+  function closeDialog(reset) {
+    if (dialog.open) dialog.close();
+    else dialog.removeAttribute("open");
+    if (reset) {
+      cart = [];
+      checkoutForm.reset();
+      // restore fulfillment default UI sync
+      fulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
+      addressFields.style.display = fulfillment === "delivery" ? "block" : "none";
+      renderCart("New cart started.");
+    }
+    checkoutBtn.focus();
+  }
+
+  document.getElementById("confirm-close-btn").addEventListener("click", function () { closeDialog(false); });
+  document.getElementById("confirm-new-btn").addEventListener("click", function () { closeDialog(true); });
+  dialog.addEventListener("close", function () { checkoutBtn.focus(); });
+
+  // ---------- Init ----------
+  updateBuilderPrice();
+  renderCart("");
+  announcer.textContent = "Welcome to Ember & Crust. Your cart is empty.";
+})();
+</script>
+</body>
+</html>

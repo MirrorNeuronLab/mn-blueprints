@@ -26,7 +26,7 @@
   },
   "outputs": {
     "adapter": "local_run_store",
-    "folder_path": "~/Download/demo_openshell_code_generation",
+    "folder_path": "~/Downloads/demo_openshell_code_generation",
     "write_run_store": true
   }
 }

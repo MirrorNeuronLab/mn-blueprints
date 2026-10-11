@@ -26,6 +26,10 @@ not replace them with machine-specific choices.
 
 ## Output Contract
 
+Version 1.1.1 sets the default host output folder to
+`~/Downloads/research-assistant`, matching the declared job name. Previously
+submitted jobs retain their configured destination.
+
 The primary artifact is `mn.blueprint.research_assistant.v2`. It contains a research goal, executive summary, `recommended_action` (`review_research_packet` or `gather_more_evidence`), confidence, source-grounded evidence, source analysis, question decomposition, an autonomous phase trace, tool/generated-code observations, a hypothesis ledger, per-hypothesis critique ledger, independent ranking, experiment concepts, evidence gaps, next steps, and source references. Generation provenance reports the provider, selected model, model-call count, fallback-call count, and completed research-phase count. Its `status` is `review_ready` only when at least one extracted local document or observed public source is present; otherwise it is `needs_evidence` and preserves diagnostics without presenting the packet as review-ready.
 
 The workflow has six logical steps executed through the same Docker-worker contract as VC Assistant: deterministic context preparation, parallel preflight assessments with an explicit join, one isolated autonomous Docker worker, and deterministic verification/publication. The autonomous worker may set or refine goals, create prompts, and request allowlisted `mn-skills` tools. Generated Python remains a proposal because the workflow lacks an enforceable experiment-batch approval grant. The final deterministic step rejects untraceable claims or missing review boundaries.
@@ -45,7 +49,7 @@ For medical, biological, safety-critical, or regulated topics, users must supply
 
 ## Persistent job data
 
-Persistent knowledge, Milvus Lite data, and durable state belong to the stable
+Persistent knowledge, DuckDB data, and durable state belong to the stable
 `job_id`. They survive run completion and cancellation; only explicit data
 reset or confirmed job deletion clears them.
 
@@ -70,6 +74,14 @@ The top-level Job response service exposes bounded role, schedule, safe
 configuration, lifecycle, and latest-run context without an active workflow.
 It cannot launch tools, execute experiments, configure, or start the job.
 
+The report writer publishes the complete saved research brief, with the document
+skill's receipts, under `context_sources/outputs/<run-identity-hash>/`. Publication
+is stable across retries and preserves earlier runs. JSON ledgers, runtime traces
+and raw inputs are not extra conversation subjects. The runtime Job responder
+uses Membrane's source intelligence for exact, cited report sections, independently
+of this blueprint's disabled worker runtime-recall profile. Unavailable or oversized
+source evidence fails visibly; conversation does not substitute curated RAG.
+
 ## Blueprint package format
 
 This blueprint uses the canonical blueprint/v1 format in both folders and ZIPs.
@@ -81,3 +93,13 @@ Platform descriptors live in `extensions/`, package requirements in
 The SDK reads these documents together and compiles the Core execution artifact.
 A ZIP contains the same files as the folder. Local overrides and invocation
 configuration are resolved by the SDK before launch.
+
+## Context engine contract
+
+The `mn.context` descriptor explicitly disables Membrane runtime recall for this blueprint: its payload does not call TextMemory. Existing domain knowledge/RAG, live status, MCP controls, and Core coordination retain their own contracts. The retired conversation-memory declaration is removed, so this workflow does not start a context compressor or require a Membrane SDK merely to launch. Any future runtime-memory consumer must declare `mirrorneuron-python-sdk[context]`, ingest complete preprocessed text under trusted job/run scope, and use the Markdown/DuckDB CPU service.
+
+## Shared capability ownership
+
+Runtime paths, structured LLM requests and knowledge retrieval use the SDK. Document extraction and bounded public-browser collection use the shared docs-to-markdown and public-research skills. Research questions, privacy rules, evidence policy, prompts and report composition remain blueprint-owned.
+
+Version 1.2.1 uses the all-in-one `mirrorneuron-docs-to-markdown-skill` for document intake and OCR. Local source preparation stages the current skill; the retired document-reading and LLM OCR distributions are no longer required.

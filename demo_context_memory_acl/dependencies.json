@@ -1,0 +1,14 @@
+{
+  "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/dependencies.schema.json",
+  "packages": [
+    {
+      "name": "mirrorneuron-python-sdk",
+      "source": "gar",
+      "type": "pip",
+      "version": ">=1.3.58.dev0,<2",
+      "extras": [
+        "context"
+      ]
+    }
+  ]
+}

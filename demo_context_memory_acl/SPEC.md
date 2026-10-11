@@ -20,3 +20,13 @@ Platform descriptors live in `extensions/`, package requirements in
 The SDK reads these documents together and compiles the Core execution artifact.
 A ZIP contains the same files as the folder. Local overrides and invocation
 configuration are resolved by the SDK before launch.
+
+## Current context contract
+
+Authenticated Membrane v2 uses Markdown TextMemory v1 with per-job DuckDB. The
+worker requires the trusted address/auth token and owns its run-scoped records.
+Legacy AddItem/GetContext/CompileContext RPCs are removed. No model compressor,
+Redis memory or estimated token count is used. ACL success requires public
+visibility plus private retrieval/witness exclusion and denied direct reads.
+Evidence admission requires exact revision/span citations and unchanged complete
+stored bodies; its byte budget does not establish serving-token efficiency.

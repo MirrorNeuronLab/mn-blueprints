@@ -4,6 +4,12 @@ The generated `financial_advisor_report.md` and `customer_report.json` are
 customer-facing and prioritize evidence status, missing context, and a ranked
 action queue. The full JSON bundle remains the audit layer.
 
+Reports and audit records are published in the SDK-provided run directory.
+The final artifact records run-relative output paths so OtterDesk can discover
+them on either node. The configured output folder receives additional copies;
+later runs retain earlier run reports. Report publication does not complete
+the logical workflow; the generated step sink owns completion.
+
 `financial_advisor` is a unified review-only finance blueprint. Put bank statements, receipts, bills, income records, W-2s, 1099s, tax-form images with answer files, brokerage statements, portfolio files, and related finance documents in the input folder. It extracts bank-statement evidence, captures tax-form OCR fields for review, normalizes household cash flow, prepares draft tax workpapers, reviews portfolio risk, and writes an integrated advisor packet to the output folder.
 
 ## Run
@@ -24,7 +30,7 @@ Or from this blueprint folder:
 mn blueprint run .
 ```
 
-The default sample input folder is `financial_advisor/examples/sample_inputs`; the default output folder is `~/Downloads/financial_advisor`. The sample folder includes synthetic bank/tax/portfolio text fixtures plus tax-form image/label pairs for local OCR-capture validation.
+The default sample input folder is `financial_advisor/examples/sample_inputs`; the default output folder is `~/Downloads/financial-advisor`. The sample folder includes synthetic bank/tax/portfolio text fixtures plus tax-form image/label pairs for local OCR-capture validation.
 
 ## Process and agents
 
@@ -51,7 +57,7 @@ action queue.
 
 ## PDF and Image OCR
 
-PDFs and document images use the shared `mirrorneuron-llm-ocr-skill`. Embedded PDF text is used when it is substantial; image-only or low-text PDFs, PNGs, JPGs, TIFFs, BMPs, and WEBPs are sent to LightOnOCR-2-1B through Docker Model Runner. The runtime prepares and starts the shared OCR model before the worker begins; the worker uses the shared endpoint and never needs a Docker CLI. The workflow records the extraction method, OCR model, warnings, and review-required status in the output packet. Explicit fake/quick-test runs skip model startup.
+PDFs and document images use the shared `mirrorneuron-docs-to-markdown-skill`. Embedded PDF text is used when it is substantial; image-only or low-text PDFs, PNGs, JPGs, TIFFs, BMPs, and WEBPs are sent to LightOnOCR-2-1B through Docker Model Runner. The runtime prepares and starts the shared OCR model before the worker begins; the worker uses the shared endpoint and never needs a Docker CLI. The workflow records the extraction method, OCR model, warnings, and review-required status in the output packet. Explicit fake/quick-test runs skip model startup.
 
 ## Shared job data
 
@@ -94,6 +100,15 @@ from missing evidence, and suggest one focused follow-up question when context i
 incomplete. The workflow reviewers use the same source-grounded conversation
 guidance when preparing customer-facing findings.
 
+Version 1.1.3 publishes the complete finished `financial_advisor_report.md`
+through the document-conversion skill into run-keyed
+`context_sources/outputs/` under the SDK-provided Job output folder. Conversion
+receipts retain original and Markdown hashes; retries reuse unchanged reports
+and later runs retain earlier reports. The runtime responder uses Membrane source
+intelligence for these report questions. Raw financial inputs and JSON audit
+records are excluded. SDK >=1.3.58.dev86 is required for bounded whole-section
+selection; review and downstream approval requirements remain unchanged.
+
 ## Blueprint package format
 
 This blueprint uses the canonical blueprint/v1 format in both folders and ZIPs.
@@ -105,3 +120,11 @@ Platform descriptors live in `extensions/`, package requirements in
 The SDK reads these documents together and compiles the Core execution artifact.
 A ZIP contains the same files as the folder. Local overrides and invocation
 configuration are resolved by the SDK before launch.
+
+## Context engine contract
+
+The `mn.context` descriptor explicitly disables Membrane runtime recall for this blueprint: its payload does not call TextMemory. Existing domain knowledge/RAG, live status, MCP controls, and Core coordination retain their own contracts. The retired conversation-memory declaration is removed, so this workflow does not start a context compressor or require a Membrane SDK merely to launch. Any future runtime-memory consumer must declare `mirrorneuron-python-sdk[context]`, ingest complete preprocessed text under trusted job/run scope, and use the Markdown/DuckDB CPU service.
+
+## Shared capability ownership
+
+Document intake, OCR record normalization, lazy client configuration, and model diagnostics belong to the shared docs-to-markdown skill. Version 1.1.1 replaces the retired document-reading and LLM OCR distributions with this package; local source preparation stages it from `mn-skills/docs_to_markdown_skill`. Financial classification, review-only policy and report composition remain blueprint-owned.

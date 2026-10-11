@@ -1,48 +1,91 @@
-from __future__ import annotations
-
+"""Authenticated Markdown memory demonstrations; no model or token estimates."""
+from contextlib import contextmanager
 import json
 import os
 import uuid
 
 import grpc
-
-import context_pb2
-import context_pb2_grpc
+from mn_context_engine_sdk.evidence import EvidenceClient
 
 
-def _target():
-    return os.environ.get("MN_CONTEXT_ADDR") or os.environ.get("CONTEXT_ENGINE_ADDR") or "mirror-neuron-context-engine:50052"
-
-
-def _stub():
-    channel = grpc.insecure_channel(_target())
-    grpc.channel_ready_future(channel).result(timeout=5)
-    return context_pb2_grpc.ContextEngineStub(channel)
-
-
-def _add(stub, job_id, item_id, payload, roles):
-    content = {"goal_id": "goal-1", "artifact_type": "demo_fact", "payload": payload, "source_refs": [f"source:{item_id}"], "acl": {"allow_roles": roles}}
-    response = stub.AddItem(context_pb2.AddItemRequest(job_id=job_id, item=context_pb2.MemoryItem(id=item_id, type="Fact", content_json=json.dumps(content, sort_keys=True), status="validated", confidence=1.0, source="mn-blueprints", version=1)))
-    if not response.success:
-        raise RuntimeError(f"AddItem failed: {item_id}")
+@contextmanager
+def clients(context):
+    address = os.environ['MN_CONTEXT_ADDR']
+    token = os.environ['MN_CONTEXT_AUTH_TOKEN']
+    job = context.get('job_id') or os.environ['MN_JOB_ID']
+    run = context.get('run_id') or os.environ['MN_RUN_ID']
+    with grpc.insecure_channel(address) as channel:
+        grpc.channel_ready_future(channel).result(timeout=5)
+        def make(principal):
+            return EvidenceClient(channel, job_id=job, run_id=run,
+                principal=principal, auth_token=token, timeout=5)
+        try:
+            yield make('operator'), make('auditor')
+        except grpc.RpcError as exc:
+            raise RuntimeError(f'Membrane {exc.code().name}: {exc.details()}') from None
 
 
 def run_acl_demo(context):
-    stub = _stub()
-    job_id = f"acl-{context.get('job_id') or uuid.uuid4().hex}"
-    _add(stub, job_id, "shared", {"value": "shared"}, ["operator", "auditor"])
-    _add(stub, job_id, "private", {"value": "private"}, ["operator"])
-    response = stub.GetContext(context_pb2.GetContextRequest(job_id=job_id, agent_role="auditor", focus_id="shared", max_items=10))
-    visible = [item.id for item in response.items]
-    return {"job_id": job_id, "auditor_visible_ids": visible, "private_hidden": "private" not in visible, "context_engine": _target()}
+    private = 'PRIVATE_APPROVAL_' + uuid.uuid4().hex
+    with clients(context) as (owner, auditor):
+        owner.ingest_text('# shared\n\nPublic observation.', record_id='shared',
+            namespace='run', event_id='shared', allow=['operator', 'auditor'])
+        owner.ingest_text('# shared\n\n' + private, record_id='private',
+            namespace='run', event_id='private', allow=['operator'])
+        if private not in owner.read_complete('run:private')['text']:
+            raise AssertionError('Restricted record was not stored')
+        result = auditor.recall('shared')
+        ids = [r['handle']['source_id'] for r in result['records']]
+        if 'run:shared' not in ids:
+            raise AssertionError('ACL check has no positive public visibility')
+        if 'run:private' in ids or private in json.dumps(result):
+            raise AssertionError('Private record leaked in retrieval or witness')
+        try:
+            auditor.read('run:private')
+        except grpc.RpcError as exc:
+            if exc.code() not in {grpc.StatusCode.NOT_FOUND, grpc.StatusCode.PERMISSION_DENIED}:
+                raise
+        else:
+            raise AssertionError('Private direct read was allowed')
+        return {'auditor_visible_ids': ids, 'private_hidden': True,
+            'private_read_denied': True, 'public_visible': True,
+            'contract': 'mn.context.text.v1'}
 
 
 def run_compression_demo(context):
-    stub = _stub()
-    job_id = f"compress-{context.get('job_id') or uuid.uuid4().hex}"
-    for index in range(8):
-        _add(stub, job_id, f"fact-{index}", {"value": "runtime evidence " * 30, "index": index}, ["operator"])
-    response = stub.CompileContext(context_pb2.CompileContextRequest(job_id=job_id, agent_role="operator", focus_id="fact-0", max_items=8, token_budget=512, target_tokens=160, use_model_compression=False, objective="Preserve the goal and source references.", current_subtask="Summarize runtime evidence."))
-    packet = json.loads(response.packet_json or "{}")
-    rendered = json.dumps(packet, sort_keys=True)
-    return {"job_id": job_id, "compressed": response.compressed, "estimated_input_tokens": response.estimated_input_tokens, "estimated_output_tokens": response.estimated_output_tokens, "goal_preserved": "goal-1" in rendered, "source_refs_preserved": "source:" in rendered, "context_engine": _target()}
+    # The historical ID is retained; v2 measures bounded exact evidence admission.
+    budget = 2048
+    bodies = {f'fact-{i}': f'# goal-1\n\nsource:fact-{i}\n\n' +
+        ('Source-qualified runtime evidence remains unknown. ' * 30) for i in range(8)}
+    with clients(context) as (owner, _):
+        for identity, body in bodies.items():
+            owner.ingest_text(body, record_id=identity, namespace='run',
+                event_id=identity, allow=['operator'])
+        compiled = owner.compile_evidence({'version': 'mn.context.evidence.v2',
+            'task': 'goal-1 Preserve source-qualified runtime evidence.',
+            'source_mode': 'markdown', 'lexical_only': True,
+            'record_scope': ['run:' + identity for identity in bodies],
+            'sources': [{'source_id': 'run:fact-0', 'required': True}],
+            'context_budget_utf8_bytes': budget})
+        items = [item for bundle in compiled['bundles'] for item in bundle['items']]
+        selected = '\n'.join(item['content'] for item in items)
+        selected_bytes = sum(len(item['content'].encode()) for item in items)
+        if not items or not 0 < selected_bytes <= budget or 'goal-1' not in selected or 'source:fact-0' not in selected:
+            raise AssertionError('Bounded admission lost its goal or required source')
+        for item in items:
+            handle = item['handle']
+            canonical = owner.read_complete(handle['source_id'], revision=handle['record_revision'])
+            # Evidence handles address the canonical file; read spans address its body.
+            offset = canonical['body_offset']
+            exact = owner.read(handle['source_id'], revision=handle['record_revision'],
+                start_byte=handle['start_byte']-offset, end_byte=handle['end_byte']-offset)['text']
+            if exact != item['content']:
+                raise AssertionError('Admitted evidence differs from its exact citation')
+        for identity, body in bodies.items():
+            if owner.read_complete('run:' + identity)['text'] != body:
+                raise AssertionError('Admission changed the complete stored source')
+        return {'contract': 'mn.context.evidence.v2', 'admission_status': compiled['status'],
+            'budget_bytes': budget, 'input_bytes': sum(len(b.encode()) for b in bodies.values()),
+            'selected_bytes': selected_bytes, 'goal_preserved': True,
+            'source_refs_preserved': True, 'exact_citations': True,
+            'complete_sources_preserved': True, 'generation_calls': 0}

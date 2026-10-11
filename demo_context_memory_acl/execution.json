@@ -41,16 +41,12 @@
           "output_message_type": "run_done",
           "pass_env": [
             "MN_CONTEXT_ADDR",
-            "CONTEXT_ENGINE_ADDR"
+            "MN_CONTEXT_AUTH_TOKEN",
+            "MN_JOB_ID",
+            "MN_RUN_ID"
           ],
           "pool": "default",
           "pool_slots": 1,
-          "python_environment": {
-            "packages": [
-              "grpcio>=1.70,<2",
-              "protobuf>=5,<7"
-            ]
-          },
           "retry_backoff_ms": 100,
           "runner_module": "MirrorNeuron.Runner.HostLocal",
           "safe_to_retry": true,
@@ -139,7 +135,7 @@
       "mode": "fail"
     }
   },
-  "required_context_engine": false,
+  "required_context_engine": true,
   "requirements": {
     "cpu": {
       "min_cores": 0.1

@@ -91,11 +91,6 @@ from mn_prototype_actor_review_agent import (
 def build_llm_call_limiter(config: dict[str, Any]) -> LlmCallLimiter:
     return build_shared_llm_call_limiter(config, fake_mode=fake_llm_mode_enabled(config))
 
-try:
-    from mn_context_engine_sdk import MemoryItem, WorkingMemory
-except Exception:  # pragma: no cover - optional runtime support
-    MemoryItem = None
-    WorkingMemory = None
 
 from mn_evidence_engine_skill import (
     ClaimRecord,
@@ -136,9 +131,7 @@ from mn_client_report_skill import (
     quality_check as shared_quality_check,
 )
 
-from mn_document_reading_skill import (
-    AnyDocConversionError,
-    convert_with_anydoc,
+from mn_docs_to_markdown_skill import (
     document_paths as shared_document_paths,
     file_sha256,
     group_document_file_records as shared_group_document_file_records,
@@ -536,7 +529,7 @@ JUDGE_RUBRIC = [
 ]
 
 try:
-    from mn_llm_ocr_skill import docker_ocr_client_factory_from_config, extract_document_folder
+    from mn_docs_to_markdown_skill import docker_ocr_client_factory_from_config, extract_document_folder
 except Exception:  # pragma: no cover - optional runtime support
     docker_ocr_client_factory_from_config = None
     extract_document_folder = None

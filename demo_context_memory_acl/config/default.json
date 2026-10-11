@@ -198,5 +198,11 @@
     "output": {
       "adapter": "none"
     }
+  },
+  "text_memory": {
+    "contract": "mn.context.text.v1",
+    "enabled": true,
+    "max_results": 8,
+    "max_context_bytes": 2048
   }
 }

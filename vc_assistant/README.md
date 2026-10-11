@@ -17,7 +17,7 @@ selection, while an operator-selected provider model can replace it with `mn
 model add --file <definition.json> --default`. Numerical formulas and
 missing-evidence gates remain deterministic.
 
-PDF startup packets are extracted only through the shared `llm_ocr_skill`. The public Firecrawl [AnyDoc](https://github.com/firecrawl/anydoc) converter turns non-PDF office documents, spreadsheets, EPUB, RTF, and CSV files into Markdown; TXT, Markdown, and JSON remain direct reads. The OCR model is prepared lazily only when a PDF needs OCR, and PDF files must produce embedded or OCR text for the batch run to continue.
+Startup packets use the shared `docs_to_markdown_skill` for document conversion and PDF extraction. MarkItDown converts office documents, spreadsheets, EPUB, RTF, and CSV files into Markdown; TXT, Markdown, and JSON remain direct reads. The OCR model is prepared lazily only when a PDF needs OCR, and PDF files must produce embedded or OCR text for the batch run to continue.
 
 ## Online Research Skills
 
@@ -60,7 +60,7 @@ Agents and steps are separate concepts:
 - `payloads/agents/` contains executable specialist workers. Each valuation agent has a discoverable module matching its registry ID; for example, `agents/first_chicago_scorer.py` binds the First Chicago worker.
 - `payloads/domain/` contains blueprint-specific diligence policy and deterministic behavior. Valuation formulas are split by method under `domain/valuation/`; the First Chicago formula is in `valuation/first_chicago.py`.
 - `payloads/runtime/` contains dependency bootstrap and runtime/service preparation only. It must not import agent behavior.
-- Shared, domain-neutral mechanisms stay in the SDK, skills, or reusable agent packages. Route-neutral message parsing and artifact references live in `mn_sdk.step_runtime`; durable message-agent replay lives in `prototype_stateful_step_agent`; document hashing, grouping, and common PII redaction live in `document_reading_skill`.
+- Shared, domain-neutral mechanisms stay in the SDK, skills, or reusable agent packages. Route-neutral message parsing and artifact references live in `mn_sdk.step_runtime`; durable message-agent replay lives in `prototype_stateful_step_agent`; document hashing, grouping, and common PII redaction live in `docs_to_markdown_skill`.
 
 There is intentionally no `payloads/agents/domain.py`. Agents import only the VC domain modules they own, while reusable skills remain independent of VC terminology.
 
@@ -92,13 +92,13 @@ startup materials.
 - `document_folder`: folder containing startup documents. Each first-level subfolder is treated as one company; loose files are grouped by inferred company name.
 - `output_folder`: folder where per-company analysis folders and root index files are written.
 - `monitoring`: bounded single-run scan controls; the runtime scheduler decides when to launch the batch.
-- `input_skills.anydoc`: public Firecrawl AnyDoc Markdown conversion for non-PDF office-style inputs.
+- `input_skills.anydoc`: public Firecrawl MarkItDown Markdown conversion for non-PDF office-style inputs.
 - `input_skills.llm_ocr`: shared OCR enablement and document thresholds for PDF startup packets; model details stay in the skill.
 - `input_skills.web_browser`: unified public research with lightweight w3m support in the `docker_worker` image and policy-governed agent-browser/Chrome rendering supplied by the selected browser execution environment. The job image does not install Playwright or its Chromium/system dependency bundle.
 - `skill_runtime`: shared DockerWorker image settings for skills that need system binaries.
 - `execution.max_company_workers`: maximum changed-company packets processed concurrently; defaults to one for local Docker Model Runner stability.
 - `backpressure.llm`: serializes and spaces local LLM calls so agentic research does not overwhelm Docker Model Runner.
-- Concurrent RAG-consuming workers use the SDK RAG package's job-scoped Unix-socket service. One owner process retains the sole Milvus Lite connection to `databases/rag/milvus.db`; every specialist agent indexes and queries through that shared connection.
+- Concurrent RAG-consuming workers use the SDK RAG package's job-scoped Unix-socket service. One owner process retains the sole DuckDB connection to `databases/rag/knowledge.duckdb`; every specialist agent indexes and queries through that shared connection.
 - `internet_research`: public verification targets, bounded browser timeouts, Crunchbase/profile URL templates, and explicit deep-render controls.
 - `internet_research.max_parallel_research_agents`: maximum research agents running in parallel per changed company.
 - `scoring.max_workers`: maximum parallel method scorers per changed company.
@@ -107,7 +107,7 @@ startup materials.
 
 Each configured VC Assistant job owns persistent `knowledge/`,
 `databases/rag/`, and `state/`. Bundled diligence knowledge seeds once; later
-runs preserve edits and reuse one Milvus Lite database. The RAG index includes
+runs preserve edits and reuse one DuckDB database. The RAG index includes
 the bundled research playbook and conversation guide. The VC knowledge
 reference lists both documents, and the SDK RAG package
 single-flights startup indexing and serves parallel agent retrieval through one
@@ -115,6 +115,12 @@ connection. Pitch inputs, reports, logs, and ordinary artifacts remain
 independent by `run_id`.
 
 ## Outputs
+
+The default host output folder is `~/Downloads/vc-assistant`.
+
+Each batch publishes reports in a `run_<timestamp>/` subfolder. Job-level
+`watch_state.json` and `context_sources/` stay at the root and persist across
+runs. MirrorNeuron runtime delivery owns this layout.
 
 Each company receives a subfolder containing:
 
@@ -126,7 +132,7 @@ Each company receives a subfolder containing:
 - `evidence.json`
 - `warnings.json`
 
-The output root also contains `company_index.json`, `company_index.md`, `company_work_queue.json`, `research_coverage.json`, `method_coverage.json`, `run_summary.md`, and internal artifact folders for fact tables, research ledgers, method scores, and audit findings. When rendered browsing runs, `browser_audit.jsonl` and bounded files under `browser_artifacts/` record the actuator trail and captured artifacts.
+The run folder also contains `company_index.json`, `company_index.md`, `company_work_queue.json`, `research_coverage.json`, `method_coverage.json`, `run_summary.md`, and internal artifact folders for fact tables, research ledgers, method scores, and audit findings. When rendered browsing runs, `browser_audit.jsonl` and bounded files under `browser_artifacts/` record the actuator trail and captured artifacts.
 
 ## Safety Checklist
 
@@ -149,9 +155,11 @@ The output root also contains `company_index.json`, `company_index.md`, `company
 
 OtterDesk or another MCP client can ask this hired co-worker about its screening
 role, schedule, latest company analysis, or diligence gaps through the stable
-Job response service even when it has never run or is idle. The responder uses
-the existing Job-scoped startup-research RAG and never starts a batch or makes
-an investment decision.
+Job response service even when it has never run or is idle. The runtime Job
+uses Membrane source intelligence for input and output questions and the
+Job-scoped startup-research RAG for curated capability knowledge. OtterDesk
+consumes its answers and citations. Asking a question never starts a batch or
+makes an investment decision.
 
 ## Validation
 
@@ -179,7 +187,7 @@ configuration are resolved by the SDK before launch.
 
 Release 1.1.0 migrates infrastructure from retired skill distributions to the
 current SDK component contract. `dependencies.json` declares pinned
-`mn-python-sdk-common`, `mn-python-sdk-rag[milvus]`,
+`mn-python-sdk-common`, `mn-python-sdk-rag`,
 `mn-python-sdk-job-response`, and `mn-python-sdk-mcp` under `packages`.
 Task capabilities remain under `skills`; reusable workers remain under `agents`.
 The skill and agent pins follow the migration releases used by the OtterDesk
@@ -188,9 +196,87 @@ catalog (1.3.23 and 1.3.10 respectively).
 Prompt/event helpers use `mn_sdk_common`; actor configuration and usage use the
 actor-review agent; foundational LLM access uses `mn_sdk.llm`. RAG owns indexing,
 retrieval, and the shared Job database, with the SDK runtime model adapter
-injected for embedding preparation and retrieval. The RAG `milvus` extra owns
-Milvus installation; the blueprint does not maintain a second dependency list.
+injected for embedding preparation and retrieval. The RAG base dependency owns
+DuckDB installation; the blueprint does not maintain a second dependency list.
 
 Local development (`MN_USE_LOCAL_SKILLS=1`) resolves declared SDK packages from
 `mn-python-sdk/packages` and skills/agents from their companion source projects,
 ignoring release pins. Binary installation uses the pinned GAR releases.
+
+The Markdown runtime profile (`text_memory.enabled=true`) commits complete
+preprocessed, redacted document text through Membrane. Private input bodies are
+restricted to input/company-analysis principals; actor-review retrieval sees only
+privacy-approved observations. Actor context assembly uses CompileEvidence v2 and
+saves full witnesses in workflow-state artifacts, outside model context. This
+replaces the retired in-process WorkingMemory helper; learned compression remains
+disabled. Source retrieval and final verified token admission remain distinct.
+
+## Context engine contract
+
+This release declares `mirrorneuron-python-sdk[context]` in `dependencies.json`. Worker preparation installs the Membrane v2 client (>=2.0,<3); local source mode stages its matching source project. `mn.context` declares the Markdown profile, and `text_memory.enabled=false` explicitly disables recall. The context service stores Markdown revisions with one disposable DuckDB per job and uses CPU only. Set `MN_CONTEXT_ADDR` and `MN_CONTEXT_AUTH_TOKEN` through trusted runtime settings. Optional `MN_CONTEXT_OBSERVABILITY=true` logs authorized source and context content. No model compressor, Redis memory, or automatic migration is required.
+
+
+## Runtime memory and external knowledge composition
+
+External knowledge remains in the job RAG index. A semantic query selects a small passage response with citations; Membrane composes that response ephemerally with source-qualified runtime query results and the current instruction. RAG passages are never copied into runtime memory, and the full knowledge corpus is never sent to the model. Runtime memory stores normalized claims, source qualification and method results created during this workflow, rather than actor prompt snapshots. Raw document excerpts remain restricted to their input consumers. Snapshot-scoped typed table queries select whole observations; source handles and retrieval witnesses stay in sidecars. Empty or completely omitted packets cannot claim readiness. Metadata compaction preserves runtime evidence, the selected RAG bodies, every selected citation and current state; its character target cannot silently remove evidence. The runtime model gateway remains responsible for complete-request token admission, including system instructions, schema and output allocation.
+
+## Authored runtime knowledge and original inputs (1.2.1)
+
+Membrane is the Context Intelligent System. Its VC runtime records are authored
+Markdown with typed Facts, graph Relations and complete qualified Notes. Long
+claims, missing evidence and source qualifications survive whole-record retrieval.
+Exact scalar values appear once; absent optional fields do not create empty table
+columns. Explicit nulls remain visible. Actual source outcome (`status`) and
+extraction classification (`retrieval_status`) are retained separately, so a
+blocked fetch cannot inherit confirmation from an extraction default.
+
+Actor query plans use DuckDB snapshot/family filters and real event time to recall
+up to three recent tool outcomes plus relevant claims or method results. Unknown
+event times are explicit and never ordered as recent using publication time.
+Graph edges connect company, claim, evidence and source identities. Citations
+bind the entire current authored body, including qualifications and counterevidence.
+
+Complete preprocessed originals live in a physically separate source corpus,
+restricted to intake/company-analysis principals. Deterministic claim extraction
+queries a pinned original revision before applying its bounded extractor, allowing
+claims beyond the initial preview to be found. Native source spans can include
+nearby text. External reference knowledge remains in RAG and is composed only
+after retrieval. The default recall share is 32,768 UTF-8 bytes, with 8,192 retained
+as the evaluation control; neither figure establishes the model's token capacity.
+
+Search-result pages retain the existing VC ceiling of 15 for evidence and
+search-only claim confidence, including graph propagation. They serve as research
+navigation and cannot set Bayesian independent-verification observations.
+Founder/company assertions remain self-reported; mentioning invoices, contracts
+or usage does not establish that independent evidence was found. Typed evidence
+polarity is normalized before Bayesian observation binding, so supporting founder
+assertions update the declared belief model without becoming verification.
+
+## Shared capability ownership
+
+Selected PDF batch extraction and usable-text checks use the shared `docs_to_markdown_skill`. It also owns the reusable intake helpers; the retired document-reading package is no longer a dependency. Company grouping policy, synthetic test evidence, redaction policy, valuation and evidence interpretation remain blueprint-owned.
+
+## Unified document conversion and artifact source intelligence
+
+VC intake calls `mirrorneuron-docs-to-markdown-skill` for every supported source.
+PDF/OCR, text, JSON, CSV and office/spreadsheet conversion share one skill API.
+Complete processed/redacted Markdown files are saved under the SDK-provided
+shared job output path at `context_sources/inputs/`, retaining the original relative
+filename with `.md` appended. Input and Markdown hashes, conversion method and
+pinned source revisions accompany the files. The output writer publishes its
+supported artifacts the same way under `context_sources/outputs/`.
+
+Syncthing replicates these files and `inputs.json`/`outputs.json` source catalogs
+with the other shared submission artifacts. Membrane SourceCorpus indexes their
+Markdown as the operation subject, with MarkdownDocumentAdapter for navigation.
+Artifact source intelligence uses `source_context.enabled` independently of
+runtime recall and performs no runtime-session journal reads. Runtime memory
+contains authored workflow observations, claims and method outcomes. Raw file
+bodies and output artifacts stay in the separate source corpus. Public research
+retains its redaction and confidential-source boundaries.
+
+The stable shared job output folder owns `context_sources/`, reused across
+workflow runs. Conversion receipts validate original and Markdown hashes and
+converter/redaction policy. Unchanged files skip conversion and OCR; changed or
+invalid cached files are converted again. Syncthing carries receipts and Markdown
+alongside the other job artifacts. Membrane receives only processed Markdown.

@@ -88,3 +88,14 @@ Platform descriptors live in `extensions/`, package requirements in
 The SDK reads these documents together and compiles the Core execution artifact.
 A ZIP contains the same files as the folder. Local overrides and invocation
 configuration are resolved by the SDK before launch.
+
+## Current external knowledge contract
+
+Use the matching SDK/RAG and document-parser family `>=1.3.58.dev0,<2`.
+The persistent RAG backend is `duckdb`: complete parsed knowledge remains in
+canonical Markdown and the job owns `databases/rag/knowledge.duckdb`.
+No Milvus extra or Redis vector backend is declared. Runtime observations and
+input documents remain separate from the external knowledge corpus.
+
+The retired conversation-memory descriptor is removed. The current Markdown
+profile is explicitly disabled: these workers do not consume runtime recall.

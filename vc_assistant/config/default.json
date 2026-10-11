@@ -17,8 +17,7 @@
       "batch_index_writer"
     ],
     "max_context_chars": 9000,
-    "use_context_engine": true,
-    "working_memory_persist_to_redis": false
+    "use_context_engine": true
   },
   "agent_handoffs": {},
   "backpressure": {
@@ -93,7 +92,14 @@
       "*.ods",
       "*.odp",
       "*.rtf",
-      "*.epub"
+      "*.epub",
+      "*.png",
+      "*.jpg",
+      "*.jpeg",
+      "*.tif",
+      "*.tiff",
+      "*.bmp",
+      "*.webp"
     ],
     "license": "Synthetic demo data",
     "name": "Synthetic startup packet samples",
@@ -140,7 +146,14 @@
       "*.ods",
       "*.odp",
       "*.rtf",
-      "*.epub"
+      "*.epub",
+      "*.png",
+      "*.jpg",
+      "*.jpeg",
+      "*.tif",
+      "*.tiff",
+      "*.bmp",
+      "*.webp"
     ],
     "folder_path": "@/examples/sample_inputs",
     "grouping": "first_level_folder_then_infer_company_name"
@@ -183,7 +196,7 @@
       "min_text_chars": 40,
       "purpose": "shared local OCR for scanned or low-text PDF startup packets",
       "required": true,
-      "skill": "llm_ocr_skill",
+      "skill": "docs_to_markdown_skill",
       "timeout_seconds": 180
     },
     "web_browser": {
@@ -213,8 +226,11 @@
       "skill": "web_browser_skill",
       "stop_on_blocked": true,
       "timeout_seconds": 20,
-      "total_timeout_seconds": 60,
-      "use_model_compression": true
+      "total_timeout_seconds": 60
+    },
+    "document_conversion": {
+      "skill": "docs_to_markdown_skill",
+      "backend": "markitdown"
     }
   },
   "inputs": {
@@ -238,7 +254,7 @@
         "mode": "folder_first"
       },
       "input_folder": "@/examples/sample_inputs",
-      "output_folder": "~/Downloads/vc_assistant",
+      "output_folder": "~/Downloads/vc-assistant",
       "public_dataset": {
         "availability_note": "Bundled sample startup documents are synthetic and intended only for local blueprint validation.",
         "expected_files": [
@@ -261,7 +277,14 @@
           "*.ods",
           "*.odp",
           "*.rtf",
-          "*.epub"
+          "*.epub",
+          "*.png",
+          "*.jpg",
+          "*.jpeg",
+          "*.tif",
+          "*.tiff",
+          "*.bmp",
+          "*.webp"
         ],
         "license": "Synthetic demo data",
         "name": "Synthetic startup packet samples",
@@ -396,7 +419,7 @@
       "web_ui",
       "interfaces",
       "execution_model",
-      "memory_layer",
+      "text_memory",
       "dataset_input",
       "document_automation",
       "agentic_research",
@@ -440,7 +463,7 @@
       "web_ui",
       "interfaces",
       "execution_model",
-      "memory_layer",
+      "text_memory",
       "dataset_input",
       "document_automation",
       "agentic_research",
@@ -575,7 +598,6 @@
     ],
     "timeout_seconds": 20,
     "total_timeout_seconds": 60,
-    "use_model_compression": true,
     "verification_domains": [
       "crunchbase.com",
       "linkedin.com/company",
@@ -594,7 +616,7 @@
     ]
   },
   "knowledge_rag": {
-    "backend": "milvus_lite"
+    "backend": "duckdb"
   },
   "llm": {
     "configs": {
@@ -629,7 +651,14 @@
           ".ods",
           ".odp",
           ".rtf",
-          ".epub"
+          ".epub",
+          ".png",
+          ".jpg",
+          ".jpeg",
+          ".tif",
+          ".tiff",
+          ".bmp",
+          ".webp"
         ],
         "config_path": "document_sources.folder_path",
         "linked_config_paths": [
@@ -703,30 +732,6 @@
     "resources_jsonl": true,
     "stderr_jsonl": true
   },
-  "memory_layer": {
-    "collection": "mn_memory",
-    "containers": "optional_sidecar",
-    "context_addr_env": "MN_CONTEXT_ADDR",
-    "conversation": {
-      "agent_role": "otterdesk_chat",
-      "include_human_events": true,
-      "include_runtime_events": true,
-      "include_runtime_logs": true,
-      "target_tokens": 2400,
-      "token_budget": 6000,
-      "use_model_compression": true
-    },
-    "conversation_enabled": true,
-    "conversation_enabled_env": "OTTERDESK_CONTEXT_MEMORY_ENABLED",
-    "default_context_addr": "localhost:50052",
-    "enabled": true,
-    "enabled_env": "MN_CONTEXT_MEMORY_ENABLED",
-    "namespace": "vc_assistant_context",
-    "project_path": "${MN_MEMBRANE_PROJECT_PATH}",
-    "python_sdk_path": "${MN_MEMBRANE_SDK_PATH}",
-    "sdk_distribution": "mirrorneuron-membrane-python-sdk",
-    "sdk_import_package": "mn_context_engine_sdk"
-  },
   "metadata": {
     "category": "Finance",
     "description": "A VC analysis co-worker for early startup screening reports. Put pitch decks, memos, financial snippets, company folders, or other startup documents in the input folder; it groups documents by company, performs privacy-safe public research, applies seven VC heuristic scoring methods, audits the math and evidence, and writes score-only per-company reports and batch indexes to the output folder."
@@ -740,7 +745,8 @@
   },
   "output_skills": {},
   "outputs": {
-    "folder_path": "~/Downloads/vc_assistant",
+    "folder_path": "~/Downloads/vc-assistant",
+    "job_files": ["watch_state.json", "context_sources"],
     "per_company_subfolders": true,
     "write_markdown_report": true,
     "write_run_store": true
@@ -774,9 +780,7 @@
     "extra_index_url": "https://pypi.org/simple",
     "index_url": "https://us-central1-python.pkg.dev/mirrorneuron-public-packages/agent-skills/simple/",
     "installer": "pip",
-    "packages": [
-      "mirrorneuron-membrane-python-sdk>=1.3.47"
-    ],
+    "packages": [],
     "requirements": "requirements.txt"
   },
   "real_adapters": {
@@ -834,7 +838,7 @@
     "final_report": {},
     "input_folder": "@/examples/sample_inputs",
     "monitor_state": {},
-    "output_folder": "~/Downloads/vc_assistant"
+    "output_folder": "~/Downloads/vc-assistant"
   },
   "streams": {
     "enabled": false
@@ -905,5 +909,13 @@
       "refresh_seconds": 2,
       "title": "VC Assistant"
     }
+  },
+  "text_memory": {
+    "enabled": true,
+    "max_results": 6,
+    "max_context_bytes": 32768
+  },
+  "source_context": {
+    "enabled": true
   }
 }

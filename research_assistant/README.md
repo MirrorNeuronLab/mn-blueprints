@@ -20,7 +20,7 @@ It is inspired by the role separation in Google's AI co-scientist—not a reprod
 mn run research_assistant
 ```
 
-The default output folder is `~/Downloads/research_assistant`. Run-store artifacts are also written under `~/.mn/runs/<run_id>/`.
+The default output folder is `~/Downloads/research-assistant`. Run-store artifacts are also written under `~/.mn/runs/<run_id>/`.
 
 Like VC Assistant, every executable specialist runs through the runtime's
 shared Docker-worker path. `frame_research_problem` and
@@ -123,6 +123,12 @@ latest hypotheses, or evidence gaps through the stable Job response service even
 before its first run or while idle. Conversation never starts research or an
 experiment.
 
+Report publication preserves the complete saved brief in
+`context_sources/outputs/<run-identity-hash>/`. The document skill owns conversion
+and source receipts; the Job responder uses Membrane source intelligence for
+cited report questions. Curated capability RAG remains separate. Missing or
+oversized source evidence remains an explicit query failure.
+
 ## Validation
 
 ```bash
@@ -140,3 +146,13 @@ Platform descriptors live in `extensions/`, package requirements in
 The SDK reads these documents together and compiles the Core execution artifact.
 A ZIP contains the same files as the folder. Local overrides and invocation
 configuration are resolved by the SDK before launch.
+
+## Context engine contract
+
+The `mn.context` descriptor explicitly disables Membrane runtime recall for this blueprint: its payload does not call TextMemory. Existing domain knowledge/RAG, live status, MCP controls, and Core coordination retain their own contracts. The retired conversation-memory declaration is removed, so this workflow does not start a context compressor or require a Membrane SDK merely to launch. Any future runtime-memory consumer must declare `mirrorneuron-python-sdk[context]`, ingest complete preprocessed text under trusted job/run scope, and use the Markdown/DuckDB CPU service.
+
+## Shared capability ownership
+
+Runtime paths, structured LLM requests and knowledge retrieval use the SDK. Document extraction and bounded public-browser collection use the shared docs-to-markdown and public-research skills. Research questions, privacy rules, evidence policy, prompts and report composition remain blueprint-owned.
+
+Version 1.2.1 uses the all-in-one `mirrorneuron-docs-to-markdown-skill` for document intake and OCR. Local source preparation stages the current skill; the retired document-reading and LLM OCR distributions are no longer required.

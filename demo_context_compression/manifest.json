@@ -18,6 +18,11 @@
     "mn.testing": {
       "file": "extensions/testing.json",
       "required": false
+    },
+    "mn.context": {
+      "file": "extensions/context.json",
+      "required": true
     }
-  }
+  },
+  "dependencies": "dependencies.json"
 }

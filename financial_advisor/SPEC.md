@@ -28,7 +28,14 @@ PDFs and document images use `mirrorneuron-docs-to-markdown-skill`. Embedded PDF
 ## Model selection
 
 Actor-style LLM analysis requests the Docker Model Runner proxy's managed
-`default` model. Runtime model preparation maps that default to the medium
+`default` model. Version 1.1.5 explicitly requests an 8,192-token context
+and a 1,800-token response limit, with a 300-second request deadline and
+two retries with a one-second backoff. The request deadline includes gateway
+queueing and generation and is tunable through
+`llm.configs.primary.timeout_seconds` in the default or invocation config.
+Model preparation has its own budget. Strict JSON validation and required
+live responses remain Financial Advisor policy. Runtime model preparation
+maps that default to the medium
 `nemotron3` catalog model on a qualifying high-memory endpoint, including a
 128 GB DGX Spark, and may use the portable small model on less capable
 machines. The blueprint does not pin a concrete runtime model or hard-require a
@@ -113,3 +120,7 @@ The `mn.context` descriptor explicitly disables Membrane runtime recall for this
 ## Shared capability ownership
 
 Document intake, OCR record normalization, lazy client configuration, and model diagnostics belong to the shared docs-to-markdown skill. Version 1.1.1 replaces the retired document-reading and LLM OCR distributions with this package; local source preparation stages it from `mn-skills/docs_to_markdown_skill`. Financial classification, review-only policy and report composition remain blueprint-owned.
+
+## Standard MCP supervision
+
+This package requires `mn.mcp.supervision.v1`. The SDK implements the shared manual, capabilities, context, results, activity, lifecycle, and operation tools. `knowledge/user_manual.md` is bundled with the prepared Job. Domain tools and their native JSON input/output schemas are declared once in `extensions/mcp.json`; response agents derive their bindings from it. All tool results use `mn.mcp.tool_result.v1`. Mutations require a request ID, and asynchronous work is observed through `get_operation_status`. Upgrade the installed SDK/API/desktop together and update idle Job definitions before using this contract.

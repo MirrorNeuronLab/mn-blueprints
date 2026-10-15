@@ -68,3 +68,18 @@ and worker requirements use `>=1.3.47`. Bundled demo distributions are versioned
 `1.3.47` and their declarations use the same minimum. Third-party libraries retain
 their own version families (for example `numpy>=2.3.5,<3.0`). Package identity
 versions and container image digests remain concrete artifact identities.
+
+## Runtime activity
+
+Use `mn_sdk.report_activity(message, kind="action", level="info",
+owner_blueprint=..., step_id=..., run_dir=...)` for actual domain work and
+observed findings. `kind` is `action`, `result`, `finding`, `milestone`, or
+`diagnostic`; `level` is `debug`, `info`, `warning`, or `error`.
+Use `mn_sdk.activity_operation(message, completed=...)` around a synchronous
+domain operation when action/result reporting is sufficient. Do not define
+blueprint-local formatters, publishers, stdout prefixes, or event clocks.
+The SDK supplies the canonical `mn.runtime.event.v1` envelope with identity,
+UTC timestamp, blueprint owner, run, step, and agent attribution. Existing
+shell/native protocol records are normalized by Core at publication.
+Only report observed facts; unchanged frame sampling and model bookkeeping
+belong in diagnostics. Full outputs remain in artifacts.

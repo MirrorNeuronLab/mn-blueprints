@@ -39,7 +39,7 @@ result = {
     "deterministic": True,
 }
 
-events = [{"type": "demo_step_observed", "payload": {"demo": demo, "step": step, "attempt": attempt}}]
+events = [{"type": "demo_step_observed", "payload": {"demo": demo, "owner_blueprint": demo, "step": step, "attempt": attempt, "message": f"Processing {step.replace('_', ' ')} inputs", "activity_kind": "action"}}]
 
 if demo == "demo_dag_scatter_gather" and step == "scatter":
     events.append({"type": "workflow_step_scatter", "payload": {"targets": ["worker"], "items": [{"record_id": f"r-{i}", "value": i} for i in range(1, 6)]}})
@@ -107,6 +107,23 @@ elif demo == "demo_openshell_worker" and step == "run":
     result["sandbox_validation"] = {"config_valid": True, "network_policy": "deny-all"}
 else:
     result["status"] = "ok"
+
+summary = f"Processed {step.replace('_', ' ')} inputs"
+if "mapped_items" in result:
+    summary = f"Dispatched {result['mapped_items']} records for processing"
+elif "selected_branch" in result:
+    summary = f"Selected the {result['selected_branch']} branch"
+elif "seen_ids" in result:
+    summary = f"Processed {len(result['seen_ids'])} unique messages; ignored {result['duplicates_ignored']} duplicates"
+elif "processed" in result:
+    summary = f"Processed {len(result['processed'])} of {result['produced']} stream items under backpressure"
+elif "sha256" in result:
+    summary = "Calculated the demo artifact checksum"
+elif "tool_trace" in result:
+    summary = "Retrieved the deterministic local forecast"
+elif "sandbox_validation" in result:
+    summary = "Validated the sandbox configuration and deny-all network policy"
+events.append({"type": "agent_activity", "payload": {"message": summary, "activity_kind": "result", "step_id": step, "owner_blueprint": demo}})
 
 if is_final_step(demo, step):
     write_run_store(result, events)

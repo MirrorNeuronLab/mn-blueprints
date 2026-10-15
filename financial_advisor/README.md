@@ -73,6 +73,14 @@ Outputs are review-only. The blueprint does not file tax returns, make trades, m
 ## Model Profiles
 
 Normal runs request the Docker Model Runner proxy's managed `default` model.
+Version 1.1.5 uses an 8,192-token context, a 1,800-token response limit,
+a 300-second request deadline, and two retries with a one-second backoff.
+The deadline includes gateway queueing and generation; local reviews can
+take longer than the previous 60-second limit even when the model is healthy.
+Override `llm.configs.primary.timeout_seconds` to tune the deadline per run.
+The context is declared explicitly so advisor
+reviews do not request the model catalog's larger default allocation.
+Financial Advisor retains strict JSON validation and requires live responses.
 The runtime selects and prepares the medium `nemotron3` catalog model when a
 capable endpoint is advertised, including a DGX Spark with 128 GB of unified
 memory. On smaller machines, the catalog may select the portable small model.
@@ -128,3 +136,7 @@ The `mn.context` descriptor explicitly disables Membrane runtime recall for this
 ## Shared capability ownership
 
 Document intake, OCR record normalization, lazy client configuration, and model diagnostics belong to the shared docs-to-markdown skill. Version 1.1.1 replaces the retired document-reading and LLM OCR distributions with this package; local source preparation stages it from `mn-skills/docs_to_markdown_skill`. Financial classification, review-only policy and report composition remain blueprint-owned.
+
+## Standard MCP supervision
+
+This package requires `mn.mcp.supervision.v1`. The SDK implements the shared manual, capabilities, context, results, activity, lifecycle, and operation tools. `knowledge/user_manual.md` is bundled with the prepared Job. Domain tools and their native JSON input/output schemas are declared once in `extensions/mcp.json`; response agents derive their bindings from it. All tool results use `mn.mcp.tool_result.v1`. Mutations require a request ID, and asynchronous work is observed through `get_operation_status`. Upgrade the installed SDK/API/desktop together and update idle Job definitions before using this contract.

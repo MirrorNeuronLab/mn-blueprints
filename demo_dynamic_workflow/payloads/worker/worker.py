@@ -42,7 +42,7 @@ input_document = load_json("MN_INPUT_FILE")
 message = load_json("MN_MESSAGE_FILE")
 evidence_gap = find_key(input_document, "evidence_gap")
 evidence_gap = True if evidence_gap is None else bool(evidence_gap)
-events = [{"type": "dynamic_demo_step_observed", "payload": {"step": step}}]
+events = [{"type": "dynamic_demo_step_observed", "payload": {"step": step, "message": f"Inspecting {step.replace('_', ' ')}", "activity_kind": "action"}}]
 outputs = {"step": step, "deterministic": True}
 
 if step == "inspect_context":

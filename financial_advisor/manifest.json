@@ -2,8 +2,8 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "financial_advisor",
   "name": "Financial Advisor",
-  "version": "1.1.3",
-  "description": "Organizes your financial documents into a review of household cash flow, tax records, and portfolio risk. Produces draft summaries with supporting evidence for you or your advisor to check.",
+  "version": "2.0.0",
+  "description": "Understand your income, spending, tax paperwork, and investment risks in one place. Get draft summaries with supporting evidence and a list of issues to review with your financial or tax advisor.",
   "workflow": "workflow.json",
   "execution": "execution.json",
   "contracts": "contracts.json",
@@ -46,6 +46,10 @@
     },
     "mn.context": {
       "file": "extensions/context.json",
+      "required": true
+    },
+    "mn.mcp": {
+      "file": "extensions/mcp.json",
       "required": true
     }
   }

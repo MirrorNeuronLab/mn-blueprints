@@ -1,5 +1,7 @@
 # Research Assistant v2 SPEC
 
+This blueprint hard-requires at least one GPU with at least 49,152 MB of memory. MirrorNeuron validates this requirement before scheduling.
+
 ## Purpose
 
 Provide a source-grounded, adversarial research workflow for scientists, engineers, analysts, and research leads. The workflow turns a research goal plus approved local evidence into a research brief with ranked hypotheses, competing explanations, evidence gaps, test concepts, and review-only next steps.
@@ -24,10 +26,10 @@ The blueprint follows VC Assistant's model contract: `llm.model` is logical
 the concrete model, endpoint, preparation, and placement; blueprint code must
 not replace them with machine-specific choices.
 
-Version 1.2.3 removes the obsolete 48 GB GPU gate and concrete-model parameter
-and quantization hints from the logical default-model contract. Blueprint workers
-perform no native GPU processing. The selected model retains its runtime-owned
-hardware checks, and required live responses and evidence validation remain in force.
+Version 1.3.0 hard-requires one GPU with at least 49,152 MB of memory.
+The logical default-model contract does not pin concrete-model parameters or
+quantization. The selected model retains its runtime-owned hardware checks,
+and required live responses and evidence validation remain in force.
 The public research orchestrator minimum is its published `1.3.49` release;
 the unavailable development-version constraint previously blocked API setup.
 
@@ -110,3 +112,7 @@ The `mn.context` descriptor explicitly disables Membrane runtime recall for this
 Runtime paths, structured LLM requests and knowledge retrieval use the SDK. Document extraction and bounded public-browser collection use the shared docs-to-markdown and public-research skills. Research questions, privacy rules, evidence policy, prompts and report composition remain blueprint-owned.
 
 Version 1.2.1 uses the all-in-one `mirrorneuron-docs-to-markdown-skill` for document intake and OCR. Local source preparation stages the current skill; the retired document-reading and LLM OCR distributions are no longer required.
+
+## Standard MCP supervision
+
+This package requires `mn.mcp.supervision.v1`. The SDK implements the shared manual, capabilities, context, results, activity, lifecycle, and operation tools. `knowledge/user_manual.md` is bundled with the prepared Job. Domain tools and their native JSON input/output schemas are declared once in `extensions/mcp.json`; response agents derive their bindings from it. All tool results use `mn.mcp.tool_result.v1`. Mutations require a request ID, and asynchronous work is observed through `get_operation_status`. Upgrade the installed SDK/API/desktop together and update idle Job definitions before using this contract.

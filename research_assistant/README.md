@@ -1,5 +1,7 @@
 # Research Assistant
 
+This blueprint hard-requires at least one GPU with at least 49,152 MB of memory. MirrorNeuron validates this requirement before scheduling.
+
 `Blueprint ID:` `research_assistant`  
 `Category:` `Science`
 
@@ -12,9 +14,9 @@ does not declare a machine-specific model, endpoint, or placement. MirrorNeuron
 owns model selection and routing; the payload only calls the configured actor
 client supplied by the runtime.
 
-Version 1.2.3 removes the obsolete 48 GB GPU requirement and Nemotron-specific
-parameter and quantization hints. Workers have no GPU workload of their own;
-the runtime selects a compatible default model on the available hardware.
+Version 1.3.0 requires one GPU with at least 49,152 MB of memory.
+The runtime selects a compatible default model; the blueprint does not pin
+Nemotron-specific parameter or quantization hints.
 Required live analysis, the 16,384-token context request and review boundaries
 are unchanged.
 It also corrects the public research orchestrator minimum to the published
@@ -164,3 +166,7 @@ The `mn.context` descriptor explicitly disables Membrane runtime recall for this
 Runtime paths, structured LLM requests and knowledge retrieval use the SDK. Document extraction and bounded public-browser collection use the shared docs-to-markdown and public-research skills. Research questions, privacy rules, evidence policy, prompts and report composition remain blueprint-owned.
 
 Version 1.2.1 uses the all-in-one `mirrorneuron-docs-to-markdown-skill` for document intake and OCR. Local source preparation stages the current skill; the retired document-reading and LLM OCR distributions are no longer required.
+
+## Standard MCP supervision
+
+This package requires `mn.mcp.supervision.v1`. The SDK implements the shared manual, capabilities, context, results, activity, lifecycle, and operation tools. `knowledge/user_manual.md` is bundled with the prepared Job. Domain tools and their native JSON input/output schemas are declared once in `extensions/mcp.json`; response agents derive their bindings from it. All tool results use `mn.mcp.tool_result.v1`. Mutations require a request ID, and asynchronous work is observed through `get_operation_status`. Upgrade the installed SDK/API/desktop together and update idle Job definitions before using this contract.

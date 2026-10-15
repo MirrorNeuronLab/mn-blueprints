@@ -22,7 +22,7 @@ defmodule MnBlueprints.NativeSignalAgent do
      [
        {:emit, state.emit_type, result},
        {:complete_step, result},
-       {:event, :native_signal_classified, result}
+       {:event, :native_signal_classified, Map.merge(result, %{"message" => "Classified #{length(values)} signals; #{Enum.count(classes, &(&1 == "alert"))} require attention", "owner_blueprint" => "demo_native_beam_agent", "activity_kind" => "result"})}
      ]}
   end
 

@@ -1,5 +1,7 @@
 # MirrorNeuron Runtime Demo Blueprints
 
+Runtime demos use Python 3.12, matching the SDK, native services, and Core HostLocal.
+
 Twenty-seven focused, deterministic blueprints for learning and testing one MirrorNeuron runtime feature at a time.
 
 | Blueprint | Category | Primary feature |

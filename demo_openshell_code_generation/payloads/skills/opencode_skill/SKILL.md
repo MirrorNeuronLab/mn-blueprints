@@ -34,7 +34,7 @@ a sandbox or substitute another coding agent.
 
 ## Runtime requirements
 
-Provide Python 3.11+ and OpenCode 1.18.33+ inside the sandbox image. If required by
+Provide Python 3.12+ and OpenCode 1.18.33+ inside the sandbox image. If required by
 the chosen provider, supply credentials through OpenShell providers or narrowly
 scoped environment injection. Never copy host authentication directories into
 payloads. The default provider uses `opencode.ai:443`; the blueprint must allow

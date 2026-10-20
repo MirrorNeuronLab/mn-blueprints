@@ -47,7 +47,7 @@
           "upload_as": "worker",
           "workdir": "/sandbox/job/worker",
           "command": [
-            "python3.11",
+            "python3.12",
             "worker.py"
           ],
           "environment": {

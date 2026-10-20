@@ -29,7 +29,7 @@
           "beacon_missed_action": "fail_attempt",
           "beacon_timeout_ms": 5000,
           "command": [
-            "python3.11",
+            "python3.12",
             "worker.py"
           ],
           "environment": {
@@ -70,7 +70,7 @@
           "beacon_missed_action": "fail_attempt",
           "beacon_timeout_ms": 5000,
           "command": [
-            "python3.11",
+            "python3.12",
             "worker.py"
           ],
           "environment": {

@@ -18,7 +18,7 @@ def _write_runtime_compatible_worker(output: Path) -> None:
     """Adapt the SDK worker envelope to the current Core step contract."""
     worker = output / "payloads/mn_python_workflow/mn_worker.py"
     worker.write_text(
-        """#!/usr/bin/env python3.11
+        """#!/usr/bin/env python3.12
 import importlib
 import json
 import os

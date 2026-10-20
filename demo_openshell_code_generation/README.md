@@ -10,7 +10,7 @@ the verified result to `~/Download/demo_openshell_code_generation/index.html`.
 
 ## Run the demo
 
-Prerequisites: Python 3.11+, Docker, and an existing OpenShell gateway. OpenCode
+Prerequisites: Python 3.12+, Docker, and an existing OpenShell gateway. OpenCode
 1.18.33 is downloaded into the sandbox image during its first Docker build.
 The image also caches the model catalog; runtime egress permits only the Zen
 model endpoint and its model listing for the OpenCode binary. The default free

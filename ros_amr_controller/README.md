@@ -1,5 +1,8 @@
 # ROS AMR Controller
 
+Version 3.0.1 installs the simulator's MCP SDK from MirrorNeuron's public package
+registry, alongside public Python dependencies. Building requires no registry credentials.
+
 This long-lived service runs the ROS 2 Jazzy TurtleBot warehouse simulation as
 an isolated Docker Compose project on the selected CUDA/NVIDIA runtime node.
 In OtterDesk, **Try a sample** starts the bundled warehouse scenario with the
@@ -105,6 +108,10 @@ are also explicit learning. For example, “Do not enter Zone C” stores an
 argument-scoped rule that blocks `navigate_to_zone(zone_c)` without disabling
 Zones A or B. Command and learning replies include structured receipts and the
 Job-relative link `knowledge/learned/active.md` for the saved knowledge.
+
+## Block composition (3.0.0)
+
+Core’s DockerCompose runner continues to own exclusive project startup, readiness and teardown. The terminal worker now uses a stock domain-operation block, with `domain/finalization.py` committing the declared service artifact before returning its reference. The shell finalizer is removed. No Python wrapper launches Compose, no robot command runs during finalization, and GPU/network/control constraints remain intact.
 
 ## Blueprint package format
 

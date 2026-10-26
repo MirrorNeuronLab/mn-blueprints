@@ -60,17 +60,6 @@ def _as_seed_hypotheses(value: Any) -> list[str | dict[str, Any]]:
     return normalized
 
 
-def resolve_input_folder(config: dict[str, Any], inputs: dict[str, Any], root: Path) -> Path | None:
-    value = inputs.get("input_folder") or (config.get("inputs") or {}).get("payload", {}).get("input_folder")
-    if not value:
-        return None
-    path = expand_runtime_path(value)
-    if not path.is_absolute():
-        bundled_path = runtime_asset_root() / path
-        if bundled_path.exists():
-            return bundled_path
-        path = root / path
-    return path
 
 
 def load_input_documents(folder: Path | None, config: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -112,4 +101,4 @@ def load_input_documents(folder: Path | None, config: dict[str, Any]) -> tuple[l
     return records, warnings
 
 
-__all__ = ['normalize_inputs', '_as_list', '_as_seed_hypotheses', 'resolve_input_folder', 'runtime_user_home', 'expand_runtime_path', 'load_input_documents']
+__all__ = ['normalize_inputs', '_as_list', '_as_seed_hypotheses', 'runtime_user_home', 'expand_runtime_path', 'load_input_documents']

@@ -1,5 +1,7 @@
 # Specification
 
+- The simulator image installs the MCP SDK from the public MirrorNeuron package
+  registry and uses PyPI for its public dependencies. No build credentials are required.
 - The executable authority is `type: service` with one root
   `MirrorNeuron.Runner.DockerCompose` worker.
 - The desktop sample profile launches the bundled `warehouse` scenario from
@@ -76,6 +78,10 @@
   resume starts it again from the same staged source and project identity.
 - Stable job data, definition identity, and schedules remain independent from
   run-scoped service history.
+
+## Block composition (3.0.0)
+
+Core’s DockerCompose runner continues to own exclusive project startup, readiness and teardown. The terminal worker now uses a stock domain-operation block, with `domain/finalization.py` committing the declared service artifact before returning its reference. The shell finalizer is removed. No Python wrapper launches Compose, no robot command runs during finalization, and GPU/network/control constraints remain intact.
 
 ## Blueprint package format
 

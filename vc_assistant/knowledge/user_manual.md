@@ -1,5 +1,17 @@
 # VC Assistant user manual
 
+## Getting started and reviewing work
+
+I organize startup evidence, compare screening methods and surface diligence questions for your investment review.
+
+The default synthetic packets need no initial configuration. For your own review, use an approved configured document folder; one first-level subfolder per company makes grouping clear. Pitch materials, team background, traction and financial records provide context. Company claims remain self-reported until supporting evidence is actually observed. Keep research permissions explicit.
+
+Expect a batch summary and per-company analysis.md, seven-method screening explanations, sources, warnings and unanswered diligence questions. Numerical screening methods are aids for comparing evidence and assumptions; they are not verified valuations, investment recommendations or decisions to invest, pass or contact a founder.
+
+Start with the selected company's evidence posture, then inspect a material claim and its dated source. Compare methods where they disagree and ask which assumption or missing fact drives the difference. Separate company assertions, public observations and estimates. Use one unresolved diligence question as the handoff to the human reviewer; an unavailable source is not a verified negative.
+
+See [the conversation guide](conversation_guide.md) for the sample or walkthrough, expected handoff and useful follow-up questions. Examples are not current findings. Ask one missing question at a time, keep confirmed answers, and answer side questions without changing settings or issuing actions.
+
 Review startups before deciding which deserve a closer look. Get company summaries, screening scores, key risks, and unanswered questions backed by documents and public research. Scores are not company valuations or investment recommendations.
 
 ## Inputs
@@ -33,3 +45,12 @@ If a source is blocked, stale, or missing, say so. If there is no completed repo
 Use `get_capabilities` for the current tools and their availability. Common MCP actions are implemented by the SDK. `start_run` starts new work, `pause_run` preserves a resumable run, `resume_run` continues it, and `stop_run` terminates it. Domain stop actions affect their named resource only. Accepted actions are not evidence of completion; use `get_operation_status`.
 
 External mutations require a caller-generated `request_id`. Tool results use `mn.mcp.tool_result.v1` in `structuredContent`; keep workflow state inside `data` and poll a returned `operation_id` with `get_operation_status`. The runtime also publishes this installed manual through its MCP Skills manifest.
+
+
+## Stage-aware conversation
+
+OtterDesk reads `payloads/prompts/conversation.json` as optional app-owned guidance. It combines this role and stage policy with the pending question, confirmed non-secret setup answers, recent dialogue, selected report and fresh Job state. Short follow-ups retain their topic; a correction does not silently change saved configuration.
+
+Use Memory or explicitly ask to remember, edit or forget an explanation preference. This affects Chat wording only; working rules and evidence keep their existing domain controls. The optional `inputs.payload.supervisor_instructions` array is app-managed, never a required setup answer or a new workflow permission.
+
+Use the matching company and run evidence through existing Job retrieval. Keep public claims separate from confidential documents, model estimates and older company facts. Scores are screening aids, not valuations or investment recommendations. No investment, founder contact or external transaction. Saved wording preferences cannot change scoring policy, factual evidence or research permissions. Existing submitted runs retain their configuration, evidence and approvals. An idle prepared Job may refresh through the existing conditional API without rehiring, resetting memory or mutating an active run.

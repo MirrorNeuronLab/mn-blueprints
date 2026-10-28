@@ -27,9 +27,13 @@ def test_compiled_worker_build_uses_declared_packages(name):
     stage_skill_dependency_payloads_for_manifest(manifest, payloads, bundle_dir=root)
     requirements = payloads["docker_worker/requirements.txt"].decode().splitlines()
     declarations = json.loads((root / "dependencies.json").read_text())
-    for dependency in declarations["skills"] + declarations["agents"]:
-        assert dependency_requirement(dependency["name"], dependency["version"]) in requirements
+    for dependency in declarations["skills"] + declarations["agents"] + declarations["packages"]:
+        extras = dependency.get("extras", [])
+        package = dependency["name"] + (f"[{','.join(sorted(extras))}]" if extras else "")
+        assert dependency_requirement(package, dependency["version"]) in requirements
     if name == "vc_assistant":
-        assert "mirrorneuron-membrane-python-sdk>=1.3.47" in requirements
+        sdk = next(item for item in declarations["packages"]
+                   if item["name"] == "mirrorneuron-python-sdk")
+        assert sdk["extras"] == ["context"]
     assert not payloads.get("docker_worker/local-requirements.txt", b"").strip()
     assert not any("__mn_skill_dependencies/local/" in path for path in payloads)

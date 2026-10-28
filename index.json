@@ -29,5 +29,6 @@
   "ros_amr_controller",
   "financial_advisor",
   "vc_assistant",
-  "research_assistant"
+  "research_assistant",
+  "microduck_controller"
 ]

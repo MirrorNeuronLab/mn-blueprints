@@ -4,18 +4,19 @@
     "Move the simulated robot to Zone A.",
     "Stop",
     "What is the robot's current status?",
+    "What should I expect from the warehouse simulation?",
+    "Did the last move arrive, and what evidence confirms it?",
     "Do not enter Zone C.",
-    "What can this robot do and what can it not do?",
     "Remember that loading dock means Zone A."
   ],
   "setup_guide": {
     "schema": "otterdesk.setup_guide.v1",
-    "introduction": "Start the bundled warehouse simulation, then control the robot from chat.",
+    "introduction": "I'll guide the simulated warehouse robot between approved Zones A, B and C and report observed progress. Start the included warehouse simulation on a compatible NVIDIA node, then ask for its status. You can request a move or Stop once ready; this controls a simulation only.",
     "sample": {
       "available": true,
       "title": "Warehouse robot simulation",
       "description": "Start the included TurtleBot warehouse world with its default headless settings. A compatible NVIDIA Docker Compose node is required.",
-      "expected_output": "A live warehouse dashboard and chat controls for Zones A, B, and C, robot status, and stop.",
+      "expected_output": "Once the warehouse simulation is ready, a live dashboard and Chat controls for Zones A, B and C, current status and Stop.",
       "values": {
         "inputs.payload.scenario": "warehouse"
       }
@@ -37,7 +38,8 @@
           }
         ]
       }
-    ]
+    ],
+    "prompt_file": "@/payloads/prompts/setup.md"
   },
   "web_ui": {
     "enabled": true,

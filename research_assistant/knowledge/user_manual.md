@@ -1,5 +1,17 @@
 # Research Assistant user manual
 
+## Getting started and reviewing work
+
+I investigate a question, challenge competing explanations, and prepare a brief so you can decide what is worth testing next.
+
+For your own work, supply a research question and an approved folder of papers, notes or datasets. State scope, success criteria and constraints where they matter. ‘Which explanation fits these measurements, and what test would distinguish it from the alternatives?’ is a useful brief. Existing setup controls own changes to the research scope.
+
+Expect research_brief.md, an evidence ledger, ranked hypotheses, critiques and proposed test procedures. The packet distinguishes observations, inferences, hypotheses and unknowns. It does not execute generated code or experiments. The exact draft packet has a human review request.
+
+Read the brief's answer and evidence posture first. Compare the leading explanation with its strongest counterargument, then examine source dates, missing observations and the proposed disconfirming test. A needs_evidence packet is a diagnostic handoff, not a supported conclusion. Approving the packet is only approval for internal review, not permission to run a test or publish findings.
+
+See [the conversation guide](conversation_guide.md) for the sample or walkthrough, expected handoff and useful follow-up questions. Examples are not current findings. Ask one missing question at a time, keep confirmed answers, and answer side questions without changing settings or issuing actions.
+
 Explore a research question and decide what to investigate next. Get a brief comparing possible explanations, the evidence for and against them, unanswered questions, and ideas for experiments to review.
 
 ## Inputs
@@ -50,3 +62,24 @@ The packet is a draft for human review. I do not execute generated experiment co
 Use `get_capabilities` for the current tools and their availability. Common MCP actions are implemented by the SDK. `start_run` starts new work, `pause_run` preserves a resumable run, `resume_run` continues it, and `stop_run` terminates it. Domain stop actions affect their named resource only. Accepted actions are not evidence of completion; use `get_operation_status`.
 
 External mutations require a caller-generated `request_id`. Tool results use `mn.mcp.tool_result.v1` in `structuredContent`; keep workflow state inside `data` and poll a returned `operation_id` with `get_operation_status`. The runtime also publishes this installed manual through its MCP Skills manifest.
+
+## Conversation continuity and saved instructions
+
+OtterDesk keeps the current topic, confirmed setup answers and pending question
+with this hired co-worker. Short follow-ups refer to that dialogue; corrections
+stay in the current conversation unless you explicitly ask me to remember them.
+Ask one focused question when a short reply is ambiguous. During work, surface
+useful findings, actual decisions and completion instead of routine step noise.
+
+Chat > Memory lets you inspect, edit and forget explicit explanation preferences
+and working rules. The next run captures the current list in
+`inputs.payload.supervisor_instructions` and its content revision. Evidence revision, test-concept, synthesis and reviewer prompts receive it only
+after public tool planning has ended; search planning and public queries do not. A changed or forgotten rule does not rewrite an active or historical run.
+Preferences are not evidence and cannot authorize experiments, external actions
+or weaker review gates.
+
+For saved findings, use the selected run's prepared research brief through the
+existing Membrane source intelligence. Keep source dates, evidence gaps and
+historical status explicit. The app-owned
+`payloads/prompts/conversation.json` supplies stage guidance to OtterDesk's native
+conversation model; existing runtime memory and response contracts are unchanged.

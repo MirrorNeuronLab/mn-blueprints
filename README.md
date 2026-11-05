@@ -34,6 +34,33 @@ Twenty-seven focused, deterministic blueprints for learning and testing one Mirr
 | `demo_observability_trace` | Runtime Operations | Run-store observability |
 | `demo_canary_deployment` | Runtime Operations | Canary promotion |
 
+## Blueprint repositories
+
+These product blueprints are maintained in their own public repositories and pinned
+here as Git submodules. `index.json` controls their catalog publication.
+
+| Blueprint | Repository |
+|---|---|
+| `financial_advisor` | [mn-blueprint-financial_advisor](https://github.com/MirrorNeuronLab/mn-blueprint-financial_advisor) |
+| `research_assistant` | [mn-blueprint-research_assistant](https://github.com/MirrorNeuronLab/mn-blueprint-research_assistant) |
+| `microduck_controller` | [mn-blueprint-microduck_controller](https://github.com/MirrorNeuronLab/mn-blueprint-microduck_controller) |
+
+Clone the catalog with its pinned packages:
+
+```bash
+git clone --recurse-submodules https://github.com/MirrorNeuronLab/mn-blueprints.git
+```
+
+After pulling an existing checkout, initialize or update the recorded commits:
+
+```bash
+git submodule update --init --recursive
+```
+
+Commit and push a blueprint's changes before updating its pin in this catalog.
+Submodule URLs use public HTTPS; development origins may use SSH. Local development
+reads the checked-out folders without fetching or changing their revisions.
+
 ## Validate the catalog
 
 ```bash

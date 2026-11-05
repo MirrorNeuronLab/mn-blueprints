@@ -1,0 +1,12 @@
+[submodule "financial_advisor"]
+	path = financial_advisor
+	url = https://github.com/MirrorNeuronLab/mn-blueprint-financial_advisor.git
+	branch = main
+[submodule "research_assistant"]
+	path = research_assistant
+	url = https://github.com/MirrorNeuronLab/mn-blueprint-research_assistant.git
+	branch = main
+[submodule "microduck_controller"]
+	path = microduck_controller
+	url = https://github.com/MirrorNeuronLab/mn-blueprint-microduck_controller.git
+	branch = main

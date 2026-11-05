@@ -26,9 +26,7 @@
   "demo_retry_recovery",
   "demo_service_health",
   "demo_stream_backpressure",
-  "ros_amr_controller",
   "financial_advisor",
-  "vc_assistant",
   "research_assistant",
   "microduck_controller"
 ]

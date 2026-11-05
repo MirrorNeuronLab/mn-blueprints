@@ -1,5 +1,5 @@
 ---
-name: mirrorneuron.opencode
+name: mirrorneuron-opencode
 metadata: {internal: true}
 package: mirrorneuron-opencode-skill
 folder: opencode_skill

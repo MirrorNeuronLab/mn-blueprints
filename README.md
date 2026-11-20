@@ -44,6 +44,7 @@ here as Git submodules. `index.json` controls their catalog publication.
 | `financial_advisor` | [mn-blueprint-financial_advisor](https://github.com/MirrorNeuronLab/mn-blueprint-financial_advisor) |
 | `research_assistant` | [mn-blueprint-research_assistant](https://github.com/MirrorNeuronLab/mn-blueprint-research_assistant) |
 | `microduck_controller` | [mn-blueprint-microduck_controller](https://github.com/MirrorNeuronLab/mn-blueprint-microduck_controller) |
+| `ros_amr_controller` | [mn-blueprint-ros_amr_controller](https://github.com/MirrorNeuronLab/mn-blueprint-ros_amr_controller) |
 
 Clone the catalog with its pinned packages:
 

@@ -10,3 +10,7 @@
 	path = microduck_controller
 	url = https://github.com/MirrorNeuronLab/mn-blueprint-microduck_controller.git
 	branch = main
+[submodule "ros_amr_controller"]
+	path = ros_amr_controller
+	url = https://github.com/MirrorNeuronLab/mn-blueprint-ros_amr_controller.git
+	branch = main

@@ -9,6 +9,10 @@
       "slug": "science"
     },
     {
+      "name": "Physical AI",
+      "slug": "physical-ai"
+    },
+    {
       "name": "Runtime",
       "slug": "runtime_demo"
     }

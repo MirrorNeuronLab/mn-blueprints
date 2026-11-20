@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_dag_fork_join",
   "name": "DAG Fork Join",
+  "tagline": "Check regions in parallel and combine results",
   "version": "1.0.0",
   "description": "Check three synthetic regions concurrently and aggregate their status.",
   "workflow": "workflow.json",

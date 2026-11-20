@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_stream_backpressure",
   "name": "Stream Backpressure",
+  "tagline": "Process bursts with a bounded queue",
   "version": "1.0.0",
   "description": "Process a finite burst through a bounded queue and report pressure handling.",
   "workflow": "workflow.json",

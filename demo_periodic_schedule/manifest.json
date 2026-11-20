@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_periodic_schedule",
   "name": "Periodic Schedule",
+  "tagline": "Schedule and dispatch a recurring child job",
   "version": "1.0.0",
   "description": "Register a periodic child job that can be dispatched immediately.",
   "workflow": "workflow.json",

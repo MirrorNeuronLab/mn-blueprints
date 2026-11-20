@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_human_approval",
   "name": "Human Approval",
+  "tagline": "Request and audit approval for a mock action",
   "version": "1.0.0",
   "description": "Request and audit approval for a harmless mock action.",
   "workflow": "workflow.json",

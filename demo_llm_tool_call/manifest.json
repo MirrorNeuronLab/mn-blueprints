@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_llm_tool_call",
   "name": "LLM Tool Call",
+  "tagline": "Test a model-driven call to a local forecast tool",
   "version": "1.0.0",
   "description": "Use a deterministic fake model decision to call a local forecast tool.",
   "workflow": "workflow.json",

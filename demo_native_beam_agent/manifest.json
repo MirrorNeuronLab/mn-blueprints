@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_native_beam_agent",
   "name": "Native Beam Agent",
+  "tagline": "Classify runtime signals with a native BEAM agent",
   "version": "1.0.0",
   "description": "Classify three synthetic runtime signals without starting an OS worker.",
   "workflow": "workflow.json",

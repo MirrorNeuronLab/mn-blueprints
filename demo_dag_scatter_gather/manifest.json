@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_dag_scatter_gather",
   "name": "DAG Scatter Gather",
+  "tagline": "Fan out records and gather their scores",
   "version": "1.0.0",
   "description": "Dynamically map five records and collect their scores.",
   "workflow": "workflow.json",

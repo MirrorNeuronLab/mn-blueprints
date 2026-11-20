@@ -1,0 +1,2 @@
+[console_scripts]
+mn-job-mcp-server = mn_mcp_server_skill.cli:main

@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_mcp_collaboration",
   "name": "MCP Job Collaboration",
+  "tagline": "Coordinate jobs through shared goals and MCP",
   "version": "1.0.0",
   "description": "Launch two jobs under one shared goal and exchange status, knowledge, and staged or final results through job-scoped MCP servers.",
   "workflow": "workflow.json",

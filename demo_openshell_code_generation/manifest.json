@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_openshell_code_generation",
   "name": "OpenShell Code Generation",
+  "tagline": "Generate an HTML page with OpenCode in OpenShell",
   "version": "1.0.0",
   "description": "Generate a pizza ordering HTML page with OpenCode inside OpenShell.",
   "workflow": "workflow.json",

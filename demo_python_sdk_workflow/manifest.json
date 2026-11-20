@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_python_sdk_workflow",
   "name": "Python SDK Workflow",
+  "tagline": "Run a two-agent workflow built with the Python SDK",
   "version": "1.0.0",
   "description": "Compile and run a decorated two-agent incident workflow.",
   "workflow": "workflow.json",

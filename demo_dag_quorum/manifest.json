@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_dag_quorum",
   "name": "DAG Quorum",
+  "tagline": "Accept a two-of-three sensor quorum",
   "version": "1.0.0",
   "description": "Accept two successful sensor votes while one controlled vote fails.",
   "workflow": "workflow.json",

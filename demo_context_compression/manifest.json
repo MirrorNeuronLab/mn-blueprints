@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_context_compression",
   "name": "Context Compression",
+  "tagline": "Compress context while preserving key references",
   "version": "1.0.0",
   "description": "Compress a context packet while preserving goals and source references.",
   "workflow": "workflow.json",

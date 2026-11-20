@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_dag_failure_fallback",
   "name": "DAG Failure Fallback",
+  "tagline": "Recover a failed lookup with a fallback",
   "version": "1.0.0",
   "description": "Fail a primary lookup and recover through a fallback step.",
   "workflow": "workflow.json",

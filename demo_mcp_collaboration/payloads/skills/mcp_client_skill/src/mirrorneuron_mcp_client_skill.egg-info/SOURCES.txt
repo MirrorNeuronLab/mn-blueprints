@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+src/mirrorneuron_mcp_client_skill.egg-info/PKG-INFO
+src/mirrorneuron_mcp_client_skill.egg-info/SOURCES.txt
+src/mirrorneuron_mcp_client_skill.egg-info/dependency_links.txt
+src/mirrorneuron_mcp_client_skill.egg-info/requires.txt
+src/mirrorneuron_mcp_client_skill.egg-info/top_level.txt
+src/mn_mcp_client_skill/__init__.py
+src/mn_mcp_client_skill/job_collaboration.py
+src/mn_mcp_client_skill/mcp_client.py

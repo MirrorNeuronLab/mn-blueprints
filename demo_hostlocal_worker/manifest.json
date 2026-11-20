@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_hostlocal_worker",
   "name": "Hostlocal Worker",
+  "tagline": "Normalize incident data in a local Python worker",
   "version": "1.0.0",
   "description": "Normalize a small incident record in a HostLocal Python worker.",
   "workflow": "workflow.json",

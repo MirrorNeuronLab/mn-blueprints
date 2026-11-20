@@ -57,9 +57,23 @@ After pulling an existing checkout, initialize or update the recorded commits:
 git submodule update --init --recursive
 ```
 
-Commit and push a blueprint's changes before updating its pin in this catalog.
-Submodule URLs use public HTTPS; development origins may use SSH. Local development
-reads the checked-out folders without fetching or changing their revisions.
+Use `development` for local work in the catalog and each submodule. Create the
+branch from the current commit if it does not exist yet. Commit submodule
+changes on `development` before committing their updated pins in the catalog.
+Submodule URLs use public HTTPS and development origins may use SSH. Local
+development reads the checked-out folders without fetching or changing their
+revisions.
+
+When the production runtime is ready, run the release script from clean
+`development` checkouts with every updated submodule pin committed:
+
+```bash
+./scripts/sync-development-to-main.sh --dry-run
+./scripts/sync-development-to-main.sh
+```
+
+The script fast-forwards local `main` and `origin/main` in each submodule before
+updating the catalog. If a push fails, resolve the Git error and rerun the script.
 
 ## Validate the catalog
 

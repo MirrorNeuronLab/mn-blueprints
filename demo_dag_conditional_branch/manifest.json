@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_dag_conditional_branch",
   "name": "DAG Conditional Branch",
+  "tagline": "Route work by risk and rejoin",
   "version": "1.0.0",
   "description": "Route one transaction through exactly one risk branch and rejoin.",
   "workflow": "workflow.json",

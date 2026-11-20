@@ -2,6 +2,7 @@
   "$schema": "https://mirrorneuron.io/schemas/blueprint/v1/manifest.schema.json",
   "id": "demo_dynamic_workflow",
   "name": "Dynamic Workflow",
+  "tagline": "Add follow-up steps from runtime evidence",
   "version": "1.0.0",
   "description": "Safely insert admitted follow-up work when runtime evidence is incomplete.",
   "workflow": "workflow.json",

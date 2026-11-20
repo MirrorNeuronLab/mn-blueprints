@@ -58,8 +58,16 @@ git submodule update --init --recursive
 ```
 
 Use `development` for local work in the catalog and each submodule. Create the
-branch from the current commit if it does not exist yet. Commit submodule
-changes on `development` before committing their updated pins in the catalog.
+branch from the current commit if it does not exist yet.
+
+The commit-and-push script stages all non-ignored changes and pushes each
+submodule's `development` branch before committing its updated pin in the
+parent repository.
+
+```bash
+./scripts/git-push-all.sh "Describe the changes"
+```
+
 Submodule URLs use public HTTPS and development origins may use SSH. Local
 development reads the checked-out folders without fetching or changing their
 revisions.
